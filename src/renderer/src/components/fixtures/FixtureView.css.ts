@@ -9,10 +9,10 @@ export const fixtureView = style({
   gap: '16px'
 });
 
-export const toolbar = style({
+export const footer = style({
   display: 'flex',
-  alignItems: 'center',
-  gap: '12px'
+  justifyContent: 'flex-end',
+  alignSelf: 'stretch'
 });
 
 export const message = style({

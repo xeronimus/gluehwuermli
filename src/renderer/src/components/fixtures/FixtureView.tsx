@@ -12,7 +12,7 @@ import Button from '../commons/Button';
 import {AddIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
-import {errorMessage, fixtureGroups, fixtureView, message, toolbar, warnings} from './FixtureView.css';
+import {errorMessage, fixtureGroups, fixtureView, footer, message, warnings} from './FixtureView.css';
 
 type Editing = {type: 'none'} | {type: 'adding'} | {type: 'editing'; fixture: Fixture};
 
@@ -50,12 +50,7 @@ const FixtureView = () => {
 
   return (
     <div className={fixtureView}>
-      <div className={toolbar}>
-        <Button variant="primary" onClick={() => setEditing({type: 'adding'})} disabled={editing.type !== 'none'}>
-          <AddIcon /> Add fixture
-        </Button>
-        {error && <span className={errorMessage}>{error}</span>}
-      </div>
+      {error && <span className={errorMessage}>{error}</span>}
 
       {editing.type !== 'none' && (
         <FixtureEditor
@@ -77,7 +72,9 @@ const FixtureView = () => {
       )}
 
       {fixtures.length === 0 && editing.type === 'none' && (
-        <span className={message}>No fixtures yet: add the devices of your rig to control them by name.</span>
+        <span className={message}>
+          No fixtures yet: add the devices of your rig with Add fixture, to control them by name.
+        </span>
       )}
 
       <div className={fixtureGroups}>
@@ -89,6 +86,13 @@ const FixtureView = () => {
             onDelete={() => onDelete(fixture)}
           />
         ))}
+      </div>
+
+      {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
+      <div className={footer}>
+        <Button onClick={() => setEditing({type: 'adding'})} disabled={editing.type !== 'none'}>
+          <AddIcon /> Add fixture
+        </Button>
       </div>
     </div>
   );
