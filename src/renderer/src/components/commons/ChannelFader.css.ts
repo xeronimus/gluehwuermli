@@ -14,6 +14,31 @@ export const channelFader = style({
   borderRadius: vars.constants.radiusMd
 });
 
+/** the value above the fader and the label below it, clickable to step the value without the look of a button */
+export const faderStepButton = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '2px',
+  padding: '2px 6px',
+  border: 'none',
+  borderRadius: vars.constants.radiusSm,
+  background: 'none',
+  font: 'inherit',
+  cursor: 'pointer',
+  selectors: {
+    '&:hover': {
+      background: vars.colors.surfaceRaised
+    },
+    '&:focus-visible': {
+      outline: `2px solid ${vars.colors.primaryHover}`
+    }
+  }
+});
+
+/** the label sits a little further from the track than the column's gap */
+export const faderLabelButton = style([faderStepButton, {marginTop: '2px'}]);
+
 export const faderValue = style({
   fontFamily: vars.fonts.mono,
   fontSize: '0.85em',
