@@ -1,5 +1,7 @@
 import {Fragment} from 'react';
 
+import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
+
 import {
   FixtureDraft,
   draftChannelAddress,
@@ -16,6 +18,7 @@ import {
   channelNameInput,
   channelRows,
   columnHeader,
+  lockMaxInput,
   offsetInput
 } from './FixtureChannelRows.css';
 
@@ -27,12 +30,18 @@ interface FixtureChannelRowsProps {
   onChange: (draft: FixtureDraft) => void;
 }
 
-/** a row per channel of the fixture being edited: its name, its offset from the start address and where it lands */
+/**
+ * a row per channel of the fixture being edited: its name, its offset from the start address, where it lands and its
+ * cap while the channel lock is on
+ */
 const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => (
   <div className={channelRows}>
     <span className={columnHeader}>Channel</span>
     <span className={columnHeader}>Offset</span>
     <span className={columnHeader}>Address</span>
+    <span className={columnHeader} title="The highest value while the channel lock is on; empty for no lock">
+      Max while locked
+    </span>
     <span />
     {draft.channels.map((channel, index) => (
       // the index is the identity of a row: rows are only appended or removed, never reordered
@@ -53,6 +62,16 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => (
           onChange={(event) => onChange(withChannelChange(draft, index, {offset: event.target.value}))}
         />
         <span className={channelAddress}>{draftChannelAddress(draft, channel) ?? NO_ADDRESS}</span>
+        <input
+          className={lockMaxInput}
+          type="number"
+          min={DMX_MIN_VALUE}
+          max={DMX_MAX_VALUE}
+          value={channel.lockMax}
+          placeholder="no lock"
+          aria-label={`Maximum of channel ${index + 1} while locked`}
+          onChange={(event) => onChange(withChannelChange(draft, index, {lockMax: event.target.value}))}
+        />
         <Button onClick={() => onChange(withoutChannel(draft, index))} title="Remove the channel">
           <RemoveIcon />
         </Button>

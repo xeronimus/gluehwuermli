@@ -20,17 +20,23 @@ import {
 } from './FixtureGroup.css';
 import FixturePresetButtons from './FixturePresetButtons';
 
-interface FixtureGroupProps {
-  fixture: Fixture;
+/** changing the fixture, only in Setup mode */
+export interface FixtureGroupActions {
   onEdit: () => void;
   onDelete: () => void;
+}
+
+interface FixtureGroupProps {
+  fixture: Fixture;
+  /** undefined in Show mode: the fixture can be played, not changed */
+  actions: FixtureGroupActions | undefined;
 }
 
 /**
  * The fixture's name and addresses, a fader per channel on its absolute DMX channel, its preset buttons and its hint
  * below them. The description is reference material, hidden until opened with the button next to the hint.
  */
-const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
+const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
   const setChannelValue = useActionSetChannelValue();
   const [descriptionShown, setDescriptionShown] = useState(false);
 
@@ -39,19 +45,23 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
       <header className={groupHeader}>
         <span className={groupName}>{fixture.name}</span>
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
-        <Button variant="icon" onClick={onEdit} title={`Edit ${fixture.name}`}>
-          <EditIcon />
-        </Button>
-        <Button variant="icon" onClick={onDelete} title={`Delete ${fixture.name}`}>
-          <DeleteIcon />
-        </Button>
+        {actions && (
+          <>
+            <Button variant="icon" onClick={actions.onEdit} title={`Edit ${fixture.name}`}>
+              <EditIcon />
+            </Button>
+            <Button variant="icon" onClick={actions.onDelete} title={`Delete ${fixture.name}`}>
+              <DeleteIcon />
+            </Button>
+          </>
+        )}
       </header>
       <div className={groupFaders}>
         {fixtureFaders(fixture).map((fader) => (
           <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
         ))}
       </div>
-      <FixturePresetButtons fixture={fixture} />
+      <FixturePresetButtons fixture={fixture} canSavePreset={actions !== undefined} />
       {(fixture.hint || fixture.description) && (
         <footer className={groupFooter}>
           <p className={groupHint}>{fixture.hint}</p>

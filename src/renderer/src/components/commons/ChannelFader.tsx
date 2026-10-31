@@ -2,21 +2,26 @@ import {Direction, Range} from 'react-range';
 
 import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 
+import {cappedValue} from '@/data/channelLocks';
 import {toPercent} from '@/data/channelValues';
 import Fader from '@/domain/Fader';
 import {selectChannelValue} from '@/state/channels/channelsSelectors';
+import {selectChannelLimit} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import {
   channelFader,
   faderLabel,
   faderLabelButton,
+  faderLock,
   faderPercent,
   faderStepButton,
   faderThumb,
+  faderThumbLocked,
   faderTrack,
   faderValue
 } from './ChannelFader.css';
+import {LockIcon} from './icons';
 
 const DMX_STEP = 1;
 
@@ -27,18 +32,26 @@ interface ChannelFaderProps {
 
 /**
  * a vertical 0..255 fader; reads only its own channel from the store, so moving it re-renders only itself. A click on
- * the value above it steps up by one, a click on the label below it steps down by one
+ * the value above it steps up by one, a click on the label below it steps down by one. A channel capped by the channel
+ * lock can't be moved, and shows the value the main process sends
  */
 const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
-  const value = useAppStore((state) => selectChannelValue(state, fader.channel));
+  const limit = useAppStore((state) => selectChannelLimit(state, fader.channel));
+  const value = cappedValue(
+    useAppStore((state) => selectChannelValue(state, fader.channel)),
+    limit
+  );
+  const locked = limit !== undefined;
 
   return (
     <div className={channelFader}>
       <button
         className={faderStepButton}
         onClick={() => onChange(fader.channel, value + DMX_STEP)}
-        title={`Channel ${fader.label} +${DMX_STEP}`}
+        disabled={locked}
+        title={locked ? `Channel ${fader.label} is locked at most ${limit}` : `Channel ${fader.label} +${DMX_STEP}`}
       >
+        {locked && <LockIcon className={faderLock} />}
         <span className={faderValue}>{value}</span>
         <span className={faderPercent}>{toPercent(value)}%</span>
       </button>
@@ -48,6 +61,7 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
         max={DMX_MAX_VALUE}
         step={DMX_STEP}
         values={[value]}
+        disabled={locked}
         onChange={([position]) => onChange(fader.channel, position ?? DMX_MIN_VALUE)}
         renderTrack={({props, children}) => (
           // react-range positions the thumb through the style it passes in
@@ -56,12 +70,18 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
           </div>
         )}
         renderThumb={({props: {key, ...thumbProps}}) => (
-          <div key={key} {...thumbProps} className={faderThumb} aria-label={`Channel ${fader.label}`} />
+          <div
+            key={key}
+            {...thumbProps}
+            className={locked ? faderThumbLocked : faderThumb}
+            aria-label={`Channel ${fader.label}`}
+          />
         )}
       />
       <button
         className={faderLabelButton}
         onClick={() => onChange(fader.channel, value - DMX_STEP)}
+        disabled={locked}
         title={`Channel ${fader.label} -${DMX_STEP}`}
       >
         <span className={faderLabel}>{fader.label}</span>

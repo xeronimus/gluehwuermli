@@ -1,4 +1,5 @@
 import {DMX_MIN_VALUE, DMX_UNIVERSE_SIZE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
+import type {ChannelLimits} from '@shared/fixtures';
 import type {DmxOutputStatus} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
@@ -17,8 +18,14 @@ export interface DmxEngineLog {
  * Runs in the main process, which Chromium never throttles (ADR 2).
  */
 export interface DmxEngine {
-  /** ignored unless channel and value are valid DMX */
+  /** ignored unless channel and value are valid DMX; capped at the channel's limit while the limits are enforced */
   setChannel: (channel: number, value: number) => void;
+
+  /** the caps per address (the channel lock); while they are enforced, channels above their new cap drop to it */
+  setChannelLimits: (limits: ChannelLimits) => void;
+
+  /** on from the start, so nothing goes out uncapped before the fixtures are loaded; turning it on caps right away */
+  setLimitsEnforced: (enforced: boolean) => void;
 
   /**
    * closes the current port first; a failure ends in the `failed` status, it doesn't throw. Overlapping connect and
@@ -58,6 +65,33 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
   let connection: DmxConnection | undefined;
   let universeChanged = false;
   let writeInFlight = false;
+  let limits: ChannelLimits = new Map();
+  let limitsEnforced = true;
+
+  const cappedValue = (channel: number, value: number) => {
+    const limit = limitsEnforced ? limits.get(channel) : undefined;
+    return limit === undefined ? value : Math.min(value, limit);
+  };
+
+  const writeChannel = (channel: number, value: number) => {
+    const index = channel - FIRST_DMX_CHANNEL;
+    const capped = cappedValue(channel, value);
+    // the same value again (a fader held still, a preset re-applied) is no reason for another packet
+    if (universe[index] === capped) {
+      return;
+    }
+    universe[index] = capped;
+    universeChanged = true;
+  };
+
+  /** a channel lock turned on must not wait for the next fader move: the laser goes off now */
+  const capUniverse = () => {
+    limits.forEach((_limit, channel) => {
+      if (isDmxChannel(channel)) {
+        writeChannel(channel, universe[channel - FIRST_DMX_CHANNEL] ?? DMX_MIN_VALUE);
+      }
+    });
+  };
 
   const setStatus = (status: DmxOutputStatus) => {
     currentStatus = status;
@@ -135,13 +169,15 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
         log.warn(`ignored invalid DMX channel ${channel} / value ${value}`);
         return;
       }
-      const index = channel - FIRST_DMX_CHANNEL;
-      // the same value again (a fader held still, a preset re-applied) is no reason for another packet
-      if (universe[index] === value) {
-        return;
-      }
-      universe[index] = value;
-      universeChanged = true;
+      writeChannel(channel, value);
+    },
+    setChannelLimits: (next) => {
+      limits = next;
+      capUniverse();
+    },
+    setLimitsEnforced: (enforced) => {
+      limitsEnforced = enforced;
+      capUniverse();
     },
     connect: (path) => runSerially(() => openPort(path)),
     disconnect: () => runSerially(closePort),

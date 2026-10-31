@@ -16,10 +16,13 @@ export {
   IconBulb as FixturesIcon,
   IconFolderOpen as FolderIcon,
   IconHelpCircle as HelpIcon,
+  IconLock as LockIcon,
   IconChevronRight as NextIcon,
   IconChevronLeft as PreviousIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
   IconDeviceFloppy as SavePresetIcon,
+  IconSettings as SettingsIcon,
+  IconLockOpen as UnlockIcon,
   IconAlertTriangle as WarningIcon
 } from '@tabler/icons-react';

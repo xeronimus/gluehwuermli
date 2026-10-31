@@ -11,16 +11,19 @@ import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
 import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
+import LockIndicator from './LockIndicator';
 import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 import PortSelect from './PortSelect';
 
 interface OutputBarProps {
   /** switches between the app's views, shown next to the title */
   viewToggle: ReactNode;
+  /** a click on a lock reminder opens the Settings view, where it can be locked again */
+  onShowSettings: () => void;
 }
 
-/** the view switch, port choice, connect/disconnect and the status of the DMX output */
-const OutputBar = ({viewToggle}: OutputBarProps) => {
+/** the view switch, what is unlocked, port choice, connect/disconnect and the status of the DMX output */
+const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const outputStatus = useAppStore((state) => state.outputStatus);
   const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const error = useAppStore((state) => state.outputError);
@@ -50,6 +53,7 @@ const OutputBar = ({viewToggle}: OutputBarProps) => {
       <img className={appLogo} src={fireflyLogo} alt="" />
       <span className={appTitle}>Glühwürmli</span>
       {viewToggle}
+      <LockIndicator onClick={onShowSettings} />
       <span className={spacer} />
       <PortSelect disabled={portLocked} />
       <Button onClick={() => void loadPorts()} disabled={portLocked} title="Search the serial ports again">
