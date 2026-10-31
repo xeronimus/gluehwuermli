@@ -6,10 +6,13 @@ export const fixtureView = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '16px'
+  gap: '16px',
+  flex: 1
 });
 
+/** at the bottom of the view, or below the fixtures once they fill more than the window */
 export const footer = style({
+  marginTop: 'auto',
   display: 'flex',
   justifyContent: 'flex-end',
   alignSelf: 'stretch'
