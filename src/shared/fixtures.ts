@@ -59,7 +59,7 @@ export function fixtureErrors(fixture: Fixture): string[] {
   if (fixture.channels.some((channel) => !Number.isInteger(channel.offset) || channel.offset < 0)) {
     errors.push('Offsets must be whole numbers from 0');
   }
-  duplicatesOf(fixture.channels.map((channel) => channel.offset)).forEach((offset) =>
+  duplicatesOf(fixture.channels.map((channel) => channel.offset).filter(Number.isInteger)).forEach((offset) =>
     errors.push(`Offset ${offset} is used by more than one channel`)
   );
   if (errors.length === 0 && !fitsInUniverse(fixture)) {

@@ -24,11 +24,21 @@ globalStyle(':where(.tabler-icon)', {
   flexShrink: 0
 });
 
-globalStyle('select', {
+globalStyle('select, input', {
   font: 'inherit',
   color: vars.colors.text,
   background: vars.colors.surfaceRaised,
   border: `1px solid ${vars.colors.border}`,
   borderRadius: vars.constants.radiusMd,
   padding: '6px 8px'
+});
+
+globalStyle('input', {
+  // the body is not selectable (a desk, not a document), typed text is
+  userSelect: 'text',
+  outline: 'none'
+});
+
+globalStyle('input:focus-visible', {
+  borderColor: vars.colors.focusBorder
 });

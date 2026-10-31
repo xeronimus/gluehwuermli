@@ -4,7 +4,12 @@
  * Size and alignment are set once for all of them, on the `tabler-icon` class (global.css.ts).
  */
 export {
+  IconPlus as AddIcon,
   IconPlugConnected as ConnectIcon,
+  IconTrash as DeleteIcon,
   IconPlugConnectedX as DisconnectIcon,
-  IconRefresh as RefreshPortsIcon
+  IconPencil as EditIcon,
+  IconX as RemoveIcon,
+  IconRefresh as RefreshPortsIcon,
+  IconAlertTriangle as WarningIcon
 } from '@tabler/icons-react';
