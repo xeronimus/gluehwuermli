@@ -22,18 +22,19 @@ notice. And Electron is still the right choice for this app.
 
   So the app keeps a 512-byte buffer as the single source of truth, changes bytes in it and sends all of it
   (`src/main/dmx/enttecProPacket.ts`).
+
 - The baud rate is ignored by the virtual COM port, USB full speed is what counts.
 
 ## Where the latency comes from
 
-| Stage                                                     | Typical                                          |
-| --------------------------------------------------------- | ------------------------------------------------ |
-| React fader `onChange` → store                            | < 1 ms (pointer events fire about 60× per second) |
-| Electron IPC, renderer → main (`ipcRenderer.send`)        | < 1 ms                                           |
-| `serialport` write of one 518-byte packet over USB        | about 1 ms                                       |
-| **FTDI latency timer** (Windows driver, default)          | **up to 16 ms**, tune it (below)                 |
-| Waiting for the widget's next DMX frame (512 ch ≈ 44 Hz)  | 0–23 ms                                          |
-| Fixture processing, dimmer curves, smoothing              | varies, often 10+ ms                             |
+| Stage                                                    | Typical                                           |
+| -------------------------------------------------------- | ------------------------------------------------- |
+| React fader `onChange` → store                           | < 1 ms (pointer events fire about 60× per second) |
+| Electron IPC, renderer → main (`ipcRenderer.send`)       | < 1 ms                                            |
+| `serialport` write of one 518-byte packet over USB       | about 1 ms                                        |
+| **FTDI latency timer** (Windows driver, default)         | **up to 16 ms**, tune it (below)                  |
+| Waiting for the widget's next DMX frame (512 ch ≈ 44 Hz) | 0–23 ms                                           |
+| Fixture processing, dimmer curves, smoothing             | varies, often 10+ ms                              |
 
 That's roughly 20–40 ms from moving the fader to the light changing, which feels immediate for a fader. Hardware
 consoles behave the same way, because the bottleneck is DMX itself: a full frame takes ~22.7 ms on the wire.
