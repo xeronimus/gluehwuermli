@@ -96,6 +96,19 @@ export const FixtureSetupSchema = Type.Object({
 });
 export type FixtureSetup = Static<typeof FixtureSetupSchema>;
 
+/** Electron's userData folder, where the app keeps its files (the fixture setup, the window state) */
+export const DataFolderSchema = Type.Object({
+  path: Type.String({minLength: 1})
+});
+export type DataFolder = Static<typeof DataFolderSchema>;
+
+/** opening the data folder in the file explorer; `failed` e.g. when the folder was deleted */
+export const OpenDataFolderResultSchema = Type.Union([
+  Type.Object({type: Type.Literal('opened')}),
+  Type.Object({type: Type.Literal('failed'), message: Type.String()})
+]);
+export type OpenDataFolderResult = Static<typeof OpenDataFolderResultSchema>;
+
 /** the payload if it is a valid request, otherwise undefined */
 export const parseSetChannelRequest = (payload: unknown): SetChannelRequest | undefined =>
   Value.Check(SetChannelRequestSchema, payload) ? payload : undefined;

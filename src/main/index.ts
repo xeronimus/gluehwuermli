@@ -1,12 +1,14 @@
-import {BrowserWindow, app, screen} from 'electron';
+import {BrowserWindow, app, screen, shell} from 'electron';
 import {join} from 'node:path';
 
 import appIcon from '../resources/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
+import {registerAppIpc} from './ipc/registerAppIpc';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerFixtureIpc} from './ipc/registerFixtureIpc';
 import log, {configureLog} from './log';
 import {createMainServices} from './services';
+import {guardExternalLinks} from './window/externalLinks';
 import {persistWindowState} from './window/persistWindowState';
 import {type WindowPlacement, restorableBounds} from './window/windowState';
 
@@ -34,6 +36,8 @@ function createMainWindow(placement: WindowPlacement): BrowserWindow {
     }
   });
 
+  guardExternalLinks(window.webContents, (url) => shell.openExternal(url), log);
+
   window.on('ready-to-show', () => {
     // maximized only now: maximize() shows a hidden window, before its content is there
     if (placement.type === 'restored' && placement.maximized) {
@@ -55,9 +59,10 @@ function createMainWindow(placement: WindowPlacement): BrowserWindow {
 
 const config = loadMainConfig(app.isPackaged);
 configureLog(config.debug);
+const dataFolder = app.getPath('userData');
 const services = createMainServices(config, {
-  fixtureFilePath: join(app.getPath('userData'), FIXTURE_FILE_NAME),
-  windowStateFilePath: join(app.getPath('userData'), WINDOW_STATE_FILE_NAME)
+  fixtureFilePath: join(dataFolder, FIXTURE_FILE_NAME),
+  windowStateFilePath: join(dataFolder, WINDOW_STATE_FILE_NAME)
 });
 
 /** where it was last time, if that is still on a connected display; screen is only available once the app is ready */
@@ -71,6 +76,7 @@ async function openMainWindow(): Promise<void> {
 void app.whenReady().then(() => {
   registerDmxIpc(services.dmxEngine, services.dmxPortConnector);
   registerFixtureIpc(services.fixtureStore);
+  registerAppIpc(dataFolder);
   void openMainWindow();
 
   // macOS: re-create the window when the dock icon is clicked and none is open
