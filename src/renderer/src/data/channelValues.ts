@@ -24,6 +24,10 @@ export function withChannelValues(channelValues: readonly number[], values: read
 export const channelValueOf = (channelValues: readonly number[], channel: number): number =>
   channelValues[channel - FIRST_DMX_CHANNEL] ?? DMX_MIN_VALUE;
 
+/** whether setting `channel` to `value` changes anything; a slider reports every pointer move, also within one step */
+export const isChannelChange = (channelValues: readonly number[], channel: number, value: number): boolean =>
+  channelValueOf(channelValues, channel) !== value;
+
 /** `count` faders for consecutive channels from `firstChannel` */
 export const fadersFor = (firstChannel: number, count: number): Fader[] =>
   Array.from({length: count}, (_, offset) => ({

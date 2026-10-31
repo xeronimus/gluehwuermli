@@ -127,7 +127,12 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
         log.warn(`ignored invalid DMX channel ${channel} / value ${value}`);
         return;
       }
-      universe[channel - FIRST_DMX_CHANNEL] = value;
+      const index = channel - FIRST_DMX_CHANNEL;
+      // the same value again (a fader held still, a preset re-applied) is no reason for another packet
+      if (universe[index] === value) {
+        return;
+      }
+      universe[index] = value;
       universeChanged = true;
     },
     connect,
