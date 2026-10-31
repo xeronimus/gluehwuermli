@@ -50,6 +50,13 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('accepts a description up to the maximum length, reports a longer one', () => {
+    expect(fixtureErrors(fixtureOf({description: 'x'.repeat(2000)}))).toEqual([]);
+    expect(fixtureErrors(fixtureOf({description: 'x'.repeat(2001)}))).toEqual([
+      'The description can have at most 2000 characters'
+    ]);
+  });
+
   test('reports blank channel names and duplicate offsets', () => {
     const channels = [
       {name: 'Dimmer', offset: 0},
@@ -90,6 +97,13 @@ describe('parseFixtureSetup', () => {
   test('accepts an empty and a filled setup', () => {
     expect(parseFixtureSetup(emptyFixtureSetup())).toEqual({version: 1, fixtures: []});
     expect(parseFixtureSetup({version: 1, fixtures: [fixtureOf()]})).toEqual({version: 1, fixtures: [fixtureOf()]});
+  });
+
+  test('accepts a fixture with and without a description, so files from before it load', () => {
+    const described = fixtureOf({description: 'DIP 1+4 on, 3 channel mode'});
+
+    expect(parseFixtureSetup({version: 1, fixtures: [described]})).toEqual({version: 1, fixtures: [described]});
+    expect(parseFixtureSetup({version: 1, fixtures: [{...fixtureOf(), description: 42}]})).toBeUndefined();
   });
 
   test.each([

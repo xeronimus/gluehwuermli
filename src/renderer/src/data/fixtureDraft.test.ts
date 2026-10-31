@@ -24,6 +24,14 @@ test('a fixture survives the round trip through a draft', () => {
   expect(fixtureOfDraft('par', draftOf(par))).toEqual(par);
 });
 
+test('keeps a description, trimmed, and leaves out a blank one', () => {
+  const described = {...par, description: 'DIP 1+4 on\nhangs stage left'};
+
+  expect(fixtureOfDraft('par', draftOf(described))).toEqual(described);
+  expect(fixtureOfDraft('par', {...draftOf(par), description: '  note \n'})).toEqual({...par, description: 'note'});
+  expect(fixtureOfDraft('par', {...draftOf(par), description: '   '})).toEqual(par);
+});
+
 test('trims the names', () => {
   const draft = withChannelChange({...draftOf(par), name: ' PAR '}, 0, {name: ' Red '});
 

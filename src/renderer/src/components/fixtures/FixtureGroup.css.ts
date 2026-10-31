@@ -29,6 +29,21 @@ export const groupAddresses = style({
   color: vars.colors.textMuted
 });
 
+/** as wide as the faders, not wider: a long description wraps and is cut after a few lines (all of it on hover) */
+export const groupDescription = style({
+  width: 0,
+  minWidth: '100%',
+  margin: 0,
+  color: vars.colors.textSecondary,
+  fontSize: '0.85em',
+  whiteSpace: 'pre-line',
+  overflowWrap: 'anywhere',
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  WebkitLineClamp: 3,
+  overflow: 'hidden'
+});
+
 export const groupFaders = style({
   display: 'flex',
   gap: '8px'

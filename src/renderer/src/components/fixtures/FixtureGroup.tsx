@@ -6,7 +6,7 @@ import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
 import {DeleteIcon, EditIcon} from '../commons/icons';
-import {fixtureGroup, groupAddresses, groupFaders, groupHeader, groupName} from './FixtureGroup.css';
+import {fixtureGroup, groupAddresses, groupDescription, groupFaders, groupHeader, groupName} from './FixtureGroup.css';
 
 interface FixtureGroupProps {
   fixture: Fixture;
@@ -14,7 +14,7 @@ interface FixtureGroupProps {
   onDelete: () => void;
 }
 
-/** the fixture's name and addresses, and a fader per channel on its absolute DMX channel */
+/** the fixture's name, addresses and description, and a fader per channel on its absolute DMX channel */
 const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
   const setChannelValue = useActionSetChannelValue();
 
@@ -30,6 +30,11 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
           <DeleteIcon />
         </Button>
       </header>
+      {fixture.description && (
+        <p className={groupDescription} title={fixture.description}>
+          {fixture.description}
+        </p>
+      )}
       <div className={groupFaders}>
         {fixtureFaders(fixture).map((fader) => (
           <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />

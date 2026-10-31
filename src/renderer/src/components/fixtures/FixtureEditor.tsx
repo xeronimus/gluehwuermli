@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {fixtureErrors, overlappingFixtures} from '@shared/fixtures';
-import type {Fixture} from '@shared/ipc';
+import {FIXTURE_DESCRIPTION_MAX_LENGTH, type Fixture} from '@shared/ipc';
 
 import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
 import {describeOverlap} from '@/data/fixtureOverlaps';
@@ -14,6 +14,7 @@ import FixtureChannelRows from './FixtureChannelRows';
 import {
   actions,
   addressInput,
+  descriptionInput,
   editorBody,
   editorForm,
   editorTitle,
@@ -25,6 +26,8 @@ import {
   warningList
 } from './FixtureEditor.css';
 import FixtureHelp from './FixtureHelp';
+
+const DESCRIPTION_ROWS = 3;
 
 interface FixtureEditorProps {
   /** undefined to add a new fixture */
@@ -86,6 +89,18 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
           </div>
 
           <FixtureChannelRows draft={draft} onChange={setDraft} />
+
+          <label className={field}>
+            Description
+            <textarea
+              className={descriptionInput}
+              value={draft.description}
+              rows={DESCRIPTION_ROWS}
+              maxLength={FIXTURE_DESCRIPTION_MAX_LENGTH}
+              placeholder="Anything worth knowing: the DMX mode, DIP switch settings, where it hangs, who it belongs to…"
+              onChange={(event) => setDraft({...draft, description: event.target.value})}
+            />
+          </label>
 
           {errors.length > 0 && (
             <ul className={errorList}>

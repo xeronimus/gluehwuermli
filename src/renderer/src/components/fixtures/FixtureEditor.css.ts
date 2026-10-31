@@ -49,6 +49,12 @@ export const nameInput = style({
   width: '240px'
 });
 
+export const descriptionInput = style({
+  width: '100%',
+  boxSizing: 'border-box',
+  resize: 'vertical'
+});
+
 export const addressInput = style({
   width: '90px'
 });

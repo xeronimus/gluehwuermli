@@ -6,6 +6,7 @@ export interface FixtureDraft {
   readonly name: string;
   readonly startAddress: string;
   readonly channels: readonly FixtureChannelDraft[];
+  readonly description: string;
 }
 
 export interface FixtureChannelDraft {
@@ -18,25 +19,31 @@ const FIRST_OFFSET = 0;
 export const newFixtureDraft = (): FixtureDraft => ({
   name: '',
   startAddress: String(FIRST_DMX_CHANNEL),
-  channels: [{name: '', offset: String(FIRST_OFFSET)}]
+  channels: [{name: '', offset: String(FIRST_OFFSET)}],
+  description: ''
 });
 
 export const draftOf = (fixture: Fixture): FixtureDraft => ({
   name: fixture.name,
   startAddress: String(fixture.startAddress),
-  channels: fixture.channels.map((channel) => ({name: channel.name, offset: String(channel.offset)}))
+  channels: fixture.channels.map((channel) => ({name: channel.name, offset: String(channel.offset)})),
+  description: fixture.description ?? ''
 });
 
 /** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
 const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
 
-/** the fixture the draft describes, valid or not: check it with fixtureErrors */
-export const fixtureOfDraft = (id: string, draft: FixtureDraft): Fixture => ({
-  id,
-  name: draft.name.trim(),
-  startAddress: numberOf(draft.startAddress),
-  channels: draft.channels.map((channel) => ({name: channel.name.trim(), offset: numberOf(channel.offset)}))
-});
+/** the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description is left out. */
+export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
+  const description = draft.description.trim();
+  return {
+    id,
+    name: draft.name.trim(),
+    startAddress: numberOf(draft.startAddress),
+    channels: draft.channels.map((channel) => ({name: channel.name.trim(), offset: numberOf(channel.offset)})),
+    ...(description && {description})
+  };
+}
 
 /** the DMX address the channel lands on, or undefined while the start address or the offset can't give a valid one */
 export function draftChannelAddress(draft: FixtureDraft, channel: FixtureChannelDraft): number | undefined {

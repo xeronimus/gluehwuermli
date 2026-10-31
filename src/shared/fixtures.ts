@@ -1,7 +1,14 @@
 import Value from 'typebox/value';
 
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from './dmx';
-import {FIXTURE_SETUP_VERSION, type Fixture, type FixtureChannel, type FixtureSetup, FixtureSetupSchema} from './ipc';
+import {
+  FIXTURE_DESCRIPTION_MAX_LENGTH,
+  FIXTURE_SETUP_VERSION,
+  type Fixture,
+  type FixtureChannel,
+  type FixtureSetup,
+  FixtureSetupSchema
+} from './ipc';
 
 /**
  * Addressing and validation of fixtures, used by both processes: the renderer shows the problems while editing, the
@@ -49,6 +56,9 @@ export function fixtureErrors(fixture: Fixture): string[] {
   }
   if (!Number.isInteger(fixture.startAddress) || fixture.startAddress < FIRST_DMX_CHANNEL) {
     errors.push(`The start address must be a whole number from ${FIRST_DMX_CHANNEL} to ${LAST_DMX_CHANNEL}`);
+  }
+  if ((fixture.description?.length ?? 0) > FIXTURE_DESCRIPTION_MAX_LENGTH) {
+    errors.push(`The description can have at most ${FIXTURE_DESCRIPTION_MAX_LENGTH} characters`);
   }
   if (fixture.channels.length === 0) {
     errors.push('The fixture needs at least one channel');
