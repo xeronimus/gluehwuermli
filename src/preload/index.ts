@@ -1,7 +1,7 @@
 import {IpcRendererEvent, contextBridge, ipcRenderer} from 'electron';
 
 import {DMX_BRIDGE_GLOBAL, DmxBridge} from '@shared/dmxBridge';
-import type {DmxOutputStatus} from '@shared/ipc';
+import type {DmxOutputStatus, LockStatus} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 
 /** The only bridge between renderer and main: a narrow, typed API instead of ipcRenderer itself. */
@@ -22,7 +22,22 @@ const dmxBridge: DmxBridge = {
   loadFixtures: () => ipcRenderer.invoke(IpcChannel.LOAD_FIXTURES),
   saveFixtures: (setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, setup),
   getDataFolder: () => ipcRenderer.invoke(IpcChannel.GET_DATA_FOLDER),
-  openDataFolder: () => ipcRenderer.invoke(IpcChannel.OPEN_DATA_FOLDER)
+  openDataFolder: () => ipcRenderer.invoke(IpcChannel.OPEN_DATA_FOLDER),
+  getLockStatus: () => ipcRenderer.invoke(IpcChannel.GET_LOCK_STATUS),
+  unlock: (password) => ipcRenderer.invoke(IpcChannel.UNLOCK, {password}),
+  lock: () => ipcRenderer.invoke(IpcChannel.LOCK),
+  // no `password: undefined` key: the schema allows the key to be missing, not to be undefined
+  liftChannelLock: (password) =>
+    ipcRenderer.invoke(IpcChannel.LIFT_CHANNEL_LOCK, password === undefined ? {} : {password}),
+  lockChannels: () => ipcRenderer.invoke(IpcChannel.LOCK_CHANNELS),
+  reportActivity: () => ipcRenderer.send(IpcChannel.USER_ACTIVITY),
+  onLockChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, status: LockStatus) => listener(status);
+    ipcRenderer.on(IpcChannel.LOCK_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.LOCK_CHANGED, handler);
+    };
+  }
 };
 
 contextBridge.exposeInMainWorld(DMX_BRIDGE_GLOBAL, dmxBridge);

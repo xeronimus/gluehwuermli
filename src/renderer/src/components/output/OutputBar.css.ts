@@ -48,3 +48,28 @@ export const activeChannels = style({
 export const outputError = style({
   color: vars.colors.danger
 });
+
+const lockIndicatorBase = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '4px',
+  padding: '2px 8px',
+  border: '1px solid',
+  borderRadius: vars.constants.radiusSm,
+  font: 'inherit',
+  fontSize: '0.85em',
+  whiteSpace: 'nowrap',
+  background: 'none',
+  outline: 'none',
+  cursor: 'pointer',
+  selectors: {
+    '&:hover, &:focus-visible': {
+      background: vars.colors.surfaceRaised
+    }
+  }
+});
+
+export const lockIndicatorVariants = styleVariants({
+  setup: [lockIndicatorBase, {color: vars.colors.warning, borderColor: vars.colors.warning}],
+  channelLockLifted: [lockIndicatorBase, {color: vars.colors.danger, borderColor: vars.colors.danger}]
+});

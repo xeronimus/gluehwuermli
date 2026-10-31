@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 
 import {useActionLoadDataFolder, useActionOpenDataFolder} from '@/state/actionHooks/dataFolder';
+import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
@@ -8,10 +9,14 @@ import {FolderIcon} from '../commons/icons';
 import {errorMessage, folderPath, message} from './DataFolderSection.css';
 import {sideSection} from './HelpView.css';
 
-/** where the setup is stored, to back it up or paste in a fixture; a path to copy and a button opening it */
+/**
+ * where the setup is stored, to back it up or paste in a fixture; a path to copy and, in Setup mode, a button opening
+ * it
+ */
 const DataFolderSection = () => {
   const dataFolder = useAppStore((state) => state.dataFolder);
   const error = useAppStore((state) => state.dataFolderError);
+  const setupMode = useAppStore(selectIsSetupMode);
   const loadDataFolder = useActionLoadDataFolder();
   const openDataFolder = useActionOpenDataFolder();
 
@@ -26,7 +31,8 @@ const DataFolderSection = () => {
     <section className={sideSection}>
       <h2>Data folder</h2>
       <p className={message}>
-        The fixtures and the window position are stored here as JSON files. Copy the folder to back up your setup.
+        The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back
+        up your setup.
       </p>
       {dataFolder.type === 'loading' && <span className={message}>Looking up the folder…</span>}
       {dataFolder.type === 'failed' && <span className={errorMessage}>{dataFolder.message}</span>}
@@ -39,9 +45,11 @@ const DataFolderSection = () => {
             aria-label="Data folder"
             onFocus={(event) => event.currentTarget.select()}
           />
-          <Button onClick={() => void openDataFolder()}>
-            <FolderIcon /> Open in Explorer
-          </Button>
+          {setupMode && (
+            <Button onClick={() => void openDataFolder()}>
+              <FolderIcon /> Open in Explorer
+            </Button>
+          )}
         </>
       )}
       {error && <span className={errorMessage}>{error}</span>}

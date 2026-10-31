@@ -27,8 +27,11 @@ export const faderStepButton = style({
   font: 'inherit',
   cursor: 'pointer',
   selectors: {
-    '&:hover': {
+    '&:hover:not(:disabled)': {
       background: vars.colors.surfaceRaised
+    },
+    '&:disabled': {
+      cursor: 'default'
     },
     '&:focus-visible': {
       outline: `2px solid ${vars.colors.primaryHover}`
@@ -38,6 +41,10 @@ export const faderStepButton = style({
 
 /** the label sits a little further from the track than the column's gap */
 export const faderLabelButton = style([faderStepButton, {marginTop: '2px'}]);
+
+export const faderLock = style({
+  color: vars.colors.warning
+});
 
 export const faderValue = style({
   fontFamily: vars.fonts.mono,
@@ -77,3 +84,6 @@ export const faderThumb = style({
     }
   }
 });
+
+/** a capped channel's thumb: greyed out, it can't be moved */
+export const faderThumbLocked = style([faderThumb, {background: vars.colors.textMuted}]);

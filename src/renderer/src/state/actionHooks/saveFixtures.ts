@@ -6,15 +6,23 @@ import {capturePreset, withPreset} from '@/data/presets';
 import logger from '@/data/service/Logger';
 import {fixtureService} from '@/data/service/services';
 
-import {storeFixturesWith} from '../fixtures/storeFixtures';
+import {type StoreFixtures, storeFixturesWith} from '../fixtures/storeFixtures';
 import {useAppStore} from '../store';
+import {capShownChannelValues} from './capShownChannelValues';
 
-const storeFixtures = storeFixturesWith({
+const storeFixturesUncapped = storeFixturesWith({
   getState: useAppStore.getState,
   fixtureService,
   runSerially: createSerialQueue(),
   log: logger
 });
+
+/** a saved setup may lock a channel that is above its new cap: the main process capped it already */
+const storeFixtures: StoreFixtures = async (change, failure) => {
+  const stored = await storeFixturesUncapped(change, failure);
+  capShownChannelValues();
+  return stored;
+};
 
 /** adds the fixture, or replaces the one with its id */
 export function useActionSaveFixture() {

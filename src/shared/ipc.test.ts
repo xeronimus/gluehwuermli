@@ -1,4 +1,10 @@
-import {parseConnectRequest, parseSetChannelRequest, parseSetChannelValuesRequest} from './ipc';
+import {
+  parseConnectRequest,
+  parseLiftChannelLockRequest,
+  parseSetChannelRequest,
+  parseSetChannelValuesRequest,
+  parseUnlockRequest
+} from './ipc';
 
 describe('parseSetChannelRequest', () => {
   test('accepts the first and last channel with the lowest and highest value', () => {
@@ -53,5 +59,28 @@ describe('parseSetChannelValuesRequest', () => {
     null
   ])('rejects %j', (payload) => {
     expect(parseSetChannelValuesRequest(payload)).toBeUndefined();
+  });
+});
+
+describe('parseUnlockRequest', () => {
+  test('accepts a password of at least 4 characters', () => {
+    expect(parseUnlockRequest({password: 'abcd'})).toEqual({password: 'abcd'});
+  });
+
+  test.each([{password: 'abc'}, {password: 'x'.repeat(201)}, {password: 1234}, {}, null])('rejects %j', (payload) => {
+    expect(parseUnlockRequest(payload)).toBeUndefined();
+  });
+});
+
+describe('parseLiftChannelLockRequest', () => {
+  test('accepts a password, or none (in Setup mode)', () => {
+    expect(parseLiftChannelLockRequest({password: 'abcd'})).toEqual({password: 'abcd'});
+    expect(parseLiftChannelLockRequest({})).toEqual({});
+  });
+
+  test('rejects a too short password and anything else', () => {
+    expect(parseLiftChannelLockRequest({password: 'abc'})).toBeUndefined();
+    expect(parseLiftChannelLockRequest({password: 1234})).toBeUndefined();
+    expect(parseLiftChannelLockRequest(null)).toBeUndefined();
   });
 });

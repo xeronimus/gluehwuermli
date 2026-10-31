@@ -6,6 +6,7 @@ import {describeOverlap} from '@/data/fixtureOverlaps';
 import {useActionLoadFixtures} from '@/state/actionHooks/loadFixtures';
 import {useActionDeleteFixture} from '@/state/actionHooks/saveFixtures';
 import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSelectors';
+import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
@@ -18,7 +19,7 @@ type Editing = {type: 'none'} | {type: 'adding'} | {type: 'editing'; fixture: Fi
 
 const NOT_EDITING: Editing = {type: 'none'};
 
-/** one control group per fixture, and adding, editing and deleting them */
+/** one control group per fixture, and adding, editing and deleting them in Setup mode */
 const FixtureView = () => {
   const fixtureSetup = useAppStore((state) => state.fixtureSetup);
   const fixtures = useAppStore(selectFixtures);
@@ -26,7 +27,13 @@ const FixtureView = () => {
   const error = useAppStore((state) => state.fixturesError);
   const loadFixtures = useActionLoadFixtures();
   const deleteFixture = useActionDeleteFixture();
+  const setupMode = useAppStore(selectIsSetupMode);
   const [editing, setEditing] = useState<Editing>(NOT_EDITING);
+
+  // locking (the Lock button, being idle) drops an unsaved edit (set during render, React re-renders right away)
+  if (editing.type !== 'none' && !setupMode) {
+    setEditing(NOT_EDITING);
+  }
 
   // the stored setup is external state: load it once, not again every time the tab is shown
   useEffect(() => {
@@ -83,7 +90,8 @@ const FixtureView = () => {
 
       {fixtures.length === 0 && (
         <span className={message}>
-          No fixtures yet: add the devices of your rig with Add fixture, to control them by name.
+          No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control
+          them by name.
         </span>
       )}
 
@@ -92,18 +100,23 @@ const FixtureView = () => {
           <FixtureGroup
             key={fixture.id}
             fixture={fixture}
-            onEdit={() => setEditing({type: 'editing', fixture})}
-            onDelete={() => onDelete(fixture)}
+            actions={
+              setupMode
+                ? {onEdit: () => setEditing({type: 'editing', fixture}), onDelete: () => onDelete(fixture)}
+                : undefined
+            }
           />
         ))}
       </div>
 
       {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
-      <div className={footer}>
-        <Button onClick={() => setEditing({type: 'adding'})}>
-          <AddIcon /> Add fixture
-        </Button>
-      </div>
+      {setupMode && (
+        <div className={footer}>
+          <Button onClick={() => setEditing({type: 'adding'})}>
+            <AddIcon /> Add fixture
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
