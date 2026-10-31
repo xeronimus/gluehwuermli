@@ -3,7 +3,7 @@
 ## What is this project?
 
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
-fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
+a Help view (short manual, the data folder, a link to the repo), fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
 folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect.
 Planned: scenes, fades and chases.
@@ -62,6 +62,7 @@ src/
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
     dmxBridge.ts             # the API the preload exposes as window.gluehwuermli
+    links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
     serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
   main/                      # Electron main process
     index.ts                 # window, lifecycle
@@ -69,10 +70,12 @@ src/
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
     ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, validated against parseFixtureSetup
+    ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/)
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
-                             # WindowStateStore + impl/file, persistWindowState (debounced save, save on close)
+                             # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
+                             # externalLinks: no navigation or new window, only the allow-listed repo URL opens in the browser
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2)
       enttecProPacket.ts     # label 6 framing
@@ -84,13 +87,14 @@ src/
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
       index.tsx, envConfig.ts
-      components/            # UI by feature: output/ (top bar: view toggle, port), fixtures/ (groups, editor), faders/ (raw channels);
+      components/            # UI by feature: output/ (top bar: view toggle, port), fixtures/ (groups, editor), faders/ (raw channels),
+                             # help/ (manual, data folder, repo link);
                              # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, outputStatus, fixtureDraft, fixtureFaders, fixtureList,
                              # presets)
-        service/             # DmxService, FixtureService, services.ts (composition root), impl/electron, impl/inMemory
+        service/             # DmxService, FixtureService, AppService, services.ts (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
-      state/                 # Zustand store: channels/, output/, fixtures/, actionHooks/
+      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, actionHooks/
 ```
 
 ## Key Architecture Patterns
