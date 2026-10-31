@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-31
+
 First release.
 
 ### Added
@@ -30,4 +32,5 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/commits/main
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/xeronimus/gluehwuermli/releases/tag/v0.1.0
