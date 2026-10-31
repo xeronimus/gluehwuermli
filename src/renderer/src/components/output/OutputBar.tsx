@@ -1,52 +1,26 @@
-import {ReactNode, useEffect} from 'react';
+import {ReactNode} from 'react';
 
 import fireflyLogo from '@resources/favicon/favicon-96x96.png';
 
 import {describeOutputStatus} from '@/data/outputStatus';
-import {useActionConnectOutput, useActionDisconnectOutput} from '@/state/actionHooks/connectOutput';
-import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
-import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
 import {selectActiveChannelCount} from '@/state/channels/channelsSelectors';
 import {useAppStore} from '@/state/store';
 
-import Button from '../commons/Button';
-import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
 import LockIndicator from './LockIndicator';
 import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
-import PortSelect from './PortSelect';
 
 interface OutputBarProps {
   /** switches between the app's views, shown next to the title */
   viewToggle: ReactNode;
-  /** a click on a lock reminder opens the Settings view, where it can be locked again */
+  /** a click on a lock reminder or the output status opens the Settings view, where their controls are */
   onShowSettings: () => void;
 }
 
-/** the view switch, what is unlocked, port choice, connect/disconnect and the status of the DMX output */
+/** the view switch, what is unlocked and the status of the DMX output; the port is chosen in the Settings view */
 const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const outputStatus = useAppStore((state) => state.outputStatus);
-  const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const error = useAppStore((state) => state.outputError);
   const activeChannelCount = useAppStore(selectActiveChannelCount);
-  const loadPorts = useActionLoadPorts();
-  const connect = useActionConnectOutput();
-  const disconnect = useActionDisconnectOutput();
-
-  useOutputStatusSubscription();
-
-  // the ports are external state: list them once when the bar appears (loadPorts is a new function every render)
-  useEffect(() => {
-    void loadPorts();
-  }, []);
-
-  const connected = outputStatus.type === 'connected';
-  const portLocked = connected || outputStatus.type === 'connecting';
-
-  const onConnect = () => {
-    if (selectedPortPath) {
-      void connect(selectedPortPath);
-    }
-  };
 
   return (
     <header className={outputBar}>
@@ -55,20 +29,13 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       {viewToggle}
       <LockIndicator onClick={onShowSettings} />
       <span className={spacer} />
-      <PortSelect disabled={portLocked} />
-      <Button onClick={() => void loadPorts()} disabled={portLocked} title="Search the serial ports again">
-        <RefreshPortsIcon />
-      </Button>
-      {connected ? (
-        <Button onClick={() => void disconnect()}>
-          <DisconnectIcon /> Disconnect
-        </Button>
-      ) : (
-        <Button variant="primary" onClick={onConnect} disabled={portLocked || !selectedPortPath}>
-          <ConnectIcon /> Connect
-        </Button>
-      )}
-      <span className={statusVariants[outputStatus.type]}>{describeOutputStatus(outputStatus)}</span>
+      <button
+        className={statusVariants[outputStatus.type]}
+        onClick={onShowSettings}
+        title="Open the Settings to choose the port and connect"
+      >
+        {describeOutputStatus(outputStatus)}
+      </button>
       {error && <span className={outputError}>{error}</span>}
       <span className={activeChannels}>{activeChannelCount} channels above 0</span>
     </header>

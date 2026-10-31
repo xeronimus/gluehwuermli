@@ -97,8 +97,9 @@ src/
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
       index.tsx, envConfig.ts
-      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, port), fixtures/ (groups,
-                             # editor), faders/ (raw channels), settings/ (mode and channel lock, password form),
+      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status), fixtures/
+                             # (groups, editor), faders/ (raw channels), settings/ (output port, mode and channel lock,
+                             # password form),
                              # help/ (manual, data folder, repo link);
                              # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,

@@ -28,9 +28,21 @@ export const spacer = style({
   flex: 1
 });
 
+/** a button that looks like text until hovered: a click leads to the port controls in the Settings view */
 const statusBase = style({
+  padding: '2px 6px',
+  border: 'none',
+  borderRadius: vars.constants.radiusSm,
   fontFamily: vars.fonts.mono,
-  fontSize: '0.9em'
+  fontSize: '0.9em',
+  background: 'none',
+  outline: 'none',
+  cursor: 'pointer',
+  selectors: {
+    '&:hover, &:focus-visible': {
+      background: vars.colors.surfaceRaised
+    }
+  }
 });
 
 export const statusVariants = styleVariants({

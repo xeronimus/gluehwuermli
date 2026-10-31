@@ -64,3 +64,9 @@ export const passwordForm = style({
 export const passwordInput = style({
   width: '160px'
 });
+
+export const portControls = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px'
+});
