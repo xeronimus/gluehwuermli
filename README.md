@@ -11,12 +11,15 @@ pnpm install   # also downloads the Electron binary (postinstall)
 pnpm dev       # the app with hot reload of the UI
 ```
 
-Without a widget, start with one simulated port:
+Without a widget, start with one simulated port instead of the real serial ports:
 
 ```sh
-GLUEHWUERMLI_SIMULATED_OUTPUT=1 pnpm dev        # bash
-$env:GLUEHWUERMLI_SIMULATED_OUTPUT=1; pnpm dev  # PowerShell
+cp .env.sample .env.development.local   # MAIN_VITE_SIMULATED_OUTPUT=1, gitignored
+pnpm dev
 ```
+
+The settings in `.env.development.local` apply to `pnpm dev` only, never to a build or installer. Delete the file (or
+set the value to `0`) to see the real ports again. All settings: [.env.sample](.env.sample).
 
 ### Windows: lower the FTDI latency timer
 

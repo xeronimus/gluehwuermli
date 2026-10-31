@@ -39,7 +39,7 @@ function createMainWindow(): BrowserWindow {
   return window;
 }
 
-const config = loadMainConfig(process.env, app.isPackaged);
+const config = loadMainConfig(app.isPackaged);
 configureLog(config.debug);
 const services = createMainServices(config);
 

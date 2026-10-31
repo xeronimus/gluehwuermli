@@ -34,7 +34,7 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 
 | Command           | Description                                                         |
 | ----------------- | ------------------------------------------------------------------- |
-| `pnpm dev`        | Electron + Vite dev server; `GLUEHWUERMLI_SIMULATED_OUTPUT=1` for a simulated port |
+| `pnpm dev`        | Electron + Vite dev server; settings from `.env.development.local` (copy of `.env.sample`) |
 | `pnpm start`      | Build and run the production build                                  |
 | `pnpm build`      | Build to `out/`                                                     |
 | `pnpm dist`       | Build and package the Windows installer to `dist/`                  |
@@ -62,7 +62,7 @@ src/
     dmxBridge.ts             # the API the preload exposes as window.gluehwuermli
   main/                      # Electron main process
     index.ts                 # window, lifecycle
-    config.ts                # the only module reading env variables
+    config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
     dmx/
