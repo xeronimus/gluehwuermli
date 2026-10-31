@@ -4,9 +4,9 @@
 
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
 fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
-folder) with a fader per channel, a bank of 16 raw 0–255 faders that moves across channels 1–512, port selection and
-connect/disconnect.
-Planned: presets, scenes, fades and chases.
+folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), a bank
+of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect.
+Planned: scenes, fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -86,7 +86,8 @@ src/
       index.tsx, envConfig.ts
       components/            # UI by feature: output/ (top bar: view toggle, port), fixtures/ (groups, editor), faders/ (raw channels);
                              # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
-      data/                  # pure logic (channelValues, channelBank, outputStatus, fixtureDraft, fixtureFaders, fixtureList)
+      data/                  # pure logic (channelValues, channelBank, outputStatus, fixtureDraft, fixtureFaders, fixtureList,
+                             # presets)
         service/             # DmxService, FixtureService, services.ts (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
       state/                 # Zustand store: channels/, output/, fixtures/, actionHooks/

@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {fixtureErrors, overlappingFixtures} from '@shared/fixtures';
-import {FIXTURE_DESCRIPTION_MAX_LENGTH, FIXTURE_HINT_MAX_LENGTH, type Fixture} from '@shared/ipc';
+import type {Fixture} from '@shared/ipc';
 
 import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
 import {describeOverlap} from '@/data/fixtureOverlaps';
@@ -14,7 +14,6 @@ import FixtureChannelRows from './FixtureChannelRows';
 import {
   actions,
   addressInput,
-  descriptionInput,
   editorBody,
   editorForm,
   editorTitle,
@@ -22,13 +21,12 @@ import {
   field,
   fields,
   fixtureEditor,
-  hintInput,
   nameInput,
   warningList
 } from './FixtureEditor.css';
 import FixtureHelp from './FixtureHelp';
-
-const DESCRIPTION_ROWS = 3;
+import FixtureNotesFields from './FixtureNotesFields';
+import FixturePresetRows from './FixturePresetRows';
 
 interface FixtureEditorProps {
   /** undefined to add a new fixture */
@@ -91,28 +89,9 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
 
           <FixtureChannelRows draft={draft} onChange={setDraft} />
 
-          <label className={field}>
-            Hint
-            <input
-              className={hintInput}
-              value={draft.hint}
-              maxLength={FIXTURE_HINT_MAX_LENGTH}
-              placeholder="Shown below the faders, e.g. warm up 2 min before smoke"
-              onChange={(event) => setDraft({...draft, hint: event.target.value})}
-            />
-          </label>
+          <FixturePresetRows draft={draft} onChange={setDraft} />
 
-          <label className={field}>
-            Description
-            <textarea
-              className={descriptionInput}
-              value={draft.description}
-              rows={DESCRIPTION_ROWS}
-              maxLength={FIXTURE_DESCRIPTION_MAX_LENGTH}
-              placeholder="Anything worth knowing: the DMX mode, DIP switch settings, where it hangs, who it belongs to…"
-              onChange={(event) => setDraft({...draft, description: event.target.value})}
-            />
-          </label>
+          <FixtureNotesFields draft={draft} onChange={setDraft} />
 
           {errors.length > 0 && (
             <ul className={errorList}>

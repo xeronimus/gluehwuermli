@@ -7,6 +7,7 @@ import {IpcChannel} from '@shared/ipcChannels';
 /** The only bridge between renderer and main: a narrow, typed API instead of ipcRenderer itself. */
 const dmxBridge: DmxBridge = {
   setChannel: (channel, value) => ipcRenderer.send(IpcChannel.SET_CHANNEL, {channel, value}),
+  setChannelValues: (values) => ipcRenderer.send(IpcChannel.SET_CHANNEL_VALUES, {values}),
   listPorts: () => ipcRenderer.invoke(IpcChannel.LIST_PORTS),
   connect: (path) => ipcRenderer.invoke(IpcChannel.CONNECT, {path}),
   disconnect: () => ipcRenderer.invoke(IpcChannel.DISCONNECT),
