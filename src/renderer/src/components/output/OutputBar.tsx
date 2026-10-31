@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {ReactNode, useEffect} from 'react';
 
 import fireflyLogo from '@resources/favicon/favicon-96x96.png';
 
@@ -10,12 +10,26 @@ import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
 import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
-import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
+import {
+  activeChannels,
+  appLogo,
+  appTitle,
+  divider,
+  outputBar,
+  outputError,
+  spacer,
+  statusVariants
+} from './OutputBar.css';
 import PortSelect from './PortSelect';
 import {useOutputStatusSubscription} from './useOutputStatusSubscription';
 
-/** port choice, connect/disconnect and the status of the DMX output */
-const OutputBar = () => {
+interface OutputBarProps {
+  /** switches between the app's views, shown next to the title */
+  viewToggle: ReactNode;
+}
+
+/** the view switch, port choice, connect/disconnect and the status of the DMX output */
+const OutputBar = ({viewToggle}: OutputBarProps) => {
   const outputStatus = useAppStore((state) => state.outputStatus);
   const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const error = useAppStore((state) => state.outputError);
@@ -44,6 +58,8 @@ const OutputBar = () => {
     <header className={outputBar}>
       <img className={appLogo} src={fireflyLogo} alt="" />
       <span className={appTitle}>Glühwürmli</span>
+      {viewToggle}
+      <span className={divider} />
       <PortSelect disabled={portLocked} />
       <Button onClick={() => void loadPorts()} disabled={portLocked} title="Search the serial ports again">
         <RefreshPortsIcon />
