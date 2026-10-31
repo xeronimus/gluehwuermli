@@ -5,12 +5,14 @@
  */
 export {
   IconPlus as AddIcon,
+  IconAdjustments as ChannelsIcon,
   IconChevronUp as CollapseIcon,
   IconPlugConnected as ConnectIcon,
   IconTrash as DeleteIcon,
   IconPlugConnectedX as DisconnectIcon,
   IconPencil as EditIcon,
   IconChevronDown as ExpandIcon,
+  IconBulb as FixturesIcon,
   IconHelpCircle as HelpIcon,
   IconChevronRight as NextIcon,
   IconChevronLeft as PreviousIcon,
