@@ -51,6 +51,7 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 ```
 electron.vite.config.ts      # aliases per process: `@/` = that process's source root, `@shared/`, `@resources/` (renderer)
 vitest.config.mts            # one Vitest project per process, with the same aliases
+CHANGELOG.md                 # release notes, Keep a Changelog; what counts as breaking
 electron-builder.yml         # packaging; serialport's native binding is unpacked from the asar
 doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
@@ -138,6 +139,19 @@ src/
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
   `domain/` imports only `domain/`, `shared/` and packages, `data/` never imports `state/` or `components/`, `state/`
   never imports `components/`
+
+## Versioning and Releases
+
+Semantic Versioning; the version lives in `package.json` and is tagged as `vX.Y.Z` on `main`. What counts as breaking
+(an existing `fixtures.json` or `settings.json` no longer readable without a migration, or a Show/Setup mode change an
+operator has to relearn) is written at the top of `CHANGELOG.md`. While on `0.x`, breaking changes bump the minor
+version, everything else the patch version.
+
+- Every user-visible change adds a line under `## [Unreleased]` in `CHANGELOG.md` in the same PR (Keep a Changelog
+  sections: Added, Changed, Fixed, Removed); internal refactors, tests and docs don't
+- A change to a stored file format bumps its `FIXTURE_SETUP_VERSION` / `SETTINGS_VERSION` and migrates older files
+- Releasing: rename `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD` and add a fresh empty `[Unreleased]` with its compare
+  link, then `npm version <minor|patch>` (bumps `package.json`, commits, tags) and push the tag
 
 ## Code Style and Workflow
 
