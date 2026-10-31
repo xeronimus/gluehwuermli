@@ -6,24 +6,28 @@ import {StoreApi} from 'zustand/vanilla';
 import envConfig from '../envConfig';
 import {ChannelsActions, getChannelsActions} from './channels/ChannelsActions';
 import {ChannelsState, getDefaultChannelsState} from './channels/ChannelsState';
+import {FixturesActions, getFixturesActions} from './fixtures/FixturesActions';
+import {FixturesState, getDefaultFixturesState} from './fixtures/FixturesState';
 import {OutputActions, getOutputActions} from './output/OutputActions';
 import {OutputState, getDefaultOutputState} from './output/OutputState';
 
-export interface AppState extends ChannelsState, OutputState {}
+export interface AppState extends ChannelsState, OutputState, FixturesState {}
 
-export interface AppActions extends ChannelsActions, OutputActions {}
+export interface AppActions extends ChannelsActions, OutputActions, FixturesActions {}
 
 export interface AppStore extends AppState, AppActions {}
 
 const innerUseAppStore = combine(
   {
     ...getDefaultChannelsState(),
-    ...getDefaultOutputState()
+    ...getDefaultOutputState(),
+    ...getDefaultFixturesState()
   },
 
   (set) => ({
     ...getChannelsActions(set),
-    ...getOutputActions(set)
+    ...getOutputActions(set),
+    ...getFixturesActions(set)
   })
 );
 

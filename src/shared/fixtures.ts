@@ -15,7 +15,12 @@ export interface FixtureOverlap {
   readonly addresses: readonly number[];
 }
 
-export const emptyFixtureSetup = (): FixtureSetup => ({version: FIXTURE_SETUP_VERSION, fixtures: []});
+export const fixtureSetupOf = (fixtures: readonly Fixture[]): FixtureSetup => ({
+  version: FIXTURE_SETUP_VERSION,
+  fixtures: [...fixtures]
+});
+
+export const emptyFixtureSetup = (): FixtureSetup => fixtureSetupOf([]);
 
 /** the absolute DMX channel of one of the fixture's channels */
 export const channelAddress = (fixture: Pick<Fixture, 'startAddress'>, channel: FixtureChannel): number =>
