@@ -3,6 +3,7 @@ import type {Fixture} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
 import {withFixture, withoutFixture} from '@/data/fixtureList';
+import {capturePreset, withPreset} from '@/data/presets';
 import logger from '@/data/service/Logger';
 import {fixtureService} from '@/data/service/services';
 
@@ -49,4 +50,17 @@ export function useActionDeleteFixture() {
 
   return (fixture: Fixture) =>
     storeFixtures((fixtures) => withoutFixture(fixtures, fixture.id), `Could not delete the fixture ${fixture.name}`);
+}
+
+/** stores the fixture's current fader values as a new preset of all its channels */
+export function useActionSavePreset() {
+  const storeFixtures = useStoreFixtures();
+
+  return (fixture: Fixture, name: string) => {
+    const preset = capturePreset(fixture, useAppStore.getState().channelValues, crypto.randomUUID(), name);
+    return storeFixtures(
+      (fixtures) => withPreset(fixtures, fixture.id, preset),
+      `Could not save the preset ${preset.name} of ${fixture.name}`
+    );
+  };
 }

@@ -1,4 +1,4 @@
-import {parseConnectRequest, parseSetChannelRequest} from './ipc';
+import {parseConnectRequest, parseSetChannelRequest, parseSetChannelValuesRequest} from './ipc';
 
 describe('parseSetChannelRequest', () => {
   test('accepts the first and last channel with the lowest and highest value', () => {
@@ -29,5 +29,29 @@ describe('parseConnectRequest', () => {
   test('rejects an empty or missing path', () => {
     expect(parseConnectRequest({path: ''})).toBeUndefined();
     expect(parseConnectRequest({})).toBeUndefined();
+  });
+});
+
+describe('parseSetChannelValuesRequest', () => {
+  test('accepts several channels', () => {
+    const request = {
+      values: [
+        {channel: 1, value: 0},
+        {channel: 512, value: 255}
+      ]
+    };
+
+    expect(parseSetChannelValuesRequest(request)).toEqual(request);
+  });
+
+  test.each([
+    {values: []},
+    {values: [{channel: 0, value: 10}]},
+    {values: [{channel: 1, value: 256}]},
+    {values: Array.from({length: 513}, () => ({channel: 1, value: 0}))},
+    {},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseSetChannelValuesRequest(payload)).toBeUndefined();
   });
 });

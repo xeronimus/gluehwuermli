@@ -1,4 +1,5 @@
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL} from '@shared/dmx';
+import type {SetChannelRequest} from '@shared/ipc';
 
 import Fader from '@/domain/Fader';
 
@@ -13,6 +14,12 @@ export const toPercent = (value: number): number => Math.round((value / DMX_MAX_
 /** a copy of `channelValues` (index 0 is channel 1) with `channel` set to `value` */
 export const withChannelValue = (channelValues: readonly number[], channel: number, value: number): number[] =>
   channelValues.map((current, index) => (index === channel - FIRST_DMX_CHANNEL ? value : current));
+
+/** a copy of `channelValues` with every one of `values` set */
+export function withChannelValues(channelValues: readonly number[], values: readonly SetChannelRequest[]): number[] {
+  const changed = new Map(values.map(({channel, value}) => [channel - FIRST_DMX_CHANNEL, value]));
+  return channelValues.map((current, index) => changed.get(index) ?? current);
+}
 
 export const channelValueOf = (channelValues: readonly number[], channel: number): number =>
   channelValues[channel - FIRST_DMX_CHANNEL] ?? DMX_MIN_VALUE;

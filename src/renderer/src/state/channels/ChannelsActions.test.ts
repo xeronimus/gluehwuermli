@@ -30,3 +30,17 @@ describe('setBankStart', () => {
     expect(current().bankStart).toBe(1);
   });
 });
+
+describe('setChannelValues', () => {
+  test('sets several channels and leaves the others alone', () => {
+    const {actions, current} = actionsOnState();
+    actions.setChannelValue(2, 50);
+
+    actions.setChannelValues([
+      {channel: 1, value: 255},
+      {channel: 3, value: 80}
+    ]);
+
+    expect(current().channelValues.slice(0, 4)).toEqual([255, 50, 80, 0]);
+  });
+});
