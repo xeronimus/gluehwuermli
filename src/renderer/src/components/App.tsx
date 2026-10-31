@@ -1,8 +1,10 @@
-import {ReactNode, useState} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 
 import mascot from '@resources/gluehwuermli_mascot.png';
 
+import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
+import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
 import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
@@ -44,6 +46,15 @@ const App = () => {
   // here, not in a view: the mode applies to every view, and the main process's idle timer to the whole window
   useLockSubscription();
   useUserActivityReporting();
+  // the output status shows in the bar, whichever view is open
+  useOutputStatusSubscription();
+
+  const loadPorts = useActionLoadPorts();
+  // the ports are external state: list them once on start, not only when Settings opens (loadPorts is a new function
+  // every render)
+  useEffect(() => {
+    void loadPorts();
+  }, []);
 
   // locking while on the channels falls back to the fixtures (set during render, React re-renders right away)
   if (view === 'channels' && !setupMode) {
