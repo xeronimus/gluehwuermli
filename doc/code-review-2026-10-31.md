@@ -38,6 +38,9 @@ The findings are mostly about four things: one latent race in the engine, test c
 Suggested order: 1 → 2 → 5 → 3 → 6 → 4, then the 🟢 items when you touch the code. Do 7 before the scenes store,
 which would be the third copy.
 
+**Follow-up (2026-10-31):** done in the order 1 → 7 → 2 → 4 → 6, each in its own commit, see the notes under each
+finding. 10, 14 and 15 are skipped for now (notes there). 3, 5 and the other 🟢 items are still open.
+
 ## 🔴 Critical (must)
 
 None.
@@ -82,6 +85,10 @@ None.
   +  });
   ```
 
+> **Done.** `dispose` goes through the queue too, since a port that is still opening when the app quits would also
+> stay open. The in-memory connector now tracks open paths and, like Windows, refuses to open one twice, so the tests
+> reproduce all three cases.
+
 ### 2. Action hooks untested, including the "fixture changes are stored first" rule
 
 - **Rule:** Testing: cover the boundaries, with a happy path and an error case for each new action; fakes at the
@@ -107,6 +114,10 @@ None.
 
   Tests to add: a failed save leaves `fixtureSetup` unchanged and sets `fixturesError`; two overlapping saves both
   end up stored; a failing `connect` sets `outputError`.
+
+> **Done, only for the hook that needs it most.** `useStoreFixtures` became `storeFixturesWith` in
+> `state/fixtures/storeFixtures.ts`, tested for: a failed save, the store waiting for the save, overlapping saves. The
+> other hooks stay untested until they are changed.
 
 ### 3. IPC responses are `any`; the response schemas are never used
 
@@ -158,6 +169,10 @@ None.
   +  background: colors.background,
   ```
 
+> **Done, only the rule and the colour.** `CODE_STYLE.md` now asks for tokens for colours, radii, fonts and shared
+> sizes, and `global.css.ts` uses the exported `colors`. No `fontSizes` and `fontWeights` tokens: with a handful of
+> relative sizes, they cost more than they bring.
+
 ### 5. Docs drift: the env-reading rule, the project structure list
 
 - **Rule:** the docs describe the code (`CLAUDE.md` is the source of truth for the structure).
@@ -188,6 +203,8 @@ None.
   +      });
   ```
 
+> **Done.** Moved, kept the name `useOutputStatusSubscription`.
+
 ## 🟢 Improvements (nice-to-have)
 
 ### 7. Both file stores duplicate the JSON and atomic-write code
@@ -200,6 +217,8 @@ None.
 - **Fix (S):** before the scenes store, add `src/main/storage/jsonFile.ts` with `readJsonFile(path)`, returning
   `{type: 'missing'} | {type: 'read'; content: unknown}`, and `atomicJsonWriter(path)`. Each store keeps its own
   policy for invalid files.
+
+> **Done.** As suggested, plus the line for `storage/` in the `CLAUDE.md` structure.
 
 ### 8. Four identical `*Log` interfaces, three identical `*StateSetter` types
 
@@ -227,6 +246,9 @@ None.
 - **Fix (S):** add a test that files in `components/<feature>/` import only their own folder, `commons/` and
   `themes.css`. Circular imports would need a small graph walk over `allImports` (S–M). Worth it only if a cycle ever
   appears.
+
+> **Skipped for now.** Both rules hold, and in a codebase this small a violation shows in the review. Worth adding
+> once someone besides the author writes code here, or once a cycle actually appears.
 
 ### 11. `FixtureNotesFields` borrows `FixtureEditor.css`
 
@@ -258,6 +280,9 @@ None.
 - **Fix (M):** a `ReadonlyFixture` type, or `Type.Readonly` on the schema arrays. That touches the pure functions'
   signatures, which is why it is an M.
 
+> **Skipped for now.** Nothing mutates a fixture today, and the change ripples through every pure function's
+> signature. Do it if a mutation bug ever shows up, or together with the scenes types.
+
 ### 15. `window.confirm` called directly in a component
 
 - **Rule:** dependency inversion: components don't depend on `window`.
@@ -265,6 +290,9 @@ None.
 - **Evidence:** it works in Electron, but blocks the renderer and can't be styled.
 - **Fix (S, optional):** a `ConfirmButton` in `commons/` (click, then "Really delete?" inline), like the inline preset
   naming already does instead of `window.prompt`.
+
+> **Skipped for now.** The confirm before deleting a fixture works and is rare. A styled inline confirm is nicer but
+> not needed yet.
 
 ## Checked and compliant
 
