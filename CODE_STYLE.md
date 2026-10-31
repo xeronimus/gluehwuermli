@@ -67,7 +67,9 @@ rules. What the app is, its architecture and its project structure are in `CLAUD
 
 - **Colocate styles:** a `.css.ts` next to every `.tsx` with layout. No inline style objects; react-range's own
   positioning `style` is passed through, that's the exception.
-- **Theme tokens** in `components/themes.css.ts`; components use the tokens, not raw values.
+- **Theme tokens** in `components/themes.css.ts` for colours, radii, fonts and sizes shared across components (the
+  fader size); components use the tokens for these. Spacing, relative font sizes (`0.9em`) and weights may be raw
+  values.
 - **Variants** with `styleVariants` or recipes, not per-property booleans.
 
 ## Electron
