@@ -1,0 +1,106 @@
+{
+  "id": "c7ac7d8d-bbf5-4e6d-9390-671cc628384f",
+  "name": "Eurolite LED SLS-144 RGBW",
+  "startAddress": 10,
+  "channels": [
+    {"name": "Red", "offset": 0},
+    {"name": "Green", "offset": 1},
+    {"name": "Blue", "offset": 2},
+    {"name": "White", "offset": 3},
+    {"name": "Dimmer", "offset": 4},
+    {"name": "Special", "offset": 5}
+  ],
+  "description": "Eurolite LED SLS-144 RGBW floorspot, 6-channel mode (set via MENU: dnH / CH6, address via Addr). Ch 1-4 red, green, blue, white (0-255). Ch 5 master dimmer (0-255). Ch 6 special: 0 off, 1-5 sound control (15 colors), 6-10 off, 11-255 strobe, increasing. Auto programs are not available over DMX. 4-channel mode is R, G, B, W only.",
+  "hint": "Dimmer is on channel 5: leave it at 0 and the light stays dark. Special: 3 = sound, 11-255 = strobe.",
+  "presets": [
+    {
+      "id": "c4a3614b-257d-43fd-a09d-e26f6ebdb7fa",
+      "name": "Off",
+      "values": [
+        {"offset": 0, "value": 0},
+        {"offset": 1, "value": 0},
+        {"offset": 2, "value": 0},
+        {"offset": 3, "value": 0},
+        {"offset": 4, "value": 0},
+        {"offset": 5, "value": 0}
+      ]
+    },
+    {
+      "id": "0f0046f0-72aa-4f52-8375-05b354f582c8",
+      "name": "Full white",
+      "values": [
+        {"offset": 0, "value": 255},
+        {"offset": 1, "value": 255},
+        {"offset": 2, "value": 255},
+        {"offset": 3, "value": 255},
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 0}
+      ]
+    },
+    {
+      "id": "490ee36e-adc5-497d-a01c-e10347e4d5a9",
+      "name": "Red",
+      "values": [
+        {"offset": 0, "value": 255},
+        {"offset": 1, "value": 0},
+        {"offset": 2, "value": 0},
+        {"offset": 3, "value": 0},
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 0}
+      ]
+    },
+     {
+      "id": "d62a15fb-61e6-45f2-a1fe-1e1cfa84236e",
+      "name": "Green",
+      "values": [
+        {"offset": 0, "value": 0},
+        {"offset": 1, "value": 255},
+        {"offset": 2, "value": 0},
+        {"offset": 3, "value": 0},
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 0}
+      ]
+    },
+    {
+      "id": "ed5e066f-e678-45ec-a708-05565ad767d0",
+      "name": "Blue",
+      "values": [
+        {"offset": 0, "value": 0},
+        {"offset": 1, "value": 0},
+        {"offset": 2, "value": 255},
+        {"offset": 3, "value": 0},
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 0}
+      ]
+    },
+    {
+      "id": "dc69d230-a1a6-4da3-966a-05c682418883",
+      "name": "Sound mode",
+      "values": [
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 3}
+      ]
+    },
+    {
+      "id": "998a8bdd-1fba-4c55-891b-dbcf28c50634",
+      "name": "Strobe slow",
+      "values": [
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 11}
+      ]
+    },
+    {
+      "id": "e50b1453-db18-469a-b646-046b8760ce2c",
+      "name": "Strobe fast",
+      "values": [
+        {"offset": 4, "value": 255},
+        {"offset": 5, "value": 255}
+      ]
+    },
+    {
+      "id": "a814dec9-7223-4b8f-952d-16b34af997b6",
+      "name": "Strobe off",
+      "values": [{"offset": 5, "value": 0}]
+    }
+  ]
+}
