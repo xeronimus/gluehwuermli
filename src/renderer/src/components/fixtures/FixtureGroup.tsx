@@ -27,7 +27,7 @@ interface FixtureGroupProps {
 }
 
 /**
- * The fixture's name and addresses, its preset buttons, a fader per channel on its absolute DMX channel and its hint
+ * The fixture's name and addresses, a fader per channel on its absolute DMX channel, its preset buttons and its hint
  * below them. The description is reference material, hidden until opened with the button next to the hint.
  */
 const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
@@ -46,12 +46,12 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
           <DeleteIcon />
         </Button>
       </header>
-      <FixturePresetButtons fixture={fixture} />
       <div className={groupFaders}>
         {fixtureFaders(fixture).map((fader) => (
           <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
         ))}
       </div>
+      <FixturePresetButtons fixture={fixture} />
       {(fixture.hint || fixture.description) && (
         <footer className={groupFooter}>
           <p className={groupHint}>{fixture.hint}</p>
