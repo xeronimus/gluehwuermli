@@ -23,14 +23,7 @@ export const appTitle = style({
   marginRight: '12px'
 });
 
-/** a thin vertical line between the view toggle and the output controls */
-export const divider = style({
-  alignSelf: 'stretch',
-  width: '1px',
-  margin: '0 6px',
-  background: vars.colors.border
-});
-
+/** pushes the output controls to the right edge, away from the view toggle */
 export const spacer = style({
   flex: 1
 });
