@@ -30,15 +30,16 @@ globalStyle('select, input, textarea', {
   background: vars.colors.surfaceRaised,
   border: `1px solid ${vars.colors.border}`,
   borderRadius: vars.constants.radiusMd,
-  padding: '6px 8px'
+  padding: '6px 8px',
+  // the focus shows as a border, like on the buttons, not as Chromium's white outline
+  outline: 'none'
 });
 
 globalStyle('input, textarea', {
   // the body is not selectable (a desk, not a document), typed text is
-  userSelect: 'text',
-  outline: 'none'
+  userSelect: 'text'
 });
 
-globalStyle('input:focus-visible, textarea:focus-visible', {
+globalStyle('select:focus-visible, input:focus-visible, textarea:focus-visible', {
   borderColor: vars.colors.focusBorder
 });
