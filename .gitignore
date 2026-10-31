@@ -1,0 +1,21 @@
+/.idea
+/.run
+/.vscode
+
+# dependencies
+node_modules/
+
+# build output: electron-vite (out/), electron-builder (dist/)
+/out
+/dist
+
+# misc
+.DS_Store
+.env
+.env.local
+
+npm-debug.log*
+pnpm-debug.log*
+
+# anthropic  claude-code
+/.claude/*

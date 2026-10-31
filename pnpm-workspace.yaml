@@ -1,0 +1,13 @@
+# a single package, this file only holds the pnpm settings
+
+# electron-builder collects the production dependencies (serialport and its native binding) from a flat node_modules
+nodeLinker: hoisted
+
+allowBuilds:
+  # Electron 45 has no build script any more, its binary comes from our postinstall (install-electron)
+  electron: true
+  esbuild: true
+  # picks the prebuilt native binding of serialport, no compiler needed
+  '@serialport/bindings-cpp': true
+  # Squirrel installers only, electron-builder.yml builds NSIS
+  electron-winstaller: false

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Formatting, typecheck, tests and the electron-vite build. Packaging (electron-builder) stays manual: `pnpm dist`
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    # takes the pnpm version from "packageManager" in package.json
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '24'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Check formatting
+      run: pnpm format:check
+
+    # typecheck + vitest
+    - name: Test
+      run: pnpm test
+
+    - name: Build
+      run: pnpm build
