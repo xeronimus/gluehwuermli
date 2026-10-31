@@ -84,8 +84,8 @@ src/
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
       index.tsx, envConfig.ts
-      components/            # UI by feature: output/ (port bar), fixtures/ (groups, editor), faders/ (raw channels);
-                             # commons/ (Button, ChannelFader, Tabs, ErrorBoundary, icons.ts)
+      components/            # UI by feature: output/ (top bar: view toggle, port), fixtures/ (groups, editor), faders/ (raw channels);
+                             # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, outputStatus, fixtureDraft, fixtureFaders, fixtureList,
                              # presets)
         service/             # DmxService, FixtureService, services.ts (composition root), impl/electron, impl/inMemory
