@@ -70,6 +70,8 @@ src/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
     ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, validated against parseFixtureSetup
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
+    window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
+                             # WindowStateStore + impl/file, persistWindowState (debounced save, save on close)
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2)
       enttecProPacket.ts     # label 6 framing
