@@ -20,7 +20,9 @@ const dmxBridge: DmxBridge = {
     };
   },
   loadFixtures: () => ipcRenderer.invoke(IpcChannel.LOAD_FIXTURES),
-  saveFixtures: (setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, setup)
+  saveFixtures: (setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, setup),
+  getDataFolder: () => ipcRenderer.invoke(IpcChannel.GET_DATA_FOLDER),
+  openDataFolder: () => ipcRenderer.invoke(IpcChannel.OPEN_DATA_FOLDER)
 };
 
 contextBridge.exposeInMainWorld(DMX_BRIDGE_GLOBAL, dmxBridge);
