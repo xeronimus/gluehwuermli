@@ -1,4 +1,3 @@
-import {fixtureSetupOf} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
@@ -7,55 +6,29 @@ import {capturePreset, withPreset} from '@/data/presets';
 import logger from '@/data/service/Logger';
 import {fixtureService} from '@/data/service/services';
 
-import {selectFixtures} from '../fixtures/fixturesSelectors';
+import {storeFixturesWith} from '../fixtures/storeFixtures';
 import {useAppStore} from '../store';
 
-// one queue for every save: each change starts from the list the previous one stored, so none gets lost
-const runSerially = createSerialQueue();
-
-/**
- * Stores the changed list first and only then shows it: unlike a fader move, a lost change to the setup would go
- * unnoticed. Resolves to whether it was stored.
- */
-function useStoreFixtures() {
-  const setFixtureSetup = useAppStore((state) => state.setFixtureSetup);
-  const setFixturesError = useAppStore((state) => state.setFixturesError);
-
-  return (change: (fixtures: readonly Fixture[]) => Fixture[], failure: string): Promise<boolean> =>
-    runSerially(async () => {
-      const fixtures = change(selectFixtures(useAppStore.getState()));
-      try {
-        await fixtureService.save(fixtureSetupOf(fixtures));
-        setFixtureSetup({type: 'loaded', fixtures});
-        setFixturesError(undefined);
-        return true;
-      } catch (error) {
-        logger.error(failure, error);
-        setFixturesError(failure);
-        return false;
-      }
-    });
-}
+const storeFixtures = storeFixturesWith({
+  getState: useAppStore.getState,
+  fixtureService,
+  runSerially: createSerialQueue(),
+  log: logger
+});
 
 /** adds the fixture, or replaces the one with its id */
 export function useActionSaveFixture() {
-  const storeFixtures = useStoreFixtures();
-
   return (fixture: Fixture) =>
     storeFixtures((fixtures) => withFixture(fixtures, fixture), `Could not save the fixture ${fixture.name}`);
 }
 
 export function useActionDeleteFixture() {
-  const storeFixtures = useStoreFixtures();
-
   return (fixture: Fixture) =>
     storeFixtures((fixtures) => withoutFixture(fixtures, fixture.id), `Could not delete the fixture ${fixture.name}`);
 }
 
 /** stores the fixture's current fader values as a new preset of all its channels */
 export function useActionSavePreset() {
-  const storeFixtures = useStoreFixtures();
-
   return (fixture: Fixture, name: string) => {
     const preset = capturePreset(fixture, useAppStore.getState().channelValues, crypto.randomUUID(), name);
     return storeFixtures(

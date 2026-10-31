@@ -1,7 +1,4 @@
-import {readFile, rename, writeFile} from 'node:fs/promises';
-
-import {createSerialQueue} from '@shared/serialQueue';
-
+import {type JsonFileContent, atomicJsonWriter, readJsonFile} from '@/storage/jsonFile';
 import type {WindowStateStore} from '@/window/WindowStateStore';
 import {type WindowState, parseWindowState} from '@/window/windowState';
 
@@ -15,53 +12,32 @@ export interface FileWindowStateStoreDependencies {
   log: WindowStateStoreLog;
 }
 
-const JSON_INDENT = 2;
-
-const isMissingFile = (error: unknown) => error instanceof Error && 'code' in error && error.code === 'ENOENT';
-
-/** undefined if the content is no JSON at all, which parseWindowState then rejects like any other invalid content */
-function parseJson(content: string): unknown {
-  try {
-    return JSON.parse(content);
-  } catch {
-    return undefined;
-  }
-}
-
 /**
- * The window state as a JSON file; written to a temporary file first and renamed, so a crash never leaves half a file.
- * Unlike the fixture file, an unreadable one isn't kept: the next save just replaces it.
+ * The window state as a JSON file, written atomically. Unlike the fixture file, an unreadable one isn't kept: the next
+ * save just replaces it.
  */
 export function fileWindowStateStoreFactory({filePath, log}: FileWindowStateStoreDependencies): WindowStateStore {
-  // overlapping saves would share the temporary file
-  const runSerially = createSerialQueue();
+  const save = atomicJsonWriter(filePath);
 
   async function load(): Promise<WindowState | undefined> {
-    let content: string;
+    let file: JsonFileContent;
     try {
-      content = await readFile(filePath, 'utf-8');
+      file = await readJsonFile(filePath);
     } catch (error) {
-      if (isMissingFile(error)) {
-        log.warn(`no window state file at ${filePath} yet, opening the window with the defaults`);
-      } else {
-        log.warn(`reading the window state file ${filePath} failed, opening the window with the defaults`, error);
-      }
+      log.warn(`reading the window state file ${filePath} failed, opening the window with the defaults`, error);
+      return undefined;
+    }
+    if (file.type === 'missing') {
+      log.warn(`no window state file at ${filePath} yet, opening the window with the defaults`);
       return undefined;
     }
 
-    const state = parseWindowState(parseJson(content));
+    const state = parseWindowState(file.content);
     if (!state) {
       log.warn(`the window state file ${filePath} is not a valid window state, opening the window with the defaults`);
     }
     return state;
   }
-
-  const save = (state: WindowState): Promise<void> =>
-    runSerially(async () => {
-      const temporaryFilePath = `${filePath}.tmp`;
-      await writeFile(temporaryFilePath, JSON.stringify(state, undefined, JSON_INDENT), 'utf-8');
-      await rename(temporaryFilePath, filePath);
-    });
 
   return {load, save};
 }

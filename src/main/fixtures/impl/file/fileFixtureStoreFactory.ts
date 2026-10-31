@@ -1,10 +1,10 @@
-import {readFile, rename, writeFile} from 'node:fs/promises';
+import {rename} from 'node:fs/promises';
 
 import {emptyFixtureSetup, parseFixtureSetup} from '@shared/fixtures';
 import type {FixtureSetup} from '@shared/ipc';
-import {createSerialQueue} from '@shared/serialQueue';
 
 import type {FixtureStore} from '@/fixtures/FixtureStore';
+import {atomicJsonWriter, readJsonFile} from '@/storage/jsonFile';
 
 export interface FixtureStoreLog {
   warn: (...message: unknown[]) => void;
@@ -18,31 +18,17 @@ export interface FileFixtureStoreDependencies {
   now?: () => Date;
 }
 
-const JSON_INDENT = 2;
-
-const isMissingFile = (error: unknown) => error instanceof Error && 'code' in error && error.code === 'ENOENT';
-
-/** undefined if the content is no JSON at all, which parseFixtureSetup then rejects like any other invalid content */
-function parseJson(content: string): unknown {
-  try {
-    return JSON.parse(content);
-  } catch {
-    return undefined;
-  }
-}
-
 /** fixtures.json -> fixtures.invalid-2026-10-31T07-52-16-000Z.json */
 const invalidFilePathOf = (filePath: string, moment: Date) =>
   filePath.replace(/(\.json)?$/, `.invalid-${moment.toISOString().replace(/[:.]/g, '-')}.json`);
 
-/** the setup as a JSON file; written to a temporary file first and renamed, so a crash never leaves half a file */
+/** the setup as a JSON file, written atomically */
 export function fileFixtureStoreFactory({
   filePath,
   log,
   now = () => new Date()
 }: FileFixtureStoreDependencies): FixtureStore {
-  // overlapping saves would share the temporary file
-  const runSerially = createSerialQueue();
+  const save = atomicJsonWriter(filePath);
 
   /**
    * Keeps an unreadable file for the user to repair instead of overwriting it with the next save. Rejects if it
@@ -59,31 +45,21 @@ export function fileFixtureStoreFactory({
   }
 
   async function load(): Promise<FixtureSetup> {
-    let content: string;
-    try {
-      content = await readFile(filePath, 'utf-8');
-    } catch (error) {
-      if (!isMissingFile(error)) {
-        throw new Error(`reading the fixture file ${filePath} failed`, {cause: error});
-      }
+    const file = await readJsonFile(filePath).catch((error: unknown) => {
+      throw new Error(`reading the fixture file ${filePath} failed`, {cause: error});
+    });
+    if (file.type === 'missing') {
       log.warn(`no fixture file at ${filePath} yet, starting with no fixtures`);
       return emptyFixtureSetup();
     }
 
-    const setup = parseFixtureSetup(parseJson(content));
+    const setup = parseFixtureSetup(file.content);
     if (!setup) {
       await setAsideInvalidFile(`the fixture file ${filePath} is not a valid fixture setup`);
       return emptyFixtureSetup();
     }
     return setup;
   }
-
-  const save = (setup: FixtureSetup): Promise<void> =>
-    runSerially(async () => {
-      const temporaryFilePath = `${filePath}.tmp`;
-      await writeFile(temporaryFilePath, JSON.stringify(setup, undefined, JSON_INDENT), 'utf-8');
-      await rename(temporaryFilePath, filePath);
-    });
 
   return {load, save};
 }
