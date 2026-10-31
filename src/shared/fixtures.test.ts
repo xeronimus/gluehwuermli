@@ -3,6 +3,7 @@ import {
   emptyFixtureSetup,
   fitsInUniverse,
   fixtureErrors,
+  fixturePresets,
   lastAddress,
   overlappingFixtures,
   parseFixtureSetup
@@ -74,6 +75,45 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('a fixture with valid presets has none', () => {
+    const presets = [{id: 'warm', name: 'Warm', values: [{offset: 0, value: 255}]}];
+
+    expect(fixtureErrors(fixtureOf({presets}))).toEqual([]);
+  });
+
+  test('reports a blank preset name, a missing channel, a channel set twice and an empty preset', () => {
+    const presets = [
+      {id: 'blank', name: ' ', values: [{offset: 0, value: 10}]},
+      {id: 'missing', name: 'Missing', values: [{offset: 7, value: 10}]},
+      {
+        id: 'twice',
+        name: 'Twice',
+        values: [
+          {offset: 1, value: 10},
+          {offset: 1, value: 20}
+        ]
+      },
+      {id: 'empty', name: 'Empty', values: []}
+    ];
+
+    expect(fixtureErrors(fixtureOf({presets}))).toEqual([
+      'Every preset needs a name',
+      "The preset Missing sets a channel the fixture doesn't have",
+      'The preset Twice sets a channel more than once',
+      'The preset Empty needs at least one channel'
+    ]);
+  });
+
+  test('reports a preset value outside 0..255 and a too long preset name', () => {
+    const name = 'x'.repeat(41);
+    const presets = [{id: 'loud', name, values: [{offset: 0, value: 256}]}];
+
+    expect(fixtureErrors(fixtureOf({presets}))).toEqual([
+      'A preset name can have at most 40 characters',
+      `The values of the preset ${name} must be whole numbers from 0 to 255`
+    ]);
+  });
+
   test('reports a fixture not fitting in the universe', () => {
     expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([
       'The fixture ends at address 513, after the last one (512)'
@@ -118,7 +158,28 @@ describe('parseFixtureSetup', () => {
     expect(parseFixtureSetup({version: 1, fixtures: [{...fixtureOf(), hint: 42}]})).toBeUndefined();
   });
 
+  test('loads a fixture without presets, from a file older than presets, as one without any', () => {
+    const setup = parseFixtureSetup({version: 1, fixtures: [fixtureOf()]});
+
+    expect(setup?.fixtures[0].presets).toBeUndefined();
+    expect(setup && fixturePresets(setup.fixtures[0])).toEqual([]);
+  });
+
+  test('accepts a fixture with presets', () => {
+    const withPresets = fixtureOf({presets: [{id: 'warm', name: 'Warm', values: [{offset: 2, value: 80}]}]});
+
+    expect(parseFixtureSetup({version: 1, fixtures: [withPresets]})).toEqual({version: 1, fixtures: [withPresets]});
+  });
+
   test.each([
+    [
+      'a preset on a channel the fixture lacks',
+      {version: 1, fixtures: [fixtureOf({presets: [{id: 'p', name: 'P', values: [{offset: 9, value: 1}]}]})]}
+    ],
+    [
+      'a preset value out of range',
+      {version: 1, fixtures: [{...fixtureOf(), presets: [{id: 'p', name: 'P', values: [{offset: 0, value: 300}]}]}]}
+    ],
     ['another version', {version: 2, fixtures: []}],
     ['no fixtures list', {version: 1}],
     ['a fixture without channels', {version: 1, fixtures: [fixtureOf({channels: []})]}],

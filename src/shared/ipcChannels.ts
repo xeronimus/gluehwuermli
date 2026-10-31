@@ -6,6 +6,8 @@
 export const IpcChannel = {
   /** renderer -> main, fire-and-forget (ipcRenderer.send): the hot path of every fader move */
   SET_CHANNEL: 'dmx:set-channel',
+  /** renderer -> main, fire-and-forget: several channels in one message, e.g. a preset */
+  SET_CHANNEL_VALUES: 'dmx:set-channel-values',
   /** renderer -> main, request/response (ipcRenderer.invoke) */
   LIST_PORTS: 'dmx:list-ports',
   CONNECT: 'dmx:connect',

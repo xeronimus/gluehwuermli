@@ -16,5 +16,6 @@ export {
   IconChevronLeft as PreviousIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
+  IconDeviceFloppy as SavePresetIcon,
   IconAlertTriangle as WarningIcon
 } from '@tabler/icons-react';
