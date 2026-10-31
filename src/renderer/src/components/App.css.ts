@@ -3,6 +3,9 @@ import {style} from '@vanilla-extract/css';
 import {vars} from './themes.css';
 
 export const app = style({
+  position: 'relative',
+  // its own stacking context, so the backdrop (z-index -1) stays above this background and below the content
+  isolation: 'isolate',
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
@@ -18,4 +21,18 @@ export const content = style({
   flexDirection: 'column',
   overflow: 'auto',
   padding: '24px'
+});
+
+/** the mascot, faint in the bottom left corner, behind everything and never in the way of a click */
+export const backdrop = style({
+  position: 'absolute',
+  left: '24px',
+  bottom: '24px',
+  zIndex: -1,
+  width: '280px',
+  maxWidth: '40%',
+  // black (the picture's corners and its dark parts) disappears, only the glowing parts show
+  mixBlendMode: 'screen',
+  opacity: 0.25,
+  pointerEvents: 'none'
 });
