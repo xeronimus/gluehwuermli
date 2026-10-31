@@ -9,7 +9,7 @@ export const settingsView = style({
   gap: '16px'
 });
 
-/** a box per lock, like the Help view's side sections */
+/** a box per setting (the output, each lock), like the Help view's side sections */
 export const settingsSection = style({
   display: 'flex',
   flexDirection: 'column',
@@ -67,6 +67,7 @@ export const passwordInput = style({
 
 export const portControls = style({
   display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'center',
   gap: '6px'
 });

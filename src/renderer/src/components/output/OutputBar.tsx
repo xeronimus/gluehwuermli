@@ -32,7 +32,7 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       <button
         className={statusVariants[outputStatus.type]}
         onClick={onShowSettings}
-        title="Open the Settings to choose the port and connect"
+        title="Open the Settings to choose the port, connect or disconnect"
       >
         {describeOutputStatus(outputStatus)}
       </button>
