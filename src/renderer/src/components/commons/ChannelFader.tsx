@@ -2,7 +2,7 @@ import {Direction, Range} from 'react-range';
 
 import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 
-import {cappedValue} from '@/data/channelLocks';
+import {cappedValue, isAtCap, isFaderLocked} from '@/data/channelLocks';
 import {toPercent} from '@/data/channelValues';
 import Fader from '@/domain/Fader';
 import {selectChannelValue} from '@/state/channels/channelsSelectors';
@@ -25,6 +25,8 @@ import {LockIcon} from './icons';
 
 const DMX_STEP = 1;
 
+const capNote = (limit: number | undefined) => (limit === undefined ? '' : `, capped at ${limit} by the channel lock`);
+
 interface ChannelFaderProps {
   fader: Fader;
   onChange: (channel: number, value: number) => void;
@@ -33,7 +35,7 @@ interface ChannelFaderProps {
 /**
  * a vertical 0..255 fader; reads only its own channel from the store, so moving it re-renders only itself. A click on
  * the value above it steps up by one, a click on the label below it steps down by one. A channel capped by the channel
- * lock can't be moved, and shows the value the main process sends
+ * lock stops at its cap (one capped at 0 can't be moved at all) and shows the value the main process sends
  */
 const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
   const limit = useAppStore((state) => selectChannelLimit(state, fader.channel));
@@ -41,17 +43,18 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
     useAppStore((state) => selectChannelValue(state, fader.channel)),
     limit
   );
-  const locked = limit !== undefined;
+  const locked = isFaderLocked(limit);
+  const lockedTitle = `Channel ${fader.label} is capped at ${limit} by the channel lock`;
 
   return (
     <div className={channelFader}>
       <button
         className={faderStepButton}
         onClick={() => onChange(fader.channel, value + DMX_STEP)}
-        disabled={locked}
-        title={locked ? `Channel ${fader.label} is locked at most ${limit}` : `Channel ${fader.label} +${DMX_STEP}`}
+        disabled={isAtCap(value, limit)}
+        title={locked ? lockedTitle : `Channel ${fader.label} +${DMX_STEP}${capNote(limit)}`}
       >
-        {locked && <LockIcon className={faderLock} />}
+        {limit !== undefined && <LockIcon className={faderLock} />}
         <span className={faderValue}>{value}</span>
         <span className={faderPercent}>{toPercent(value)}%</span>
       </button>
@@ -82,7 +85,7 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
         className={faderLabelButton}
         onClick={() => onChange(fader.channel, value - DMX_STEP)}
         disabled={locked}
-        title={`Channel ${fader.label} -${DMX_STEP}`}
+        title={locked ? lockedTitle : `Channel ${fader.label} -${DMX_STEP}`}
       >
         <span className={faderLabel}>{fader.label}</span>
       </button>
