@@ -39,7 +39,12 @@ const FixtureView = () => {
     return <span className={message}>Loading the fixtures…</span>;
   }
   if (fixtureSetup.type === 'failed') {
-    return <span className={errorMessage}>{fixtureSetup.message}</span>;
+    return (
+      <div className={fixtureView}>
+        <span className={errorMessage}>{fixtureSetup.message}</span>
+        <Button onClick={() => void loadFixtures()}>Try again</Button>
+      </div>
+    );
   }
 
   const onDelete = (fixture: Fixture) => {

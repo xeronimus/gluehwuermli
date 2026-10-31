@@ -7,6 +7,7 @@ export function useActionLoadFixtures() {
   const setFixtureSetup = useAppStore((state) => state.setFixtureSetup);
 
   return async () => {
+    setFixtureSetup({type: 'loading'});
     try {
       const {fixtures} = await fixtureService.load();
       setFixtureSetup({type: 'loaded', fixtures});

@@ -62,6 +62,7 @@ src/
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
     dmxBridge.ts             # the API the preload exposes as window.gluehwuermli
+    serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
   main/                      # Electron main process
     index.ts                 # window, lifecycle
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)

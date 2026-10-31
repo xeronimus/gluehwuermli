@@ -1,6 +1,9 @@
 import type {Fixture} from '@shared/ipc';
 
-/** `failed` only when the main process can't be reached; a missing or invalid file loads as an empty setup */
+/**
+ * `failed` when the stored setup can't be read (e.g. a file locked by another program) or the main process can't be
+ * reached; a missing or invalid file loads as an empty setup
+ */
 export type FixtureSetupState =
   | {readonly type: 'loading'}
   | {readonly type: 'loaded'; readonly fixtures: readonly Fixture[]}

@@ -55,7 +55,7 @@ export type Fixture = Static<typeof FixtureSchema>;
 /** the version of the stored setup, so a later format change can migrate an older file instead of dropping it */
 export const FIXTURE_SETUP_VERSION = 1;
 
-/** every fixture, as stored in the fixtures file and sent over FIXTURES_LOAD / FIXTURES_SAVE */
+/** every fixture, as stored in the fixtures file and sent over LOAD_FIXTURES / SAVE_FIXTURES */
 export const FixtureSetupSchema = Type.Object({
   version: Type.Literal(FIXTURE_SETUP_VERSION),
   fixtures: Type.Array(FixtureSchema)

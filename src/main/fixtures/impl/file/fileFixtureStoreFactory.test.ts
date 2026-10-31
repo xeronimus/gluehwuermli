@@ -1,4 +1,4 @@
-import {mkdtemp, readFile, readdir, rm, writeFile} from 'node:fs/promises';
+import {mkdir, mkdtemp, readFile, readdir, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 
@@ -67,4 +67,27 @@ test.each([
   expect(warnings).toHaveLength(1);
   expect(await readdir(dir)).toEqual([INVALID_FILE_NAME]);
   expect(await readFile(join(dir, INVALID_FILE_NAME), 'utf-8')).toBe(content);
+});
+
+test('a file that cannot be read rejects instead of loading as an empty setup', async () => {
+  await mkdir(filePath);
+
+  await expect(store.load()).rejects.toThrow(`reading the fixture file ${filePath} failed`);
+});
+
+test('an invalid file that cannot be moved aside rejects and stays where it is', async () => {
+  await writeFile(filePath, '{"fixtures": "none"}', 'utf-8');
+  await mkdir(join(dir, INVALID_FILE_NAME, 'in-the-way'), {recursive: true});
+
+  await expect(store.load()).rejects.toThrow('moving it aside failed');
+  expect(await readFile(filePath, 'utf-8')).toBe('{"fixtures": "none"}');
+});
+
+test('overlapping saves run one after the other, the last one wins', async () => {
+  const empty: FixtureSetup = {version: 1, fixtures: []};
+
+  await Promise.all([store.save(setup), store.save(empty)]);
+
+  expect(await store.load()).toEqual(empty);
+  expect(await readdir(dir)).toEqual(['fixtures.json']);
 });
