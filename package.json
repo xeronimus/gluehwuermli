@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Desktop app sending DMX through an Enttec DMX USB Pro",
+  "author": "Sergio Trentini",
   "main": "./out/main/index.js",
   "packageManager": "pnpm@12.4.2",
   "engines": {
