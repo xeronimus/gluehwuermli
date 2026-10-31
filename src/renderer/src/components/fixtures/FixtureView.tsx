@@ -48,18 +48,23 @@ const FixtureView = () => {
     }
   };
 
-  return (
-    <div className={fixtureView}>
-      {error && <span className={errorMessage}>{error}</span>}
-
-      {editing.type !== 'none' && (
+  // while editing, the editor alone: it shows its own shared addresses, the list would only be clutter
+  if (editing.type !== 'none') {
+    return (
+      <div className={fixtureView}>
+        {error && <span className={errorMessage}>{error}</span>}
         <FixtureEditor
-          key={editing.type === 'editing' ? editing.fixture.id : 'new'}
           fixture={editing.type === 'editing' ? editing.fixture : undefined}
           fixtures={fixtures}
           onClose={() => setEditing(NOT_EDITING)}
         />
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={fixtureView}>
+      {error && <span className={errorMessage}>{error}</span>}
 
       {overlaps.length > 0 && (
         <ul className={warnings}>
@@ -71,7 +76,7 @@ const FixtureView = () => {
         </ul>
       )}
 
-      {fixtures.length === 0 && editing.type === 'none' && (
+      {fixtures.length === 0 && (
         <span className={message}>
           No fixtures yet: add the devices of your rig with Add fixture, to control them by name.
         </span>
@@ -90,7 +95,7 @@ const FixtureView = () => {
 
       {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
       <div className={footer}>
-        <Button onClick={() => setEditing({type: 'adding'})} disabled={editing.type !== 'none'}>
+        <Button onClick={() => setEditing({type: 'adding'})}>
           <AddIcon /> Add fixture
         </Button>
       </div>
