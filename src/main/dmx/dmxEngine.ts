@@ -1,10 +1,11 @@
-import {DMX_UNIVERSE_SIZE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
+import {DMX_MIN_VALUE, DMX_UNIVERSE_SIZE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
 import type {DmxOutputStatus} from '@shared/ipc';
 
 import type {DmxConnection, DmxPortConnector} from './DmxPortConnector';
 import {enttecProDmxPacket} from './enttecProPacket';
 
 export interface DmxEngineLog {
+  debug: (...message: unknown[]) => void;
   info: (...message: unknown[]) => void;
   warn: (...message: unknown[]) => void;
 }
@@ -37,6 +38,14 @@ export interface DmxEngineDependencies {
 }
 
 const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
+
+/** the channels above 0 as `channel=value`, e.g. "1=255 17=128"; a whole universe would be unreadable in a log */
+export const describeActiveChannels = (universe: Uint8Array): string => {
+  const active = Array.from(universe, (value, index) => ({channel: index + FIRST_DMX_CHANNEL, value})).filter(
+    ({value}) => value > DMX_MIN_VALUE
+  );
+  return active.length === 0 ? 'all channels 0' : active.map(({channel, value}) => `${channel}=${value}`).join(' ');
+};
 
 export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineDependencies): DmxEngine {
   const universe = new Uint8Array(DMX_UNIVERSE_SIZE);
@@ -71,6 +80,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     universeChanged = false;
     writeInFlight = true;
     try {
+      log.debug(`sending universe to ${target.path}: ${describeActiveChannels(universe)}`);
       await target.write(enttecProDmxPacket(universe));
     } catch (error) {
       // a write to a port that was replaced in the meantime doesn't concern the current one
