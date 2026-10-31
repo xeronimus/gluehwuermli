@@ -37,10 +37,18 @@ export const DmxOutputStatusSchema = Type.Union([
 ]);
 export type DmxOutputStatus = Static<typeof DmxOutputStatusSchema>;
 
+/** the highest value the channel may have while the channel lock is on, e.g. 0 for a laser */
+export const ChannelLockSchema = Type.Object({
+  max: Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE})
+});
+export type ChannelLock = Static<typeof ChannelLockSchema>;
+
 /** one channel of a fixture: its address is the fixture's start address plus `offset` */
 export const FixtureChannelSchema = Type.Object({
   name: Type.String({minLength: 1}),
-  offset: Type.Integer({minimum: 0, maximum: LAST_DMX_CHANNEL - FIRST_DMX_CHANNEL})
+  offset: Type.Integer({minimum: 0, maximum: LAST_DMX_CHANNEL - FIRST_DMX_CHANNEL}),
+  /** optional, so older files load; a channel without one is never capped */
+  lock: Type.Optional(ChannelLockSchema)
 });
 export type FixtureChannel = Static<typeof FixtureChannelSchema>;
 
@@ -109,6 +117,43 @@ export const OpenDataFolderResultSchema = Type.Union([
 ]);
 export type OpenDataFolderResult = Static<typeof OpenDataFolderResultSchema>;
 
+/**
+ * Two independent locks, both on after every start. The mode: in Show mode fixtures can be played, not changed; Setup
+ * mode (unlocked with the password) allows changing them. The channel lock caps the locked channels; lifting it needs
+ * the password too, and it stays lifted in Show mode, e.g. for a show where the laser hangs high enough.
+ * `passwordSet` false means the next password typed becomes the password.
+ */
+export const LockStatusSchema = Type.Object({
+  mode: Type.Union([Type.Literal('show'), Type.Literal('setup')]),
+  passwordSet: Type.Boolean(),
+  channelLocked: Type.Boolean()
+});
+export type LockStatus = Static<typeof LockStatusSchema>;
+
+/** long enough not to be guessed by a guest at the laptop, short enough to type at an event */
+export const PASSWORD_MIN_LENGTH = 4;
+export const PASSWORD_MAX_LENGTH = 200;
+
+const PasswordSchema = Type.String({minLength: PASSWORD_MIN_LENGTH, maxLength: PASSWORD_MAX_LENGTH});
+
+export const UnlockRequestSchema = Type.Object({
+  password: PasswordSchema
+});
+export type UnlockRequest = Static<typeof UnlockRequestSchema>;
+
+/** no password in Setup mode, where it was typed to get there; Show mode needs it */
+export const LiftChannelLockRequestSchema = Type.Object({
+  password: Type.Optional(PasswordSchema)
+});
+export type LiftChannelLockRequest = Static<typeof LiftChannelLockRequestSchema>;
+
+/** what unlocking Setup mode or lifting the channel lock answers */
+export const PasswordResultSchema = Type.Union([
+  Type.Object({type: Type.Literal('accepted')}),
+  Type.Object({type: Type.Literal('wrong-password')})
+]);
+export type PasswordResult = Static<typeof PasswordResultSchema>;
+
 /** the payload if it is a valid request, otherwise undefined */
 export const parseSetChannelRequest = (payload: unknown): SetChannelRequest | undefined =>
   Value.Check(SetChannelRequestSchema, payload) ? payload : undefined;
@@ -118,3 +163,9 @@ export const parseSetChannelValuesRequest = (payload: unknown): SetChannelValues
 
 export const parseConnectRequest = (payload: unknown): ConnectRequest | undefined =>
   Value.Check(ConnectRequestSchema, payload) ? payload : undefined;
+
+export const parseUnlockRequest = (payload: unknown): UnlockRequest | undefined =>
+  Value.Check(UnlockRequestSchema, payload) ? payload : undefined;
+
+export const parseLiftChannelLockRequest = (payload: unknown): LiftChannelLockRequest | undefined =>
+  Value.Check(LiftChannelLockRequestSchema, payload) ? payload : undefined;

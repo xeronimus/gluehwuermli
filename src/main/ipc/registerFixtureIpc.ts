@@ -1,19 +1,12 @@
 import {ipcMain} from 'electron';
 
-import {parseFixtureSetup} from '@shared/fixtures';
 import {IpcChannel} from '@shared/ipcChannels';
 
-import type {FixtureStore} from '../fixtures/FixtureStore';
+import type {FixtureIpcHandlers} from './fixtureIpcHandlers';
 
-/** Connects the fixture IPC channels to the store; a setup from the renderer is only stored if it is valid. */
-export function registerFixtureIpc(store: FixtureStore): void {
-  ipcMain.handle(IpcChannel.LOAD_FIXTURES, () => store.load());
+/** Connects the fixture IPC channels to their handlers (fixtureIpcHandlers.ts). */
+export function registerFixtureIpc(handlers: FixtureIpcHandlers): void {
+  ipcMain.handle(IpcChannel.LOAD_FIXTURES, () => handlers.load());
 
-  ipcMain.handle(IpcChannel.SAVE_FIXTURES, (_event, payload: unknown) => {
-    const setup = parseFixtureSetup(payload);
-    if (!setup) {
-      throw new Error('invalid fixture setup');
-    }
-    return store.save(setup);
-  });
+  ipcMain.handle(IpcChannel.SAVE_FIXTURES, (_event, payload: unknown) => handlers.save(payload));
 }

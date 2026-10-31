@@ -10,12 +10,14 @@ import {DataFolderActions, getDataFolderActions} from './dataFolder/DataFolderAc
 import {DataFolderState, getDefaultDataFolderState} from './dataFolder/DataFolderState';
 import {FixturesActions, getFixturesActions} from './fixtures/FixturesActions';
 import {FixturesState, getDefaultFixturesState} from './fixtures/FixturesState';
+import {LockActions, getLockActions} from './lock/LockActions';
+import {LockState, getDefaultLockState} from './lock/LockState';
 import {OutputActions, getOutputActions} from './output/OutputActions';
 import {OutputState, getDefaultOutputState} from './output/OutputState';
 
-export interface AppState extends ChannelsState, OutputState, FixturesState, DataFolderState {}
+export interface AppState extends ChannelsState, OutputState, FixturesState, DataFolderState, LockState {}
 
-export interface AppActions extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions {}
+export interface AppActions extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions, LockActions {}
 
 export interface AppStore extends AppState, AppActions {}
 
@@ -24,14 +26,16 @@ const innerUseAppStore = combine(
     ...getDefaultChannelsState(),
     ...getDefaultOutputState(),
     ...getDefaultFixturesState(),
-    ...getDefaultDataFolderState()
+    ...getDefaultDataFolderState(),
+    ...getDefaultLockState()
   },
 
   (set) => ({
     ...getChannelsActions(set),
     ...getOutputActions(set),
     ...getFixturesActions(set),
-    ...getDataFolderActions(set)
+    ...getDataFolderActions(set),
+    ...getLockActions(set)
   })
 );
 

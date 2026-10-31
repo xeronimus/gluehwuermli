@@ -17,6 +17,15 @@ export const IpcChannel = {
   SAVE_FIXTURES: 'fixtures:save',
   GET_DATA_FOLDER: 'app:get-data-folder',
   OPEN_DATA_FOLDER: 'app:open-data-folder',
+  GET_LOCK_STATUS: 'app:get-lock-status',
+  UNLOCK: 'app:unlock',
+  LOCK: 'app:lock',
+  LIFT_CHANNEL_LOCK: 'app:lift-channel-lock',
+  LOCK_CHANNELS: 'app:lock-channels',
+  /** renderer -> main, fire-and-forget: the user did something in Setup mode, so it isn't locked for being idle */
+  USER_ACTIVITY: 'app:user-activity',
   /** main -> renderer, whenever the output status changes */
-  STATUS_CHANGED: 'dmx:status-changed'
+  STATUS_CHANGED: 'dmx:status-changed',
+  /** main -> renderer, whenever the mode or the channel lock changes */
+  LOCK_CHANGED: 'app:lock-changed'
 } as const;

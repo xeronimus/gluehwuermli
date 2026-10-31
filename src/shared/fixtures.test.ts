@@ -1,5 +1,6 @@
 import {
   channelAddress,
+  channelLimits,
   emptyFixtureSetup,
   fitsInUniverse,
   fixtureErrors,
@@ -129,6 +130,17 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('accepts a lock from 0 to 255, reports one outside', () => {
+    const lockedAt = (max: number) => fixtureOf({channels: [{name: 'Laser', offset: 0, lock: {max}}]});
+
+    expect(fixtureErrors(lockedAt(0))).toEqual([]);
+    expect(fixtureErrors(lockedAt(255))).toEqual([]);
+    expect(fixtureErrors(lockedAt(256))).toEqual(['The maximum while locked must be a whole number from 0 to 255']);
+    expect(fixtureErrors(lockedAt(Number.NaN))).toEqual([
+      'The maximum while locked must be a whole number from 0 to 255'
+    ]);
+  });
+
   test('reports a fixture not fitting in the universe', () => {
     expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([
       'The fixture ends at address 513, after the last one (512)'
@@ -150,6 +162,34 @@ describe('overlappingFixtures', () => {
     const sparse = fixtureOf({id: 'sparse', startAddress: 1, channels: [{name: 'Pan', offset: 8}]});
 
     expect(overlappingFixtures([left, right, sparse])).toEqual([]);
+  });
+});
+
+describe('channelLimits', () => {
+  test('the cap of every locked channel at its address, none for the others', () => {
+    const laser = fixtureOf({
+      channels: [
+        {name: 'Dimmer', offset: 0},
+        {name: 'Laser', offset: 1, lock: {max: 0}},
+        {name: 'Macro', offset: 2, lock: {max: 50}}
+      ]
+    });
+
+    expect(channelLimits([laser])).toEqual(
+      new Map([
+        [11, 0],
+        [12, 50]
+      ])
+    );
+  });
+
+  test('fixtures sharing an address with different caps: the lowest wins', () => {
+    const loose = fixtureOf({channels: [{name: 'Macro', offset: 0, lock: {max: 50}}]});
+    const strict = fixtureOf({id: 'strict', channels: [{name: 'Macro', offset: 0, lock: {max: 10}}]});
+    const unlocked = fixtureOf({id: 'unlocked', channels: [{name: 'Dimmer', offset: 0}]});
+
+    expect(channelLimits([loose, strict, unlocked])).toEqual(new Map([[10, 10]]));
+    expect(channelLimits([strict, loose])).toEqual(new Map([[10, 10]]));
   });
 });
 
@@ -178,6 +218,18 @@ describe('parseFixtureSetup', () => {
 
     expect(setup?.fixtures[0].presets).toBeUndefined();
     expect(setup && fixturePresets(setup.fixtures[0])).toEqual([]);
+  });
+
+  test('accepts a channel with a lock, rejects a lock without a valid maximum', () => {
+    const locked = fixtureOf({channels: [{name: 'Laser', offset: 0, lock: {max: 0}}]});
+
+    expect(parseFixtureSetup({version: 1, fixtures: [locked]})).toEqual({version: 1, fixtures: [locked]});
+    expect(
+      parseFixtureSetup({version: 1, fixtures: [fixtureOf({channels: [{name: 'Laser', offset: 0, lock: {max: 300}}]})]})
+    ).toBeUndefined();
+    expect(
+      parseFixtureSetup({version: 1, fixtures: [{...fixtureOf(), channels: [{name: 'Laser', offset: 0, lock: {}}]}]})
+    ).toBeUndefined();
   });
 
   test('accepts a fixture with presets', () => {

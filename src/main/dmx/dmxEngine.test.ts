@@ -122,6 +122,70 @@ test('after disconnecting nothing is sent', async () => {
   expect(connector.writtenPackets).toHaveLength(1);
 });
 
+describe('channel limits', () => {
+  const LASER = 29;
+  const MACRO = 37;
+  const limits = new Map([
+    [LASER, 0],
+    [MACRO, 50]
+  ]);
+
+  beforeEach(async () => {
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+  });
+
+  const lastPacket = () => connector.writtenPackets.at(-1);
+
+  test('caps a channel while the limits are enforced, which they are from the start', async () => {
+    engine.setChannelLimits(limits);
+
+    engine.setChannel(LASER, 255);
+    engine.setChannel(MACRO, 200);
+    engine.setChannel(1, 255);
+    await nextTick();
+
+    expect(channelValueIn(lastPacket(), LASER)).toBe(0);
+    expect(channelValueIn(lastPacket(), MACRO)).toBe(50);
+    expect(channelValueIn(lastPacket(), 1)).toBe(255);
+  });
+
+  test('a lifted limit lets the value through', async () => {
+    engine.setChannelLimits(limits);
+    engine.setLimitsEnforced(false);
+
+    engine.setChannel(LASER, 255);
+    await nextTick();
+
+    expect(channelValueIn(lastPacket(), LASER)).toBe(255);
+  });
+
+  test('enforcing the limits again caps the channels already above them right away', async () => {
+    engine.setChannelLimits(limits);
+    engine.setLimitsEnforced(false);
+    engine.setChannel(LASER, 255);
+    engine.setChannel(MACRO, 30);
+    await nextTick();
+
+    engine.setLimitsEnforced(true);
+    await nextTick();
+
+    expect(connector.writtenPackets).toHaveLength(3);
+    expect(channelValueIn(lastPacket(), LASER)).toBe(0);
+    expect(channelValueIn(lastPacket(), MACRO)).toBe(30);
+  });
+
+  test('new limits while enforced cap the channels already above them', async () => {
+    engine.setChannel(MACRO, 200);
+    await nextTick();
+
+    engine.setChannelLimits(limits);
+    await nextTick();
+
+    expect(channelValueIn(lastPacket(), MACRO)).toBe(50);
+  });
+});
+
 describe('overlapping calls', () => {
   test('connecting to the same port twice keeps it connected', async () => {
     const [first, second] = await Promise.all([

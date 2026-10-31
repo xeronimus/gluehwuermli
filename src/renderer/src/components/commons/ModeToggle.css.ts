@@ -53,7 +53,10 @@ export const modeVariants = styleVariants({
     {
       color: vars.colors.textSecondary,
       background: vars.colors.surfaceRaised,
-      ':hover': {color: vars.colors.text}
+      selectors: {
+        '&:hover:not(:disabled)': {color: vars.colors.text},
+        '&:disabled': {cursor: 'default', opacity: 0.5}
+      }
     }
   ]
 });
