@@ -1,5 +1,6 @@
 import {DMX_MIN_VALUE, DMX_UNIVERSE_SIZE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
 import type {DmxOutputStatus} from '@shared/ipc';
+import {createSerialQueue} from '@shared/serialQueue';
 
 import type {DmxConnection, DmxPortConnector} from './DmxPortConnector';
 import {enttecProDmxPacket} from './enttecProPacket';
@@ -19,7 +20,10 @@ export interface DmxEngine {
   /** ignored unless channel and value are valid DMX */
   setChannel: (channel: number, value: number) => void;
 
-  /** closes the current port first; a failure ends in the `failed` status, it doesn't throw */
+  /**
+   * closes the current port first; a failure ends in the `failed` status, it doesn't throw. Overlapping connect and
+   * disconnect calls run one after the other.
+   */
   connect: (path: string) => Promise<DmxOutputStatus>;
   disconnect: () => Promise<DmxOutputStatus>;
   status: () => DmxOutputStatus;
@@ -94,7 +98,11 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
 
   const refreshTimer = setInterval(() => void sendUniverseIfChanged(), refreshIntervalMs);
 
-  const connect = async (path: string): Promise<DmxOutputStatus> => {
+  // a second connect or a disconnect waits until the port being opened is tracked, so it can be closed; otherwise a
+  // double click opens the same COM port twice ("Access denied") and another port would stay open untracked
+  const runSerially = createSerialQueue();
+
+  const openPort = async (path: string): Promise<DmxOutputStatus> => {
     await closeConnection();
     setStatus({type: 'connecting', path});
     try {
@@ -115,7 +123,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     return currentStatus;
   };
 
-  const disconnect = async (): Promise<DmxOutputStatus> => {
+  const closePort = async (): Promise<DmxOutputStatus> => {
     await closeConnection();
     setStatus({type: 'disconnected'});
     return currentStatus;
@@ -135,8 +143,8 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
       universe[index] = value;
       universeChanged = true;
     },
-    connect,
-    disconnect,
+    connect: (path) => runSerially(() => openPort(path)),
+    disconnect: () => runSerially(closePort),
     status: () => currentStatus,
     onStatusChanged: (listener) => {
       statusListeners.add(listener);
@@ -144,7 +152,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     },
     dispose: async () => {
       clearInterval(refreshTimer);
-      await closeConnection();
+      await runSerially(closeConnection);
     }
   };
 }

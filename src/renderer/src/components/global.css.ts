@@ -1,12 +1,12 @@
 import {globalStyle} from '@vanilla-extract/css';
 
-import {vars} from './themes.css';
+import {colors, vars} from './themes.css';
 
 globalStyle('body', {
   margin: 0,
-  // `vars.colors.*` isn't in scope here: the theme class is applied to a div inside <body> (App.tsx). Kept in sync with
-  // `colors.background` in themes.css.ts by hand, so the window doesn't flash white before React renders
-  background: '#121110',
+  // `vars.colors.*` isn't in scope here: the theme class is applied to a div inside <body> (App.tsx). The plain colour,
+  // so the window doesn't flash white before React renders
+  background: colors.background,
   overflow: 'hidden',
   userSelect: 'none'
 });

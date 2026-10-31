@@ -69,6 +69,7 @@ src/
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
     ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, validated against parseFixtureSetup
+    storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close)

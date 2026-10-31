@@ -122,6 +122,41 @@ test('after disconnecting nothing is sent', async () => {
   expect(connector.writtenPackets).toHaveLength(1);
 });
 
+describe('overlapping calls', () => {
+  test('connecting to the same port twice keeps it connected', async () => {
+    const [first, second] = await Promise.all([
+      engine.connect(SIMULATED_PORT_PATH),
+      engine.connect(SIMULATED_PORT_PATH)
+    ]);
+
+    expect(first).toEqual({type: 'connected', path: SIMULATED_PORT_PATH});
+    expect(second).toEqual({type: 'connected', path: SIMULATED_PORT_PATH});
+    expect(connector.openPaths).toEqual([SIMULATED_PORT_PATH]);
+  });
+
+  test('connecting to another port while the first opens closes the first', async () => {
+    await Promise.all([engine.connect('COM3'), engine.connect('COM4')]);
+
+    expect(engine.status()).toEqual({type: 'connected', path: 'COM4'});
+    expect(connector.openPaths).toEqual(['COM4']);
+  });
+
+  test('disconnecting while the port opens ends disconnected', async () => {
+    await Promise.all([engine.connect('COM3'), engine.disconnect()]);
+
+    expect(engine.status()).toEqual({type: 'disconnected'});
+    expect(connector.openPaths).toEqual([]);
+  });
+
+  test('disposing while the port opens closes it', async () => {
+    const connecting = engine.connect('COM3');
+    await engine.dispose();
+    await connecting;
+
+    expect(connector.openPaths).toEqual([]);
+  });
+});
+
 describe('describeActiveChannels', () => {
   test('lists the channels above 0, numbered from 1', () => {
     const universe = new Uint8Array(512);
