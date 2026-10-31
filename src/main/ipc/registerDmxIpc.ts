@@ -1,6 +1,6 @@
 import {BrowserWindow, ipcMain} from 'electron';
 
-import {parseConnectRequest, parseSetChannelRequest} from '@shared/ipc';
+import {parseConnectRequest, parseSetChannelRequest, parseSetChannelValuesRequest} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 
 import type {DmxPortConnector} from '../dmx/DmxPortConnector';
@@ -19,6 +19,16 @@ export function registerDmxIpc(engine: DmxEngine, connector: DmxPortConnector): 
       return;
     }
     engine.setChannel(request.channel, request.value);
+  });
+
+  ipcMain.on(IpcChannel.SET_CHANNEL_VALUES, (_event, payload: unknown) => {
+    const request = parseSetChannelValuesRequest(payload);
+    if (!request) {
+      log.warn('dropped invalid set-channel-values request', payload);
+      return;
+    }
+    // the engine only writes its buffer: all of them go out together on its next tick
+    request.values.forEach(({channel, value}) => engine.setChannel(channel, value));
   });
 
   ipcMain.handle(IpcChannel.LIST_PORTS, () => connector.listPorts());

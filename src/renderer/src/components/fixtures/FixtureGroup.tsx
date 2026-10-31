@@ -18,6 +18,7 @@ import {
   groupName,
   groupNote
 } from './FixtureGroup.css';
+import FixturePresetButtons from './FixturePresetButtons';
 
 interface FixtureGroupProps {
   fixture: Fixture;
@@ -26,8 +27,8 @@ interface FixtureGroupProps {
 }
 
 /**
- * The fixture's name and addresses, a fader per channel on its absolute DMX channel and its hint below them. The
- * description is reference material, hidden until opened with the button next to the hint.
+ * The fixture's name and addresses, its preset buttons, a fader per channel on its absolute DMX channel and its hint
+ * below them. The description is reference material, hidden until opened with the button next to the hint.
  */
 const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
   const setChannelValue = useActionSetChannelValue();
@@ -45,6 +46,7 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
           <DeleteIcon />
         </Button>
       </header>
+      <FixturePresetButtons fixture={fixture} />
       <div className={groupFaders}>
         {fixtureFaders(fixture).map((fader) => (
           <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
