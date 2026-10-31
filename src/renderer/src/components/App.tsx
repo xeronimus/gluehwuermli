@@ -1,6 +1,8 @@
 import {useState} from 'react';
 
-import {app, content} from './App.css';
+import mascot from '@resources/gluehwuermli_mascot.png';
+
+import {app, backdrop, content} from './App.css';
 import ErrorBoundary from './commons/ErrorBoundary';
 import Tabs, {Tab} from './commons/Tabs';
 import FaderBank from './faders/FaderBank';
@@ -21,6 +23,7 @@ const App = () => {
 
   return (
     <div className={`${defaultTheme} ${app}`}>
+      <img className={backdrop} src={mascot} alt="" />
       <ErrorBoundary>
         <OutputBar />
       </ErrorBoundary>

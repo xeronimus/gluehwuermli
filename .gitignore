@@ -20,3 +20,4 @@ pnpm-debug.log*
 
 # anthropic  claude-code
 /.claude/*
+/sync-skills.ps1
