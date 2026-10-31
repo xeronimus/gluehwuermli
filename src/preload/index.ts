@@ -17,7 +17,9 @@ const dmxBridge: DmxBridge = {
     return () => {
       ipcRenderer.removeListener(IpcChannel.STATUS_CHANGED, handler);
     };
-  }
+  },
+  loadFixtures: () => ipcRenderer.invoke(IpcChannel.LOAD_FIXTURES),
+  saveFixtures: (setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, setup)
 };
 
 contextBridge.exposeInMainWorld(DMX_BRIDGE_GLOBAL, dmxBridge);

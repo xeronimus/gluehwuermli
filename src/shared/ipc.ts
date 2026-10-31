@@ -31,6 +31,32 @@ export const DmxOutputStatusSchema = Type.Union([
 ]);
 export type DmxOutputStatus = Static<typeof DmxOutputStatusSchema>;
 
+/** one channel of a fixture: its address is the fixture's start address plus `offset` */
+export const FixtureChannelSchema = Type.Object({
+  name: Type.String({minLength: 1}),
+  offset: Type.Integer({minimum: 0, maximum: LAST_DMX_CHANNEL - FIRST_DMX_CHANNEL})
+});
+export type FixtureChannel = Static<typeof FixtureChannelSchema>;
+
+/** a device on the rig, e.g. a PAR or a smoke machine */
+export const FixtureSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  name: Type.String({minLength: 1}),
+  startAddress: Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL}),
+  channels: Type.Array(FixtureChannelSchema, {minItems: 1})
+});
+export type Fixture = Static<typeof FixtureSchema>;
+
+/** the version of the stored setup, so a later format change can migrate an older file instead of dropping it */
+export const FIXTURE_SETUP_VERSION = 1;
+
+/** every fixture, as stored in the fixtures file and sent over FIXTURES_LOAD / FIXTURES_SAVE */
+export const FixtureSetupSchema = Type.Object({
+  version: Type.Literal(FIXTURE_SETUP_VERSION),
+  fixtures: Type.Array(FixtureSchema)
+});
+export type FixtureSetup = Static<typeof FixtureSetupSchema>;
+
 /** the payload if it is a valid request, otherwise undefined */
 export const parseSetChannelRequest = (payload: unknown): SetChannelRequest | undefined =>
   Value.Check(SetChannelRequestSchema, payload) ? payload : undefined;
