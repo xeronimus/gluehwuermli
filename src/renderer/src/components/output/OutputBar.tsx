@@ -5,6 +5,7 @@ import fireflyLogo from '@resources/favicon/favicon-96x96.png';
 import {describeOutputStatus} from '@/data/outputStatus';
 import {useActionConnectOutput, useActionDisconnectOutput} from '@/state/actionHooks/connectOutput';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
+import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
 import {selectActiveChannelCount} from '@/state/channels/channelsSelectors';
 import {useAppStore} from '@/state/store';
 
@@ -12,7 +13,6 @@ import Button from '../commons/Button';
 import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
 import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 import PortSelect from './PortSelect';
-import {useOutputStatusSubscription} from './useOutputStatusSubscription';
 
 interface OutputBarProps {
   /** switches between the app's views, shown next to the title */
