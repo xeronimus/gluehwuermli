@@ -5,7 +5,10 @@
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
 a Help view (short manual, the data folder, a link to the repo), fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
 folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), a bank
-of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect.
+of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect. The app starts in
+**Show mode** (fixtures can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
+cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
+lifted with the password, too (ADR 3).
 Planned: scenes, fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
@@ -69,15 +72,22 @@ src/
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
-    ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, validated against parseFixtureSetup
-    ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/)
+    ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, wired to fixtureIpcHandlers
+    ipc/fixtureIpcHandlers.ts # what fixtures:load / fixtures:save do, without Electron: save refused in Show mode,
+                             # the engine's channel limits follow the setup
+    ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;
+                             # refused in Show mode)
+    ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
+                             # app:user-activity, pushes app:lock-changed
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
+    lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash
+                             # (scrypt), settings (schema of settings.json), SettingsStore + impl/file
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation or new window, only the allow-listed repo URL opens in the browser
     dmx/
-      dmxEngine.ts           # owns universe, port and refresh tick (ADR 2)
+      dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3)
       enttecProPacket.ts     # label 6 framing
       DmxPortConnector.ts    # port interface; impl/serialport (real), impl/inMemory (tests, simulated)
       portDetection.ts       # FTDI ids of the Pro
@@ -87,14 +97,16 @@ src/
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
       index.tsx, envConfig.ts
-      components/            # UI by feature: output/ (top bar: view toggle, port), fixtures/ (groups, editor), faders/ (raw channels),
+      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, port), fixtures/ (groups,
+                             # editor), faders/ (raw channels), settings/ (mode and channel lock, password form),
                              # help/ (manual, data folder, repo link);
                              # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
-      data/                  # pure logic (channelValues, channelBank, outputStatus, fixtureDraft, fixtureFaders, fixtureList,
-                             # presets)
-        service/             # DmxService, FixtureService, AppService, services.ts (composition root), impl/electron, impl/inMemory
+      data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,
+                             # fixtureList, presets, passwordForm, activityThrottle)
+        service/             # DmxService, FixtureService, AppService, LockService, services.ts (composition root),
+                             # impl/electron, impl/inMemory
       domain/                # types (Fader)
-      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, actionHooks/
+      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, actionHooks/
 ```
 
 ## Key Architecture Patterns
@@ -114,6 +126,11 @@ src/
 - **Optimistic UI**: a fader updates the store and sends the value in the same handler (`useActionSetChannelValue`),
   no round trip. Each `ChannelFader` subscribes to its own channel only. A fixture fader is a `ChannelFader` on the
   fixture channel's absolute address, so fixtures and the raw channels always show the same values
+- **Show mode is enforced in main** (ADR 3): the `AppLock` owns the mode, the channel lock (independent of each other),
+  the password and the idle timer, the `DmxEngine` caps locked channels per address in `setChannel`, whichever view
+  sent the value, and main refuses `fixtures:save`, opening the data folder and lifting the channel lock without the
+  password in Show mode. The renderer only mirrors the
+  pushed status (`app:lock-changed`), disables and hides, and caps its faders the same way so they show what is sent
 - **Fixture changes are stored first**: add/edit/delete save the whole setup and only then update the store; a failed
   save shows `fixturesError` and leaves the shown setup unchanged
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor

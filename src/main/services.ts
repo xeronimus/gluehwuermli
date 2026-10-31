@@ -5,6 +5,9 @@ import {inMemoryConnectorFactory} from './dmx/impl/inMemory/inMemoryConnectorFac
 import {serialPortConnectorFactory} from './dmx/impl/serialport/serialPortConnectorFactory';
 import type {FixtureStore} from './fixtures/FixtureStore';
 import {fileFixtureStoreFactory} from './fixtures/impl/file/fileFixtureStoreFactory';
+import type {SettingsStore} from './lock/SettingsStore';
+import {AppLock, appLockFactory} from './lock/appLock';
+import {fileSettingsStoreFactory} from './lock/impl/file/fileSettingsStoreFactory';
 import log from './log';
 import type {WindowStateStore} from './window/WindowStateStore';
 import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateStoreFactory';
@@ -15,11 +18,19 @@ import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateSto
  */
 const DMX_REFRESH_INTERVAL_MS = 23;
 
+/** Setup mode locks itself after this long without input, so it isn't left open at an event */
+const IDLE_LOCK_TIMEOUT_MS = 10 * 60 * 1000;
+
+/** after a wrong password: hardly noticeable for a typo, slows down guessing */
+const WRONG_PASSWORD_DELAY_MS = 1000;
+
 export interface MainServices {
   dmxPortConnector: DmxPortConnector;
   dmxEngine: DmxEngine;
   fixtureStore: FixtureStore;
   windowStateStore: WindowStateStore;
+  settingsStore: SettingsStore;
+  appLock: AppLock;
 }
 
 export interface MainServicesOptions {
@@ -27,12 +38,14 @@ export interface MainServicesOptions {
   fixtureFilePath: string;
   /** where the main window's position and size are stored, in Electron's userData folder */
   windowStateFilePath: string;
+  /** where the settings (the password hash) are stored, in Electron's userData folder */
+  settingsFilePath: string;
 }
 
 /** The composition root of the main process: creates every service once; the only module importing from impl/. */
 export function createMainServices(
   config: MainConfig,
-  {fixtureFilePath, windowStateFilePath}: MainServicesOptions
+  {fixtureFilePath, windowStateFilePath, settingsFilePath}: MainServicesOptions
 ): MainServices {
   const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory();
   const dmxEngine = dmxEngineFactory({connector: dmxPortConnector, refreshIntervalMs: DMX_REFRESH_INTERVAL_MS, log});
@@ -41,5 +54,14 @@ export function createMainServices(
 
   const windowStateStore = fileWindowStateStoreFactory({filePath: windowStateFilePath, log});
 
-  return {dmxPortConnector, dmxEngine, fixtureStore, windowStateStore};
+  const settingsStore = fileSettingsStoreFactory({filePath: settingsFilePath, log});
+  const appLock = appLockFactory({
+    settingsStore,
+    engine: dmxEngine,
+    idleTimeoutMs: IDLE_LOCK_TIMEOUT_MS,
+    wrongPasswordDelayMs: WRONG_PASSWORD_DELAY_MS,
+    log
+  });
+
+  return {dmxPortConnector, dmxEngine, fixtureStore, windowStateStore, settingsStore, appLock};
 }

@@ -31,10 +31,51 @@ const UserManual = () => (
     </section>
 
     <section className={manualSection}>
+      <h2>Show mode and Setup mode</h2>
+      <p>
+        The app always starts in <strong>Show mode</strong>: the fixtures and their presets can be played, but not
+        changed, and the Channels view is off. Anything else needs <strong>Setup mode</strong>: in the{' '}
+        <strong>Settings</strong> view, press <strong>Unlock Setup mode</strong> and type the password. The first time,
+        there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so.
+      </p>
+      <p>
+        Setup mode returns to Show mode with the <strong>Lock</strong> button, after 10 minutes without input and
+        whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays
+        as it is.
+      </p>
+      <p>
+        Forgot the password? Close the app, delete <strong>settings.json</strong> in the data folder (see the Data
+        folder section) and start it again: the next time a password is asked for, it becomes the new one.
+      </p>
+    </section>
+
+    <section className={manualSection}>
+      <h2>Channel locks</h2>
+      <p>
+        A fixture's channel can have a <strong>Max while locked</strong> (in the fixture editor): while the channel lock
+        is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel
+        running the device's own programs e.g. 50. Its faders are greyed out with a lock, and a preset that would set it
+        higher is disabled.
+      </p>
+      <p>
+        The channel lock is on after every start, independent of the mode. Lift it in the <strong>Settings</strong>{' '}
+        view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a
+        confirmation. It then stays lifted, also in Show mode and after Lock, until{' '}
+        <strong>Turn channel lock on</strong> or a restart; the top bar shows <strong>Channel lock lifted</strong>{' '}
+        meanwhile. Turned on again, the locked channels drop to their maximum right away.
+      </p>
+      <p>
+        The lock only covers what the app sends. A laser can still come on without it: through its infrared remote
+        (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be
+        mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX.
+      </p>
+    </section>
+
+    <section className={manualSection}>
       <h2>Setting up a fixture</h2>
       <p>
-        A fixture is one device of your rig, e.g. a PAR or a smoke machine. In the <strong>Fixtures</strong> view, press{' '}
-        <strong>Add fixture</strong>:
+        A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press{' '}
+        <strong>Add fixture</strong> in the <strong>Fixtures</strong> view:
       </p>
       <ol>
         <li>
@@ -67,9 +108,9 @@ const UserManual = () => (
     <section className={manualSection}>
       <h2>Finding out what a device does</h2>
       <p>
-        No manual, or not sure it is right? The <strong>Channels</strong> view has a fader for every DMX channel, 16 at
-        a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and
-        the channels show the same values: a fader moved in one view has moved in the other, too.
+        No manual, or not sure it is right? The <strong>Channels</strong> view (Setup mode only) has a fader for every
+        DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it
+        does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too.
       </p>
     </section>
   </article>

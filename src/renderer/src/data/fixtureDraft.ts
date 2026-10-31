@@ -1,6 +1,6 @@
 import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel} from '@shared/dmx';
 import {fixturePresets} from '@shared/fixtures';
-import type {Fixture, FixturePreset} from '@shared/ipc';
+import type {Fixture, FixtureChannel, FixturePreset} from '@shared/ipc';
 
 /** a fixture as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
 export interface FixtureDraft {
@@ -15,6 +15,8 @@ export interface FixtureDraft {
 export interface FixtureChannelDraft {
   readonly name: string;
   readonly offset: string;
+  /** the channel's cap while the channel lock is on; blank for none */
+  readonly lockMax: string;
 }
 
 /**
@@ -37,10 +39,14 @@ const UNSET_PRESET_VALUE: PresetValueDraft = {included: false, value: String(DMX
 
 const FIRST_OFFSET = 0;
 
+const NO_LOCK = '';
+
+const channelDraftAt = (offset: number): FixtureChannelDraft => ({name: '', offset: String(offset), lockMax: NO_LOCK});
+
 export const newFixtureDraft = (): FixtureDraft => ({
   name: '',
   startAddress: String(FIRST_DMX_CHANNEL),
-  channels: [{name: '', offset: String(FIRST_OFFSET)}],
+  channels: [channelDraftAt(FIRST_OFFSET)],
   description: '',
   hint: '',
   presets: []
@@ -58,7 +64,11 @@ const presetDraftOf = (fixture: Fixture, preset: FixturePreset): FixturePresetDr
 export const draftOf = (fixture: Fixture): FixtureDraft => ({
   name: fixture.name,
   startAddress: String(fixture.startAddress),
-  channels: fixture.channels.map((channel) => ({name: channel.name, offset: String(channel.offset)})),
+  channels: fixture.channels.map((channel) => ({
+    name: channel.name,
+    offset: String(channel.offset),
+    lockMax: channel.lock ? String(channel.lock.max) : NO_LOCK
+  })),
   description: fixture.description ?? '',
   hint: fixture.hint ?? '',
   presets: fixturePresets(fixture).map((preset) => presetDraftOf(fixture, preset))
@@ -71,6 +81,12 @@ const replacedAt = <T>(items: readonly T[], index: number, replace: (item: T) =>
 /** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
 const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
 
+const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => ({
+  name: channel.name.trim(),
+  offset: numberOf(channel.offset),
+  ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}})
+});
+
 const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): FixturePreset => ({
   id: preset.id,
   name: preset.name.trim(),
@@ -81,8 +97,8 @@ const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): Fixture
 });
 
 /**
- * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description or hint and an empty
- * list of presets are left out.
+ * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description, hint or lock and an
+ * empty list of presets are left out.
  */
 export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   const description = draft.description.trim();
@@ -92,7 +108,7 @@ export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
     id,
     name: draft.name.trim(),
     startAddress: numberOf(draft.startAddress),
-    channels: draft.channels.map((channel) => ({name: channel.name.trim(), offset: numberOf(channel.offset)})),
+    channels: draft.channels.map(channelOfDraft),
     ...(description && {description}),
     ...(hint && {hint}),
     ...(presets.length > 0 && {presets})
@@ -112,7 +128,7 @@ export function withNewChannel(draft: FixtureDraft): FixtureDraft {
   const nextOffset = offsets.length > 0 ? Math.max(...offsets) + 1 : FIRST_OFFSET;
   return {
     ...draft,
-    channels: [...draft.channels, {name: '', offset: String(nextOffset)}],
+    channels: [...draft.channels, channelDraftAt(nextOffset)],
     presets: draft.presets.map((preset) => ({...preset, values: [...preset.values, UNSET_PRESET_VALUE]}))
   };
 }

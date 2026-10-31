@@ -2,7 +2,9 @@ import type {
   DataFolder,
   DmxOutputStatus,
   FixtureSetup,
+  LockStatus,
   OpenDataFolderResult,
+  PasswordResult,
   SerialPortDescription,
   SetChannelRequest
 } from './ipc';
@@ -25,6 +27,19 @@ export interface DmxBridge {
   /** rejects when the main process refuses the setup or cannot write it */
   saveFixtures: (setup: FixtureSetup) => Promise<void>;
   getDataFolder: () => Promise<DataFolder>;
-  /** a folder that can't be opened is a `failed` result, not a rejection */
+  /** a folder that can't be opened is a `failed` result, not a rejection; refused in Show mode */
   openDataFolder: () => Promise<OpenDataFolderResult>;
+  getLockStatus: () => Promise<LockStatus>;
+  /** Setup mode; with no password stored yet, stores this one and unlocks */
+  unlock: (password: string) => Promise<PasswordResult>;
+  /** back to Show mode; leaves the channel lock as it is */
+  lock: () => Promise<LockStatus>;
+  /** the password is needed in Show mode only (rejects without it there) */
+  liftChannelLock: (password: string | undefined) => Promise<PasswordResult>;
+  /** turns the channel lock on again; needs no password */
+  lockChannels: () => Promise<LockStatus>;
+  /** fire-and-forget: restarts the idle timer that locks Setup mode again */
+  reportActivity: () => void;
+  /** returns the function that removes the listener again */
+  onLockChanged: (listener: (status: LockStatus) => void) => () => void;
 }

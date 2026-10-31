@@ -115,6 +115,9 @@ export function fixtureErrors(fixture: Fixture): string[] {
   duplicatesOf(fixture.channels.map((channel) => channel.offset).filter(Number.isInteger)).forEach((offset) =>
     errors.push(`Offset ${offset} is used by more than one channel`)
   );
+  if (fixture.channels.some((channel) => channel.lock && !isDmxValue(channel.lock.max))) {
+    errors.push(`The maximum while locked must be a whole number from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`);
+  }
   if (errors.length === 0 && !fitsInUniverse(fixture)) {
     errors.push(`The fixture ends at address ${lastAddress(fixture)}, after the last one (${LAST_DMX_CHANNEL})`);
   }
@@ -130,6 +133,24 @@ export function overlappingFixtures(fixtures: readonly Fixture[]): FixtureOverla
       return addresses.length > 0 ? [{first, second, addresses}] : [];
     })
   );
+}
+
+/** the highest value per DMX address while the channel lock is on; an address missing here is never capped */
+export type ChannelLimits = ReadonlyMap<number, number>;
+
+/** the caps the fixtures' channels declare, per address; fixtures sharing an address with different caps: the lowest */
+export function channelLimits(fixtures: readonly Fixture[]): ChannelLimits {
+  const limits = new Map<number, number>();
+  fixtures.forEach((fixture) =>
+    fixture.channels.forEach((channel) => {
+      if (!channel.lock) {
+        return;
+      }
+      const address = channelAddress(fixture, channel);
+      limits.set(address, Math.min(channel.lock.max, limits.get(address) ?? channel.lock.max));
+    })
+  );
+  return limits;
 }
 
 const hasUniqueIds = (fixtures: readonly Fixture[]) => new Set(fixtures.map(({id}) => id)).size === fixtures.length;

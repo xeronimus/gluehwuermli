@@ -62,26 +62,61 @@ test('a blank or non-numeric field is invalid, not 0', () => {
 test('a new channel goes after the highest offset, or to 0 when there is none', () => {
   const withGap = withChannelChange(draftOf(par), 1, {offset: '4'});
 
-  expect(withNewChannel(withGap).channels[2]).toEqual({name: '', offset: '5'});
-  expect(withNewChannel(withoutChannel(newFixtureDraft(), 0)).channels).toEqual([{name: '', offset: '0'}]);
+  expect(withNewChannel(withGap).channels[2]).toEqual({name: '', offset: '5', lockMax: ''});
+  expect(withNewChannel(withoutChannel(newFixtureDraft(), 0)).channels).toEqual([{name: '', offset: '0', lockMax: ''}]);
 });
 
 test('removes the channel at the index', () => {
-  expect(withoutChannel(draftOf(par), 0).channels).toEqual([{name: 'Green', offset: '1'}]);
+  expect(withoutChannel(draftOf(par), 0).channels).toEqual([{name: 'Green', offset: '1', lockMax: ''}]);
 });
 
 test('a channel lands on the start address plus its offset', () => {
   const draft = draftOf(par);
 
-  expect(draftChannelAddress(draft, {name: 'Red', offset: '0'})).toBe(10);
-  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2'})).toBe(12);
+  expect(draftChannelAddress(draft, {name: 'Red', offset: '0', lockMax: ''})).toBe(10);
+  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2', lockMax: ''})).toBe(12);
 });
 
 test('no address while a field is blank or invalid, or past the universe', () => {
-  expect(draftChannelAddress({...draftOf(par), startAddress: ''}, {name: 'Red', offset: '0'})).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: ''})).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1'})).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503'})).toBeUndefined();
+  expect(
+    draftChannelAddress({...draftOf(par), startAddress: ''}, {name: 'Red', offset: '0', lockMax: ''})
+  ).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '', lockMax: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1', lockMax: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503', lockMax: ''})).toBeUndefined();
+});
+
+describe('channel locks', () => {
+  const laser = {
+    ...par,
+    channels: [
+      {name: 'Red', offset: 0},
+      {name: 'Laser', offset: 1, lock: {max: 0}}
+    ]
+  };
+
+  test('a fixture with a locked channel survives the round trip through a draft', () => {
+    expect(draftOf(laser).channels[1]).toEqual({name: 'Laser', offset: '1', lockMax: '0'});
+    expect(fixtureOfDraft('par', draftOf(laser))).toEqual(laser);
+  });
+
+  test('a blank maximum is no lock, a typed one is', () => {
+    expect(fixtureOfDraft('par', withChannelChange(draftOf(laser), 1, {lockMax: ' '})).channels[1]).toEqual({
+      name: 'Laser',
+      offset: 1
+    });
+    expect(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {lockMax: '50'})).channels[0]).toEqual({
+      name: 'Red',
+      offset: 0,
+      lock: {max: 50}
+    });
+  });
+
+  test('a maximum outside 0..255 is invalid', () => {
+    expect(fixtureErrors(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {lockMax: '300'})))).toEqual([
+      'The maximum while locked must be a whole number from 0 to 255'
+    ]);
+  });
 });
 
 describe('presets', () => {
