@@ -38,10 +38,10 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
       <header className={groupHeader}>
         <span className={groupName}>{fixture.name}</span>
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
-        <Button onClick={onEdit} title={`Edit ${fixture.name}`}>
+        <Button variant="icon" onClick={onEdit} title={`Edit ${fixture.name}`}>
           <EditIcon />
         </Button>
-        <Button onClick={onDelete} title={`Delete ${fixture.name}`}>
+        <Button variant="icon" onClick={onDelete} title={`Delete ${fixture.name}`}>
           <DeleteIcon />
         </Button>
       </header>
