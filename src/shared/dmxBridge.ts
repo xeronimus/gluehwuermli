@@ -1,4 +1,11 @@
-import type {DmxOutputStatus, FixtureSetup, SerialPortDescription, SetChannelRequest} from './ipc';
+import type {
+  DataFolder,
+  DmxOutputStatus,
+  FixtureSetup,
+  OpenDataFolderResult,
+  SerialPortDescription,
+  SetChannelRequest
+} from './ipc';
 
 /** the global under which the preload script exposes the DmxBridge to the renderer (`window.gluehwuermli`) */
 export const DMX_BRIDGE_GLOBAL = 'gluehwuermli';
@@ -17,4 +24,7 @@ export interface DmxBridge {
   loadFixtures: () => Promise<FixtureSetup>;
   /** rejects when the main process refuses the setup or cannot write it */
   saveFixtures: (setup: FixtureSetup) => Promise<void>;
+  getDataFolder: () => Promise<DataFolder>;
+  /** a folder that can't be opened is a `failed` result, not a rejection */
+  openDataFolder: () => Promise<OpenDataFolderResult>;
 }

@@ -15,6 +15,8 @@ export const IpcChannel = {
   GET_STATUS: 'dmx:get-status',
   LOAD_FIXTURES: 'fixtures:load',
   SAVE_FIXTURES: 'fixtures:save',
+  GET_DATA_FOLDER: 'app:get-data-folder',
+  OPEN_DATA_FOLDER: 'app:open-data-folder',
   /** main -> renderer, whenever the output status changes */
   STATUS_CHANGED: 'dmx:status-changed'
 } as const;

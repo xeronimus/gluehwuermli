@@ -1,8 +1,11 @@
+import type AppService from './AppService';
 import type DmxService from './DmxService';
 import type FixtureService from './FixtureService';
 import logger from './Logger';
+import {electronAppServiceFactory} from './impl/electron/electronAppServiceFactory';
 import {electronDmxServiceFactory} from './impl/electron/electronDmxServiceFactory';
 import {electronFixtureServiceFactory} from './impl/electron/electronFixtureServiceFactory';
+import {inMemoryAppServiceFactory} from './impl/inMemory/inMemoryAppServiceFactory';
 import {inMemoryDmxServiceFactory} from './impl/inMemory/inMemoryDmxServiceFactory';
 import {inMemoryFixtureServiceFactory} from './impl/inMemory/inMemoryFixtureServiceFactory';
 
@@ -21,3 +24,5 @@ export const dmxService: DmxService = dmxBridge ? electronDmxServiceFactory(dmxB
 export const fixtureService: FixtureService = dmxBridge
   ? electronFixtureServiceFactory(dmxBridge)
   : inMemoryFixtureServiceFactory();
+
+export const appService: AppService = dmxBridge ? electronAppServiceFactory(dmxBridge) : inMemoryAppServiceFactory();
