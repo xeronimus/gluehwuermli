@@ -12,6 +12,8 @@ export {
   IconPencil as EditIcon,
   IconChevronDown as ExpandIcon,
   IconHelpCircle as HelpIcon,
+  IconChevronRight as NextIcon,
+  IconChevronLeft as PreviousIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
   IconAlertTriangle as WarningIcon

@@ -10,5 +10,5 @@ test('all channels start at 0', () => {
 });
 
 test('counts the channels above 0', () => {
-  expect(selectActiveChannelCount({channelValues: [0, 1, 255, 0]})).toBe(2);
+  expect(selectActiveChannelCount({...getDefaultChannelsState(), channelValues: [0, 1, 255, 0]})).toBe(2);
 });
