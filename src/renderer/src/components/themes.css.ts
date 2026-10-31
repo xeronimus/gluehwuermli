@@ -1,7 +1,8 @@
 import {createTheme, createThemeContract} from '@vanilla-extract/css';
 
-// dark, like a desk at the side of a stage; the accent is the glow of a firefly
-const colors = {
+// dark, like a desk at the side of a stage; the accent is the glow of a firefly. Exported for global styles outside the
+// theme class (global.css.ts)
+export const colors = {
   background: '#121110',
   surface: '#1c1a17',
   surfaceRaised: '#26231f',
