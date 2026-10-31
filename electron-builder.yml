@@ -6,6 +6,8 @@ directories:
 files:
   - out/**/*
   - package.json
+# serialport ships N-API prebuilds that load in Electron as they are; a rebuild would need Visual Studio
+npmRebuild: false
 # native modules can't be loaded from inside the asar archive
 asarUnpack:
   - '**/node_modules/@serialport/bindings-cpp/**'
