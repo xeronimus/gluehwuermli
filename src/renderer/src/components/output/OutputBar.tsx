@@ -10,16 +10,7 @@ import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
 import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
-import {
-  activeChannels,
-  appLogo,
-  appTitle,
-  divider,
-  outputBar,
-  outputError,
-  spacer,
-  statusVariants
-} from './OutputBar.css';
+import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 import PortSelect from './PortSelect';
 import {useOutputStatusSubscription} from './useOutputStatusSubscription';
 
@@ -59,7 +50,7 @@ const OutputBar = ({viewToggle}: OutputBarProps) => {
       <img className={appLogo} src={fireflyLogo} alt="" />
       <span className={appTitle}>Glühwürmli</span>
       {viewToggle}
-      <span className={divider} />
+      <span className={spacer} />
       <PortSelect disabled={portLocked} />
       <Button onClick={() => void loadPorts()} disabled={portLocked} title="Search the serial ports again">
         <RefreshPortsIcon />
@@ -75,7 +66,6 @@ const OutputBar = ({viewToggle}: OutputBarProps) => {
       )}
       <span className={statusVariants[outputStatus.type]}>{describeOutputStatus(outputStatus)}</span>
       {error && <span className={outputError}>{error}</span>}
-      <span className={spacer} />
       <span className={activeChannels}>{activeChannelCount} channels above 0</span>
     </header>
   );
