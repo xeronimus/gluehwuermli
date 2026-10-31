@@ -54,6 +54,9 @@ const duplicatesOf = <T>(values: readonly T[]): T[] => [
   ...new Set(values.filter((value, index) => values.indexOf(value) !== index))
 ];
 
+/** the preset as named in an error message; one still being named in the editor has no name yet */
+const presetLabel = (preset: FixturePreset): string => (isBlank(preset.name) ? 'without a name' : preset.name);
+
 /** what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each */
 function presetErrors(fixture: Fixture): string[] {
   const errors: string[] = [];
@@ -67,20 +70,19 @@ function presetErrors(fixture: Fixture): string[] {
   }
   duplicatesOf(presets.map((preset) => preset.id)).forEach((id) => errors.push(`Preset id ${id} is used twice`));
   presets.forEach((preset) => {
+    const label = presetLabel(preset);
     const presetOffsets = preset.values.map((presetValue) => presetValue.offset);
     if (presetOffsets.length === 0) {
-      errors.push(`The preset ${preset.name} needs at least one channel`);
+      errors.push(`The preset ${label} needs at least one channel`);
     }
     if (presetOffsets.some((offset) => !offsets.has(offset))) {
-      errors.push(`The preset ${preset.name} sets a channel the fixture doesn't have`);
+      errors.push(`The preset ${label} sets a channel the fixture doesn't have`);
     }
     if (duplicatesOf(presetOffsets).length > 0) {
-      errors.push(`The preset ${preset.name} sets a channel more than once`);
+      errors.push(`The preset ${label} sets a channel more than once`);
     }
     if (preset.values.some((presetValue) => !isDmxValue(presetValue.value))) {
-      errors.push(
-        `The values of the preset ${preset.name} must be whole numbers from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`
-      );
+      errors.push(`The values of the preset ${label} must be whole numbers from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`);
     }
   });
   return errors;

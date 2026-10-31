@@ -67,7 +67,7 @@ const FixturePresetButtons = ({fixture}: FixturePresetButtonsProps) => {
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 void onSave();
-              } else if (event.key === 'Escape') {
+              } else if (event.key === 'Escape' && !saving) {
                 setNewPresetName(undefined);
               }
             }}

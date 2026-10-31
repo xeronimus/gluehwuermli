@@ -64,6 +64,10 @@ export const draftOf = (fixture: Fixture): FixtureDraft => ({
   presets: fixturePresets(fixture).map((preset) => presetDraftOf(fixture, preset))
 });
 
+/** a copy of `items` with the one at `index` replaced */
+const replacedAt = <T>(items: readonly T[], index: number, replace: (item: T) => T): T[] =>
+  items.map((item, current) => (current === index ? replace(item) : item));
+
 /** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
 const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
 
@@ -119,7 +123,7 @@ export const withChannelChange = (
   change: Partial<FixtureChannelDraft>
 ): FixtureDraft => ({
   ...draft,
-  channels: draft.channels.map((channel, current) => (current === index ? {...channel, ...change} : channel))
+  channels: replacedAt(draft.channels, index, (channel) => ({...channel, ...change}))
 });
 
 export const withoutChannel = (draft: FixtureDraft, index: number): FixtureDraft => ({
@@ -139,7 +143,7 @@ export const withNewPreset = (draft: FixtureDraft, id: string): FixtureDraft => 
 
 export const withPresetName = (draft: FixtureDraft, presetIndex: number, name: string): FixtureDraft => ({
   ...draft,
-  presets: draft.presets.map((preset, current) => (current === presetIndex ? {...preset, name} : preset))
+  presets: replacedAt(draft.presets, presetIndex, (preset) => ({...preset, name}))
 });
 
 export const withPresetValueChange = (
@@ -149,16 +153,10 @@ export const withPresetValueChange = (
   change: Partial<PresetValueDraft>
 ): FixtureDraft => ({
   ...draft,
-  presets: draft.presets.map((preset, current) =>
-    current === presetIndex
-      ? {
-          ...preset,
-          values: preset.values.map((presetValue, index) =>
-            index === channelIndex ? {...presetValue, ...change} : presetValue
-          )
-        }
-      : preset
-  )
+  presets: replacedAt(draft.presets, presetIndex, (preset) => ({
+    ...preset,
+    values: replacedAt(preset.values, channelIndex, (presetValue) => ({...presetValue, ...change}))
+  }))
 });
 
 export const withoutPreset = (draft: FixtureDraft, presetIndex: number): FixtureDraft => ({

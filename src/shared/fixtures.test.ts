@@ -104,6 +104,21 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('reports a preset id used twice', () => {
+    const preset = {id: 'warm', name: 'Warm', values: [{offset: 0, value: 255}]};
+
+    expect(fixtureErrors(fixtureOf({presets: [preset, {...preset, name: 'Warmer'}]}))).toEqual([
+      'Preset id warm is used twice'
+    ]);
+  });
+
+  test('names a preset without a name as such', () => {
+    expect(fixtureErrors(fixtureOf({presets: [{id: 'new', name: '', values: []}]}))).toEqual([
+      'Every preset needs a name',
+      'The preset without a name needs at least one channel'
+    ]);
+  });
+
   test('reports a preset value outside 0..255 and a too long preset name', () => {
     const name = 'x'.repeat(41);
     const presets = [{id: 'loud', name, values: [{offset: 0, value: 256}]}];
