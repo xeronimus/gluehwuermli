@@ -1,4 +1,4 @@
-import {DmxEngine, dmxEngineFactory} from './dmxEngine';
+import {DmxEngine, describeActiveChannels, dmxEngineFactory} from './dmxEngine';
 import {
   InMemoryConnector,
   SIMULATED_PORT_PATH,
@@ -6,7 +6,7 @@ import {
 } from './impl/inMemory/inMemoryConnectorFactory';
 
 const REFRESH_INTERVAL_MS = 25;
-const silentLog = {info: () => {}, warn: () => {}};
+const silentLog = {debug: () => {}, info: () => {}, warn: () => {}};
 
 /** the value of `channel` in a label 6 packet: 4 header bytes and the start code come before channel 1 */
 const channelValueIn = (packet: Uint8Array | undefined, channel: number) => packet?.[4 + channel];
@@ -108,4 +108,18 @@ test('after disconnecting nothing is sent', async () => {
   await nextTick();
 
   expect(connector.writtenPackets).toHaveLength(1);
+});
+
+describe('describeActiveChannels', () => {
+  test('lists the channels above 0, numbered from 1', () => {
+    const universe = new Uint8Array(512);
+    universe[0] = 255;
+    universe[16] = 128;
+
+    expect(describeActiveChannels(universe)).toBe('1=255 17=128');
+  });
+
+  test('says so when every channel is 0', () => {
+    expect(describeActiveChannels(new Uint8Array(512))).toBe('all channels 0');
+  });
 });
