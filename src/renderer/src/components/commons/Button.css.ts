@@ -40,6 +40,22 @@ export const buttonVariants = styleVariants({
         }
       }
     }
+  ],
+  /** just the icon, for small secondary actions */
+  icon: [
+    buttonBase,
+    {
+      padding: '2px',
+      color: vars.colors.textSecondary,
+      background: 'none',
+      borderColor: 'transparent',
+      selectors: {
+        '&:hover:not(:disabled), &:focus-visible:not(:disabled)': {
+          color: vars.colors.text,
+          borderColor: 'transparent'
+        }
+      }
+    }
   ]
 });
 
