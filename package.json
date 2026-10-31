@@ -17,8 +17,8 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p src/renderer/tsconfig.json",
     "test": "pnpm run typecheck && vitest run",
     "test:watch": "vitest",
-    "format": "node ./scripts/normalizeImports.mjs && prettier --write \"src/**/*.{ts,tsx}\" \"*.{ts,mts}\" \"scripts/**/*.mjs\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"*.{ts,mts}\" \"scripts/**/*.mjs\"",
+    "format": "node ./scripts/normalizeImports.mjs && prettier --write \"src/**/*.{ts,tsx}\" \"*.{ts,mts}\" \"scripts/**/*.mjs\" \"*.md\" \"doc/**/*.md\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"*.{ts,mts}\" \"scripts/**/*.mjs\" \"*.md\" \"doc/**/*.md\"",
     "ft": "pnpm run format && pnpm run test"
   },
   "dependencies": {

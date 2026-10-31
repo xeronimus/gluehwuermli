@@ -29,16 +29,16 @@ Device Manager → Ports (COM & LPT) → the widget's COM port → Port Settings
 
 ## Commands
 
-| Command             | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------- |
-| `pnpm dev`          | Electron with the Vite dev server (HMR for the renderer)                  |
-| `pnpm start`        | Build and run the production build (`electron-vite preview`)              |
-| `pnpm build`        | Build main, preload and renderer to `out/`                                |
-| `pnpm dist`         | Build and package the Windows installer (NSIS) to `dist/`                 |
-| `pnpm test`         | Typecheck (both tsconfigs), then all Vitest tests                         |
-| `pnpm test:watch`   | Vitest in watch mode                                                      |
-| `pnpm format`       | Import normalizer + Prettier                                              |
-| `pnpm ft`           | Format + test, run it before considering a task done                      |
+| Command           | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| `pnpm dev`        | Electron with the Vite dev server (HMR for the renderer)     |
+| `pnpm start`      | Build and run the production build (`electron-vite preview`) |
+| `pnpm build`      | Build main, preload and renderer to `out/`                   |
+| `pnpm dist`       | Build and package the Windows installer (NSIS) to `dist/`    |
+| `pnpm test`       | Typecheck (both tsconfigs), then all Vitest tests            |
+| `pnpm test:watch` | Vitest in watch mode                                         |
+| `pnpm format`     | Import normalizer + Prettier (code and Markdown)             |
+| `pnpm ft`         | Format + test, run it before considering a task done         |
 
 ## Docs
 
