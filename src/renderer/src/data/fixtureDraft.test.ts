@@ -1,6 +1,7 @@
 import {fixtureErrors} from '@shared/fixtures';
 
 import {
+  draftChannelAddress,
   draftOf,
   fixtureOfDraft,
   newFixtureDraft,
@@ -47,4 +48,18 @@ test('a new channel goes after the highest offset, or to 0 when there is none', 
 
 test('removes the channel at the index', () => {
   expect(withoutChannel(draftOf(par), 0).channels).toEqual([{name: 'Green', offset: '1'}]);
+});
+
+test('a channel lands on the start address plus its offset', () => {
+  const draft = draftOf(par);
+
+  expect(draftChannelAddress(draft, {name: 'Red', offset: '0'})).toBe(10);
+  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2'})).toBe(12);
+});
+
+test('no address while a field is blank or invalid, or past the universe', () => {
+  expect(draftChannelAddress({...draftOf(par), startAddress: ''}, {name: 'Red', offset: '0'})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1'})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503'})).toBeUndefined();
 });

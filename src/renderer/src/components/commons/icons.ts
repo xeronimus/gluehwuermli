@@ -9,6 +9,7 @@ export {
   IconTrash as DeleteIcon,
   IconPlugConnectedX as DisconnectIcon,
   IconPencil as EditIcon,
+  IconHelpCircle as HelpIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
   IconAlertTriangle as WarningIcon

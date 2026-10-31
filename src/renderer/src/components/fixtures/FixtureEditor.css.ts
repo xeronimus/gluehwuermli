@@ -12,6 +12,20 @@ export const fixtureEditor = style({
   borderRadius: vars.constants.radiusMd
 });
 
+/** the form, and the help beside it (below it when the window is narrow) */
+export const editorBody = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'flex-start',
+  gap: '24px'
+});
+
+export const editorForm = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '14px'
+});
+
 export const editorTitle = style({
   margin: 0,
   fontSize: '1em',

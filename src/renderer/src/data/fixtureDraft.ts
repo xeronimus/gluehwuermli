@@ -1,4 +1,4 @@
-import {FIRST_DMX_CHANNEL} from '@shared/dmx';
+import {FIRST_DMX_CHANNEL, isDmxChannel} from '@shared/dmx';
 import type {Fixture} from '@shared/ipc';
 
 /** a fixture as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
@@ -37,6 +37,13 @@ export const fixtureOfDraft = (id: string, draft: FixtureDraft): Fixture => ({
   startAddress: numberOf(draft.startAddress),
   channels: draft.channels.map((channel) => ({name: channel.name.trim(), offset: numberOf(channel.offset)}))
 });
+
+/** the DMX address the channel lands on, or undefined while the start address or the offset can't give a valid one */
+export function draftChannelAddress(draft: FixtureDraft, channel: FixtureChannelDraft): number | undefined {
+  const offset = numberOf(channel.offset);
+  const address = numberOf(draft.startAddress) + offset;
+  return offset >= 0 && isDmxChannel(address) ? address : undefined;
+}
 
 /** a new channel after the highest offset typed so far */
 export function withNewChannel(draft: FixtureDraft): FixtureDraft {

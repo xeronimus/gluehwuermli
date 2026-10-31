@@ -4,7 +4,7 @@ import {vars} from '../themes.css';
 
 export const channelRows = style({
   display: 'grid',
-  gridTemplateColumns: '200px 90px auto',
+  gridTemplateColumns: '200px 90px 64px auto',
   gap: '6px 8px',
   alignItems: 'center',
   justifyItems: 'start'
@@ -23,6 +23,12 @@ export const channelNameInput = style({
 export const offsetInput = style({
   width: '100%',
   boxSizing: 'border-box'
+});
+
+export const channelAddress = style({
+  justifySelf: 'center',
+  fontFamily: vars.fonts.mono,
+  color: vars.colors.textSecondary
 });
 
 export const addChannel = style({
