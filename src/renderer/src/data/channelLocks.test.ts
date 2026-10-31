@@ -5,7 +5,9 @@ import {
   cappedValue,
   channelsAboveLimits,
   clampedChannelValues,
+  isAtCap,
   isChannelLockOn,
+  isFaderLocked,
   isPresetLocked
 } from './channelLocks';
 
@@ -90,5 +92,20 @@ describe('isPresetLocked', () => {
     ).toBe(false);
     expect(isPresetLocked(laserBox, presetOf([{offset: 0, value: 255}]), limits)).toBe(false);
     expect(isPresetLocked(laserBox, presetOf([{offset: 1, value: 255}]), new Map())).toBe(false);
+  });
+});
+
+describe('isFaderLocked and isAtCap', () => {
+  test('only a cap of 0 locks the fader, a higher one leaves the range below it', () => {
+    expect(isFaderLocked(0)).toBe(true);
+    expect(isFaderLocked(50)).toBe(false);
+    expect(isFaderLocked(undefined)).toBe(false);
+  });
+
+  test('at or above the cap the fader is at its cap; without one, never', () => {
+    expect(isAtCap(50, 50)).toBe(true);
+    expect(isAtCap(49, 50)).toBe(false);
+    expect(isAtCap(0, 0)).toBe(true);
+    expect(isAtCap(255, undefined)).toBe(false);
   });
 });

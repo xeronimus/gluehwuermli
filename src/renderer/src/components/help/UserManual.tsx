@@ -54,8 +54,8 @@ const UserManual = () => (
       <p>
         A fixture's channel can have a <strong>Max while locked</strong> (in the fixture editor): while the channel lock
         is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel
-        running the device's own programs e.g. 50. Its faders are greyed out with a lock, and a preset that would set it
-        higher is disabled.
+        running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed
+        out), and a preset that would set it higher is disabled.
       </p>
       <p>
         The channel lock is on after every start, independent of the mode. Lift it in the <strong>Settings</strong>{' '}

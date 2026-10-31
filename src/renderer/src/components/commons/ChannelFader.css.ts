@@ -85,5 +85,5 @@ export const faderThumb = style({
   }
 });
 
-/** a capped channel's thumb: greyed out, it can't be moved */
+/** the thumb of a channel capped at 0: greyed out, it can't be moved */
 export const faderThumbLocked = style([faderThumb, {background: vars.colors.textMuted}]);
