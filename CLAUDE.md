@@ -2,9 +2,10 @@
 
 ## What is this project?
 
-A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today: a
-bank of 0–255 faders for channels 1–16, port selection and connect/disconnect. Planned: patching fixtures, scenes,
-fades and chases.
+A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
+fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
+folder) with a fader per channel, a bank of raw 0–255 faders for channels 1–16, port selection and connect/disconnect.
+Planned: presets, scenes, fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -59,12 +60,16 @@ src/
     dmx.ts                   # universe size, channel/value ranges
     ipcChannels.ts           # IPC channel names (kept apart so the preload doesn't bundle TypeBox)
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
+    fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
     dmxBridge.ts             # the API the preload exposes as window.gluehwuermli
+    serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
   main/                      # Electron main process
     index.ts                 # window, lifecycle
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
+    ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, validated against parseFixtureSetup
+    fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2)
       enttecProPacket.ts     # label 6 framing
@@ -76,11 +81,12 @@ src/
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
       index.tsx, envConfig.ts
-      components/            # UI by feature: output/ (port bar), faders/; commons/ (Button, ErrorBoundary, icons.ts)
-      data/                  # pure logic (channelValues, outputStatus)
-        service/             # DmxService interface, services.ts (composition root), impl/electron, impl/inMemory
+      components/            # UI by feature: output/ (port bar), fixtures/ (groups, editor), faders/ (raw channels);
+                             # commons/ (Button, ChannelFader, Tabs, ErrorBoundary, icons.ts)
+      data/                  # pure logic (channelValues, outputStatus, fixtureDraft, fixtureFaders, fixtureList)
+        service/             # DmxService, FixtureService, services.ts (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
-      state/                 # Zustand store: channels/, output/, actionHooks/
+      state/                 # Zustand store: channels/, output/, fixtures/, actionHooks/
 ```
 
 ## Key Architecture Patterns
@@ -98,7 +104,10 @@ src/
   composition root and the only module importing from `impl/`. Tests pass fakes (`inMemory`) into the factories
   rather than mocking modules
 - **Optimistic UI**: a fader updates the store and sends the value in the same handler (`useActionSetChannelValue`),
-  no round trip. Each `ChannelFader` subscribes to its own channel only
+  no round trip. Each `ChannelFader` subscribes to its own channel only. A fixture fader is a `ChannelFader` on the
+  fixture channel's absolute address, so fixtures and the raw channels always show the same values
+- **Fixture changes are stored first**: add/edit/delete save the whole setup and only then update the store; a failed
+  save shows `fixturesError` and leaves the shown setup unchanged
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
   `domain/` imports only `domain/`, `shared/` and packages, `data/` never imports `state/` or `components/`, `state/`

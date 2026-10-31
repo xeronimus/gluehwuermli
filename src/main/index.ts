@@ -4,10 +4,12 @@ import {join} from 'node:path';
 import appIcon from '../resources/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
+import {registerFixtureIpc} from './ipc/registerFixtureIpc';
 import log, {configureLog} from './log';
 import {createMainServices} from './services';
 
 const MAIN_WINDOW_SIZE = {width: 1280, height: 800};
+const FIXTURE_FILE_NAME = 'fixtures.json';
 
 function createMainWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -41,10 +43,11 @@ function createMainWindow(): BrowserWindow {
 
 const config = loadMainConfig(app.isPackaged);
 configureLog(config.debug);
-const services = createMainServices(config);
+const services = createMainServices(config, {fixtureFilePath: join(app.getPath('userData'), FIXTURE_FILE_NAME)});
 
 void app.whenReady().then(() => {
   registerDmxIpc(services.dmxEngine, services.dmxPortConnector);
+  registerFixtureIpc(services.fixtureStore);
   createMainWindow();
 
   // macOS: re-create the window when the dock icon is clicked and none is open
