@@ -1,0 +1,6 @@
+# LF everywhere (.editorconfig, Prettier), regardless of core.autocrlf
+* text=auto eol=lf
+
+# binaries
+*.png binary
+*.ico binary
