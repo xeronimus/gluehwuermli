@@ -1,4 +1,4 @@
-import {fixtureFaders} from './fixtureFaders';
+import {addressRangeOf, fixtureFaders} from './fixtureFaders';
 
 test('a fader per channel, on the start address plus the offset', () => {
   const smoke = {
@@ -15,4 +15,12 @@ test('a fader per channel, on the start address plus the offset', () => {
     {channel: 20, label: 'Smoke'},
     {channel: 22, label: 'Fan'}
   ]);
+});
+
+test('the address range, or a single address for a one-channel fixture', () => {
+  const par = {id: 'par', name: 'PAR', startAddress: 10, channels: [{name: 'Blue', offset: 2}]};
+  const smoke = {id: 'smoke', name: 'Smoke', startAddress: 12, channels: [{name: 'Smoke', offset: 0}]};
+
+  expect(addressRangeOf(par)).toBe('10–12');
+  expect(addressRangeOf(smoke)).toBe('12');
 });

@@ -1,7 +1,6 @@
-import {lastAddress} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
-import {fixtureFaders} from '@/data/fixtureFaders';
+import {addressRangeOf, fixtureFaders} from '@/data/fixtureFaders';
 import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 
 import Button from '../commons/Button';
@@ -23,9 +22,7 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
     <section className={fixtureGroup} aria-label={fixture.name}>
       <header className={groupHeader}>
         <span className={groupName}>{fixture.name}</span>
-        <span className={groupAddresses}>
-          {fixture.startAddress}–{lastAddress(fixture)}
-        </span>
+        <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         <Button onClick={onEdit} title={`Edit ${fixture.name}`}>
           <EditIcon />
         </Button>
