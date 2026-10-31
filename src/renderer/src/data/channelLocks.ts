@@ -1,3 +1,4 @@
+import {DMX_MIN_VALUE} from '@shared/dmx';
 import {type ChannelLimits, channelLimits} from '@shared/fixtures';
 import type {Fixture, FixturePreset, LockStatus, SetChannelRequest} from '@shared/ipc';
 
@@ -16,6 +17,12 @@ export const activeLimits = (fixtures: readonly Fixture[], lockStatus: LockStatu
 /** the value the main process sends for it: capped at the channel's limit, if it has one */
 export const cappedValue = (value: number, limit: number | undefined): number =>
   limit === undefined ? value : Math.min(value, limit);
+
+/** a cap of 0 (e.g. a laser) leaves nothing to move; a higher one (e.g. a macro at 50) only limits the fader */
+export const isFaderLocked = (limit: number | undefined): boolean => limit === DMX_MIN_VALUE;
+
+/** the channel lock lets the fader go no higher */
+export const isAtCap = (value: number, limit: number | undefined): boolean => limit !== undefined && value >= limit;
 
 export const clampedChannelValues = (
   values: readonly SetChannelRequest[],
