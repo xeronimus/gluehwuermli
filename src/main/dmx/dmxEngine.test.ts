@@ -60,6 +60,18 @@ test('sends nothing while nothing changes', async () => {
   expect(connector.writtenPackets).toHaveLength(1);
 });
 
+test('setting a channel to the value it already has sends nothing', async () => {
+  engine.setChannel(1, 128);
+  await engine.connect(SIMULATED_PORT_PATH);
+  await nextTick();
+
+  engine.setChannel(1, 128);
+  engine.setChannel(2, 0);
+  await nextTick();
+
+  expect(connector.writtenPackets).toHaveLength(1);
+});
+
 test('ignores invalid channels and values', async () => {
   await engine.connect(SIMULATED_PORT_PATH);
   await nextTick();
