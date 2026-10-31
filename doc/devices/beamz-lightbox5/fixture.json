@@ -23,7 +23,7 @@
     {"name": "Macro", "offset": 17, "lock": {"max": 50}}
   ],
   "description": "BeamZ LightBox5 party effect (153.692): jellyball (magic ball), red/green laser, RGBW PAR LEDs, UV and white strobe, 18 DMX channels (address via MENU: A001-A512). Ch 1 speed, slow to fast (0-255). Ch 2 jellyball motor: 0-127 position 0-340°, 128-255 automatic rotation. Ch 3 laser rotation: 0-9 none, 10-127 CW fast to slow, 128-255 CCW slow to fast. Ch 4 master dimmer (0-255). Ch 5 master strobe: 0-19 off, 20-255 strobe all, slow to fast. Ch 6-9 jellyball red, green, blue, white (0-255). Ch 10-11 red laser, green laser (0-255). Ch 12-15 LED red, green, blue, white (0-255). Ch 16 UV (0-255). Ch 17 white strobe: 0-10 off, 11-255 slow to fast. Ch 18 macro: 0-50 off, 51-150 auto program, 151-255 sound program. Never point the laser at people: mount it at least 3 m high.",
-  "hint": "Dimmer is on channel 4: leave it at 0 and the light stays dark. Macro: 100 = auto, 200 = sound. Laser: never at people.",
+  "hint": "Dimmer is on channel 4: leave it at 0 and the light stays dark. Macro: 100 = auto, 200 = sound, only with the channel lock lifted. Laser: never at people.",
   "presets": [
     {
       "id": "8be892a1-015a-41a5-9fd1-1969347a5fff",
