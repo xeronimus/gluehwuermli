@@ -57,6 +57,11 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('accepts a hint up to the maximum length, reports a longer one', () => {
+    expect(fixtureErrors(fixtureOf({hint: 'x'.repeat(200)}))).toEqual([]);
+    expect(fixtureErrors(fixtureOf({hint: 'x'.repeat(201)}))).toEqual(['The hint can have at most 200 characters']);
+  });
+
   test('reports blank channel names and duplicate offsets', () => {
     const channels = [
       {name: 'Dimmer', offset: 0},
@@ -104,6 +109,13 @@ describe('parseFixtureSetup', () => {
 
     expect(parseFixtureSetup({version: 1, fixtures: [described]})).toEqual({version: 1, fixtures: [described]});
     expect(parseFixtureSetup({version: 1, fixtures: [{...fixtureOf(), description: 42}]})).toBeUndefined();
+  });
+
+  test('accepts a fixture with a hint, rejects a hint that is no text', () => {
+    const hinted = fixtureOf({hint: 'warm up 2 min'});
+
+    expect(parseFixtureSetup({version: 1, fixtures: [hinted]})).toEqual({version: 1, fixtures: [hinted]});
+    expect(parseFixtureSetup({version: 1, fixtures: [{...fixtureOf(), hint: 42}]})).toBeUndefined();
   });
 
   test.each([

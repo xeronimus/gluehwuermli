@@ -49,6 +49,11 @@ export const nameInput = style({
   width: '240px'
 });
 
+export const hintInput = style({
+  width: '100%',
+  boxSizing: 'border-box'
+});
+
 export const descriptionInput = style({
   width: '100%',
   boxSizing: 'border-box',

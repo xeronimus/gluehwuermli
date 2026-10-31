@@ -1,3 +1,5 @@
+import {useState} from 'react';
+
 import type {Fixture} from '@shared/ipc';
 
 import {addressRangeOf, fixtureFaders} from '@/data/fixtureFaders';
@@ -5,8 +7,17 @@ import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
-import {DeleteIcon, EditIcon} from '../commons/icons';
-import {fixtureGroup, groupAddresses, groupDescription, groupFaders, groupHeader, groupName} from './FixtureGroup.css';
+import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon} from '../commons/icons';
+import {
+  fixtureGroup,
+  groupAddresses,
+  groupFaders,
+  groupFooter,
+  groupHeader,
+  groupHint,
+  groupName,
+  groupNote
+} from './FixtureGroup.css';
 
 interface FixtureGroupProps {
   fixture: Fixture;
@@ -14,9 +25,13 @@ interface FixtureGroupProps {
   onDelete: () => void;
 }
 
-/** the fixture's name, addresses and description, and a fader per channel on its absolute DMX channel */
+/**
+ * The fixture's name and addresses, a fader per channel on its absolute DMX channel and its hint below them. The
+ * description is reference material, hidden until opened with the button next to the hint.
+ */
 const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
   const setChannelValue = useActionSetChannelValue();
+  const [descriptionShown, setDescriptionShown] = useState(false);
 
   return (
     <section className={fixtureGroup} aria-label={fixture.name}>
@@ -30,16 +45,26 @@ const FixtureGroup = ({fixture, onEdit, onDelete}: FixtureGroupProps) => {
           <DeleteIcon />
         </Button>
       </header>
-      {fixture.description && (
-        <p className={groupDescription} title={fixture.description}>
-          {fixture.description}
-        </p>
-      )}
       <div className={groupFaders}>
         {fixtureFaders(fixture).map((fader) => (
           <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
         ))}
       </div>
+      {(fixture.hint || fixture.description) && (
+        <footer className={groupFooter}>
+          <p className={groupHint}>{fixture.hint}</p>
+          {fixture.description && (
+            <Button
+              variant="icon"
+              onClick={() => setDescriptionShown(!descriptionShown)}
+              title={descriptionShown ? 'Hide the description' : 'Show the description'}
+            >
+              {descriptionShown ? <CollapseIcon /> : <ExpandIcon />}
+            </Button>
+          )}
+        </footer>
+      )}
+      {descriptionShown && fixture.description && <p className={groupNote}>{fixture.description}</p>}
     </section>
   );
 };

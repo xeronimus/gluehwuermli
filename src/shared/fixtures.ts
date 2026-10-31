@@ -3,6 +3,7 @@ import Value from 'typebox/value';
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from './dmx';
 import {
   FIXTURE_DESCRIPTION_MAX_LENGTH,
+  FIXTURE_HINT_MAX_LENGTH,
   FIXTURE_SETUP_VERSION,
   type Fixture,
   type FixtureChannel,
@@ -59,6 +60,9 @@ export function fixtureErrors(fixture: Fixture): string[] {
   }
   if ((fixture.description?.length ?? 0) > FIXTURE_DESCRIPTION_MAX_LENGTH) {
     errors.push(`The description can have at most ${FIXTURE_DESCRIPTION_MAX_LENGTH} characters`);
+  }
+  if ((fixture.hint?.length ?? 0) > FIXTURE_HINT_MAX_LENGTH) {
+    errors.push(`The hint can have at most ${FIXTURE_HINT_MAX_LENGTH} characters`);
   }
   if (fixture.channels.length === 0) {
     errors.push('The fixture needs at least one channel');

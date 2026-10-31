@@ -41,6 +41,9 @@ export type FixtureChannel = Static<typeof FixtureChannelSchema>;
 /** plenty for notes on a device, short enough that a pasted manual doesn't end up in the setup file */
 export const FIXTURE_DESCRIPTION_MAX_LENGTH = 2000;
 
+/** a line or two below the faders */
+export const FIXTURE_HINT_MAX_LENGTH = 200;
+
 /** a device on the rig, e.g. a PAR or a smoke machine */
 export const FixtureSchema = Type.Object({
   id: Type.String({minLength: 1}),
@@ -48,7 +51,9 @@ export const FixtureSchema = Type.Object({
   startAddress: Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL}),
   channels: Type.Array(FixtureChannelSchema, {minItems: 1}),
   /** free text: the DMX mode, DIP switch settings, where it hangs, who it belongs to; optional, so older files load */
-  description: Type.Optional(Type.String({maxLength: FIXTURE_DESCRIPTION_MAX_LENGTH}))
+  description: Type.Optional(Type.String({maxLength: FIXTURE_DESCRIPTION_MAX_LENGTH})),
+  /** short free text shown below the faders, e.g. "warm up 2 min before smoke"; optional, so older files load */
+  hint: Type.Optional(Type.String({maxLength: FIXTURE_HINT_MAX_LENGTH}))
 });
 export type Fixture = Static<typeof FixtureSchema>;
 

@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {fixtureErrors, overlappingFixtures} from '@shared/fixtures';
-import {FIXTURE_DESCRIPTION_MAX_LENGTH, type Fixture} from '@shared/ipc';
+import {FIXTURE_DESCRIPTION_MAX_LENGTH, FIXTURE_HINT_MAX_LENGTH, type Fixture} from '@shared/ipc';
 
 import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
 import {describeOverlap} from '@/data/fixtureOverlaps';
@@ -22,6 +22,7 @@ import {
   field,
   fields,
   fixtureEditor,
+  hintInput,
   nameInput,
   warningList
 } from './FixtureEditor.css';
@@ -89,6 +90,17 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
           </div>
 
           <FixtureChannelRows draft={draft} onChange={setDraft} />
+
+          <label className={field}>
+            Hint
+            <input
+              className={hintInput}
+              value={draft.hint}
+              maxLength={FIXTURE_HINT_MAX_LENGTH}
+              placeholder="Shown below the faders, e.g. warm up 2 min before smoke"
+              onChange={(event) => setDraft({...draft, hint: event.target.value})}
+            />
+          </label>
 
           <label className={field}>
             Description

@@ -36,8 +36,9 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
         Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12).
       </p>
       <p>
-        Use the <strong>description</strong> for anything else worth knowing about the device: the DMX mode, DIP switch
-        settings, where it hangs, who it belongs to.
+        The <strong>hint</strong> is shown below the faders, for what you need while playing, e.g. "warm up 2 min before
+        smoke". Use the <strong>description</strong> for anything else worth knowing about the device: the DMX mode, DIP
+        switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture.
       </p>
       <p>
         No manual? Use the <strong>Channels</strong> tab to move one channel after the other from the device's address

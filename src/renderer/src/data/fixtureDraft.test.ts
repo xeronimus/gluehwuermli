@@ -32,6 +32,14 @@ test('keeps a description, trimmed, and leaves out a blank one', () => {
   expect(fixtureOfDraft('par', {...draftOf(par), description: '   '})).toEqual(par);
 });
 
+test('keeps a hint, trimmed, and leaves out a blank one', () => {
+  const hinted = {...par, hint: 'warm up 2 min'};
+
+  expect(fixtureOfDraft('par', draftOf(hinted))).toEqual(hinted);
+  expect(fixtureOfDraft('par', {...draftOf(par), hint: ' dim first '})).toEqual({...par, hint: 'dim first'});
+  expect(fixtureOfDraft('par', {...draftOf(par), hint: '  '})).toEqual(par);
+});
+
 test('trims the names', () => {
   const draft = withChannelChange({...draftOf(par), name: ' PAR '}, 0, {name: ' Red '});
 

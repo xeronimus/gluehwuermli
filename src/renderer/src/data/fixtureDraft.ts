@@ -7,6 +7,7 @@ export interface FixtureDraft {
   readonly startAddress: string;
   readonly channels: readonly FixtureChannelDraft[];
   readonly description: string;
+  readonly hint: string;
 }
 
 export interface FixtureChannelDraft {
@@ -20,28 +21,32 @@ export const newFixtureDraft = (): FixtureDraft => ({
   name: '',
   startAddress: String(FIRST_DMX_CHANNEL),
   channels: [{name: '', offset: String(FIRST_OFFSET)}],
-  description: ''
+  description: '',
+  hint: ''
 });
 
 export const draftOf = (fixture: Fixture): FixtureDraft => ({
   name: fixture.name,
   startAddress: String(fixture.startAddress),
   channels: fixture.channels.map((channel) => ({name: channel.name, offset: String(channel.offset)})),
-  description: fixture.description ?? ''
+  description: fixture.description ?? '',
+  hint: fixture.hint ?? ''
 });
 
 /** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
 const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
 
-/** the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description is left out. */
+/** the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description or hint is left out. */
 export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   const description = draft.description.trim();
+  const hint = draft.hint.trim();
   return {
     id,
     name: draft.name.trim(),
     startAddress: numberOf(draft.startAddress),
     channels: draft.channels.map((channel) => ({name: channel.name.trim(), offset: numberOf(channel.offset)})),
-    ...(description && {description})
+    ...(description && {description}),
+    ...(hint && {hint})
   };
 }
 
