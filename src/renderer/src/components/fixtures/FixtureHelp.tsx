@@ -41,6 +41,11 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
         switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture.
       </p>
       <p>
+        A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white". The
+        channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next
+        to the presets.
+      </p>
+      <p>
         No manual? Use the <strong>Channels</strong> tab to move one channel after the other from the device's address
         and watch what it does.
       </p>
