@@ -1,4 +1,4 @@
-import {channelValueOf, fadersFor, toDmxValue, toPercent, withChannelValue} from './channelValues';
+import {channelValueOf, fadersFor, toDmxValue, toPercent, withChannelValue, withChannelValues} from './channelValues';
 
 describe('toDmxValue', () => {
   test('rounds and clamps a slider position', () => {
@@ -26,6 +26,21 @@ describe('withChannelValue', () => {
 
   test('a channel outside the values changes nothing', () => {
     expect(withChannelValue([1, 2], 5, 200)).toEqual([1, 2]);
+  });
+});
+
+describe('withChannelValues', () => {
+  test('sets every channel in one copy, leaves the others and ignores channels outside the values', () => {
+    const channelValues = [0, 0, 0];
+
+    expect(
+      withChannelValues(channelValues, [
+        {channel: 1, value: 10},
+        {channel: 3, value: 30},
+        {channel: 9, value: 90}
+      ])
+    ).toEqual([10, 0, 30]);
+    expect(channelValues).toEqual([0, 0, 0]);
   });
 });
 

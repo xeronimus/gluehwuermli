@@ -1,12 +1,14 @@
 import Value from 'typebox/value';
 
-import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from './dmx';
+import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
   FIXTURE_DESCRIPTION_MAX_LENGTH,
   FIXTURE_HINT_MAX_LENGTH,
+  FIXTURE_PRESET_NAME_MAX_LENGTH,
   FIXTURE_SETUP_VERSION,
   type Fixture,
   type FixtureChannel,
+  type FixturePreset,
   type FixtureSetup,
   FixtureSetupSchema
 } from './ipc';
@@ -43,11 +45,46 @@ export const lastAddress = (fixture: Fixture): number => Math.max(fixture.startA
 export const fitsInUniverse = (fixture: Fixture): boolean =>
   fixture.startAddress >= FIRST_DMX_CHANNEL && lastAddress(fixture) <= LAST_DMX_CHANNEL;
 
+/** the fixture's presets; none in a file from before presets existed */
+export const fixturePresets = (fixture: Fixture): readonly FixturePreset[] => fixture.presets ?? [];
+
 const isBlank = (text: string) => text.trim().length === 0;
 
-const duplicatesOf = (values: readonly number[]): number[] => [
+const duplicatesOf = <T>(values: readonly T[]): T[] => [
   ...new Set(values.filter((value, index) => values.indexOf(value) !== index))
 ];
+
+/** what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each */
+function presetErrors(fixture: Fixture): string[] {
+  const errors: string[] = [];
+  const presets = fixturePresets(fixture);
+  const offsets = new Set(fixture.channels.map((channel) => channel.offset));
+  if (presets.some((preset) => isBlank(preset.name))) {
+    errors.push('Every preset needs a name');
+  }
+  if (presets.some((preset) => preset.name.length > FIXTURE_PRESET_NAME_MAX_LENGTH)) {
+    errors.push(`A preset name can have at most ${FIXTURE_PRESET_NAME_MAX_LENGTH} characters`);
+  }
+  duplicatesOf(presets.map((preset) => preset.id)).forEach((id) => errors.push(`Preset id ${id} is used twice`));
+  presets.forEach((preset) => {
+    const presetOffsets = preset.values.map((presetValue) => presetValue.offset);
+    if (presetOffsets.length === 0) {
+      errors.push(`The preset ${preset.name} needs at least one channel`);
+    }
+    if (presetOffsets.some((offset) => !offsets.has(offset))) {
+      errors.push(`The preset ${preset.name} sets a channel the fixture doesn't have`);
+    }
+    if (duplicatesOf(presetOffsets).length > 0) {
+      errors.push(`The preset ${preset.name} sets a channel more than once`);
+    }
+    if (preset.values.some((presetValue) => !isDmxValue(presetValue.value))) {
+      errors.push(
+        `The values of the preset ${preset.name} must be whole numbers from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`
+      );
+    }
+  });
+  return errors;
+}
 
 /** what keeps the fixture from being saved; empty when it is valid */
 export function fixtureErrors(fixture: Fixture): string[] {
@@ -79,7 +116,7 @@ export function fixtureErrors(fixture: Fixture): string[] {
   if (errors.length === 0 && !fitsInUniverse(fixture)) {
     errors.push(`The fixture ends at address ${lastAddress(fixture)}, after the last one (${LAST_DMX_CHANNEL})`);
   }
-  return errors;
+  return [...errors, ...presetErrors(fixture)];
 }
 
 /** every pair of fixtures sharing an address, in the order of the list */

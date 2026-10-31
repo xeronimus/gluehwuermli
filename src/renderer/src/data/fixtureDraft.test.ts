@@ -7,7 +7,11 @@ import {
   newFixtureDraft,
   withChannelChange,
   withNewChannel,
-  withoutChannel
+  withNewPreset,
+  withPresetName,
+  withPresetValueChange,
+  withoutChannel,
+  withoutPreset
 } from './fixtureDraft';
 
 const par = {
@@ -78,4 +82,62 @@ test('no address while a field is blank or invalid, or past the universe', () =>
   expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: ''})).toBeUndefined();
   expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1'})).toBeUndefined();
   expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503'})).toBeUndefined();
+});
+
+describe('presets', () => {
+  const withWarm = {...par, presets: [{id: 'warm', name: 'Warm', values: [{offset: 1, value: 180}]}]};
+
+  test('a fixture with presets survives the round trip through a draft', () => {
+    expect(fixtureOfDraft('par', draftOf(withWarm))).toEqual(withWarm);
+  });
+
+  test('a preset has an entry per channel, unticked where it sets nothing', () => {
+    expect(draftOf(withWarm).presets[0].values).toEqual([
+      {included: false, value: '0'},
+      {included: true, value: '180'}
+    ]);
+  });
+
+  test('a new preset sets every channel to 0, a named one ends up in the fixture', () => {
+    const draft = withPresetName(withNewPreset(draftOf(par), 'off'), 0, ' Off ');
+
+    expect(fixtureOfDraft('par', draft).presets).toEqual([
+      {
+        id: 'off',
+        name: 'Off',
+        values: [
+          {offset: 0, value: 0},
+          {offset: 1, value: 0}
+        ]
+      }
+    ]);
+  });
+
+  test('leaves out unticked channels', () => {
+    const draft = withPresetValueChange(withNewPreset(draftOf(par), 'red'), 0, 1, {included: false});
+
+    expect(fixtureOfDraft('par', draft).presets?.[0].values).toEqual([{offset: 0, value: 0}]);
+  });
+
+  test('follows a channel that is removed or gets another offset', () => {
+    const moved = withChannelChange(draftOf(withWarm), 1, {offset: '4'});
+    expect(fixtureOfDraft('par', moved).presets?.[0].values).toEqual([{offset: 4, value: 180}]);
+
+    const removed = withoutChannel(draftOf(withWarm), 1);
+    expect(fixtureOfDraft('par', removed).presets?.[0].values).toEqual([]);
+    expect(fixtureErrors(fixtureOfDraft('par', removed))).toEqual(['The preset Warm needs at least one channel']);
+  });
+
+  test('a new channel is not part of the existing presets', () => {
+    expect(withNewChannel(draftOf(withWarm)).presets[0].values[2]).toEqual({included: false, value: '0'});
+  });
+
+  test('a blank value is invalid, and removing the last preset leaves no presets at all', () => {
+    const blank = withPresetValueChange(draftOf(withWarm), 0, 1, {value: ''});
+    expect(fixtureErrors(fixtureOfDraft('par', blank))).toEqual([
+      'The values of the preset Warm must be whole numbers from 0 to 255'
+    ]);
+
+    expect(fixtureOfDraft('par', withoutPreset(draftOf(withWarm), 0))).toEqual(par);
+  });
 });
