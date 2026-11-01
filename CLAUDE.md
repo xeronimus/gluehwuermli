@@ -79,7 +79,7 @@ src/
     ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;
                              # refused in Show mode)
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
-                             # app:user-activity, pushes app:lock-changed
+                             # app:change-password, app:user-activity, pushes app:lock-changed
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
     lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash

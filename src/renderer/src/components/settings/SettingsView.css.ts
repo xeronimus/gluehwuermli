@@ -61,6 +61,14 @@ export const passwordForm = style({
   gap: '6px'
 });
 
+/** changing the password: a row each for the current password, the new one twice, and the buttons */
+export const changePasswordForm = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '6px'
+});
+
 export const passwordInput = style({
   width: '160px'
 });

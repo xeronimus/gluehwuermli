@@ -31,6 +31,12 @@ export function inMemoryLockServiceFactory(): LockService {
       return {type: 'accepted'};
     },
     lockChannels: async () => setStatus({channelLocked: true}),
+    changePassword: async () => {
+      if (status.mode === 'show') {
+        throw new Error('changing the password needs Setup mode');
+      }
+      return {type: 'accepted'};
+    },
     reportActivity: () => {},
     onChanged: (listener) => {
       listeners.add(listener);
