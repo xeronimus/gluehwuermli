@@ -29,6 +29,11 @@ export interface AppLock {
   /** rejects in Show mode without a password; with no password stored yet, stores this one */
   liftChannelLock: (password: string | undefined) => Promise<PasswordResult>;
   lockChannels: () => Promise<LockStatus>;
+  /**
+   * rejects in Show mode, and when the new password can't be stored (the old one stays valid then). Leaves the mode and
+   * the channel lock as they are
+   */
+  changePassword: (currentPassword: string, newPassword: string) => Promise<PasswordResult>;
   /** restarts the idle timer while in Setup mode; ignored in Show mode */
   registerActivity: () => void;
   /** returns the function that removes the listener again */
@@ -128,21 +133,50 @@ export function appLockFactory({
     restartIdleTimer();
   };
 
-  /** the first password typed becomes the password; a wrong one answers only after the delay */
+  /** saved first: if the save fails, the password in use stays the one before */
+  const storePassword = async (password: string) => {
+    const hashed = await hashPassword(password);
+    await settingsStore.save({version: SETTINGS_VERSION, password: hashed});
+    passwordHash = hashed;
+  };
+
+  /** a wrong password answers only after the delay */
+  const isStoredPassword = async (password: string, stored: PasswordHash): Promise<boolean> => {
+    if (await verifyPassword(password, stored)) {
+      return true;
+    }
+    await wait(wrongPasswordDelayMs);
+    return false;
+  };
+
+  /** the first password typed becomes the password */
   const checkPassword = (password: string): Promise<boolean> =>
     runSerially(async () => {
       await settingsLoaded;
       if (!passwordHash) {
-        const hashed = await hashPassword(password);
-        await settingsStore.save({version: SETTINGS_VERSION, password: hashed});
-        passwordHash = hashed;
+        await storePassword(password);
         return true;
       }
-      if (await verifyPassword(password, passwordHash)) {
-        return true;
+      return isStoredPassword(password, passwordHash);
+    });
+
+  const replacePassword = (currentPassword: string, newPassword: string): Promise<boolean> =>
+    runSerially(async () => {
+      await settingsLoaded;
+      if (!passwordHash) {
+        // Setup mode is only reached by setting or typing the password
+        throw new Error('there is no password to change');
       }
-      await wait(wrongPasswordDelayMs);
-      return false;
+      if (!(await isStoredPassword(currentPassword, passwordHash))) {
+        return false;
+      }
+      // the idle timer may have locked the app while this call waited in the queue
+      if (!setupMode) {
+        throw new Error('changing the password needs Setup mode');
+      }
+      await storePassword(newPassword);
+      log.info('password changed');
+      return true;
     });
 
   return {
@@ -171,6 +205,12 @@ export function appLockFactory({
     lockChannels: async () => {
       setChannelLocked(true);
       return status();
+    },
+    changePassword: async (currentPassword, newPassword) => {
+      if (!setupMode) {
+        throw new Error('changing the password needs Setup mode');
+      }
+      return (await replacePassword(currentPassword, newPassword)) ? ACCEPTED : WRONG_PASSWORD;
     },
     registerActivity: () => {
       if (setupMode) {

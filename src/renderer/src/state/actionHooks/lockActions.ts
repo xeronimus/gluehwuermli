@@ -51,6 +51,15 @@ export function useActionLiftChannelLock() {
     outcomeOf(await lockCall(() => lockService.liftChannelLock(password), 'Could not lift the channel lock'));
 }
 
+/** Setup mode only; the current password is checked by the main process */
+export function useActionChangePassword() {
+  const lockCall = useLockCall();
+  return async (currentPassword: string, newPassword: string): Promise<PasswordOutcome> =>
+    outcomeOf(
+      await lockCall(() => lockService.changePassword(currentPassword, newPassword), 'Could not change the password')
+    );
+}
+
 export function useActionLockChannels() {
   const lockCall = useLockCall();
   return async (): Promise<LockStatus | undefined> =>

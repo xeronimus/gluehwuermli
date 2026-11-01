@@ -1,6 +1,6 @@
 import {BrowserWindow, ipcMain} from 'electron';
 
-import {parseLiftChannelLockRequest, parseUnlockRequest} from '@shared/ipc';
+import {parseChangePasswordRequest, parseLiftChannelLockRequest, parseUnlockRequest} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 
 import type {AppLock} from '../lock/appLock';
@@ -31,6 +31,14 @@ export function registerLockIpc(appLock: AppLock): void {
   });
 
   ipcMain.handle(IpcChannel.LOCK_CHANNELS, () => appLock.lockChannels());
+
+  ipcMain.handle(IpcChannel.CHANGE_PASSWORD, (_event, payload: unknown) => {
+    const request = parseChangePasswordRequest(payload);
+    if (!request) {
+      throw new Error('invalid change-password request');
+    }
+    return appLock.changePassword(request.currentPassword, request.newPassword);
+  });
 
   ipcMain.on(IpcChannel.USER_ACTIVITY, () => appLock.registerActivity());
 

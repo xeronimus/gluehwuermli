@@ -10,10 +10,14 @@ const PASSWORD = 'laser-off';
 let stored: Settings | undefined;
 let saved: Settings[];
 let limitsEnforced: boolean[];
+let failingSave: boolean;
 
 const settingsStore: SettingsStore = {
   load: async () => stored,
   save: async (settings) => {
+    if (failingSave) {
+      throw new Error('disk full');
+    }
     saved.push(settings);
     stored = settings;
   }
@@ -28,9 +32,12 @@ const createLock = (): AppLock =>
     log: {info: () => {}}
   });
 
-/** scrypt runs outside the fake timers: yields to the event loop until the delay after a wrong password is scheduled */
-async function untilTimerScheduled() {
-  while (vi.getTimerCount() === 0) {
+/**
+ * scrypt runs outside the fake timers: yields to the event loop until the delay after a wrong password is scheduled,
+ * one timer more than before (in Setup mode the idle timer runs already)
+ */
+async function untilTimerScheduled(timersBefore: number) {
+  while (vi.getTimerCount() <= timersBefore) {
     await new Promise((resolve) => setImmediate(resolve));
   }
 }
@@ -41,6 +48,7 @@ beforeEach(async () => {
   stored = {version: 1, password: await hashPassword(PASSWORD)};
   saved = [];
   limitsEnforced = [];
+  failingSave = false;
 });
 
 afterEach(() => {
@@ -53,10 +61,11 @@ const SETUP = {mode: 'setup', passwordSet: true, channelLocked: true};
 /** starts a call that checks a wrong password and lets the delay after it pass; resolves to its result */
 async function afterWrongPasswordDelay<T>(call: () => Promise<T>): Promise<{settledEarly: boolean; result: T}> {
   let settled = false;
+  const timersBefore = vi.getTimerCount();
   const running = call().finally(() => {
     settled = true;
   });
-  await untilTimerScheduled();
+  await untilTimerScheduled(timersBefore);
   await vi.advanceTimersByTimeAsync(WRONG_PASSWORD_DELAY_MS - 1);
   const settledEarly = settled;
   await vi.advanceTimersByTimeAsync(1);
@@ -204,5 +213,81 @@ describe('the channel lock', () => {
 
     await expect(lock.liftChannelLock(undefined)).rejects.toThrow('needs the password');
     expect(limitsEnforced).toEqual([true]);
+  });
+});
+
+describe('changing the password', () => {
+  const NEW_PASSWORD = 'laser-on';
+
+  test('in Setup mode with the current password stores the new one, staying in Setup mode', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+    await lock.liftChannelLock(undefined);
+
+    expect(await lock.changePassword(PASSWORD, NEW_PASSWORD)).toEqual({type: 'accepted'});
+
+    expect(saved).toHaveLength(1);
+    expect(JSON.stringify(saved)).not.toContain(NEW_PASSWORD);
+    expect(await lock.status()).toEqual({...SETUP, channelLocked: false});
+  });
+
+  test('afterwards only the new password unlocks, also after a restart', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+    await lock.changePassword(PASSWORD, NEW_PASSWORD);
+    await lock.lock();
+
+    const {result} = await afterWrongPasswordDelay(() => lock.unlock(PASSWORD));
+    expect(result).toEqual({type: 'wrong-password'});
+    expect(await lock.unlock(NEW_PASSWORD)).toEqual({type: 'accepted'});
+
+    const restarted = createLock();
+    expect(await restarted.liftChannelLock(NEW_PASSWORD)).toEqual({type: 'accepted'});
+  });
+
+  test('a wrong current password keeps the password and Setup mode, answering after the delay', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+
+    const {settledEarly, result} = await afterWrongPasswordDelay(() => lock.changePassword('guess', NEW_PASSWORD));
+
+    expect(settledEarly).toBe(false);
+    expect(result).toEqual({type: 'wrong-password'});
+    expect(saved).toEqual([]);
+    expect(await lock.status()).toEqual(SETUP);
+  });
+
+  test('is refused in Show mode', async () => {
+    const lock = createLock();
+
+    await expect(lock.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrow('needs Setup mode');
+    expect(saved).toEqual([]);
+  });
+
+  test('is refused when Show mode returns while the change waits in the queue', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+    const timersBefore = vi.getTimerCount();
+    const wrongGuess = lock.changePassword('guess', NEW_PASSWORD);
+    const refused = expect(lock.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrow('needs Setup mode');
+    await untilTimerScheduled(timersBefore);
+
+    await lock.lock();
+    await vi.advanceTimersByTimeAsync(WRONG_PASSWORD_DELAY_MS);
+
+    expect(await wrongGuess).toEqual({type: 'wrong-password'});
+    await refused;
+    expect(saved).toEqual([]);
+  });
+
+  test('keeps the old password when the new one cannot be stored', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+    failingSave = true;
+
+    await expect(lock.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrow('disk full');
+    await lock.lock();
+
+    expect(await lock.unlock(PASSWORD)).toEqual({type: 'accepted'});
   });
 });

@@ -10,6 +10,8 @@ export default interface LockService {
   /** the password is only needed in Show mode; rejects there without one */
   liftChannelLock: (password: string | undefined) => Promise<PasswordResult>;
   lockChannels: () => Promise<LockStatus>;
+  /** Setup mode only; rejects in Show mode or when the new password can't be stored */
+  changePassword: (currentPassword: string, newPassword: string) => Promise<PasswordResult>;
   /** fire-and-forget: keeps Setup mode from locking itself for being idle */
   reportActivity: () => void;
   /** returns the function that removes the listener again */

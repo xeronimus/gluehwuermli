@@ -22,6 +22,7 @@ export const IpcChannel = {
   LOCK: 'app:lock',
   LIFT_CHANNEL_LOCK: 'app:lift-channel-lock',
   LOCK_CHANNELS: 'app:lock-channels',
+  CHANGE_PASSWORD: 'app:change-password',
   /** renderer -> main, fire-and-forget: the user did something in Setup mode, so it isn't locked for being idle */
   USER_ACTIVITY: 'app:user-activity',
   /** main -> renderer, whenever the output status changes */

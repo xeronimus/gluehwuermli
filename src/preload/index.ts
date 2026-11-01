@@ -30,6 +30,8 @@ const dmxBridge: DmxBridge = {
   liftChannelLock: (password) =>
     ipcRenderer.invoke(IpcChannel.LIFT_CHANNEL_LOCK, password === undefined ? {} : {password}),
   lockChannels: () => ipcRenderer.invoke(IpcChannel.LOCK_CHANNELS),
+  changePassword: (currentPassword, newPassword) =>
+    ipcRenderer.invoke(IpcChannel.CHANGE_PASSWORD, {currentPassword, newPassword}),
   reportActivity: () => ipcRenderer.send(IpcChannel.USER_ACTIVITY),
   onLockChanged: (listener) => {
     const handler = (_event: IpcRendererEvent, status: LockStatus) => listener(status);

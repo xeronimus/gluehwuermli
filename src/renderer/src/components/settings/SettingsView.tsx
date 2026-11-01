@@ -3,11 +3,13 @@ import {useAppStore} from '@/state/store';
 import ChannelLockSection from './ChannelLockSection';
 import ModeSection from './ModeSection';
 import OutputSection from './OutputSection';
+import PasswordSection from './PasswordSection';
 import {errorMessage, message, settingsView} from './SettingsView.css';
 
 /**
  * The output port, and the two locks: the mode (changing the rig) and the channel lock (e.g. the laser), each with its
- * own controls. The port doesn't wait for the lock status, it needs no password.
+ * own controls, and changing the password in Setup mode. The port doesn't wait for the lock status, it needs no
+ * password.
  */
 const SettingsView = () => {
   const lockStatus = useAppStore((state) => state.lockStatus);
@@ -23,6 +25,7 @@ const SettingsView = () => {
         <>
           <ModeSection lockStatus={lockStatus} />
           <ChannelLockSection lockStatus={lockStatus} />
+          {lockStatus.mode === 'setup' && <PasswordSection />}
         </>
       )}
     </div>
