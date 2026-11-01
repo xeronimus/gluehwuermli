@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-01
+
 ### Added
 
 - The app remembers the port it was last connected to (in `settings.json`, also after Disconnect) and connects to it on
@@ -46,5 +48,6 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/xeronimus/gluehwuermli/releases/tag/v0.1.0
