@@ -54,7 +54,6 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
         disabled={isAtCap(value, limit)}
         title={locked ? lockedTitle : `Channel ${fader.label} +${DMX_STEP}${capNote(limit)}`}
       >
-        {limit !== undefined && <LockIcon className={faderLock} />}
         <span className={faderValue}>{value}</span>
         <span className={faderPercent}>{toPercent(value)}%</span>
       </button>
@@ -78,7 +77,9 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
             {...thumbProps}
             className={locked ? faderThumbLocked : faderThumb}
             aria-label={`Channel ${fader.label}`}
-          />
+          >
+            {limit !== undefined && <LockIcon className={faderLock} />}
+          </div>
         )}
       />
       <button
