@@ -10,13 +10,13 @@ const NO_PORT = '';
 const PortSelect = ({disabled}: PortSelectProps) => {
   const ports = useAppStore((state) => state.availablePorts);
   const selectedPortPath = useAppStore((state) => state.selectedPortPath);
-  const setSelectedPortPath = useAppStore((state) => state.setSelectedPortPath);
+  const choosePortPath = useAppStore((state) => state.choosePortPath);
 
   return (
     <select
       value={selectedPortPath ?? NO_PORT}
       disabled={disabled || ports.length === 0}
-      onChange={(event) => setSelectedPortPath(event.target.value || undefined)}
+      onChange={(event) => choosePortPath(event.target.value || undefined)}
     >
       {ports.length === 0 && <option value={NO_PORT}>No serial port found</option>}
       {ports.map((port) => (
