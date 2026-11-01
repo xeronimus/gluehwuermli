@@ -89,7 +89,8 @@ const UserManual = () => (
         </li>
         <li>
           Optionally, a <strong>hint</strong> shown below the faders (e.g. "warm up 2 min before smoke") and a{' '}
-          <strong>description</strong> for anything else: the DMX mode, DIP switches, where it hangs.
+          <strong>description</strong> for anything else: the DMX mode, DIP switches, where it hangs. The description is
+          Markdown (lists, tables, links that open in your browser), with a preview in the editor.
         </li>
       </ol>
       <p>

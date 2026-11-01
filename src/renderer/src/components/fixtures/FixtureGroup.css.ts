@@ -36,7 +36,6 @@ export const groupNote = style({
   margin: 0,
   color: vars.colors.textSecondary,
   fontSize: '0.85em',
-  whiteSpace: 'pre-line',
   overflowWrap: 'anywhere'
 });
 

@@ -75,6 +75,31 @@ export const descriptionInput = style({
   resize: 'vertical'
 });
 
+/** the description's label, and the edit/preview toggle at its right */
+export const descriptionHeader = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '8px'
+});
+
+/** about as high as the textarea's 6 rows, so the form doesn't jump on the toggle */
+export const descriptionPreview = style({
+  boxSizing: 'border-box',
+  width: '100%',
+  minHeight: '9.2em',
+  padding: '6px 8px',
+  color: vars.colors.text,
+  background: vars.colors.surfaceRaised,
+  border: `1px solid ${vars.colors.border}`,
+  borderRadius: vars.constants.radiusMd
+});
+
+export const previewPlaceholder = style({
+  color: vars.colors.textMuted,
+  fontStyle: 'italic'
+});
+
 export const addressInput = style({
   width: '90px'
 });
