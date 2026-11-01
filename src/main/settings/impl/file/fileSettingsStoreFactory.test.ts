@@ -2,8 +2,8 @@ import {mkdir, mkdtemp, readdir, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 
-import type {SettingsStore} from '@/lock/SettingsStore';
-import type {Settings} from '@/lock/settings';
+import type {SettingsStore} from '@/settings/SettingsStore';
+import type {Settings} from '@/settings/settings';
 
 import {fileSettingsStoreFactory} from './fileSettingsStoreFactory';
 
@@ -38,8 +38,23 @@ test('loads what it saved, leaving no temporary file behind', async () => {
   expect(warnings).toEqual([]);
 });
 
+test('loads the stored port with the password', async () => {
+  const withPort: Settings = {...settings, outputPortPath: 'COM3'};
+  await store.save(withPort);
+
+  expect(await store.load()).toEqual(withPort);
+});
+
+test('loads a file from before the port was stored, with its password', async () => {
+  await writeFile(filePath, '{"version": 1, "password": {"salt": "00ff", "hash": "abcdef"}}', 'utf-8');
+
+  expect(await store.load()).toEqual(settings);
+  expect(warnings).toEqual([]);
+});
+
 test.each([
   ['no JSON', '{"version": 1'],
+  ['an empty port', '{"version": 1, "outputPortPath": ""}'],
   ['another version', '{"version": 2}'],
   ['a password in plain text', '{"version": 1, "password": "laser-off"}'],
   ['a hash that is not hex', '{"version": 1, "password": {"salt": "00", "hash": "xyz"}}']
