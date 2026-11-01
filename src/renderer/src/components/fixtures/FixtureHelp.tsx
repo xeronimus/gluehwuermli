@@ -42,8 +42,9 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
       </p>
       <p>
         The description is <strong>Markdown</strong>: <code>**bold**</code>, lists starting with <code>-</code>, tables,
-        and links like <code>[manual](https://…)</code>, which open in your browser. <strong>Preview</strong> shows how
-        it will look.
+        and links like <code>[manual](https://…)</code>, which open in your browser. Only links to web pages (
+        <code>http://</code> or <code>https://</code>) can be clicked, any other shows as text. <strong>Preview</strong>{' '}
+        shows how it will look.
       </p>
       <p>
         A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white". The

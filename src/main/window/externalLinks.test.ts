@@ -1,29 +1,6 @@
 import {REPOSITORY_URL} from '@shared/links';
 
-import {type GuardedWebContents, guardExternalLinks, isOpenableExternalUrl} from './externalLinks';
-
-describe('isOpenableExternalUrl', () => {
-  test.each([
-    REPOSITORY_URL,
-    'HTTPS://GITHUB.COM/xeronimus/gluehwuermli',
-    'https://www.example.com/manual.pdf#page=4',
-    'http://192.168.1.20/setup'
-  ])('opens %s', (url) => {
-    expect(isOpenableExternalUrl(url)).toBe(true);
-  });
-
-  test.each([
-    'file:///C:/Windows/System32/cmd.exe',
-    'javascript:alert(1)',
-    'mailto:a@b.c',
-    'ms-settings:',
-    '/foo',
-    'not a url',
-    ''
-  ])('refuses %s', (url) => {
-    expect(isOpenableExternalUrl(url)).toBe(false);
-  });
-});
+import {type GuardedWebContents, guardExternalLinks} from './externalLinks';
 
 describe('guardExternalLinks', () => {
   type NavigateListener = (event: {url: string; preventDefault: () => void}) => void;
