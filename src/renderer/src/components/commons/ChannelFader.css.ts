@@ -42,8 +42,11 @@ export const faderStepButton = style({
 /** the label sits a little further from the track than the column's gap */
 export const faderLabelButton = style([faderStepButton, {marginTop: '2px'}]);
 
+/** the lock icon inside the thumb of a capped channel, dark on the light thumb */
 export const faderLock = style({
-  color: vars.colors.warning
+  width: '14px',
+  height: '14px',
+  color: vars.colors.onPrimary
 });
 
 export const faderValue = style({
@@ -73,6 +76,9 @@ export const faderTrack = style({
 });
 
 export const faderThumb = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   width: '36px',
   height: '18px',
   borderRadius: vars.constants.radiusSm,
