@@ -86,7 +86,7 @@ src/
                              # (scrypt), settings (schema of settings.json), SettingsStore + impl/file
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
-                             # externalLinks: no navigation or new window, only the allow-listed repo URL opens in the browser
+                             # externalLinks: no navigation or new window, only http(s) links open in the browser
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3)
       enttecProPacket.ts     # label 6 framing
@@ -102,7 +102,7 @@ src/
                              # (groups, editor), faders/ (raw channels), settings/ (output port, mode and channel lock,
                              # password form),
                              # help/ (manual, data folder, repo link);
-                             # commons/ (Button, ChannelFader, ModeToggle, ErrorBoundary, icons.ts)
+                             # commons/ (Button, ChannelFader, MarkdownText, ModeToggle, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,
                              # fixtureList, presets, passwordForm, activityThrottle)
         service/             # DmxService, FixtureService, AppService, LockService, services.ts (composition root),

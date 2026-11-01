@@ -41,6 +41,11 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
         switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture.
       </p>
       <p>
+        The description is <strong>Markdown</strong>: <code>**bold**</code>, lists starting with <code>-</code>, tables,
+        and links like <code>[manual](https://…)</code>, which open in your browser. <strong>Preview</strong> shows how
+        it will look.
+      </p>
+      <p>
         A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white". The
         channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next
         to the presets.

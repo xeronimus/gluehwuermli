@@ -1,24 +1,27 @@
 import {REPOSITORY_URL} from '@shared/links';
 
-import {type GuardedWebContents, guardExternalLinks, isAllowedExternalUrl} from './externalLinks';
+import {type GuardedWebContents, guardExternalLinks, isOpenableExternalUrl} from './externalLinks';
 
-describe('isAllowedExternalUrl', () => {
-  test('allows the repository', () => {
-    expect(isAllowedExternalUrl(REPOSITORY_URL)).toBe(true);
-    expect(isAllowedExternalUrl('HTTPS://GITHUB.COM/xeronimus/gluehwuermli')).toBe(true);
+describe('isOpenableExternalUrl', () => {
+  test.each([
+    REPOSITORY_URL,
+    'HTTPS://GITHUB.COM/xeronimus/gluehwuermli',
+    'https://www.example.com/manual.pdf#page=4',
+    'http://192.168.1.20/setup'
+  ])('opens %s', (url) => {
+    expect(isOpenableExternalUrl(url)).toBe(true);
   });
 
   test.each([
-    'https://github.com/xeronimus/gluehwuermli/issues',
-    'https://github.com/xeronimus',
-    'http://github.com/xeronimus/gluehwuermli',
-    'https://github.com.example.com/xeronimus/gluehwuermli',
-    'https://example.com/?next=https://github.com/xeronimus/gluehwuermli',
     'file:///C:/Windows/System32/cmd.exe',
+    'javascript:alert(1)',
+    'mailto:a@b.c',
+    'ms-settings:',
+    '/foo',
     'not a url',
     ''
   ])('refuses %s', (url) => {
-    expect(isAllowedExternalUrl(url)).toBe(false);
+    expect(isOpenableExternalUrl(url)).toBe(false);
   });
 });
 
@@ -67,8 +70,13 @@ describe('guardExternalLinks', () => {
     expect(opened).toEqual([REPOSITORY_URL]);
   });
 
-  test('a new window for any other page is denied and opens nothing', () => {
-    expect(windowOpenHandler({url: 'https://example.com'})).toEqual({action: 'deny'});
+  test('a new window for a web page is denied, the page opens in the browser instead', () => {
+    expect(windowOpenHandler({url: 'https://example.com/'})).toEqual({action: 'deny'});
+    expect(opened).toEqual(['https://example.com/']);
+  });
+
+  test('a new window for a local file is denied and opens nothing', () => {
+    expect(windowOpenHandler({url: 'file:///C:/Windows'})).toEqual({action: 'deny'});
     expect(opened).toEqual([]);
     expect(warnings).toHaveLength(1);
   });
@@ -78,8 +86,8 @@ describe('guardExternalLinks', () => {
     expect(opened).toEqual([REPOSITORY_URL]);
   });
 
-  test('navigating to any other page is prevented and opens nothing', () => {
-    expect(navigate('https://example.com')).toBe(true);
+  test('navigating to a local file is prevented and opens nothing', () => {
+    expect(navigate('file:///C:/Windows')).toBe(true);
     expect(opened).toEqual([]);
   });
 
