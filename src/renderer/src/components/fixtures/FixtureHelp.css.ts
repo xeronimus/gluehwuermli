@@ -3,7 +3,7 @@ import {globalStyle, style} from '@vanilla-extract/css';
 import {vars} from '../themes.css';
 
 export const fixtureHelp = style({
-  width: '440px',
+  width: '100%',
   boxSizing: 'border-box',
   padding: '8px 12px',
   background: vars.colors.surfaceRaised,
@@ -24,7 +24,9 @@ export const helpSummary = style({
   }
 });
 
+/** the box spans the editor, the text stays short enough to read */
 export const helpBody = style({
+  maxWidth: '680px',
   lineHeight: 1.45
 });
 
