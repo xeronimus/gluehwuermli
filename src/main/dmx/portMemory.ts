@@ -37,10 +37,9 @@ const NO_PORT: RememberedPort = {type: 'none'};
 export function portMemoryFactory({engine, connector, settings, log}: PortMemoryDependencies): PortMemory {
   const rememberedPath = async () => (await settings.load()).outputPortPath;
 
+  // stored on every connect, even if unchanged: a check against the settings would run outside their queue and could
+  // miss a save still in progress
   const rememberPort = async (path: string) => {
-    if ((await rememberedPath()) === path) {
-      return;
-    }
     try {
       await settings.update({outputPortPath: path});
       log.info(`remembering the port ${path} for the next start`);

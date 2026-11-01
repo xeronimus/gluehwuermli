@@ -23,8 +23,8 @@ const UserManual = () => (
       </ol>
       <p>
         The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to
-        it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected, with
-        that port chosen.
+        it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug
+        the widget in, search the serial ports again and press Connect.
       </p>
       <p>
         If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went

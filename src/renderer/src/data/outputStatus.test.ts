@@ -8,8 +8,14 @@ const NONE = {type: 'none'} as const;
 const remembered = (path: string) => ({type: 'remembered', path}) as const;
 
 describe('preferredPortPath', () => {
-  test('keeps the current choice while the port is still there', () => {
+  test('keeps the port chosen by hand while it is still there', () => {
     expect(preferredPortPath([COM1, COM2, COM3], 'COM1', remembered('COM2'))).toBe('COM1');
+  });
+
+  test('the remembered port plugged in later wins over a port only preselected before', () => {
+    // at start only COM1 is there and preselected, nothing chosen by hand
+    expect(preferredPortPath([COM1], undefined, remembered('COM3'))).toBe('COM1');
+    expect(preferredPortPath([COM1, COM3], undefined, remembered('COM3'))).toBe('COM3');
   });
 
   test('otherwise the port connected to last time', () => {

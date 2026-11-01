@@ -12,6 +12,8 @@ export interface OutputActions {
   setOutputStatus: (outputStatus: DmxOutputStatus) => void;
   setAvailablePorts: (availablePorts: readonly SerialPortDescription[]) => void;
   setSelectedPortPath: (selectedPortPath: string | undefined) => void;
+  /** a port chosen by hand: selected, and preferred over the remembered port from then on */
+  choosePortPath: (chosenPortPath: string | undefined) => void;
   setOutputError: (outputError: string | undefined) => void;
 }
 
@@ -19,5 +21,7 @@ export const getOutputActions = (set: OutputStateSetter): OutputActions => ({
   setOutputStatus: (outputStatus) => set({outputStatus}, undefined, 'output/setOutputStatus'),
   setAvailablePorts: (availablePorts) => set({availablePorts}, undefined, 'output/setAvailablePorts'),
   setSelectedPortPath: (selectedPortPath) => set({selectedPortPath}, undefined, 'output/setSelectedPortPath'),
+  choosePortPath: (chosenPortPath) =>
+    set({chosenPortPath, selectedPortPath: chosenPortPath}, undefined, 'output/choosePortPath'),
   setOutputError: (outputError) => set({outputError}, undefined, 'output/setOutputError')
 });
