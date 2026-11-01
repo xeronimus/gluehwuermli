@@ -11,9 +11,9 @@ export function useActionLoadPorts() {
 
   return async () => {
     try {
-      const ports = await dmxService.listPorts();
+      const [ports, rememberedPort] = await Promise.all([dmxService.listPorts(), dmxService.getRememberedPort()]);
       setAvailablePorts(ports);
-      setSelectedPortPath(preferredPortPath(ports, useAppStore.getState().selectedPortPath));
+      setSelectedPortPath(preferredPortPath(ports, useAppStore.getState().selectedPortPath, rememberedPort));
       setOutputError(undefined);
     } catch (error) {
       logger.error('listing the serial ports failed', error);

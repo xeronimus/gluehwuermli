@@ -37,6 +37,13 @@ export const DmxOutputStatusSchema = Type.Union([
 ]);
 export type DmxOutputStatus = Static<typeof DmxOutputStatusSchema>;
 
+/** the port the output was last connected to, connected again on start and preselected; `none` before the first one */
+export const RememberedPortSchema = Type.Union([
+  Type.Object({type: Type.Literal('none')}),
+  Type.Object({type: Type.Literal('remembered'), path: Type.String({minLength: 1})})
+]);
+export type RememberedPort = Static<typeof RememberedPortSchema>;
+
 /** the highest value the channel may have while the channel lock is on, e.g. 0 for a laser */
 export const ChannelLockSchema = Type.Object({
   max: Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE})

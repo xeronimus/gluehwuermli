@@ -2,10 +2,10 @@ import type {LockStatus, PasswordResult} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
 import type {DmxEngine} from '@/dmx/dmxEngine';
+import type {AppSettings} from '@/settings/appSettings';
+import type {PasswordHash} from '@/settings/settings';
 
-import type {SettingsStore} from './SettingsStore';
 import {hashPassword, verifyPassword} from './passwordHash';
-import {type PasswordHash, SETTINGS_VERSION} from './settings';
 
 export interface AppLockLog {
   info: (...message: unknown[]) => void;
@@ -41,7 +41,7 @@ export interface AppLock {
 }
 
 export interface AppLockDependencies {
-  settingsStore: SettingsStore;
+  settings: AppSettings;
   engine: Pick<DmxEngine, 'setLimitsEnforced'>;
   idleTimeoutMs: number;
   /** after a wrong password, so guessing takes a while */
@@ -55,7 +55,7 @@ const WRONG_PASSWORD: PasswordResult = {type: 'wrong-password'};
 const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export function appLockFactory({
-  settingsStore,
+  settings,
   engine,
   idleTimeoutMs,
   wrongPasswordDelayMs,
@@ -67,8 +67,8 @@ export function appLockFactory({
   let passwordHash: PasswordHash | undefined;
   let idleTimer: ReturnType<typeof setTimeout> | undefined;
   // load() never rejects; a missing or invalid file is no password
-  const settingsLoaded = settingsStore.load().then((settings) => {
-    passwordHash = settings?.password;
+  const settingsLoaded = settings.load().then((loaded) => {
+    passwordHash = loaded.password;
   });
   // two password checks at once must not both store a first password
   const runSerially = createSerialQueue();
@@ -136,7 +136,7 @@ export function appLockFactory({
   /** saved first: if the save fails, the password in use stays the one before */
   const storePassword = async (password: string) => {
     const hashed = await hashPassword(password);
-    await settingsStore.save({version: SETTINGS_VERSION, password: hashed});
+    await settings.update({password: hashed});
     passwordHash = hashed;
   };
 

@@ -1,6 +1,6 @@
 import {randomBytes, scrypt, timingSafeEqual} from 'node:crypto';
 
-import type {PasswordHash} from './settings';
+import type {PasswordHash} from '@/settings/settings';
 
 const SALT_BYTES = 16;
 const KEY_BYTES = 64;

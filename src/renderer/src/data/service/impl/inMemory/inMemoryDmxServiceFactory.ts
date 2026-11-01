@@ -22,6 +22,7 @@ export function inMemoryDmxServiceFactory(): DmxService {
     connect: async (path) => setStatus({type: 'connected', path}),
     disconnect: async () => setStatus({type: 'disconnected'}),
     getStatus: async () => status,
+    getRememberedPort: async () => ({type: 'none'}),
     onStatusChanged: (listener) => {
       listeners.add(listener);
       return () => {

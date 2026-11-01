@@ -12,6 +12,8 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
+- The app remembers the port it was last connected to (in `settings.json`, also after Disconnect) and connects to it on
+  start if the widget is plugged in; the port list preselects it
 - Change the password in Setup mode (Settings view), with the current password and the new one typed twice
 - Fixture descriptions are Markdown: formatted on the fixture, with a preview in the editor; links to web pages open in
   the default browser, any other link shows as text
