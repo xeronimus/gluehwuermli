@@ -10,6 +10,10 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Changed
+
+- A capped fader shows its lock icon in the fader knob instead of above its value
+
 ## [0.1.0] - 2026-10-31
 
 First release.
