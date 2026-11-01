@@ -4,6 +4,7 @@ import {PASSWORD_MAX_LENGTH} from '@shared/ipc';
 
 import {changePasswordFormError} from '@/data/passwordForm';
 import {useActionChangePassword} from '@/state/actionHooks/lockActions';
+import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
 import {PasswordIcon} from '../commons/icons';
@@ -27,16 +28,21 @@ const FIELD_LABELS: Record<FormField, string> = {
 /** a row per step: the current password, then the new one twice */
 const FIELD_ROWS: readonly (readonly FormField[])[] = [['currentPassword'], ['newPassword', 'confirmation']];
 
-/** the current password and the new one twice, inline like PasswordForm; a failed save shows in lockError */
+/**
+ * the current password and the new one twice, inline like PasswordForm; a failed save shows here too, not only in
+ * lockError at the top of the view
+ */
 const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
   const changePassword = useActionChangePassword();
+  const lockError = useAppStore((state) => state.lockError);
   const [form, setForm] = useState(EMPTY_FORM);
-  const [wrongPassword, setWrongPassword] = useState(false);
+  const [refusal, setRefusal] = useState<'wrong-password' | 'failed'>();
   const [submitting, setSubmitting] = useState(false);
 
   const error = changePasswordFormError(form);
+  const refusalMessage = refusal === 'wrong-password' ? 'Wrong current password' : refusal && lockError;
   // nothing to complain about before the new password is typed
-  const shownError = wrongPassword ? 'Wrong current password' : form.newPassword ? error : undefined;
+  const shownError = refusalMessage || (form.newPassword ? error : undefined);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -48,8 +54,10 @@ const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
     setSubmitting(false);
     if (outcome === 'accepted') {
       onChanged();
-    } else if (outcome === 'wrong-password') {
-      setWrongPassword(true);
+      return;
+    }
+    setRefusal(outcome);
+    if (outcome === 'wrong-password') {
       setForm({...form, currentPassword: ''});
     }
   };
@@ -78,7 +86,7 @@ const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
               autoFocus={field === 'currentPassword'}
               disabled={submitting}
               onChange={(event) => {
-                setWrongPassword(false);
+                setRefusal(undefined);
                 setForm({...form, [field]: event.target.value});
               }}
             />

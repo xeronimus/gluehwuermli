@@ -23,7 +23,8 @@ describe('changing the password', () => {
 
   test('needs the current password and the new one typed the same twice', () => {
     expect(changePasswordFormError(VALID_CHANGE)).toBeUndefined();
-    expect(changePasswordFormError({...VALID_CHANGE, currentPassword: ''})).toBe(
+    expect(changePasswordFormError({...VALID_CHANGE, currentPassword: ''})).toBe('Type the current password');
+    expect(changePasswordFormError({...VALID_CHANGE, newPassword: 'ef', confirmation: 'ef'})).toBe(
       'The password needs at least 4 characters'
     );
     expect(changePasswordFormError({...VALID_CHANGE, confirmation: 'efgi'})).toBe("The passwords don't match");

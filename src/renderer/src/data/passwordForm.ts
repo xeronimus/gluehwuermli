@@ -16,8 +16,9 @@ export function changePasswordFormError(form: {
   newPassword: string;
   confirmation: string;
 }): string | undefined {
+  // the main process checks the current password, its length doesn't matter here
   const error =
-    lengthError(form.currentPassword) ??
+    (form.currentPassword ? undefined : 'Type the current password') ??
     passwordFormError({password: form.newPassword, confirmation: form.confirmation}, true);
   if (error) {
     return error;
