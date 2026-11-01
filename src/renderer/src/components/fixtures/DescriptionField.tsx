@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useId, useRef, useState} from 'react';
+import {flushSync} from 'react-dom';
 
 import {FIXTURE_DESCRIPTION_MAX_LENGTH} from '@shared/ipc';
 
@@ -8,7 +9,6 @@ import {EditIcon, PreviewIcon} from '../commons/icons';
 import {descriptionHeader, descriptionInput, descriptionPreview, field, previewPlaceholder} from './FixtureEditor.css';
 
 const DESCRIPTION_ROWS = 6;
-const TEXTAREA_ID = 'fixture-description';
 
 type DescriptionMode = 'edit' | 'preview';
 
@@ -28,16 +28,27 @@ interface DescriptionFieldProps {
  */
 const DescriptionField = ({description, onChange}: DescriptionFieldProps) => {
   const [mode, setMode] = useState<DescriptionMode>('edit');
+  const textareaId = useId();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // back in Edit, the textarea gets the focus again, so typing goes on where the cursor was; it has to be shown first
+  const selectMode = (nextMode: DescriptionMode) => {
+    flushSync(() => setMode(nextMode));
+    if (nextMode === 'edit') {
+      textareaRef.current?.focus();
+    }
+  };
 
   return (
     <div className={field}>
       {/* the toggle is outside the label, so a click on it doesn't focus the hidden textarea */}
       <div className={descriptionHeader}>
-        <label htmlFor={TEXTAREA_ID}>Description</label>
-        <ModeToggle modes={DESCRIPTION_MODES} activeId={mode} onSelect={setMode} />
+        <label htmlFor={textareaId}>Description</label>
+        <ModeToggle modes={DESCRIPTION_MODES} activeId={mode} onSelect={selectMode} />
       </div>
       <textarea
-        id={TEXTAREA_ID}
+        ref={textareaRef}
+        id={textareaId}
         className={descriptionInput}
         hidden={mode === 'preview'}
         value={description}

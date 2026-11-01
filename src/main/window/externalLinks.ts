@@ -1,5 +1,4 @@
-/** the schemes the app opens in the system browser; anything else (file:, javascript:, mailto:, custom ones) is refused */
-const OPENABLE_PROTOCOLS: readonly string[] = ['http:', 'https:'];
+import {isOpenableExternalUrl} from '@shared/links';
 
 /** Electron's shell.openExternal */
 export type OpenExternal = (url: string) => Promise<void>;
@@ -13,10 +12,6 @@ export interface GuardedWebContents {
 export interface ExternalLinksLog {
   warn: (...message: unknown[]) => void;
 }
-
-/** a web page: the repo link and the links in fixture descriptions, which the user writes and may point anywhere */
-export const isOpenableExternalUrl = (url: string): boolean =>
-  URL.canParse(url) && OPENABLE_PROTOCOLS.includes(new URL(url).protocol);
 
 /**
  * The window never leaves the app and never opens another one: a link (with or without target="_blank") opens in the

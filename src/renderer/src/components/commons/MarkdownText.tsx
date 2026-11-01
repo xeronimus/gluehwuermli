@@ -4,17 +4,25 @@ import Markdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 
+import {isOpenableExternalUrl} from '@shared/links';
+
 import {markdownText} from './MarkdownText.css';
 
 /** the CSP blocks remote images anyway; dropping them avoids a broken image icon */
 const DISALLOWED_ELEMENTS = ['img'];
 
-/** a click goes to main, which opens web pages in the system browser and refuses anything else */
-const ExternalLink = ({href, children}: ComponentPropsWithoutRef<'a'>) => (
-  <a href={href} target="_blank" rel="noreferrer">
-    {children}
-  </a>
-);
+/**
+ * A click goes to main, which opens web pages in the system browser. Any other link (relative, #anchor, file:, …) is
+ * shown as text: main would refuse it, and Chromium would first resolve a relative one against the app's own page.
+ */
+const ExternalLink = ({href, children}: ComponentPropsWithoutRef<'a'>) =>
+  href !== undefined && isOpenableExternalUrl(href) ? (
+    <a href={href} target="_blank" rel="noreferrer">
+      {children}
+    </a>
+  ) : (
+    <span>{children}</span>
+  );
 
 interface MarkdownTextProps {
   text: string;

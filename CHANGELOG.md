@@ -12,8 +12,8 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
-- Fixture descriptions are Markdown: formatted on the fixture, with a preview in the editor; links open in the default
-  browser
+- Fixture descriptions are Markdown: formatted on the fixture, with a preview in the editor; links to web pages open in
+  the default browser, any other link shows as text
 
 ### Changed
 
