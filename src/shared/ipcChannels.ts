@@ -13,6 +13,7 @@ export const IpcChannel = {
   CONNECT: 'dmx:connect',
   DISCONNECT: 'dmx:disconnect',
   GET_STATUS: 'dmx:get-status',
+  GET_REMEMBERED_PORT: 'dmx:get-remembered-port',
   LOAD_FIXTURES: 'fixtures:load',
   SAVE_FIXTURES: 'fixtures:save',
   GET_DATA_FOLDER: 'app:get-data-folder',

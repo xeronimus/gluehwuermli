@@ -1,4 +1,4 @@
-import type {DmxOutputStatus, SerialPortDescription, SetChannelRequest} from '@shared/ipc';
+import type {DmxOutputStatus, RememberedPort, SerialPortDescription, SetChannelRequest} from '@shared/ipc';
 
 /** The renderer's access to the DMX output, in the main process. */
 export default interface DmxService {
@@ -10,6 +10,8 @@ export default interface DmxService {
   connect: (path: string) => Promise<DmxOutputStatus>;
   disconnect: () => Promise<DmxOutputStatus>;
   getStatus: () => Promise<DmxOutputStatus>;
+  /** the port the output was last connected to, to preselect it */
+  getRememberedPort: () => Promise<RememberedPort>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
 }

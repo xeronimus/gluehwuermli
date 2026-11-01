@@ -5,6 +5,7 @@ import type {
   LockStatus,
   OpenDataFolderResult,
   PasswordResult,
+  RememberedPort,
   SerialPortDescription,
   SetChannelRequest
 } from './ipc';
@@ -20,6 +21,8 @@ export interface DmxBridge {
   connect: (path: string) => Promise<DmxOutputStatus>;
   disconnect: () => Promise<DmxOutputStatus>;
   getStatus: () => Promise<DmxOutputStatus>;
+  /** the port the output was last connected to, to preselect it */
+  getRememberedPort: () => Promise<RememberedPort>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
   /** the stored fixture setup; an empty one when there is no valid file yet */

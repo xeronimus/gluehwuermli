@@ -1,5 +1,5 @@
-import type {SettingsStore} from '@/lock/SettingsStore';
-import {type Settings, parseSettings} from '@/lock/settings';
+import type {SettingsStore} from '@/settings/SettingsStore';
+import {type Settings, parseSettings} from '@/settings/settings';
 import {type JsonFileContent, atomicJsonWriter, readJsonFile} from '@/storage/jsonFile';
 
 export interface SettingsStoreLog {
@@ -13,8 +13,8 @@ export interface FileSettingsStoreDependencies {
 }
 
 /**
- * The settings as a JSON file, written atomically. An unreadable one isn't kept: it only holds the password hash, and
- * deleting the file is how a forgotten password is reset.
+ * The settings as a JSON file, written atomically. An unreadable one isn't kept: it only holds the password hash and the
+ * last port, and deleting the file is how a forgotten password is reset.
  */
 export function fileSettingsStoreFactory({filePath, log}: FileSettingsStoreDependencies): SettingsStore {
   const save = atomicJsonWriter(filePath);

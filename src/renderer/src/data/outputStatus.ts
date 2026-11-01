@@ -1,4 +1,4 @@
-import type {DmxOutputStatus, SerialPortDescription} from '@shared/ipc';
+import type {DmxOutputStatus, RememberedPort, SerialPortDescription} from '@shared/ipc';
 
 export const describeOutputStatus = (status: DmxOutputStatus): string => {
   switch (status.type) {
@@ -20,15 +20,16 @@ export const describePort = (port: SerialPortDescription): string => {
 };
 
 /**
- * The port to preselect: the current choice while it is still there, otherwise the first that looks like an Enttec
- * Pro, otherwise the first port.
+ * The port to preselect, the first one still there of: the port chosen by hand, the port connected to last time;
+ * otherwise the first that looks like an Enttec Pro, otherwise the first port. A port only preselected earlier is not a
+ * choice, so a widget plugged in after the app started wins over it.
  */
 export const preferredPortPath = (
   ports: readonly SerialPortDescription[],
-  currentPath: string | undefined
+  chosenPath: string | undefined,
+  rememberedPort: RememberedPort
 ): string | undefined => {
-  if (ports.some((port) => port.path === currentPath)) {
-    return currentPath;
-  }
-  return (ports.find((port) => port.likelyEnttecPro) ?? ports[0])?.path;
+  const rememberedPath = rememberedPort.type === 'remembered' ? rememberedPort.path : undefined;
+  const listedPath = [chosenPath, rememberedPath].find((path) => ports.some((port) => port.path === path));
+  return listedPath ?? (ports.find((port) => port.likelyEnttecPro) ?? ports[0])?.path;
 };
