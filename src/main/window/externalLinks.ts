@@ -1,7 +1,4 @@
-import {REPOSITORY_URL} from '@shared/links';
-
-/** the pages the app may open in the system browser; anything else a link or a script asks for is refused */
-const ALLOWED_EXTERNAL_URLS: readonly string[] = [REPOSITORY_URL];
+import {isOpenableExternalUrl} from '@shared/links';
 
 /** Electron's shell.openExternal */
 export type OpenExternal = (url: string) => Promise<void>;
@@ -16,16 +13,10 @@ export interface ExternalLinksLog {
   warn: (...message: unknown[]) => void;
 }
 
-const normalized = (url: string) => (URL.canParse(url) ? new URL(url).href : undefined);
-
-export const isAllowedExternalUrl = (url: string): boolean => {
-  const href = normalized(url);
-  return href !== undefined && ALLOWED_EXTERNAL_URLS.some((allowed) => normalized(allowed) === href);
-};
-
 /**
  * The window never leaves the app and never opens another one: a link (with or without target="_blank") opens in the
- * system browser if it is allow-listed, anything else is refused. A page from the web would get the DMX bridge.
+ * system browser if it is a web page, anything else is refused. A page from the web inside the window would get the
+ * DMX bridge, and a file: or custom scheme could start a program.
  */
 export function guardExternalLinks(
   contents: GuardedWebContents,
@@ -33,7 +24,7 @@ export function guardExternalLinks(
   log: ExternalLinksLog
 ): void {
   const openIfAllowed = (url: string) => {
-    if (!isAllowedExternalUrl(url)) {
+    if (!isOpenableExternalUrl(url)) {
       log.warn('refused to open', url);
       return;
     }

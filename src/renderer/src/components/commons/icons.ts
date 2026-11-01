@@ -18,6 +18,7 @@ export {
   IconHelpCircle as HelpIcon,
   IconLock as LockIcon,
   IconChevronRight as NextIcon,
+  IconEye as PreviewIcon,
   IconChevronLeft as PreviousIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
