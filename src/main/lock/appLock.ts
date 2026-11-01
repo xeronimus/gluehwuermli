@@ -170,6 +170,10 @@ export function appLockFactory({
       if (!(await isStoredPassword(currentPassword, passwordHash))) {
         return false;
       }
+      // the idle timer may have locked the app while this call waited in the queue
+      if (!setupMode) {
+        throw new Error('changing the password needs Setup mode');
+      }
       await storePassword(newPassword);
       log.info('password changed');
       return true;

@@ -264,6 +264,22 @@ describe('changing the password', () => {
     expect(saved).toEqual([]);
   });
 
+  test('is refused when Show mode returns while the change waits in the queue', async () => {
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+    const timersBefore = vi.getTimerCount();
+    const wrongGuess = lock.changePassword('guess', NEW_PASSWORD);
+    const refused = expect(lock.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrow('needs Setup mode');
+    await untilTimerScheduled(timersBefore);
+
+    await lock.lock();
+    await vi.advanceTimersByTimeAsync(WRONG_PASSWORD_DELAY_MS);
+
+    expect(await wrongGuess).toEqual({type: 'wrong-password'});
+    await refused;
+    expect(saved).toEqual([]);
+  });
+
   test('keeps the old password when the new one cannot be stored', async () => {
     const lock = createLock();
     await lock.unlock(PASSWORD);
