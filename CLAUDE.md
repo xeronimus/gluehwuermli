@@ -5,7 +5,8 @@
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
 a Help view (short manual, the data folder, a link to the repo), fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
 folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), a bank
-of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect. The app starts in
+of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
+port is remembered and connected again on start). The app starts in
 **Show mode** (fixtures can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3).
@@ -83,7 +84,9 @@ src/
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
     lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash
-                             # (scrypt), settings (schema of settings.json), SettingsStore + impl/file
+                             # (scrypt)
+    settings/                # settings.json: settings (schema), SettingsStore + impl/file, appSettings (the one owner,
+                             # merges each change into the whole file: the lock's password, the output's port)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation or new window, only http(s) links open in the browser
@@ -92,6 +95,8 @@ src/
       enttecProPacket.ts     # label 6 framing
       DmxPortConnector.ts    # port interface; impl/serialport (real), impl/inMemory (tests, simulated)
       portDetection.ts       # FTDI ids of the Pro
+      portMemory.ts          # remembers the last connected port in the settings, connects to it on start (not with
+                             # the simulated output)
   preload/index.ts           # contextBridge: the DmxBridge over ipcRenderer
   renderer/
     index.html               # CSP

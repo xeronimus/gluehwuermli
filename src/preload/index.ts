@@ -12,6 +12,7 @@ const dmxBridge: DmxBridge = {
   connect: (path) => ipcRenderer.invoke(IpcChannel.CONNECT, {path}),
   disconnect: () => ipcRenderer.invoke(IpcChannel.DISCONNECT),
   getStatus: () => ipcRenderer.invoke(IpcChannel.GET_STATUS),
+  getRememberedPort: () => ipcRenderer.invoke(IpcChannel.GET_REMEMBERED_PORT),
   onStatusChanged: (listener) => {
     const handler = (_event: IpcRendererEvent, status: DmxOutputStatus) => listener(status);
     ipcRenderer.on(IpcChannel.STATUS_CHANGED, handler);

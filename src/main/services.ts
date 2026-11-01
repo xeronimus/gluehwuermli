@@ -3,12 +3,13 @@ import type {DmxPortConnector} from './dmx/DmxPortConnector';
 import {DmxEngine, dmxEngineFactory} from './dmx/dmxEngine';
 import {inMemoryConnectorFactory} from './dmx/impl/inMemory/inMemoryConnectorFactory';
 import {serialPortConnectorFactory} from './dmx/impl/serialport/serialPortConnectorFactory';
+import {type PortMemory, forgetfulPortMemory, portMemoryFactory} from './dmx/portMemory';
 import type {FixtureStore} from './fixtures/FixtureStore';
 import {fileFixtureStoreFactory} from './fixtures/impl/file/fileFixtureStoreFactory';
-import type {SettingsStore} from './lock/SettingsStore';
 import {AppLock, appLockFactory} from './lock/appLock';
-import {fileSettingsStoreFactory} from './lock/impl/file/fileSettingsStoreFactory';
 import log from './log';
+import {type AppSettings, appSettingsFactory} from './settings/appSettings';
+import {fileSettingsStoreFactory} from './settings/impl/file/fileSettingsStoreFactory';
 import type {WindowStateStore} from './window/WindowStateStore';
 import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateStoreFactory';
 
@@ -29,8 +30,9 @@ export interface MainServices {
   dmxEngine: DmxEngine;
   fixtureStore: FixtureStore;
   windowStateStore: WindowStateStore;
-  settingsStore: SettingsStore;
+  settings: AppSettings;
   appLock: AppLock;
+  portMemory: PortMemory;
 }
 
 export interface MainServicesOptions {
@@ -38,7 +40,7 @@ export interface MainServicesOptions {
   fixtureFilePath: string;
   /** where the main window's position and size are stored, in Electron's userData folder */
   windowStateFilePath: string;
-  /** where the settings (the password hash) are stored, in Electron's userData folder */
+  /** where the settings (the password hash, the last port) are stored, in Electron's userData folder */
   settingsFilePath: string;
 }
 
@@ -54,14 +56,18 @@ export function createMainServices(
 
   const windowStateStore = fileWindowStateStoreFactory({filePath: windowStateFilePath, log});
 
-  const settingsStore = fileSettingsStoreFactory({filePath: settingsFilePath, log});
+  const settings = appSettingsFactory(fileSettingsStoreFactory({filePath: settingsFilePath, log}));
   const appLock = appLockFactory({
-    settingsStore,
+    settings,
     engine: dmxEngine,
     idleTimeoutMs: IDLE_LOCK_TIMEOUT_MS,
     wrongPasswordDelayMs: WRONG_PASSWORD_DELAY_MS,
     log
   });
 
-  return {dmxPortConnector, dmxEngine, fixtureStore, windowStateStore, settingsStore, appLock};
+  const portMemory = config.simulatedOutput
+    ? forgetfulPortMemory
+    : portMemoryFactory({engine: dmxEngine, connector: dmxPortConnector, settings, log});
+
+  return {dmxPortConnector, dmxEngine, fixtureStore, windowStateStore, settings, appLock, portMemory};
 }

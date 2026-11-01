@@ -1,7 +1,9 @@
-import type {SettingsStore} from './SettingsStore';
+import type {SettingsStore} from '@/settings/SettingsStore';
+import {appSettingsFactory} from '@/settings/appSettings';
+import type {Settings} from '@/settings/settings';
+
 import {type AppLock, appLockFactory} from './appLock';
 import {hashPassword} from './passwordHash';
-import type {Settings} from './settings';
 
 const IDLE_TIMEOUT_MS = 10 * 60 * 1000;
 const WRONG_PASSWORD_DELAY_MS = 1000;
@@ -25,7 +27,7 @@ const settingsStore: SettingsStore = {
 
 const createLock = (): AppLock =>
   appLockFactory({
-    settingsStore,
+    settings: appSettingsFactory(settingsStore),
     engine: {setLimitsEnforced: (enforced) => limitsEnforced.push(enforced)},
     idleTimeoutMs: IDLE_TIMEOUT_MS,
     wrongPasswordDelayMs: WRONG_PASSWORD_DELAY_MS,
@@ -229,6 +231,16 @@ describe('changing the password', () => {
     expect(saved).toHaveLength(1);
     expect(JSON.stringify(saved)).not.toContain(NEW_PASSWORD);
     expect(await lock.status()).toEqual({...SETUP, channelLocked: false});
+  });
+
+  test('keeps the stored port', async () => {
+    stored = {version: 1, password: await hashPassword(PASSWORD), outputPortPath: 'COM3'};
+    const lock = createLock();
+    await lock.unlock(PASSWORD);
+
+    await lock.changePassword(PASSWORD, NEW_PASSWORD);
+
+    expect(saved[0]?.outputPortPath).toBe('COM3');
   });
 
   test('afterwards only the new password unlocks, also after a restart', async () => {

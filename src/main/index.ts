@@ -93,10 +93,12 @@ async function openMainWindow(): Promise<void> {
 
 void app.whenReady().then(async () => {
   await applyStoredChannelLimits();
-  registerDmxIpc(services.dmxEngine, services.dmxPortConnector);
+  registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory);
   registerFixtureIpc(fixtureHandlers);
   registerAppIpc(dataFolder, services.appLock.isSetupMode);
   registerLockIpc(services.appLock);
+  // after the channel limits, so the output is capped from its first packet; the renderer gets the status pushed
+  void services.portMemory.reconnect();
   void openMainWindow();
 
   // macOS: re-create the window when the dock icon is clicked and none is open

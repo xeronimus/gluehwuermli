@@ -10,5 +10,6 @@ export const electronDmxServiceFactory = (bridge: DmxBridge): DmxService => ({
   connect: (path) => bridge.connect(path),
   disconnect: () => bridge.disconnect(),
   getStatus: () => bridge.getStatus(),
+  getRememberedPort: () => bridge.getRememberedPort(),
   onStatusChanged: (listener) => bridge.onStatusChanged(listener)
 });
