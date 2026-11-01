@@ -7,6 +7,7 @@ import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
+import MarkdownText from '../commons/MarkdownText';
 import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon} from '../commons/icons';
 import {
   fixtureGroup,
@@ -76,7 +77,11 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
           )}
         </footer>
       )}
-      {descriptionShown && fixture.description && <p className={groupNote}>{fixture.description}</p>}
+      {descriptionShown && fixture.description && (
+        <div className={groupNote}>
+          <MarkdownText text={fixture.description} />
+        </div>
+      )}
     </section>
   );
 };

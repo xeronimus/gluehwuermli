@@ -1,10 +1,9 @@
-import {FIXTURE_DESCRIPTION_MAX_LENGTH, FIXTURE_HINT_MAX_LENGTH} from '@shared/ipc';
+import {FIXTURE_HINT_MAX_LENGTH} from '@shared/ipc';
 
 import {FixtureDraft} from '@/data/fixtureDraft';
 
-import {descriptionInput, field, hintInput} from './FixtureEditor.css';
-
-const DESCRIPTION_ROWS = 3;
+import DescriptionField from './DescriptionField';
+import {field, hintInput} from './FixtureEditor.css';
 
 interface FixtureNotesFieldsProps {
   draft: FixtureDraft;
@@ -25,17 +24,7 @@ const FixtureNotesFields = ({draft, onChange}: FixtureNotesFieldsProps) => (
       />
     </label>
 
-    <label className={field}>
-      Description
-      <textarea
-        className={descriptionInput}
-        value={draft.description}
-        rows={DESCRIPTION_ROWS}
-        maxLength={FIXTURE_DESCRIPTION_MAX_LENGTH}
-        placeholder="Anything worth knowing: the DMX mode, DIP switch settings, where it hangs, who it belongs to…"
-        onChange={(event) => onChange({...draft, description: event.target.value})}
-      />
-    </label>
+    <DescriptionField description={draft.description} onChange={(description) => onChange({...draft, description})} />
   </>
 );
 
