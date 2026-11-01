@@ -38,6 +38,8 @@ export interface DmxBridge {
   liftChannelLock: (password: string | undefined) => Promise<PasswordResult>;
   /** turns the channel lock on again; needs no password */
   lockChannels: () => Promise<LockStatus>;
+  /** Setup mode only (rejects in Show mode, or when the new password can't be stored); the current password is checked */
+  changePassword: (currentPassword: string, newPassword: string) => Promise<PasswordResult>;
   /** fire-and-forget: restarts the idle timer that locks Setup mode again */
   reportActivity: () => void;
   /** returns the function that removes the listener again */

@@ -12,6 +12,7 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
+- Change the password in Setup mode (Settings view), with the current password and the new one typed twice
 - Fixture descriptions are Markdown: formatted on the fixture, with a preview in the editor; links to web pages open in
   the default browser, any other link shows as text
 

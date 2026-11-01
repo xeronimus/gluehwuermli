@@ -46,6 +46,11 @@ const UserManual = () => (
         as it is.
       </p>
       <p>
+        To change the password, unlock Setup mode and press <strong>Change password</strong> in the Settings view: type
+        the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the
+        channel lock.
+      </p>
+      <p>
         Forgot the password? Close the app, delete <strong>settings.json</strong> in the data folder (see the Data
         folder section) and start it again: the next time a password is asked for, it becomes the new one.
       </p>
