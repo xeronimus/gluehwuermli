@@ -9,6 +9,7 @@ export const electronLockServiceFactory = (bridge: DmxBridge): LockService => ({
   lock: () => bridge.lock(),
   liftChannelLock: (password) => bridge.liftChannelLock(password),
   lockChannels: () => bridge.lockChannels(),
+  changePassword: (currentPassword, newPassword) => bridge.changePassword(currentPassword, newPassword),
   reportActivity: () => bridge.reportActivity(),
   onChanged: (listener) => bridge.onLockChanged(listener)
 });

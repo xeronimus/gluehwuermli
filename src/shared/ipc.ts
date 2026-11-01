@@ -147,7 +147,14 @@ export const LiftChannelLockRequestSchema = Type.Object({
 });
 export type LiftChannelLockRequest = Static<typeof LiftChannelLockRequestSchema>;
 
-/** what unlocking Setup mode or lifting the channel lock answers */
+/** Setup mode only; the current password too, so nobody passing a Setup mode left open can take the password over */
+export const ChangePasswordRequestSchema = Type.Object({
+  currentPassword: PasswordSchema,
+  newPassword: PasswordSchema
+});
+export type ChangePasswordRequest = Static<typeof ChangePasswordRequestSchema>;
+
+/** what unlocking Setup mode, lifting the channel lock or changing the password answers */
 export const PasswordResultSchema = Type.Union([
   Type.Object({type: Type.Literal('accepted')}),
   Type.Object({type: Type.Literal('wrong-password')})
@@ -169,3 +176,6 @@ export const parseUnlockRequest = (payload: unknown): UnlockRequest | undefined 
 
 export const parseLiftChannelLockRequest = (payload: unknown): LiftChannelLockRequest | undefined =>
   Value.Check(LiftChannelLockRequestSchema, payload) ? payload : undefined;
+
+export const parseChangePasswordRequest = (payload: unknown): ChangePasswordRequest | undefined =>
+  Value.Check(ChangePasswordRequestSchema, payload) ? payload : undefined;

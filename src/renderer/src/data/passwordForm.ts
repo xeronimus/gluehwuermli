@@ -10,6 +10,21 @@ const lengthError = (password: string): string | undefined => {
   return undefined;
 };
 
+/** what keeps a password change from being sent; undefined when it can be */
+export function changePasswordFormError(form: {
+  currentPassword: string;
+  newPassword: string;
+  confirmation: string;
+}): string | undefined {
+  const error =
+    lengthError(form.currentPassword) ??
+    passwordFormError({password: form.newPassword, confirmation: form.confirmation}, true);
+  if (error) {
+    return error;
+  }
+  return form.newPassword === form.currentPassword ? 'The new password is the current one' : undefined;
+}
+
 /** what keeps the password from being sent; undefined when it can be. A new one is typed twice, to catch a typo */
 export function passwordFormError(
   form: {password: string; confirmation: string},
