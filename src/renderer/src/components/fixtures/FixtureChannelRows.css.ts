@@ -2,9 +2,17 @@ import {style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
+export const channelsSection = style({
+  display: 'flex',
+  flexDirection: 'column',
+  flexShrink: 0
+});
+
+/** its rows line up with the preset columns beside it */
 export const channelRows = style({
   display: 'grid',
   gridTemplateColumns: '200px 90px 64px 120px auto',
+  gridAutoRows: vars.constants.editorRowHeight,
   gap: '6px 8px',
   alignItems: 'center',
   justifyItems: 'start'
@@ -37,5 +45,5 @@ export const channelAddress = style({
 });
 
 export const addChannel = style({
-  gridColumn: '1 / -1'
+  marginTop: '6px'
 });

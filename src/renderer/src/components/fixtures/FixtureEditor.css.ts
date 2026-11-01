@@ -2,7 +2,10 @@ import {style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
+/** as wide as the view and no wider (FixtureView aligns its children to their content), so the presets scroll inside */
 export const fixtureEditor = style({
+  alignSelf: 'stretch',
+  minWidth: 0,
   display: 'flex',
   flexDirection: 'column',
   gap: '14px',
@@ -12,18 +15,30 @@ export const fixtureEditor = style({
   borderRadius: vars.constants.radiusMd
 });
 
-/** the form, and the help beside it (below it when the window is narrow) */
-export const editorBody = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'flex-start',
-  gap: '24px'
-});
-
+/** minWidth 0, so the preset columns scroll inside it instead of widening the editor */
 export const editorForm = style({
   display: 'flex',
   flexDirection: 'column',
+  minWidth: 0,
   gap: '14px'
+});
+
+/** the channels, and the preset columns beside them */
+export const channelsAndPresets = style({
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: '16px'
+});
+
+/** the title of the channels and of the presets section, the same height so their rows line up */
+export const sectionTitle = style({
+  display: 'flex',
+  alignItems: 'center',
+  height: vars.constants.editorRowHeight,
+  margin: '0 0 6px',
+  color: vars.colors.textSecondary,
+  fontSize: '0.9em',
+  fontWeight: 600
 });
 
 export const editorTitle = style({

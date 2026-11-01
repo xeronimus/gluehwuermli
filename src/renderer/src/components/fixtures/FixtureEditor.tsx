@@ -14,7 +14,7 @@ import FixtureChannelRows from './FixtureChannelRows';
 import {
   actions,
   addressInput,
-  editorBody,
+  channelsAndPresets,
   editorForm,
   editorTitle,
   errorList,
@@ -26,7 +26,7 @@ import {
 } from './FixtureEditor.css';
 import FixtureHelp from './FixtureHelp';
 import FixtureNotesFields from './FixtureNotesFields';
-import FixturePresetRows from './FixturePresetRows';
+import FixturePresetColumns from './FixturePresetColumns';
 
 interface FixtureEditorProps {
   /** undefined to add a new fixture */
@@ -61,65 +61,65 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
   return (
     <section className={fixtureEditor} aria-label="Fixture editor">
       <h2 className={editorTitle}>{fixture ? `Edit ${fixture.name}` : 'New fixture'}</h2>
-      <div className={editorBody}>
-        <div className={editorForm}>
-          <div className={fields}>
-            <label className={field}>
-              Name
-              <input
-                className={nameInput}
-                value={draft.name}
-                placeholder="e.g. PAR left"
-                autoFocus
-                onChange={(event) => setDraft({...draft, name: event.target.value})}
-              />
-            </label>
-            <label className={field}>
-              Start address
-              <input
-                className={addressInput}
-                type="number"
-                min={FIRST_DMX_CHANNEL}
-                max={LAST_DMX_CHANNEL}
-                value={draft.startAddress}
-                onChange={(event) => setDraft({...draft, startAddress: event.target.value})}
-              />
-            </label>
-          </div>
-
-          <FixtureChannelRows draft={draft} onChange={setDraft} />
-
-          <FixturePresetRows draft={draft} onChange={setDraft} />
-
-          <FixtureNotesFields draft={draft} onChange={setDraft} />
-
-          {errors.length > 0 && (
-            <ul className={errorList}>
-              {errors.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          )}
-          {ownOverlaps.length > 0 && (
-            <ul className={warningList}>
-              {ownOverlaps.map((overlap) => (
-                <li key={overlap.second.id}>
-                  <WarningIcon /> {describeOverlap(overlap)}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className={actions}>
-            <Button variant="primary" onClick={() => void onSave()} disabled={errors.length > 0 || saving}>
-              Save
-            </Button>
-            <Button onClick={onClose} disabled={saving}>
-              Cancel
-            </Button>
-          </div>
+      <div className={editorForm}>
+        <div className={fields}>
+          <label className={field}>
+            Name
+            <input
+              className={nameInput}
+              value={draft.name}
+              placeholder="e.g. PAR left"
+              autoFocus
+              onChange={(event) => setDraft({...draft, name: event.target.value})}
+            />
+          </label>
+          <label className={field}>
+            Start address
+            <input
+              className={addressInput}
+              type="number"
+              min={FIRST_DMX_CHANNEL}
+              max={LAST_DMX_CHANNEL}
+              value={draft.startAddress}
+              onChange={(event) => setDraft({...draft, startAddress: event.target.value})}
+            />
+          </label>
         </div>
+
+        <div className={channelsAndPresets}>
+          <FixtureChannelRows draft={draft} onChange={setDraft} />
+          <FixturePresetColumns draft={draft} onChange={setDraft} />
+        </div>
+
+        <FixtureNotesFields draft={draft} onChange={setDraft} />
+
         <FixtureHelp initiallyOpen={!fixture} />
+
+        {errors.length > 0 && (
+          <ul className={errorList}>
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        )}
+        {ownOverlaps.length > 0 && (
+          <ul className={warningList}>
+            {ownOverlaps.map((overlap) => (
+              <li key={overlap.second.id}>
+                <WarningIcon /> {describeOverlap(overlap)}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className={actions}>
+          <Button variant="primary" onClick={() => void onSave()} disabled={errors.length > 0 || saving}>
+            Save
+          </Button>
+          <Button onClick={onClose} disabled={saving}>
+            Cancel
+          </Button>
+        </div>
       </div>
     </section>
   );
