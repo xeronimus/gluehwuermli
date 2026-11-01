@@ -23,7 +23,9 @@ const constants = {
   radiusSm: '4px',
   radiusMd: '7px',
   faderHeight: '260px',
-  faderWidth: '56px'
+  faderWidth: '56px',
+  /** a row of the fixture editor's channels and presets, the same in both so they line up */
+  editorRowHeight: '34px'
 };
 
 const fonts = {
