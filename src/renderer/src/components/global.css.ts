@@ -43,3 +43,27 @@ globalStyle('input, textarea', {
 globalStyle('select:focus-visible, input:focus-visible, textarea:focus-visible', {
   borderColor: vars.colors.focusBorder
 });
+
+// -- scrollbars: thin, a rounded thumb on no track, like the rest of the desk. Chromium's own pseudo-elements: the
+// standard `scrollbar-color` / `scrollbar-width` would override them and can't round the thumb
+globalStyle('::-webkit-scrollbar', {
+  width: '10px',
+  height: '10px'
+});
+
+globalStyle('::-webkit-scrollbar-track, ::-webkit-scrollbar-corner', {
+  background: 'transparent'
+});
+
+globalStyle('::-webkit-scrollbar-thumb', {
+  background: vars.colors.border,
+  // the transparent border keeps the thumb clear of the edges, background-clip draws it inside the border only
+  border: '2px solid transparent',
+  backgroundClip: 'padding-box',
+  borderRadius: '5px'
+});
+
+globalStyle('::-webkit-scrollbar-thumb:hover', {
+  background: vars.colors.focusBorder,
+  backgroundClip: 'padding-box'
+});

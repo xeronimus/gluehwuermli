@@ -13,6 +13,8 @@ change bumps the minor version and everything else the patch version.
 ### Changed
 
 - A capped fader shows its lock icon in the fader knob instead of above its value
+- Fixture editor: the presets are columns beside the channels, in line with their rows, and scroll sideways when they
+  don't fit; both section titles show their count. The help is below the description, scrollbars are thin and dark
 
 ## [0.1.0] - 2026-10-31
 
