@@ -16,20 +16,24 @@ import {inMemoryLockServiceFactory} from './impl/inMemory/inMemoryLockServiceFac
  * The composition root of the renderer: creates every service instance once; the only module importing from impl/
  * (enforced by architecture.test.ts). Consumers import the instances from here and depend on the interfaces only.
  */
-const dmxBridge = globalThis.window?.gluehwuermli;
+const preloadBridge = globalThis.window?.gluehwuermli;
 
-if (!dmxBridge) {
+if (!preloadBridge) {
   logger.warn('no DMX bridge from the preload script, the output is simulated and fixtures are not stored');
 }
 
-export const dmxService: DmxService = dmxBridge ? electronDmxServiceFactory(dmxBridge) : inMemoryDmxServiceFactory();
+export const dmxService: DmxService = preloadBridge
+  ? electronDmxServiceFactory(preloadBridge)
+  : inMemoryDmxServiceFactory();
 
-export const fixtureService: FixtureService = dmxBridge
-  ? electronFixtureServiceFactory(dmxBridge)
+export const fixtureService: FixtureService = preloadBridge
+  ? electronFixtureServiceFactory(preloadBridge)
   : inMemoryFixtureServiceFactory();
 
-export const appService: AppService = dmxBridge ? electronAppServiceFactory(dmxBridge) : inMemoryAppServiceFactory();
+export const appService: AppService = preloadBridge
+  ? electronAppServiceFactory(preloadBridge)
+  : inMemoryAppServiceFactory();
 
-export const lockService: LockService = dmxBridge
-  ? electronLockServiceFactory(dmxBridge)
+export const lockService: LockService = preloadBridge
+  ? electronLockServiceFactory(preloadBridge)
   : inMemoryLockServiceFactory();

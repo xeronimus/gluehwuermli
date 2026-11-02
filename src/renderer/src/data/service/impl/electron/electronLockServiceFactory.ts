@@ -1,9 +1,9 @@
-import type {DmxBridge} from '@shared/dmxBridge';
+import type {PreloadBridge} from '@shared/preloadBridge';
 
 import type LockService from '@/data/service/LockService';
 
 /** the LockService over the bridge the preload script exposes */
-export const electronLockServiceFactory = (bridge: DmxBridge): LockService => ({
+export const electronLockServiceFactory = (bridge: PreloadBridge): LockService => ({
   getStatus: () => bridge.getLockStatus(),
   unlock: (password) => bridge.unlock(password),
   lock: () => bridge.lock(),
