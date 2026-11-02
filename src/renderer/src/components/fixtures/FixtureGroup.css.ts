@@ -18,8 +18,12 @@ export const groupHeader = style({
   gap: '8px'
 });
 
+/** the fixture icon and the name */
 export const groupName = style({
   flex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
   fontWeight: 600
 });
 

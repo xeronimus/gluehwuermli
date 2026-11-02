@@ -10,7 +10,7 @@ import {selectChannelLimits} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {DeleteIcon, EditIcon, LockIcon} from '../commons/icons';
+import {DeleteIcon, EditIcon, LockIcon, SceneIcon} from '../commons/icons';
 import {sceneButtons, sceneEntry} from './SceneButtons.css';
 
 interface SceneButtonsProps {
@@ -56,8 +56,9 @@ const SceneButtons = ({onEdit}: SceneButtonsProps) => {
                 : t`Apply the scene ${sceneName}`
             }
           >
-            {capped && <LockIcon />}
+            <SceneIcon />
             {scene.name}
+            {capped && <LockIcon />}
           </Button>
         );
         if (!onEdit) {

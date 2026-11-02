@@ -10,7 +10,7 @@ import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
 import MarkdownText from '../commons/MarkdownText';
-import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon} from '../commons/icons';
+import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon, FixtureIcon} from '../commons/icons';
 import {
   fixtureGroup,
   groupAddresses,
@@ -48,7 +48,10 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
   return (
     <section className={fixtureGroup} aria-label={fixture.name}>
       <header className={groupHeader}>
-        <span className={groupName}>{fixture.name}</span>
+        <span className={groupName}>
+          <FixtureIcon />
+          {fixture.name}
+        </span>
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         {actions && (
           <>

@@ -12,7 +12,7 @@ import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {AddIcon, WarningIcon} from '../commons/icons';
+import {AddFixtureIcon, AddSceneIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
 import {errorMessage, fixtureGroups, fixtureView, footer, message, warnings} from './FixtureView.css';
@@ -143,10 +143,10 @@ const FixtureView = () => {
       {setupMode && editing.type === 'none' && (
         <div className={footer}>
           <Button onClick={() => setEditing({type: 'adding-scene'})} disabled={fixtures.length === 0}>
-            <AddIcon /> <Trans>Add scene</Trans>
+            <AddSceneIcon /> <Trans>Add scene</Trans>
           </Button>
           <Button onClick={() => setEditing({type: 'adding'})}>
-            <AddIcon /> <Trans>Add fixture</Trans>
+            <AddFixtureIcon /> <Trans>Add fixture</Trans>
           </Button>
         </div>
       )}
