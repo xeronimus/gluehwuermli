@@ -18,9 +18,13 @@ export interface StoreFixturesDependencies {
   log: {error: (...message: unknown[]) => void};
 }
 
-/** changes the fixture list; resolves to whether the change was stored */
+/**
+ * changes the fixture list; resolves to whether the change was stored. A failure shows `failure` and is logged as
+ * "`action` failed" (in English: a production build keeps only the hashed id of `failure`)
+ */
 export type StoreFixtures = (
   change: (fixtures: readonly Fixture[]) => Fixture[],
+  action: string,
   failure: MessageDescriptor
 ) => Promise<boolean>;
 
@@ -30,7 +34,7 @@ export type StoreFixtures = (
  */
 export const storeFixturesWith =
   ({getState, fixtureService, runSerially, log}: StoreFixturesDependencies): StoreFixtures =>
-  (change, failure) =>
+  (change, action, failure) =>
     runSerially(async () => {
       const fixtures = change(selectFixtures(getState()));
       try {
@@ -39,7 +43,7 @@ export const storeFixturesWith =
         getState().setFixturesError(undefined);
         return true;
       } catch (error) {
-        log.error(failure.message ?? failure.id, error);
+        log.error(`${action} failed`, error);
         getState().setFixturesError(failure);
         return false;
       }

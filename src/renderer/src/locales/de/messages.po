@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/renderer/src/components/output/OutputBar.tsx
-msgid "{activeChannelCount} channels above 0"
-msgstr "{activeChannelCount} Kanäle über 0"
+msgid "{activeChannelCount, plural, one {# channel above 0} other {# channels above 0}}"
+msgstr "{activeChannelCount, plural, one {# Kanal über 0} other {# Kanäle über 0}}"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"

@@ -34,8 +34,8 @@ test('isLocale knows the supported languages only', () => {
   expect(isLocale('fr')).toBe(false);
 });
 
-test.each(LOCALES)('the %s catalog loads and becomes active', async (locale) => {
-  await activateLocale(locale);
+test.each(LOCALES)('the %s catalog becomes active', (locale) => {
+  activateLocale(locale);
 
   expect(i18n.locale).toBe(locale);
   expect(Object.keys(i18n.messages).length).toBeGreaterThan(0);
@@ -59,5 +59,12 @@ describe('catalogs', () => {
     const missing = Array.from(po.matchAll(/^msgid (".*"\r?\n)+msgstr ""\r?\n(?!")/gm), ([entry]) => entry);
 
     expect(missing).toEqual([]);
+  });
+
+  // the .po as written, so the branches of a plural are checked too
+  test('no ß in German: Swiss High German writes ss', async () => {
+    const load = poFiles['../locales/de/messages.po'];
+
+    expect(load ? await load() : '').not.toContain('ß');
   });
 });

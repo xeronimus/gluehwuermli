@@ -35,13 +35,13 @@ const storeWithFixtures = (fixtures: readonly Fixture[]) => {
   return createStore(combine(initialState, (set) => getFixturesActions(set)));
 };
 
-const setUp = (fixtureService: FixtureService) => {
+const setUp = (fixtureService: FixtureService, log = silentLog) => {
   const store = storeWithFixtures([par]);
   const storeFixtures: StoreFixtures = storeFixturesWith({
     getState: store.getState,
     fixtureService,
     runSerially: createSerialQueue(),
-    log: silentLog
+    log
   });
   return {store, storeFixtures};
 };
@@ -51,7 +51,7 @@ test('a stored change is shown and clears an earlier error', async () => {
   const {store, storeFixtures} = setUp(fixtureService);
   store.getState().setFixturesError(failure('an earlier failure'));
 
-  expect(await storeFixtures(append(smoke), failure('Could not save'))).toBe(true);
+  expect(await storeFixtures(append(smoke), 'saving', failure('Could not save'))).toBe(true);
 
   expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par, smoke]});
   expect(store.getState().fixturesError).toBeUndefined();
@@ -61,10 +61,19 @@ test('a stored change is shown and clears an earlier error', async () => {
 test('a failed save leaves the shown setup unchanged and sets the error', async () => {
   const {store, storeFixtures} = setUp(failingFixtureService);
 
-  expect(await storeFixtures(append(smoke), failure('Could not save the fixture Smoke'))).toBe(false);
+  expect(await storeFixtures(append(smoke), 'saving', failure('Could not save the fixture Smoke'))).toBe(false);
 
   expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par]});
   expect(store.getState().fixturesError).toEqual(failure('Could not save the fixture Smoke'));
+});
+
+test('a failed save is logged by its action, not by the shown message (a production build keeps only its id)', async () => {
+  const logged: unknown[][] = [];
+  const {storeFixtures} = setUp(failingFixtureService, {error: (...message) => logged.push(message)});
+
+  await storeFixtures(append(smoke), 'saving the fixture Smoke', {id: 'x7aFd2'});
+
+  expect(logged).toEqual([['saving the fixture Smoke failed', new Error('disk full')]]);
 });
 
 test('the store is only updated once the save resolved', async () => {
@@ -78,7 +87,7 @@ test('the store is only updated once the save resolved', async () => {
   };
   const {store, storeFixtures} = setUp(slowFixtureService);
 
-  const storing = storeFixtures(append(smoke), failure('Could not save'));
+  const storing = storeFixtures(append(smoke), 'saving', failure('Could not save'));
   await vi.waitFor(() => expect(resolveSave).toBeDefined());
   expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par]});
 
@@ -99,8 +108,8 @@ test('overlapping changes are all stored', async () => {
   const fog: Fixture = {id: 'fog', name: 'Fog', startAddress: 3, channels: [{name: 'Fog', offset: 0}]};
 
   await Promise.all([
-    storeFixtures(append(smoke), failure('Could not save')),
-    storeFixtures(append(fog), failure('Could not save'))
+    storeFixtures(append(smoke), 'saving', failure('Could not save')),
+    storeFixtures(append(fog), 'saving', failure('Could not save'))
   ]);
 
   expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par, smoke, fog]});

@@ -8,14 +8,14 @@ const NO_CHOICE: ChosenLocale = {type: 'none'};
 
 /**
  * Before the first render: the language chosen in the app, otherwise the OS language. Never rejects, a settings file
- * that can't be read shows the app in the OS language.
+ * that can't be read shows the app in the OS language; the catalogs are bundled, activating one doesn't load anything.
  */
 export async function activateStartLocale(): Promise<void> {
   const chosen = await appService.getLocale().catch((error: unknown) => {
     logger.error('reading the chosen language failed', error);
     return NO_CHOICE;
   });
-  await activateLocale(detectLocale(chosen, navigator.languages));
+  activateLocale(detectLocale(chosen, navigator.languages));
 }
 
 /**
@@ -24,7 +24,7 @@ export async function activateStartLocale(): Promise<void> {
  */
 export function useActionChangeLocale() {
   return async (locale: Locale) => {
-    await activateLocale(locale);
+    activateLocale(locale);
     try {
       await appService.setLocale(locale);
     } catch (error) {
