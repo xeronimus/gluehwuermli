@@ -21,3 +21,8 @@ pnpm-debug.log*
 # anthropic  claude-code
 /.claude/*
 /sync-skills.ps1
+
+# compiled message catalogs (`lingui compile`); the build compiles the .po files itself
+src/renderer/src/locales/*/messages.js
+src/renderer/src/locales/*/messages.mjs
+src/renderer/src/locales/*/messages.ts

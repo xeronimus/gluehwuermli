@@ -86,7 +86,12 @@ test('ignores invalid channels and values', async () => {
 test('a port that cannot be opened ends in the failed status', async () => {
   connector.failNextOpen(new Error('Access denied'));
 
-  expect(await engine.connect('COM9')).toEqual({type: 'failed', path: 'COM9', message: 'Access denied'});
+  expect(await engine.connect('COM9')).toEqual({
+    type: 'failed',
+    path: 'COM9',
+    reason: 'port-error',
+    message: 'Access denied'
+  });
 });
 
 test('a failing write closes the port and reports it', async () => {
@@ -99,7 +104,12 @@ test('a failing write closes the port and reports it', async () => {
   engine.setChannel(1, 1);
   await nextTick();
 
-  expect(engine.status()).toEqual({type: 'failed', path: SIMULATED_PORT_PATH, message: 'Device not ready'});
+  expect(engine.status()).toEqual({
+    type: 'failed',
+    path: SIMULATED_PORT_PATH,
+    reason: 'port-error',
+    message: 'Device not ready'
+  });
   expect(statuses).toEqual(['connecting', 'connected', 'failed']);
   expect(connector.writtenPackets).toHaveLength(0);
 });
@@ -108,7 +118,9 @@ test('unplugging the widget ends in the failed status', async () => {
   await engine.connect(SIMULATED_PORT_PATH);
 
   connector.unplug();
-  await vi.waitFor(() => expect(engine.status().type).toBe('failed'));
+  await vi.waitFor(() =>
+    expect(engine.status()).toEqual({type: 'failed', path: SIMULATED_PORT_PATH, reason: 'port-closed'})
+  );
 });
 
 test('after disconnecting nothing is sent', async () => {

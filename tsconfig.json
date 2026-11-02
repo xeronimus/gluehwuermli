@@ -16,6 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "noEmit": true,
+    // the configs import the Lingui macro plugin as an ES module by its .mts name, as Node loads it
+    "allowImportingTsExtensions": true,
     "types": ["node", "vitest/globals", "electron-vite/node"],
     "paths": {
       "@/*": ["./src/main/*"],

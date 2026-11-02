@@ -107,7 +107,13 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
   const failConnection = async (path: string, error: unknown) => {
     log.warn(`DMX output on ${path} failed`, error);
     await closeConnection();
-    setStatus({type: 'failed', path, message: messageOf(error)});
+    setStatus({type: 'failed', path, reason: 'port-error', message: messageOf(error)});
+  };
+
+  const reportUnexpectedClose = async (path: string) => {
+    log.warn(`DMX output on ${path} failed: the port was closed, is the widget still plugged in?`);
+    await closeConnection();
+    setStatus({type: 'failed', path, reason: 'port-closed'});
   };
 
   const sendUniverseIfChanged = async () => {
@@ -144,7 +150,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
       connection = opened;
       opened.onUnexpectedClose(() => {
         if (connection === opened) {
-          void failConnection(path, new Error('The port was closed, is the widget still plugged in?'));
+          void reportUnexpectedClose(path);
         }
       });
       // the widget gets the current universe with the next tick, not only after the next change

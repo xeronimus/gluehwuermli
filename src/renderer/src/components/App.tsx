@@ -1,6 +1,10 @@
 import {ReactNode, useEffect, useState} from 'react';
 
-import mascot from '@resources/gluehwuermli_mascot.png';
+import type {I18n} from '@lingui/core';
+import {msg} from '@lingui/core/macro';
+import {useLingui} from '@lingui/react/macro';
+
+import mascot from '@assets/gluehwuermli_mascot.png';
 
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
@@ -23,13 +27,13 @@ import {defaultTheme} from './themes.css';
 type View = 'fixtures' | 'channels' | 'settings' | 'help';
 
 /** the raw channels reach every address, the fixtures only theirs: Setup mode only */
-const viewsFor = (setupMode: boolean): readonly Mode<View>[] => [
-  {id: 'fixtures', label: 'Fixtures', Icon: FixturesIcon},
+const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
+  {id: 'fixtures', label: i18n._(msg`Fixtures`), Icon: FixturesIcon},
   // the raw channels, e.g. to find out what a new device does on which channel
-  {id: 'channels', label: 'Channels', Icon: ChannelsIcon, disabled: !setupMode},
+  {id: 'channels', label: i18n._(msg`Channels`), Icon: ChannelsIcon, disabled: !setupMode},
   // unlocking Setup mode and the channel lock
-  {id: 'settings', label: 'Settings', Icon: SettingsIcon},
-  {id: 'help', label: 'Help', Icon: HelpIcon}
+  {id: 'settings', label: i18n._(msg`Settings`), Icon: SettingsIcon},
+  {id: 'help', label: i18n._(msg`Help`), Icon: HelpIcon}
 ];
 
 const VIEW_CONTENT: Record<View, () => ReactNode> = {
@@ -40,6 +44,7 @@ const VIEW_CONTENT: Record<View, () => ReactNode> = {
 };
 
 const App = () => {
+  const {i18n} = useLingui();
   const [view, setView] = useState<View>('fixtures');
   const setupMode = useAppStore(selectIsSetupMode);
 
@@ -66,7 +71,7 @@ const App = () => {
       <img className={backdrop} src={mascot} alt="" />
       <ErrorBoundary>
         <OutputBar
-          viewToggle={<ModeToggle modes={viewsFor(setupMode)} activeId={view} onSelect={setView} />}
+          viewToggle={<ModeToggle modes={viewsFor(setupMode, i18n)} activeId={view} onSelect={setView} />}
           onShowSettings={() => setView('settings')}
         />
       </ErrorBoundary>

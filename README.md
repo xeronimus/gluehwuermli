@@ -1,6 +1,6 @@
 # Glühwürmli
 
-<img src="src/resources/gluehwuermli_favicon.png" alt="Glühwürmli" width="96" align="right" />
+<img src="src/assets/gluehwuermli_favicon.png" alt="Glühwürmli" width="96" align="right" />
 
 A desktop app that sends DMX through an **Enttec DMX USB Pro**. Electron + electron-vite, React, TypeScript.
 

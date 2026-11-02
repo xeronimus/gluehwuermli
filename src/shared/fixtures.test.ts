@@ -46,22 +46,20 @@ describe('fixtureErrors', () => {
 
   test('reports a blank name, missing channels and an invalid start address', () => {
     expect(fixtureErrors(fixtureOf({name: ' ', startAddress: 0, channels: []}))).toEqual([
-      'The fixture needs a name',
-      'The start address must be a whole number from 1 to 512',
-      'The fixture needs at least one channel'
+      {type: 'name-missing'},
+      {type: 'start-address-invalid'},
+      {type: 'channels-missing'}
     ]);
   });
 
   test('accepts a description up to the maximum length, reports a longer one', () => {
     expect(fixtureErrors(fixtureOf({description: 'x'.repeat(2000)}))).toEqual([]);
-    expect(fixtureErrors(fixtureOf({description: 'x'.repeat(2001)}))).toEqual([
-      'The description can have at most 2000 characters'
-    ]);
+    expect(fixtureErrors(fixtureOf({description: 'x'.repeat(2001)}))).toEqual([{type: 'description-too-long'}]);
   });
 
   test('accepts a hint up to the maximum length, reports a longer one', () => {
     expect(fixtureErrors(fixtureOf({hint: 'x'.repeat(200)}))).toEqual([]);
-    expect(fixtureErrors(fixtureOf({hint: 'x'.repeat(201)}))).toEqual(['The hint can have at most 200 characters']);
+    expect(fixtureErrors(fixtureOf({hint: 'x'.repeat(201)}))).toEqual([{type: 'hint-too-long'}]);
   });
 
   test('reports blank channel names and duplicate offsets', () => {
@@ -71,8 +69,8 @@ describe('fixtureErrors', () => {
     ];
 
     expect(fixtureErrors(fixtureOf({channels}))).toEqual([
-      'Every channel needs a name',
-      'Offset 0 is used by more than one channel'
+      {type: 'channel-name-missing'},
+      {type: 'offset-used-twice', offset: 0}
     ]);
   });
 
@@ -98,10 +96,10 @@ describe('fixtureErrors', () => {
     ];
 
     expect(fixtureErrors(fixtureOf({presets}))).toEqual([
-      'Every preset needs a name',
-      "The preset Missing sets a channel the fixture doesn't have",
-      'The preset Twice sets a channel more than once',
-      'The preset Empty needs at least one channel'
+      {type: 'preset-name-missing'},
+      {type: 'preset-channel-unknown', presetName: 'Missing'},
+      {type: 'preset-channel-twice', presetName: 'Twice'},
+      {type: 'preset-channels-missing', presetName: 'Empty'}
     ]);
   });
 
@@ -109,14 +107,14 @@ describe('fixtureErrors', () => {
     const preset = {id: 'warm', name: 'Warm', values: [{offset: 0, value: 255}]};
 
     expect(fixtureErrors(fixtureOf({presets: [preset, {...preset, name: 'Warmer'}]}))).toEqual([
-      'Preset id warm is used twice'
+      {type: 'preset-id-used-twice', id: 'warm'}
     ]);
   });
 
-  test('names a preset without a name as such', () => {
+  test('a preset without a name has no name in its errors', () => {
     expect(fixtureErrors(fixtureOf({presets: [{id: 'new', name: '', values: []}]}))).toEqual([
-      'Every preset needs a name',
-      'The preset without a name needs at least one channel'
+      {type: 'preset-name-missing'},
+      {type: 'preset-channels-missing', presetName: undefined}
     ]);
   });
 
@@ -125,8 +123,8 @@ describe('fixtureErrors', () => {
     const presets = [{id: 'loud', name, values: [{offset: 0, value: 256}]}];
 
     expect(fixtureErrors(fixtureOf({presets}))).toEqual([
-      'A preset name can have at most 40 characters',
-      `The values of the preset ${name} must be whole numbers from 0 to 255`
+      {type: 'preset-name-too-long'},
+      {type: 'preset-value-invalid', presetName: name}
     ]);
   });
 
@@ -135,16 +133,12 @@ describe('fixtureErrors', () => {
 
     expect(fixtureErrors(lockedAt(0))).toEqual([]);
     expect(fixtureErrors(lockedAt(255))).toEqual([]);
-    expect(fixtureErrors(lockedAt(256))).toEqual(['The maximum while locked must be a whole number from 0 to 255']);
-    expect(fixtureErrors(lockedAt(Number.NaN))).toEqual([
-      'The maximum while locked must be a whole number from 0 to 255'
-    ]);
+    expect(fixtureErrors(lockedAt(256))).toEqual([{type: 'lock-max-invalid'}]);
+    expect(fixtureErrors(lockedAt(Number.NaN))).toEqual([{type: 'lock-max-invalid'}]);
   });
 
   test('reports a fixture not fitting in the universe', () => {
-    expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([
-      'The fixture ends at address 513, after the last one (512)'
-    ]);
+    expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([{type: 'past-universe-end', lastAddress: 513}]);
   });
 });
 

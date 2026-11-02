@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {FIRST_DMX_CHANNEL} from '@shared/dmx';
 
 import {
@@ -23,6 +25,7 @@ interface ChannelBankNavigationProps {
 
 /** previous/next bank, the range shown, and a field to jump to a start channel */
 const ChannelBankNavigation = ({start, onChange}: ChannelBankNavigationProps) => {
+  const {t} = useLingui();
   const [jumpText, setJumpText] = useState(String(start));
 
   const moveTo = (newStart: number) => {
@@ -37,7 +40,7 @@ const ChannelBankNavigation = ({start, onChange}: ChannelBankNavigationProps) =>
     <div className={bankNavigation}>
       <Button
         variant="icon"
-        title="Previous channels"
+        title={t`Previous channels`}
         disabled={isFirstBank(start)}
         onClick={() => moveTo(previousBankStart(start))}
       >
@@ -48,14 +51,14 @@ const ChannelBankNavigation = ({start, onChange}: ChannelBankNavigationProps) =>
       </span>
       <Button
         variant="icon"
-        title="Next channels"
+        title={t`Next channels`}
         disabled={isLastBank(start)}
         onClick={() => moveTo(nextBankStart(start))}
       >
         <NextIcon />
       </Button>
       <label className={jumpField}>
-        Start channel
+        <Trans>Start channel</Trans>
         <input
           className={jumpInput}
           type="number"

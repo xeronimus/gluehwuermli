@@ -135,7 +135,7 @@ describe('reconnecting on start', () => {
 
     await createPortMemory().reconnect();
 
-    expect(engine.status()).toEqual({type: 'failed', path: 'COM4', message: 'Access denied'});
+    expect(engine.status()).toEqual({type: 'failed', path: 'COM4', reason: 'port-error', message: 'Access denied'});
   });
 
   test('stays disconnected when the remembered port is not listed, and keeps remembering it', async () => {

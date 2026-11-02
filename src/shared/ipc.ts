@@ -33,7 +33,15 @@ export const DmxOutputStatusSchema = Type.Union([
   Type.Object({type: Type.Literal('disconnected')}),
   Type.Object({type: Type.Literal('connecting'), path: Type.String()}),
   Type.Object({type: Type.Literal('connected'), path: Type.String()}),
-  Type.Object({type: Type.Literal('failed'), path: Type.String(), message: Type.String()})
+  /** the port closed by itself (unplugged); a code, the renderer says it in the UI language */
+  Type.Object({type: Type.Literal('failed'), path: Type.String(), reason: Type.Literal('port-closed')}),
+  /** opening or writing failed; `message` is the raw text of serialport or the OS, shown as it is */
+  Type.Object({
+    type: Type.Literal('failed'),
+    path: Type.String(),
+    reason: Type.Literal('port-error'),
+    message: Type.String()
+  })
 ]);
 export type DmxOutputStatus = Static<typeof DmxOutputStatusSchema>;
 
@@ -117,12 +125,32 @@ export const DataFolderSchema = Type.Object({
 });
 export type DataFolder = Static<typeof DataFolderSchema>;
 
-/** opening the data folder in the file explorer; `failed` e.g. when the folder was deleted */
+/**
+ * opening the data folder in the file explorer; `refused` in Show mode, `failed` e.g. when the folder was deleted, with
+ * the raw text of the shell
+ */
 export const OpenDataFolderResultSchema = Type.Union([
   Type.Object({type: Type.Literal('opened')}),
+  Type.Object({type: Type.Literal('refused')}),
   Type.Object({type: Type.Literal('failed'), message: Type.String()})
 ]);
 export type OpenDataFolderResult = Static<typeof OpenDataFolderResultSchema>;
+
+/** the languages of the UI; English is the source language, the texts in the code */
+export const LocaleSchema = Type.Union([Type.Literal('en'), Type.Literal('de')]);
+export type Locale = Static<typeof LocaleSchema>;
+
+/** the language chosen in the app, kept in the settings; `none` until one is chosen, then the OS language decides */
+export const ChosenLocaleSchema = Type.Union([
+  Type.Object({type: Type.Literal('none')}),
+  Type.Object({type: Type.Literal('chosen'), locale: LocaleSchema})
+]);
+export type ChosenLocale = Static<typeof ChosenLocaleSchema>;
+
+export const SetLocaleRequestSchema = Type.Object({
+  locale: LocaleSchema
+});
+export type SetLocaleRequest = Static<typeof SetLocaleRequestSchema>;
 
 /**
  * Two independent locks, both on after every start. The mode: in Show mode fixtures can be played, not changed; Setup
@@ -177,6 +205,9 @@ export const parseSetChannelValuesRequest = (payload: unknown): SetChannelValues
 
 export const parseConnectRequest = (payload: unknown): ConnectRequest | undefined =>
   Value.Check(ConnectRequestSchema, payload) ? payload : undefined;
+
+export const parseSetLocaleRequest = (payload: unknown): SetLocaleRequest | undefined =>
+  Value.Check(SetLocaleRequestSchema, payload) ? payload : undefined;
 
 export const parseUnlockRequest = (payload: unknown): UnlockRequest | undefined =>
   Value.Check(UnlockRequestSchema, payload) ? payload : undefined;

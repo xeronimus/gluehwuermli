@@ -1,6 +1,10 @@
 import {useId, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
 
+import type {I18n} from '@lingui/core';
+import {msg} from '@lingui/core/macro';
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {FIXTURE_DESCRIPTION_MAX_LENGTH} from '@shared/ipc';
 
 import MarkdownText from '../commons/MarkdownText';
@@ -12,9 +16,9 @@ const DESCRIPTION_ROWS = 6;
 
 type DescriptionMode = 'edit' | 'preview';
 
-const DESCRIPTION_MODES: readonly Mode<DescriptionMode>[] = [
-  {id: 'edit', label: 'Edit', Icon: EditIcon},
-  {id: 'preview', label: 'Preview', Icon: PreviewIcon}
+const descriptionModes = (i18n: I18n): readonly Mode<DescriptionMode>[] => [
+  {id: 'edit', label: i18n._(msg`Edit`), Icon: EditIcon},
+  {id: 'preview', label: i18n._(msg`Preview`), Icon: PreviewIcon}
 ];
 
 interface DescriptionFieldProps {
@@ -27,6 +31,7 @@ interface DescriptionFieldProps {
  * preview is shown, so the cursor and the scroll position survive the toggle.
  */
 const DescriptionField = ({description, onChange}: DescriptionFieldProps) => {
+  const {t, i18n} = useLingui();
   const [mode, setMode] = useState<DescriptionMode>('edit');
   const textareaId = useId();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,8 +48,10 @@ const DescriptionField = ({description, onChange}: DescriptionFieldProps) => {
     <div className={field}>
       {/* the toggle is outside the label, so a click on it doesn't focus the hidden textarea */}
       <div className={descriptionHeader}>
-        <label htmlFor={textareaId}>Description</label>
-        <ModeToggle modes={DESCRIPTION_MODES} activeId={mode} onSelect={selectMode} />
+        <label htmlFor={textareaId}>
+          <Trans>Description</Trans>
+        </label>
+        <ModeToggle modes={descriptionModes(i18n)} activeId={mode} onSelect={selectMode} />
       </div>
       <textarea
         ref={textareaRef}
@@ -54,13 +61,15 @@ const DescriptionField = ({description, onChange}: DescriptionFieldProps) => {
         value={description}
         rows={DESCRIPTION_ROWS}
         maxLength={FIXTURE_DESCRIPTION_MAX_LENGTH}
-        placeholder="Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
+        placeholder={t`Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…`}
         onChange={(event) => onChange(event.target.value)}
       />
       {mode === 'preview' && (
         <div className={descriptionPreview}>
           {description.trim() === '' ? (
-            <span className={previewPlaceholder}>Nothing to preview</span>
+            <span className={previewPlaceholder}>
+              <Trans>Nothing to preview</Trans>
+            </span>
           ) : (
             <MarkdownText text={description} />
           )}

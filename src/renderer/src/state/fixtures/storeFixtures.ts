@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import {fixtureSetupOf} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 import type {SerialQueue} from '@shared/serialQueue';
@@ -16,8 +18,15 @@ export interface StoreFixturesDependencies {
   log: {error: (...message: unknown[]) => void};
 }
 
-/** changes the fixture list; resolves to whether the change was stored */
-export type StoreFixtures = (change: (fixtures: readonly Fixture[]) => Fixture[], failure: string) => Promise<boolean>;
+/**
+ * changes the fixture list; resolves to whether the change was stored. A failure shows `failure` and is logged as
+ * "`action` failed" (in English: a production build keeps only the hashed id of `failure`)
+ */
+export type StoreFixtures = (
+  change: (fixtures: readonly Fixture[]) => Fixture[],
+  action: string,
+  failure: MessageDescriptor
+) => Promise<boolean>;
 
 /**
  * Stores the changed list first and only then shows it: unlike a fader move, a lost change to the setup would go
@@ -25,7 +34,7 @@ export type StoreFixtures = (change: (fixtures: readonly Fixture[]) => Fixture[]
  */
 export const storeFixturesWith =
   ({getState, fixtureService, runSerially, log}: StoreFixturesDependencies): StoreFixtures =>
-  (change, failure) =>
+  (change, action, failure) =>
     runSerially(async () => {
       const fixtures = change(selectFixtures(getState()));
       try {
@@ -34,7 +43,7 @@ export const storeFixturesWith =
         getState().setFixturesError(undefined);
         return true;
       } catch (error) {
-        log.error(failure, error);
+        log.error(`${action} failed`, error);
         getState().setFixturesError(failure);
         return false;
       }

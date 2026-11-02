@@ -1,3 +1,5 @@
+import {msg} from '@lingui/core/macro';
+
 import logger from '@/data/service/Logger';
 import {dmxService} from '@/data/service/services';
 
@@ -14,7 +16,7 @@ export function useActionConnectOutput() {
       setOutputStatus(await dmxService.connect(path));
     } catch (error) {
       logger.error(`connecting to ${path} failed`, error);
-      setOutputError(`Could not connect to ${path}`);
+      setOutputError(msg`Could not connect to ${path}`);
     }
   };
 }
@@ -29,7 +31,7 @@ export function useActionDisconnectOutput() {
       setOutputStatus(await dmxService.disconnect());
     } catch (error) {
       logger.error('disconnecting failed', error);
-      setOutputError('Could not disconnect');
+      setOutputError(msg`Could not disconnect`);
     }
   };
 }
