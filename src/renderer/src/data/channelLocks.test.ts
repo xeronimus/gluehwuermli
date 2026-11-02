@@ -8,7 +8,8 @@ import {
   isAtCap,
   isChannelLockOn,
   isFaderLocked,
-  isPresetLocked
+  isPresetLocked,
+  isSceneCapped
 } from './channelLocks';
 
 const laserBox: Fixture = {
@@ -92,6 +93,24 @@ describe('isPresetLocked', () => {
     ).toBe(false);
     expect(isPresetLocked(laserBox, presetOf([{offset: 0, value: 255}]), limits)).toBe(false);
     expect(isPresetLocked(laserBox, presetOf([{offset: 1, value: 255}]), new Map())).toBe(false);
+  });
+});
+
+describe('isSceneCapped', () => {
+  const sceneOf = (values: {offset: number; value: number}[]) => ({
+    id: 'show',
+    name: 'Show',
+    fixtures: [{fixtureId: 'box', values}]
+  });
+
+  test('a scene setting a channel above its cap is capped', () => {
+    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [laserBox], limits)).toBe(true);
+  });
+
+  test('within the caps, without caps, or on a fixture that is gone, it is not', () => {
+    expect(isSceneCapped(sceneOf([{offset: 2, value: 50}]), [laserBox], limits)).toBe(false);
+    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [laserBox], new Map())).toBe(false);
+    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [], limits)).toBe(false);
   });
 });
 
