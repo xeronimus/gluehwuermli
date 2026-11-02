@@ -53,6 +53,10 @@ msgstr "A preset is a button on a fixture that sets several of its channels at o
 msgid "A preset name can have at most {maxLength} characters"
 msgstr "A preset name can have at most {maxLength} characters"
 
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "A scene name can have at most {maxLength} characters"
+msgstr "A scene name can have at most {maxLength} characters"
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 msgstr "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
@@ -73,6 +77,10 @@ msgstr "Add fixture"
 msgid "Add preset"
 msgstr "Add preset"
 
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Add scene"
+msgstr "Add scene"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Address"
 msgstr "Address"
@@ -89,12 +97,21 @@ msgstr "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, 
 msgid "Apply the preset {presetName}"
 msgstr "Apply the preset {presetName}"
 
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Apply the scene {sceneName}"
+msgstr "Apply the scene {sceneName}"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Apply the scene {sceneName}; locked channels go only up to their cap"
+msgstr "Apply the scene {sceneName}; locked channels go only up to their cap"
+
 #: src/renderer/src/components/settings/SettingsView.tsx
 msgid "Asking whether the app is locked…"
 msgstr "Asking whether the app is locked…"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Cancel"
@@ -161,6 +178,10 @@ msgstr "Channels ({channelCount})"
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
 msgstr "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Choose at least one fixture"
+msgstr "Choose at least one fixture"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
@@ -270,6 +291,14 @@ msgstr "Delete {fixtureName}"
 msgid "Delete the fixture {fixtureName}?"
 msgstr "Delete the fixture {fixtureName}?"
 
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Delete the scene {sceneName}"
+msgstr "Delete the scene {sceneName}"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Delete the scene {sceneName}?"
+msgstr "Delete the scene {sceneName}?"
+
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Description"
 msgstr "Description"
@@ -299,9 +328,18 @@ msgstr "Edit"
 msgid "Edit {fixtureName}"
 msgstr "Edit {fixtureName}"
 
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Edit the scene {sceneName}"
+msgstr "Edit the scene {sceneName}"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
 msgstr "Every channel needs a name"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Every fixture of the scene needs at least one channel"
+msgstr "Every fixture of the scene needs at least one channel"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every preset needs a name"
@@ -330,6 +368,10 @@ msgstr "Fixtures and presets can be changed, and the Channels view is open. Back
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
 msgstr "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Fixtures in the scene"
+msgstr "Fixtures in the scene"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
@@ -396,6 +438,7 @@ msgid "Mode"
 msgstr "Mode"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Name"
 msgstr "Name"
 
@@ -419,6 +462,10 @@ msgstr "New fixture"
 #: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "New password"
 msgstr "New password"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "New scene"
+msgstr "New scene"
 
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Next channels"
@@ -548,12 +595,29 @@ msgstr "Repeat the new password"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Save"
 msgstr "Save"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Save current values"
+msgstr "Save current values"
 
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "Save the current values of {fixtureName} as a preset"
 msgstr "Save the current values of {fixtureName} as a preset"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Scene editor"
+msgstr "Scene editor"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Scene values must be whole numbers from {minValue} to {maxValue}"
+msgstr "Scene values must be whole numbers from {minValue} to {maxValue}"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Scenes"
+msgstr "Scenes"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Search the serial ports again"
@@ -727,6 +791,26 @@ msgstr "The preset {preset} sets a channel more than once"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The preset {preset} sets a channel the fixture doesn't have"
 msgstr "The preset {preset} sets a channel the fixture doesn't have"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene names a fixture that doesn't exist"
+msgstr "The scene names a fixture that doesn't exist"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene names a fixture twice"
+msgstr "The scene names a fixture twice"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene needs a name"
+msgstr "The scene needs a name"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene sets a channel its fixture doesn't have"
+msgstr "The scene sets a channel its fixture doesn't have"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene sets a channel twice"
+msgstr "The scene sets a channel twice"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."

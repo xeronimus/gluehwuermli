@@ -7,6 +7,7 @@ import {
   changingFixturesAndScenes,
   editedScene,
   sceneChannelValues,
+  sceneEditErrors,
   withFittedScenes,
   withScene,
   withoutScene
@@ -193,5 +194,18 @@ describe('changingFixturesAndScenes', () => {
     expect(change(setupOf(fixtures, [intro, outro]))).toEqual(
       setupOf([par], [{...intro, fixtures: [intro.fixtures[0]]}])
     );
+  });
+});
+
+describe('sceneEditErrors', () => {
+  test('a named scene of at least one fixture can be saved', () => {
+    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['par']})).toEqual([]);
+  });
+
+  test('not without a name, or without a fixture that exists', () => {
+    expect(sceneEditErrors(fixtures, {name: ' ', fixtureIds: ['par']})).toEqual([{type: 'scene-name-missing'}]);
+    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['laser']})).toEqual([
+      {type: 'scene-fixtures-missing'}
+    ]);
   });
 });

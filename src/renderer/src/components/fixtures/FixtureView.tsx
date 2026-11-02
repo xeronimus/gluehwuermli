@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import type {Fixture} from '@shared/ipc';
+import type {Fixture, Scene} from '@shared/ipc';
 
 import {overlapMessage} from '@/i18n/messages/fixtureMessages';
 import {useActionLoadFixtures} from '@/state/actionHooks/loadFixtures';
@@ -16,12 +16,19 @@ import {AddIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
 import {errorMessage, fixtureGroups, fixtureView, footer, message, warnings} from './FixtureView.css';
+import SceneButtons from './SceneButtons';
+import SceneEditor from './SceneEditor';
 
-type Editing = {type: 'none'} | {type: 'adding'} | {type: 'editing'; fixture: Fixture};
+type Editing =
+  | {type: 'none'}
+  | {type: 'adding'}
+  | {type: 'editing'; fixture: Fixture}
+  | {type: 'adding-scene'}
+  | {type: 'editing-scene'; scene: Scene};
 
 const NOT_EDITING: Editing = {type: 'none'};
 
-/** one control group per fixture, and adding, editing and deleting them in Setup mode */
+/** the scene buttons and one control group per fixture, and adding, editing and deleting both in Setup mode */
 const FixtureView = () => {
   const {t, i18n} = useLingui();
   const fixtureSetup = useAppStore((state) => state.fixtureSetup);
@@ -70,8 +77,8 @@ const FixtureView = () => {
     }
   };
 
-  // while editing, the editor alone: it shows its own shared addresses, the list would only be clutter
-  if (editing.type !== 'none') {
+  // while editing a fixture, the editor alone: it shows its own shared addresses, the list would only be clutter
+  if (editing.type === 'adding' || editing.type === 'editing') {
     return (
       <div className={fixtureView}>
         {error && <span className={errorMessage}>{i18n._(error)}</span>}
@@ -87,6 +94,17 @@ const FixtureView = () => {
   return (
     <div className={fixtureView}>
       {error && <span className={errorMessage}>{i18n._(error)}</span>}
+
+      <SceneButtons onEdit={setupMode ? (scene) => setEditing({type: 'editing-scene', scene}) : undefined} />
+
+      {/* above the fixtures, not in place of them: the look is set with their faders while the scene is named */}
+      {(editing.type === 'adding-scene' || editing.type === 'editing-scene') && (
+        <SceneEditor
+          key={editing.type === 'editing-scene' ? editing.scene.id : 'new'}
+          scene={editing.type === 'editing-scene' ? editing.scene : undefined}
+          onClose={() => setEditing(NOT_EDITING)}
+        />
+      )}
 
       {overlaps.length > 0 && (
         <ul className={warnings}>
@@ -122,8 +140,11 @@ const FixtureView = () => {
       </div>
 
       {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
-      {setupMode && (
+      {setupMode && editing.type === 'none' && (
         <div className={footer}>
+          <Button onClick={() => setEditing({type: 'adding-scene'})} disabled={fixtures.length === 0}>
+            <AddIcon /> <Trans>Add scene</Trans>
+          </Button>
           <Button onClick={() => setEditing({type: 'adding'})}>
             <AddIcon /> <Trans>Add fixture</Trans>
           </Button>

@@ -7,8 +7,11 @@ import {duplicatesOf, isBlank} from './validation';
  * editing, the main process refuses to store or load a setup that has any.
  */
 
+/** one empty list, so a store selector returns the same value every time */
+const NO_SCENES: readonly Scene[] = [];
+
 /** the setup's scenes; none in a file from before scenes existed */
-export const setupScenes = (setup: FixtureSetup): readonly Scene[] => setup.scenes ?? [];
+export const setupScenes = (setup: FixtureSetup): readonly Scene[] => setup.scenes ?? NO_SCENES;
 
 /** what keeps a scene from being saved, as a code (said in the UI language by the renderer) */
 export type SceneError =
