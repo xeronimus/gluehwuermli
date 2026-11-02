@@ -42,8 +42,8 @@ msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Se
 msgstr "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
-msgstr "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
+msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
+msgstr "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
@@ -52,6 +52,10 @@ msgstr "A preset is a button on a fixture that sets several of its channels at o
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A preset name can have at most {maxLength} characters"
 msgstr "A preset name can have at most {maxLength} characters"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
+msgstr "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
 
 #: src/renderer/src/i18n/messages/sceneMessages.ts
 msgid "A scene name can have at most {maxLength} characters"
@@ -357,17 +361,17 @@ msgstr "Finding out what a device does"
 msgid "Fixture editor"
 msgstr "Fixture editor"
 
-#: src/renderer/src/components/settings/ModeSection.tsx
-msgid "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
-msgstr "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
-
-#: src/renderer/src/components/settings/ModeSection.tsx
-msgid "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
-msgstr "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
-
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Fixtures in the scene"
 msgstr "Fixtures in the scene"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Fixtures, presets and scenes can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
+msgstr "Fixtures, presets and scenes can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
+msgstr "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
@@ -612,6 +616,7 @@ msgid "Scene values must be whole numbers from {minValue} to {maxValue}"
 msgstr "Scene values must be whole numbers from {minValue} to {maxValue}"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
+#: src/renderer/src/components/help/UserManual.tsx
 msgid "Scenes"
 msgstr "Scenes"
 
@@ -649,8 +654,8 @@ msgid "Setup mode"
 msgstr "Setup mode"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
-msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
+msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
+msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
 
 #: src/renderer/src/components/App.tsx
 msgid "Show"
@@ -697,8 +702,8 @@ msgid "The <0>hint</0> is shown below the faders, for what you need while playin
 msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app always starts in <0>Show mode</0>: the fixtures and their presets can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
-msgstr "The app always starts in <0>Show mode</0>: the fixtures and their presets can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
@@ -827,6 +832,10 @@ msgstr "The values of the preset {preset} must be whole numbers from {minValue} 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 #: src/renderer/src/components/fixtures/FixtureView.tsx
