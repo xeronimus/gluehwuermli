@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import fireflyLogo from '@resources/favicon/favicon-96x96.png';
+import fireflyLogo from '@assets/favicon/favicon-96x96.png';
 
 import {outputStatusMessage} from '@/i18n/messages/outputMessages';
 import {selectActiveChannelCount} from '@/state/channels/channelsSelectors';

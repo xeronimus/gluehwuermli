@@ -6,14 +6,14 @@ rules. What the app is, its architecture and its project structure are in `CLAUD
 ## Tooling and formatting
 
 - **TypeScript strict mode**, with `noUnusedLocals` and `noUnusedParameters`.
-- **Prettier** does all formatting (`.prettierrc`, the same as my-life's plus the `@shared/` and `@resources/` groups):
+- **Prettier** does all formatting (`.prettierrc`, the same as my-life's plus the `@shared/` and `@assets/` groups):
   - single quotes
   - no bracket spacing (`{a, b}`, not `{ a, b }`)
   - no trailing commas
   - print width 120
   - 2 spaces indentation
   - LF line endings
-- **Import order** (sorted by the Prettier plugin): `react` > third-party packages > `@shared/` > `@resources/` > `@/` >
+- **Import order** (sorted by the Prettier plugin): `react` > third-party packages > `@shared/` > `@assets/` > `@/` >
   relative imports.
 - **Path alias:** `@/` is the source root of the current process (main or renderer). Use it for imports that cross two
   or more directory levels (`../../` and deeper); keep `./` and `../` otherwise. `scripts/normalizeImports.mjs` rewrites

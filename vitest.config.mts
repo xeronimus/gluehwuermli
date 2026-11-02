@@ -7,7 +7,7 @@ import {linguiMacroPlugin} from './lingui-macro-plugin.mts';
 
 // the same aliases as electron.vite.config.ts, one project per process since `@/` differs between them
 const sharedAlias = {'@shared': resolve('src/shared')};
-const resourcesAlias = {'@resources': resolve('src/resources')};
+const assetsAlias = {'@assets': resolve('src/assets')};
 
 export default defineConfig({
   test: {
@@ -29,7 +29,7 @@ export default defineConfig({
       {
         extends: true,
         plugins: [linguiMacroPlugin(), vanillaExtractPlugin(), lingui()],
-        resolve: {alias: {...sharedAlias, ...resourcesAlias, '@': resolve('src/renderer/src')}},
+        resolve: {alias: {...sharedAlias, ...assetsAlias, '@': resolve('src/renderer/src')}},
         test: {name: 'renderer', include: ['src/renderer/src/**/*.test.{ts,tsx}']}
       }
     ]

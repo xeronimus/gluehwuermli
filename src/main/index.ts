@@ -1,7 +1,7 @@
 import {BrowserWindow, app, screen, shell} from 'electron';
 import {join} from 'node:path';
 
-import appIcon from '../resources/favicon/android-chrome-512x512.png?asset';
+import appIcon from '../assets/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
 import {fixtureIpcHandlers} from './ipc/fixtureIpcHandlers';
 import {localeIpcHandlers} from './ipc/localeIpcHandlers';
