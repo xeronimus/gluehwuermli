@@ -70,7 +70,7 @@ src/
     ipcChannels.ts           # IPC channel names (kept apart so the preload doesn't bundle TypeBox)
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
-    dmxBridge.ts             # the API the preload exposes as window.gluehwuermli
+    preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
     links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
     serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
   main/                      # Electron main process
@@ -101,7 +101,7 @@ src/
       portDetection.ts       # FTDI ids of the Pro
       portMemory.ts          # remembers the last connected port in the settings, connects to it on start (not with
                              # the simulated output)
-  preload/index.ts           # contextBridge: the DmxBridge over ipcRenderer
+  preload/index.ts           # contextBridge: the PreloadBridge over ipcRenderer
   renderer/
     index.html               # CSP
     tsconfig.json            # the renderer's own (DOM, JSX)

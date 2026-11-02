@@ -1,11 +1,11 @@
 import {IpcRendererEvent, contextBridge, ipcRenderer} from 'electron';
 
-import {DMX_BRIDGE_GLOBAL, DmxBridge} from '@shared/dmxBridge';
 import type {DmxOutputStatus, LockStatus} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
+import {PRELOAD_BRIDGE_GLOBAL, PreloadBridge} from '@shared/preloadBridge';
 
 /** The only bridge between renderer and main: a narrow, typed API instead of ipcRenderer itself. */
-const dmxBridge: DmxBridge = {
+const preloadBridge: PreloadBridge = {
   setChannel: (channel, value) => ipcRenderer.send(IpcChannel.SET_CHANNEL, {channel, value}),
   setChannelValues: (values) => ipcRenderer.send(IpcChannel.SET_CHANNEL_VALUES, {values}),
   listPorts: () => ipcRenderer.invoke(IpcChannel.LIST_PORTS),
@@ -45,4 +45,4 @@ const dmxBridge: DmxBridge = {
   }
 };
 
-contextBridge.exposeInMainWorld(DMX_BRIDGE_GLOBAL, dmxBridge);
+contextBridge.exposeInMainWorld(PRELOAD_BRIDGE_GLOBAL, preloadBridge);
