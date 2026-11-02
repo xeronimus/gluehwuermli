@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-02
+
 ### Added
 
 - The app is in German, too: an EN/DE switch in the top bar changes every text without a restart, also in Show mode. The
@@ -53,6 +55,7 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/xeronimus/gluehwuermli/releases/tag/v0.1.0
