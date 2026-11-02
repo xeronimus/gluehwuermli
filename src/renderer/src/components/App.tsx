@@ -28,7 +28,7 @@ type View = 'fixtures' | 'channels' | 'settings' | 'help';
 
 /** the raw channels reach every address, the fixtures only theirs: Setup mode only */
 const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
-  {id: 'fixtures', label: i18n._(msg`Fixtures`), Icon: FixturesIcon},
+  {id: 'fixtures', label: i18n._(msg`Show`), Icon: FixturesIcon},
   // the raw channels, e.g. to find out what a new device does on which channel
   {id: 'channels', label: i18n._(msg`Channels`), Icon: ChannelsIcon, disabled: !setupMode},
   // unlocking Setup mode and the channel lock

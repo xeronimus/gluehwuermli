@@ -38,8 +38,8 @@ msgid "A <0>preset</0> is a button on the fixture that sets several channels at 
 msgstr "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
-msgstr "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
+msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
+msgstr "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
@@ -357,10 +357,6 @@ msgstr "Finding out what a device does"
 msgid "Fixture editor"
 msgstr "Fixture editor"
 
-#: src/renderer/src/components/App.tsx
-msgid "Fixtures"
-msgstr "Fixtures"
-
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
 msgstr "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
@@ -655,6 +651,10 @@ msgstr "Setup mode"
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
 msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
+
+#: src/renderer/src/components/App.tsx
+msgid "Show"
+msgstr "Show"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Show mode"

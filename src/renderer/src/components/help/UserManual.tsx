@@ -125,7 +125,7 @@ const UserManual = () => (
       <p>
         <Trans>
           A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press{' '}
-          <strong>Add fixture</strong> in the <strong>Fixtures</strong> view:
+          <strong>Add fixture</strong> in the <strong>Show</strong> view:
         </Trans>
       </p>
       <ol>
