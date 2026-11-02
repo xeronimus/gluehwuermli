@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import {LockState, LockStatusState} from './LockState';
 
 export type LockStateSetter = (
@@ -8,7 +10,7 @@ export type LockStateSetter = (
 
 export interface LockActions {
   setLockStatus: (lockStatus: LockStatusState) => void;
-  setLockError: (lockError: string | undefined) => void;
+  setLockError: (lockError: MessageDescriptor | undefined) => void;
 }
 
 export const getLockActions = (set: LockStateSetter): LockActions => ({

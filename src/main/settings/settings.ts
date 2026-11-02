@@ -1,6 +1,8 @@
 import Type, {type Static} from 'typebox';
 import Value from 'typebox/value';
 
+import {LocaleSchema} from '@shared/ipc';
+
 const HEX_PATTERN = '^[0-9a-f]+$';
 
 /** a salted scrypt hash of the password, never the password itself (lock/passwordHash.ts) */
@@ -22,7 +24,9 @@ export const SettingsSchema = Type.Object({
   /** none yet: the next unlock sets one */
   password: Type.Optional(PasswordHashSchema),
   /** the port the output was last connected to, connected again on start (dmx/portMemory.ts) */
-  outputPortPath: Type.Optional(Type.String({minLength: 1}))
+  outputPortPath: Type.Optional(Type.String({minLength: 1})),
+  /** the language chosen in the app; without it, the OS language decides */
+  locale: Type.Optional(LocaleSchema)
 });
 export type Settings = Static<typeof SettingsSchema>;
 

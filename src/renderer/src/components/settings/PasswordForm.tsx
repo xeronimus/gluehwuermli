@@ -1,8 +1,11 @@
 import {FormEvent, useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {PASSWORD_MAX_LENGTH} from '@shared/ipc';
 
 import {passwordFormError} from '@/data/passwordForm';
+import {passwordFormErrorMessage} from '@/i18n/messages/passwordMessages';
 import type {PasswordOutcome} from '@/state/actionHooks/lockActions';
 
 import Button from '../commons/Button';
@@ -21,13 +24,18 @@ const EMPTY_FORM = {password: '', confirmation: ''};
 
 /** the password, inline; Electron has no window.prompt. Closes once the main process accepted it */
 const PasswordForm = ({isNewPassword, submitLabel, onSubmit, onClose}: PasswordFormProps) => {
+  const {t, i18n} = useLingui();
   const [form, setForm] = useState(EMPTY_FORM);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const error = passwordFormError(form, isNewPassword);
   // nothing to complain about before anything is typed
-  const shownError = wrongPassword ? 'Wrong password' : form.password ? error : undefined;
+  const shownError = wrongPassword
+    ? t`Wrong password`
+    : form.password && error
+      ? i18n._(passwordFormErrorMessage(error))
+      : undefined;
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -60,8 +68,8 @@ const PasswordForm = ({isNewPassword, submitLabel, onSubmit, onClose}: PasswordF
         type="password"
         value={form.password}
         maxLength={PASSWORD_MAX_LENGTH}
-        placeholder={isNewPassword ? 'New password' : 'Password'}
-        aria-label={isNewPassword ? 'New password' : 'Password'}
+        placeholder={isNewPassword ? t`New password` : t`Password`}
+        aria-label={isNewPassword ? t`New password` : t`Password`}
         autoFocus
         disabled={submitting}
         onChange={(event) => {
@@ -75,8 +83,8 @@ const PasswordForm = ({isNewPassword, submitLabel, onSubmit, onClose}: PasswordF
           type="password"
           value={form.confirmation}
           maxLength={PASSWORD_MAX_LENGTH}
-          placeholder="Repeat it"
-          aria-label="Repeat the new password"
+          placeholder={t`Repeat it`}
+          aria-label={t`Repeat the new password`}
           disabled={submitting}
           onChange={(event) => setForm({...form, confirmation: event.target.value})}
         />
@@ -85,7 +93,7 @@ const PasswordForm = ({isNewPassword, submitLabel, onSubmit, onClose}: PasswordF
         <UnlockIcon /> {submitLabel}
       </Button>
       <Button onClick={onClose} disabled={submitting}>
-        Cancel
+        <Trans>Cancel</Trans>
       </Button>
       {shownError && <span className={errorMessage}>{shownError}</span>}
     </form>

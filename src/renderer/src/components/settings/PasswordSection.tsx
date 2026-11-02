@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Trans} from '@lingui/react/macro';
+
 import Button from '../commons/Button';
 import {PasswordIcon} from '../commons/icons';
 import ChangePasswordForm from './ChangePasswordForm';
@@ -12,11 +14,17 @@ const PasswordSection = () => {
 
   return (
     <section className={settingsSection}>
-      <h2>Password</h2>
+      <h2>
+        <Trans>Password</Trans>
+      </h2>
       <p className={message}>
-        {changed
-          ? 'The password is changed. From now on, the new one unlocks Setup mode and lifts the channel lock.'
-          : 'The password unlocks Setup mode and lifts the channel lock. Changing it needs the current one.'}
+        {changed ? (
+          <Trans>
+            The password is changed. From now on, the new one unlocks Setup mode and lifts the channel lock.
+          </Trans>
+        ) : (
+          <Trans>The password unlocks Setup mode and lifts the channel lock. Changing it needs the current one.</Trans>
+        )}
       </p>
       {changing ? (
         <ChangePasswordForm
@@ -33,7 +41,7 @@ const PasswordSection = () => {
             setChanging(true);
           }}
         >
-          <PasswordIcon /> Change password
+          <PasswordIcon /> <Trans>Change password</Trans>
         </Button>
       )}
     </section>

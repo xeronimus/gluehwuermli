@@ -4,6 +4,7 @@ import {join} from 'node:path';
 import appIcon from '../resources/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
 import {fixtureIpcHandlers} from './ipc/fixtureIpcHandlers';
+import {localeIpcHandlers} from './ipc/localeIpcHandlers';
 import {registerAppIpc} from './ipc/registerAppIpc';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerFixtureIpc} from './ipc/registerFixtureIpc';
@@ -95,7 +96,7 @@ void app.whenReady().then(async () => {
   await applyStoredChannelLimits();
   registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory);
   registerFixtureIpc(fixtureHandlers);
-  registerAppIpc(dataFolder, services.appLock.isSetupMode);
+  registerAppIpc(dataFolder, services.appLock.isSetupMode, localeIpcHandlers(services.settings));
   registerLockIpc(services.appLock);
   // after the channel limits, so the output is capped from its first packet; the renderer gets the status pushed
   void services.portMemory.reconnect();

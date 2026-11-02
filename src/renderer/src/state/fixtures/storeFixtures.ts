@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import {fixtureSetupOf} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 import type {SerialQueue} from '@shared/serialQueue';
@@ -17,7 +19,10 @@ export interface StoreFixturesDependencies {
 }
 
 /** changes the fixture list; resolves to whether the change was stored */
-export type StoreFixtures = (change: (fixtures: readonly Fixture[]) => Fixture[], failure: string) => Promise<boolean>;
+export type StoreFixtures = (
+  change: (fixtures: readonly Fixture[]) => Fixture[],
+  failure: MessageDescriptor
+) => Promise<boolean>;
 
 /**
  * Stores the changed list first and only then shows it: unlike a fader move, a lost change to the setup would go
@@ -34,7 +39,7 @@ export const storeFixturesWith =
         getState().setFixturesError(undefined);
         return true;
       } catch (error) {
-        log.error(failure, error);
+        log.error(failure.message ?? failure.id, error);
         getState().setFixturesError(failure);
         return false;
       }

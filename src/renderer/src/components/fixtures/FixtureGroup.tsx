@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {useLingui} from '@lingui/react/macro';
+
 import type {Fixture} from '@shared/ipc';
 
 import {addressRangeOf, fixtureFaders} from '@/data/fixtureFaders';
@@ -38,6 +40,8 @@ interface FixtureGroupProps {
  * below them. The description is reference material, hidden until opened with the button next to the hint.
  */
 const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
+  const {t} = useLingui();
+  const fixtureName = fixture.name;
   const setChannelValue = useActionSetChannelValue();
   const [descriptionShown, setDescriptionShown] = useState(false);
 
@@ -48,10 +52,10 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         {actions && (
           <>
-            <Button variant="icon" onClick={actions.onEdit} title={`Edit ${fixture.name}`}>
+            <Button variant="icon" onClick={actions.onEdit} title={t`Edit ${fixtureName}`}>
               <EditIcon />
             </Button>
-            <Button variant="icon" onClick={actions.onDelete} title={`Delete ${fixture.name}`}>
+            <Button variant="icon" onClick={actions.onDelete} title={t`Delete ${fixtureName}`}>
               <DeleteIcon />
             </Button>
           </>
@@ -70,7 +74,7 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
             <Button
               variant="icon"
               onClick={() => setDescriptionShown(!descriptionShown)}
-              title={descriptionShown ? 'Hide the description' : 'Show the description'}
+              title={descriptionShown ? t`Hide the description` : t`Show the description`}
             >
               {descriptionShown ? <CollapseIcon /> : <ExpandIcon />}
             </Button>

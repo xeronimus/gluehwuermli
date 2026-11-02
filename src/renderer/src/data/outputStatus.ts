@@ -1,18 +1,6 @@
-import type {DmxOutputStatus, RememberedPort, SerialPortDescription} from '@shared/ipc';
+import type {RememberedPort, SerialPortDescription} from '@shared/ipc';
 
-export const describeOutputStatus = (status: DmxOutputStatus): string => {
-  switch (status.type) {
-    case 'disconnected':
-      return 'Not connected';
-    case 'connecting':
-      return `Connecting to ${status.path}…`;
-    case 'connected':
-      return `Sending on ${status.path}`;
-    case 'failed':
-      return `${status.path}: ${status.message}`;
-  }
-};
-
+/** a port in the select; nothing to translate: the path, the manufacturer and a product name */
 export const describePort = (port: SerialPortDescription): string => {
   const manufacturer = port.manufacturer ? ` (${port.manufacturer})` : '';
   const enttecHint = port.likelyEnttecPro ? ' – Enttec?' : '';

@@ -5,7 +5,8 @@ import {modeToggle, modeVariants} from './ModeToggle.css';
 export interface Mode<Id extends string> {
   id: Id;
   label: string;
-  Icon: ComponentType;
+  /** none for a plain text label, e.g. a language */
+  Icon?: ComponentType;
   /** shown, but can't be selected, e.g. a view not available in Show mode */
   disabled?: boolean;
 }
@@ -28,7 +29,7 @@ const ModeToggle = <Id extends string>({modes, activeId, onSelect}: ModeTogglePr
         disabled={disabled}
         onClick={() => onSelect(id)}
       >
-        <Icon /> {label}
+        {Icon && <Icon />} {label}
       </button>
     ))}
   </div>

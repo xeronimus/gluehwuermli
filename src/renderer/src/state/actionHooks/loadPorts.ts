@@ -1,3 +1,5 @@
+import {msg} from '@lingui/core/macro';
+
 import {preferredPortPath} from '@/data/outputStatus';
 import logger from '@/data/service/Logger';
 import {dmxService} from '@/data/service/services';
@@ -17,7 +19,7 @@ export function useActionLoadPorts() {
       setOutputError(undefined);
     } catch (error) {
       logger.error('listing the serial ports failed', error);
-      setOutputError('Could not list the serial ports');
+      setOutputError(msg`Could not list the serial ports`);
     }
   };
 }

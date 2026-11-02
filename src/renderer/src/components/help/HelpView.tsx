@@ -1,3 +1,5 @@
+import {Trans} from '@lingui/react/macro';
+
 import {REPOSITORY_URL} from '@shared/links';
 
 import {ExternalLinkIcon} from '../commons/icons';
@@ -12,7 +14,9 @@ const HelpView = () => (
     <aside className={sideColumn}>
       <DataFolderSection />
       <section className={sideSection}>
-        <h2>Source code</h2>
+        <h2>
+          <Trans>Source code</Trans>
+        </h2>
         {/* the main process opens it in the system browser, the window itself never leaves the app */}
         <a className={repositoryLink} href={REPOSITORY_URL} target="_blank" rel="noreferrer">
           <ExternalLinkIcon /> {REPOSITORY_URL}

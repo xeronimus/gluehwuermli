@@ -1,0 +1,774 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-11-02 15:53+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/renderer/src/components/output/OutputBar.tsx
+msgid "{activeChannelCount} channels above 0"
+msgstr "{activeChannelCount} channels above 0"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
+msgstr "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
+
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "{path}: {message}"
+msgstr "{path}: {message}"
+
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "{path}: the port was closed, is the widget still plugged in?"
+msgstr "{path}: the port was closed, is the widget still plugged in?"
+
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "{presetName} sets a locked channel"
+msgstr "{presetName} sets a locked channel"
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
+msgstr "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
+msgstr "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
+msgstr "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
+msgstr "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A preset name can have at most {maxLength} characters"
+msgstr "A preset name can have at most {maxLength} characters"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
+msgstr "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
+msgstr "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Add channel"
+msgstr "Add channel"
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Add fixture"
+msgstr "Add fixture"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Add preset"
+msgstr "Add preset"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Address"
+msgstr "Address"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out."
+msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out."
+
+#: src/renderer/src/components/fixtures/DescriptionField.tsx
+msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
+msgstr "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
+
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Apply the preset {presetName}"
+msgstr "Apply the preset {presetName}"
+
+#: src/renderer/src/components/settings/SettingsView.tsx
+msgid "Asking whether the app is locked…"
+msgstr "Asking whether the app is locked…"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+#: src/renderer/src/components/settings/PasswordForm.tsx
+msgid "Cancel"
+msgstr "Cancel"
+
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+#: src/renderer/src/components/settings/PasswordSection.tsx
+msgid "Change password"
+msgstr "Change password"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Channel"
+msgstr "Channel"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Channel {channelNumber}"
+msgstr "Channel {channelNumber}"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label}"
+msgstr "Channel {label}"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} -{DMX_STEP}"
+msgstr "Channel {label} -{DMX_STEP}"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} +{DMX_STEP}"
+msgstr "Channel {label} +{DMX_STEP}"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
+msgstr "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} is capped at {limit} by the channel lock"
+msgstr "Channel {label} is capped at {limit} by the channel lock"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Channel lock"
+msgstr "Channel lock"
+
+#: src/renderer/src/components/output/LockIndicator.tsx
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Channel lock lifted"
+msgstr "Channel lock lifted"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Channel lock on"
+msgstr "Channel lock on"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Channel locks"
+msgstr "Channel locks"
+
+#: src/renderer/src/components/App.tsx
+msgid "Channels"
+msgstr "Channels"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Channels ({channelCount})"
+msgstr "Channels ({channelCount})"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
+msgstr "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
+msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
+
+#: src/renderer/src/components/settings/OutputSection.tsx
+msgid "Connect"
+msgstr "Connect"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Connecting the DMX USB Pro"
+msgstr "Connecting the DMX USB Pro"
+
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "Connecting to {path}…"
+msgstr "Connecting to {path}…"
+
+#: src/renderer/src/state/actionHooks/lockActions.ts
+msgid "Could not change the password"
+msgstr "Could not change the password"
+
+#: src/renderer/src/state/actionHooks/connectOutput.ts
+msgid "Could not connect to {path}"
+msgstr "Could not connect to {path}"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not delete the fixture {fixtureName}"
+msgstr "Could not delete the fixture {fixtureName}"
+
+#: src/renderer/src/state/actionHooks/connectOutput.ts
+msgid "Could not disconnect"
+msgstr "Could not disconnect"
+
+#: src/renderer/src/state/actionHooks/dataFolder.ts
+msgid "Could not find out where the data folder is"
+msgstr "Could not find out where the data folder is"
+
+#: src/renderer/src/state/actionHooks/lockActions.ts
+msgid "Could not lift the channel lock"
+msgstr "Could not lift the channel lock"
+
+#: src/renderer/src/state/actionHooks/loadPorts.ts
+msgid "Could not list the serial ports"
+msgstr "Could not list the serial ports"
+
+#: src/renderer/src/state/actionHooks/loadFixtures.ts
+msgid "Could not load the fixtures"
+msgstr "Could not load the fixtures"
+
+#: src/renderer/src/state/actionHooks/lockActions.ts
+msgid "Could not lock"
+msgstr "Could not lock"
+
+#: src/renderer/src/state/actionHooks/dataFolder.ts
+msgid "Could not open the folder"
+msgstr "Could not open the folder"
+
+#: src/renderer/src/state/actionHooks/dataFolder.ts
+msgid "Could not open the folder: {message}"
+msgstr "Could not open the folder: {message}"
+
+#: src/renderer/src/state/actionHooks/outputStatusSubscription.ts
+msgid "Could not read the output status"
+msgstr "Could not read the output status"
+
+#: src/renderer/src/state/actionHooks/lockSubscription.ts
+msgid "Could not read whether the app is locked"
+msgstr "Could not read whether the app is locked"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not save the fixture {fixtureName}"
+msgstr "Could not save the fixture {fixtureName}"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not save the preset {presetName} of {fixtureName}"
+msgstr "Could not save the preset {presetName} of {fixtureName}"
+
+#: src/renderer/src/state/actionHooks/lockActions.ts
+msgid "Could not turn the channel lock on"
+msgstr "Could not turn the channel lock on"
+
+#: src/renderer/src/state/actionHooks/lockActions.ts
+msgid "Could not unlock"
+msgstr "Could not unlock"
+
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+msgid "Current password"
+msgstr "Current password"
+
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "Data folder"
+msgstr "Data folder"
+
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Delete {fixtureName}"
+msgstr "Delete {fixtureName}"
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Delete the fixture {fixtureName}?"
+msgstr "Delete the fixture {fixtureName}?"
+
+#: src/renderer/src/components/fixtures/DescriptionField.tsx
+msgid "Description"
+msgstr "Description"
+
+#: src/renderer/src/components/settings/OutputSection.tsx
+msgid "Disconnect"
+msgstr "Disconnect"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "e.g. Dimmer"
+msgstr "e.g. Dimmer"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "e.g. PAR left"
+msgstr "e.g. PAR left"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "e.g. Warm white"
+msgstr "e.g. Warm white"
+
+#: src/renderer/src/components/fixtures/DescriptionField.tsx
+msgid "Edit"
+msgstr "Edit"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Edit {fixtureName}"
+msgstr "Edit {fixtureName}"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Every channel needs a name"
+msgstr "Every channel needs a name"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Every preset needs a name"
+msgstr "Every preset needs a name"
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
+msgstr "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Finding out what a device does"
+msgstr "Finding out what a device does"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "Fixture editor"
+msgstr "Fixture editor"
+
+#: src/renderer/src/components/App.tsx
+msgid "Fixtures"
+msgstr "Fixtures"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
+msgstr "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
+msgstr "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
+msgstr "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
+
+#: src/renderer/src/components/App.tsx
+msgid "Help"
+msgstr "Help"
+
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Hide the description"
+msgstr "Hide the description"
+
+#: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
+msgid "Hint"
+msgstr "Hint"
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "How to set up a fixture"
+msgstr "How to set up a fixture"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgstr "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Lift channel lock"
+msgstr "Lift channel lock"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value."
+msgstr "Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value."
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Loading the fixtures…"
+msgstr "Loading the fixtures…"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Lock"
+msgstr "Lock"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts."
+msgstr "Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts."
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in the device's manual. Many devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it."
+msgstr "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in the device's manual. Many devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it."
+
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "Looking up the folder…"
+msgstr "Looking up the folder…"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Max while locked"
+msgstr "Max while locked"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Maximum of channel {row} while locked"
+msgstr "Maximum of channel {row} while locked"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Mode"
+msgstr "Mode"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "Name"
+msgstr "Name"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Name of channel {row}"
+msgstr "Name of channel {row}"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Name of preset {presetNumber}"
+msgstr "Name of preset {presetNumber}"
+
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Name of the new preset"
+msgstr "Name of the new preset"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "New fixture"
+msgstr "New fixture"
+
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+#: src/renderer/src/components/settings/PasswordForm.tsx
+msgid "New password"
+msgstr "New password"
+
+#: src/renderer/src/components/faders/ChannelBankNavigation.tsx
+msgid "Next channels"
+msgstr "Next channels"
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
+msgstr "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "no lock"
+msgstr "no lock"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
+msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
+msgstr "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
+
+#: src/renderer/src/components/settings/PortSelect.tsx
+msgid "No serial port found"
+msgstr "No serial port found"
+
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "Not connected"
+msgstr "Not connected"
+
+#: src/renderer/src/components/fixtures/DescriptionField.tsx
+msgid "Nothing to preview"
+msgstr "Nothing to preview"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Offset"
+msgstr "Offset"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Offset {offset} is used by more than one channel"
+msgstr "Offset {offset} is used by more than one channel"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Offset of channel {row}"
+msgstr "Offset of channel {row}"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Offsets must be whole numbers from 0"
+msgstr "Offsets must be whole numbers from 0"
+
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "Open in Explorer"
+msgstr "Open in Explorer"
+
+#: src/renderer/src/components/output/OutputBar.tsx
+msgid "Open the Settings to choose the port, connect or disconnect"
+msgstr "Open the Settings to choose the port, connect or disconnect"
+
+#: src/renderer/src/components/output/LockIndicator.tsx
+msgid "Open the Settings to lock it"
+msgstr "Open the Settings to lock it"
+
+#: src/renderer/src/components/output/LockIndicator.tsx
+msgid "Open the Settings to turn it on"
+msgstr "Open the Settings to turn it on"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
+msgstr "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
+
+#: src/renderer/src/components/settings/OutputSection.tsx
+msgid "Output"
+msgstr "Output"
+
+#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/settings/PasswordSection.tsx
+msgid "Password"
+msgstr "Password"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+msgstr "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Preset id {id} is used twice"
+msgstr "Preset id {id} is used twice"
+
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Preset name"
+msgstr "Preset name"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Presets"
+msgstr "Presets"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Presets ({presetCount})"
+msgstr "Presets ({presetCount})"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+msgstr "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+
+#: src/renderer/src/components/fixtures/DescriptionField.tsx
+msgid "Preview"
+msgstr "Preview"
+
+#: src/renderer/src/components/faders/ChannelBankNavigation.tsx
+msgid "Previous channels"
+msgstr "Previous channels"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Remove the channel"
+msgstr "Remove the channel"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Remove the preset"
+msgstr "Remove the preset"
+
+#: src/renderer/src/components/settings/PasswordForm.tsx
+msgid "Repeat it"
+msgstr "Repeat it"
+
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+#: src/renderer/src/components/settings/PasswordForm.tsx
+msgid "Repeat the new password"
+msgstr "Repeat the new password"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Save"
+msgstr "Save"
+
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Save the current values of {fixtureName} as a preset"
+msgstr "Save the current values of {fixtureName} as a preset"
+
+#: src/renderer/src/components/settings/OutputSection.tsx
+msgid "Search the serial ports again"
+msgstr "Search the serial ports again"
+
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "Sending on {path}"
+msgstr "Sending on {path}"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Set password and unlock"
+msgstr "Set password and unlock"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
+msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
+msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Setting up a fixture"
+msgstr "Setting up a fixture"
+
+#: src/renderer/src/components/App.tsx
+msgid "Settings"
+msgstr "Settings"
+
+#: src/renderer/src/components/output/LockIndicator.tsx
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Setup mode"
+msgstr "Setup mode"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
+msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Show mode"
+msgstr "Show mode"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Show mode and Setup mode"
+msgstr "Show mode and Setup mode"
+
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Show the description"
+msgstr "Show the description"
+
+#: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
+msgid "Shown below the faders, e.g. warm up 2 min before smoke"
+msgstr "Shown below the faders, e.g. warm up 2 min before smoke"
+
+#: src/renderer/src/components/commons/ErrorBoundary.tsx
+msgid "Something went wrong"
+msgstr "Something went wrong"
+
+#: src/renderer/src/components/help/HelpView.tsx
+msgid "Source code"
+msgstr "Source code"
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "Start address"
+msgstr "Start address"
+
+#: src/renderer/src/components/faders/ChannelBankNavigation.tsx
+msgid "Start channel"
+msgstr "Start channel"
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
+msgstr "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
+msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The app always starts in <0>Show mode</0>: the fixtures and their presets can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+msgstr "The app always starts in <0>Show mode</0>: the fixtures and their presets can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
+msgstr "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
+msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
+
+#: src/renderer/src/state/actionHooks/dataFolder.ts
+msgid "The data folder can only be opened in Setup mode"
+msgstr "The data folder can only be opened in Setup mode"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The description can have at most {maxLength} characters"
+msgstr "The description can have at most {maxLength} characters"
+
+#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+msgid "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
+msgstr "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
+msgstr "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
+msgstr "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The fixture needs a name"
+msgstr "The fixture needs a name"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The fixture needs at least one channel"
+msgstr "The fixture needs at least one channel"
+
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."
+msgstr "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "The highest value while the channel lock is on; empty for no lock"
+msgstr "The highest value while the channel lock is on; empty for no lock"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The hint can have at most {maxLength} characters"
+msgstr "The hint can have at most {maxLength} characters"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
+msgstr "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"
+msgstr "The maximum while locked must be a whole number from {minValue} to {maxValue}"
+
+#: src/renderer/src/i18n/messages/passwordMessages.ts
+msgid "The new password is the current one"
+msgstr "The new password is the current one"
+
+#: src/renderer/src/i18n/messages/passwordMessages.ts
+msgid "The password can have at most {maxLength} characters"
+msgstr "The password can have at most {maxLength} characters"
+
+#: src/renderer/src/components/settings/PasswordSection.tsx
+msgid "The password is changed. From now on, the new one unlocks Setup mode and lifts the channel lock."
+msgstr "The password is changed. From now on, the new one unlocks Setup mode and lifts the channel lock."
+
+#: src/renderer/src/i18n/messages/passwordMessages.ts
+msgid "The password needs at least {minLength} characters"
+msgstr "The password needs at least {minLength} characters"
+
+#: src/renderer/src/components/settings/PasswordSection.tsx
+msgid "The password unlocks Setup mode and lifts the channel lock. Changing it needs the current one."
+msgstr "The password unlocks Setup mode and lifts the channel lock. Changing it needs the current one."
+
+#: src/renderer/src/i18n/messages/passwordMessages.ts
+msgid "The passwords don't match"
+msgstr "The passwords don't match"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The preset {preset} needs at least one channel"
+msgstr "The preset {preset} needs at least one channel"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The preset {preset} sets a channel more than once"
+msgstr "The preset {preset} sets a channel more than once"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The preset {preset} sets a channel the fixture doesn't have"
+msgstr "The preset {preset} sets a channel the fixture doesn't have"
+
+#: src/renderer/src/components/settings/OutputSection.tsx
+msgid "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
+msgstr "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
+msgstr "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue}"
+msgstr "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue}"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
+msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
+
+#: src/renderer/src/components/commons/ErrorBoundary.tsx
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Try again"
+msgstr "Try again"
+
+#: src/renderer/src/components/settings/ChannelLockSection.tsx
+msgid "Turn channel lock on"
+msgstr "Turn channel lock on"
+
+#: src/renderer/src/i18n/messages/passwordMessages.ts
+msgid "Type the current password"
+msgstr "Type the current password"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Unlock"
+msgstr "Unlock"
+
+#: src/renderer/src/components/settings/ModeSection.tsx
+msgid "Unlock Setup mode"
+msgstr "Unlock Setup mode"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Value of {label} in preset {presetNumber}"
+msgstr "Value of {label} in preset {presetNumber}"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "without a name"
+msgstr "without a name"
+
+#: src/renderer/src/components/settings/ChangePasswordForm.tsx
+msgid "Wrong current password"
+msgstr "Wrong current password"
+
+#: src/renderer/src/components/settings/PasswordForm.tsx
+msgid "Wrong password"
+msgstr "Wrong password"

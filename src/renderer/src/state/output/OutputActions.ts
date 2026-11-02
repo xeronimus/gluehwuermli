@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import type {DmxOutputStatus, SerialPortDescription} from '@shared/ipc';
 
 import {OutputState} from './OutputState';
@@ -14,7 +16,7 @@ export interface OutputActions {
   setSelectedPortPath: (selectedPortPath: string | undefined) => void;
   /** a port chosen by hand: selected, and preferred over the remembered port from then on */
   choosePortPath: (chosenPortPath: string | undefined) => void;
-  setOutputError: (outputError: string | undefined) => void;
+  setOutputError: (outputError: MessageDescriptor | undefined) => void;
 }
 
 export const getOutputActions = (set: OutputStateSetter): OutputActions => ({

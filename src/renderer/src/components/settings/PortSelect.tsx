@@ -1,3 +1,5 @@
+import {Trans} from '@lingui/react/macro';
+
 import {describePort} from '@/data/outputStatus';
 import {useAppStore} from '@/state/store';
 
@@ -18,7 +20,11 @@ const PortSelect = ({disabled}: PortSelectProps) => {
       disabled={disabled || ports.length === 0}
       onChange={(event) => choosePortPath(event.target.value || undefined)}
     >
-      {ports.length === 0 && <option value={NO_PORT}>No serial port found</option>}
+      {ports.length === 0 && (
+        <option value={NO_PORT}>
+          <Trans>No serial port found</Trans>
+        </option>
+      )}
       {ports.map((port) => (
         <option key={port.path} value={port.path}>
           {describePort(port)}

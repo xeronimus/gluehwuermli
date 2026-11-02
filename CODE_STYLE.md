@@ -56,6 +56,21 @@ rules. What the app is, its architecture and its project structure are in `CLAUD
 - **Error boundaries around each view** (`App.tsx`).
 - **Icons** only through `components/commons/icons.ts`, never imported from `@tabler/icons-react` directly.
 
+## Texts and languages (Lingui)
+
+- **Every text the user sees goes through Lingui:** `<Trans>` in JSX, `t` from `useLingui()` for attributes
+  (`title`, `placeholder`, `aria-label`) and `window.confirm`, `msg` for a message kept for later (store errors,
+  labels in constants). Write the English text; `pnpm test` extracts it and fails until `de/messages.po` has it.
+- **Named placeholders:** put values in a variable with a telling name first (`const fixtureName = fixture.name`), so
+  the catalog reads `{fixtureName}`, not `{0}`.
+- **No Lingui below the UI:** `shared/`, `main/`, `data/` and `domain/` return codes; `i18n/messages/` translates them
+  (enforced by `src/architecture.test.ts`).
+- **German** is Swiss High German: `ss`, never `ß`; the user is addressed with a lowercase `du`; Swiss words and idioms
+  where they fit. Show mode and Setup mode stay "Show-Modus" and "Setup-Modus". UI labels named in a text (the manual)
+  use the label's German text.
+- **Not translated:** what the user typed (fixture, channel and preset names, notes), port paths and product names,
+  raw error texts of `serialport` or the OS. Everything not aimed at the user (docs, comments, logs) stays English.
+
 ## State (Zustand)
 
 - **Stores built with `combine()`**, state and actions together.
