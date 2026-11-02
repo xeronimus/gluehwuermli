@@ -15,18 +15,21 @@ import {applyLockStatus} from './lockSubscription';
  */
 export type PasswordOutcome = PasswordResult['type'] | 'failed';
 
-/** asks the main process, then shows the status it is in now; a failure ends up in lockError */
+/**
+ * asks the main process, then shows the status it is in now; a failure ends up in lockError and is logged as
+ * "`action` failed" (in English: a production build keeps only the hashed id of `failure`)
+ */
 function useLockCall() {
   const setLockError = useAppStore((state) => state.setLockError);
 
-  return async <T>(call: () => Promise<T>, failure: MessageDescriptor): Promise<T | undefined> => {
+  return async <T>(call: () => Promise<T>, action: string, failure: MessageDescriptor): Promise<T | undefined> => {
     try {
       setLockError(undefined);
       const result = await call();
       applyLockStatus(await lockService.getStatus());
       return result;
     } catch (error) {
-      logger.error(failure.message ?? failure.id, error);
+      logger.error(`${action} failed`, error);
       setLockError(failure);
       return undefined;
     }
@@ -38,20 +41,27 @@ const outcomeOf = (result: PasswordResult | undefined): PasswordOutcome => resul
 export function useActionUnlock() {
   const lockCall = useLockCall();
   return async (password: string): Promise<PasswordOutcome> =>
-    outcomeOf(await lockCall(() => lockService.unlock(password), msg`Could not unlock`));
+    outcomeOf(await lockCall(() => lockService.unlock(password), 'unlocking', msg`Could not unlock`));
 }
 
 /** back to Show mode; the channel lock stays as it is */
 export function useActionLock() {
   const lockCall = useLockCall();
-  return async (): Promise<LockStatus | undefined> => lockCall(() => lockService.lock(), msg`Could not lock`);
+  return async (): Promise<LockStatus | undefined> =>
+    lockCall(() => lockService.lock(), 'locking', msg`Could not lock`);
 }
 
 /** the password is only needed in Show mode */
 export function useActionLiftChannelLock() {
   const lockCall = useLockCall();
   return async (password: string | undefined): Promise<PasswordOutcome> =>
-    outcomeOf(await lockCall(() => lockService.liftChannelLock(password), msg`Could not lift the channel lock`));
+    outcomeOf(
+      await lockCall(
+        () => lockService.liftChannelLock(password),
+        'lifting the channel lock',
+        msg`Could not lift the channel lock`
+      )
+    );
 }
 
 /** Setup mode only; the current password is checked by the main process */
@@ -59,12 +69,16 @@ export function useActionChangePassword() {
   const lockCall = useLockCall();
   return async (currentPassword: string, newPassword: string): Promise<PasswordOutcome> =>
     outcomeOf(
-      await lockCall(() => lockService.changePassword(currentPassword, newPassword), msg`Could not change the password`)
+      await lockCall(
+        () => lockService.changePassword(currentPassword, newPassword),
+        'changing the password',
+        msg`Could not change the password`
+      )
     );
 }
 
 export function useActionLockChannels() {
   const lockCall = useLockCall();
   return async (): Promise<LockStatus | undefined> =>
-    lockCall(() => lockService.lockChannels(), msg`Could not turn the channel lock on`);
+    lockCall(() => lockService.lockChannels(), 'turning the channel lock on', msg`Could not turn the channel lock on`);
 }

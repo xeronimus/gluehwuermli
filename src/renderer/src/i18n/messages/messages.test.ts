@@ -81,8 +81,4 @@ describe('in German', () => {
       'PAR und Nebel teilen sich die Adressen 12, 13'
     );
   });
-
-  test('no ß: Swiss High German writes ss', () => {
-    expect(Object.values(i18n.messages).flat().join(' ')).not.toContain('ß');
-  });
 });

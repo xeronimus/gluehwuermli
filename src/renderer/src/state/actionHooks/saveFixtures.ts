@@ -20,8 +20,8 @@ const storeFixturesUncapped = storeFixturesWith({
 });
 
 /** a saved setup may lock a channel that is above its new cap: the main process capped it already */
-const storeFixtures: StoreFixtures = async (change, failure) => {
-  const stored = await storeFixturesUncapped(change, failure);
+const storeFixtures: StoreFixtures = async (change, action, failure) => {
+  const stored = await storeFixturesUncapped(change, action, failure);
   capShownChannelValues();
   return stored;
 };
@@ -35,12 +35,20 @@ const couldNotSavePreset = (presetName: string, {name: fixtureName}: Fixture) =>
 /** adds the fixture, or replaces the one with its id */
 export function useActionSaveFixture() {
   return (fixture: Fixture) =>
-    storeFixtures((fixtures) => withFixture(fixtures, fixture), couldNotSaveFixture(fixture));
+    storeFixtures(
+      (fixtures) => withFixture(fixtures, fixture),
+      `saving the fixture ${fixture.name}`,
+      couldNotSaveFixture(fixture)
+    );
 }
 
 export function useActionDeleteFixture() {
   return (fixture: Fixture) =>
-    storeFixtures((fixtures) => withoutFixture(fixtures, fixture.id), couldNotDeleteFixture(fixture));
+    storeFixtures(
+      (fixtures) => withoutFixture(fixtures, fixture.id),
+      `deleting the fixture ${fixture.name}`,
+      couldNotDeleteFixture(fixture)
+    );
 }
 
 /** stores the fixture's current fader values as a new preset of all its channels */
@@ -49,6 +57,7 @@ export function useActionSavePreset() {
     const preset = capturePreset(fixture, useAppStore.getState().channelValues, crypto.randomUUID(), name);
     return storeFixtures(
       (fixtures) => withPreset(fixtures, fixture.id, preset),
+      `saving the preset ${preset.name} of ${fixture.name}`,
       couldNotSavePreset(preset.name, fixture)
     );
   };

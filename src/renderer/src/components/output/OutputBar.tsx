@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 
-import {Trans, useLingui} from '@lingui/react/macro';
+import {Plural, useLingui} from '@lingui/react/macro';
 
 import fireflyLogo from '@assets/favicon/favicon-96x96.png';
 
@@ -42,7 +42,7 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       </button>
       {error && <span className={outputError}>{i18n._(error)}</span>}
       <span className={activeChannels}>
-        <Trans>{activeChannelCount} channels above 0</Trans>
+        <Plural value={activeChannelCount} one="# channel above 0" other="# channels above 0" />
       </span>
       <LocaleSwitch />
     </header>
