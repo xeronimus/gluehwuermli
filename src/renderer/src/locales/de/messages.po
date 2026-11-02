@@ -38,8 +38,8 @@ msgid "A <0>preset</0> is a button on the fixture that sets several channels at 
 msgstr "Ein <0>Preset</0> ist ein Knopf am Gerät, der mehrere Kanäle aufs Mal setzt, z. B. «Warmweiss». Kanäle ohne Häkchen bleiben, wie sie sind. Am schnellsten machst du eines, indem du die Fader einstellst und auf den Speichern-Knopf neben den Presets drückst."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
-msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmaschine. Drück im Setup-Modus in der Ansicht <1>Geräte</1> auf <0>Gerät hinzufügen</0>:"
+msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
+msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmaschine. Drück im Setup-Modus in der Ansicht <1>Show</1> auf <0>Gerät hinzufügen</0>:"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
@@ -357,10 +357,6 @@ msgstr "Herausfinden, was ein Gerät macht"
 msgid "Fixture editor"
 msgstr "Geräte-Editor"
 
-#: src/renderer/src/components/App.tsx
-msgid "Fixtures"
-msgstr "Geräte"
-
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
 msgstr "Geräte und Presets lassen sich ändern, und die Ansicht Kanäle ist offen. Zurück in den Show-Modus mit Sperren, nach 10 Minuten ohne Eingabe oder beim Neustart."
@@ -655,6 +651,10 @@ msgstr "Setup-Modus"
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
 msgstr "Der Setup-Modus geht zurück in den Show-Modus mit dem Knopf <0>Sperren</0>, nach 10 Minuten ohne Eingabe und bei jedem Neustart der App. Ein Gerät, das gerade bearbeitet und noch nicht gespeichert ist, geht dann verloren. Die Kanalsperre bleibt, wie sie ist."
+
+#: src/renderer/src/components/App.tsx
+msgid "Show"
+msgstr "Show"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Show mode"
