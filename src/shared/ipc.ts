@@ -109,13 +109,36 @@ export const FixtureSchema = Type.Object({
 });
 export type Fixture = Static<typeof FixtureSchema>;
 
+/** short enough to fit on a button */
+export const SCENE_NAME_MAX_LENGTH = 40;
+
+/** the values a scene sets on one fixture's channels, keyed by offset like a preset's */
+export const SceneFixtureSchema = Type.Object({
+  fixtureId: Type.String({minLength: 1}),
+  values: Type.Array(FixturePresetValueSchema, {minItems: 1})
+});
+export type SceneFixture = Static<typeof SceneFixtureSchema>;
+
+/**
+ * a named button setting the channels of several fixtures at once; the channels of the fixtures it doesn't name stay
+ * as they are, so scenes can be layered
+ */
+export const SceneSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  name: Type.String({minLength: 1, maxLength: SCENE_NAME_MAX_LENGTH}),
+  fixtures: Type.Array(SceneFixtureSchema, {minItems: 1})
+});
+export type Scene = Static<typeof SceneSchema>;
+
 /** the version of the stored setup, so a later format change can migrate an older file instead of dropping it */
 export const FIXTURE_SETUP_VERSION = 1;
 
 /** every fixture, as stored in the fixtures file and sent over LOAD_FIXTURES / SAVE_FIXTURES */
 export const FixtureSetupSchema = Type.Object({
   version: Type.Literal(FIXTURE_SETUP_VERSION),
-  fixtures: Type.Array(FixtureSchema)
+  fixtures: Type.Array(FixtureSchema),
+  /** optional, so older files load */
+  scenes: Type.Optional(Type.Array(SceneSchema))
 });
 export type FixtureSetup = Static<typeof FixtureSetupSchema>;
 

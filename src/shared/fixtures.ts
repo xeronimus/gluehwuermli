@@ -12,6 +12,8 @@ import {
   type FixtureSetup,
   FixtureSetupSchema
 } from './ipc';
+import {scenesAreValid} from './scenes';
+import {duplicatesOf, isBlank} from './validation';
 
 /**
  * Addressing and validation of fixtures, used by both processes: the renderer shows the problems while editing, the
@@ -47,12 +49,6 @@ export const fitsInUniverse = (fixture: Fixture): boolean =>
 
 /** the fixture's presets; none in a file from before presets existed */
 export const fixturePresets = (fixture: Fixture): readonly FixturePreset[] => fixture.presets ?? [];
-
-const isBlank = (text: string) => text.trim().length === 0;
-
-const duplicatesOf = <T>(values: readonly T[]): T[] => [
-  ...new Set(values.filter((value, index) => values.indexOf(value) !== index))
-];
 
 /**
  * What keeps a fixture from being saved, as a code: the renderer says it in the UI language, main only checks that
@@ -177,10 +173,14 @@ export function channelLimits(fixtures: readonly Fixture[]): ChannelLimits {
 
 const hasUniqueIds = (fixtures: readonly Fixture[]) => new Set(fixtures.map(({id}) => id)).size === fixtures.length;
 
-/** the payload if it is a setup the app can work with (schema, unique ids, every fixture valid), otherwise undefined */
+/**
+ * the payload if it is a setup the app can work with (schema, unique ids, every fixture and every scene valid),
+ * otherwise undefined
+ */
 export const parseFixtureSetup = (payload: unknown): FixtureSetup | undefined =>
   Value.Check(FixtureSetupSchema, payload) &&
   hasUniqueIds(payload.fixtures) &&
-  payload.fixtures.every((fixture) => fixtureErrors(fixture).length === 0)
+  payload.fixtures.every((fixture) => fixtureErrors(fixture).length === 0) &&
+  scenesAreValid(payload)
     ? payload
     : undefined;
