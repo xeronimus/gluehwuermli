@@ -1,9 +1,9 @@
-import type {DmxBridge} from '@shared/dmxBridge';
+import type {PreloadBridge} from '@shared/preloadBridge';
 
 import type DmxService from '@/data/service/DmxService';
 
 /** the DmxService over the bridge the preload script exposes */
-export const electronDmxServiceFactory = (bridge: DmxBridge): DmxService => ({
+export const electronDmxServiceFactory = (bridge: PreloadBridge): DmxService => ({
   setChannel: (channel, value) => bridge.setChannel(channel, value),
   setChannelValues: (values) => bridge.setChannelValues(values),
   listPorts: () => bridge.listPorts(),

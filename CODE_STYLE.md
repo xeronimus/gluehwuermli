@@ -92,7 +92,7 @@ rules. What the app is, its architecture and its project structure are in `CLAUD
 - **Security defaults stay on:** `contextIsolation`, `sandbox`, no `nodeIntegration`, the CSP in `index.html`.
 - **Nothing timing-critical in the renderer:** timers for DMX (refresh, later fades and chases) live in the main process.
 - **New IPC = shared first:** add the channel to `ipcChannels.ts`, the payload schema to `ipc.ts`, the method to
-  `DmxBridge`, then preload, handler and renderer service.
+  `PreloadBridge`, then preload, handler and renderer service.
 - **Runtime-loaded packages are `dependencies`**, bundled ones `devDependencies`.
 
 ## Testing (Vitest)
