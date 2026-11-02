@@ -1,9 +1,10 @@
 import {DMX_MIN_VALUE} from '@shared/dmx';
 import {type ChannelLimits, channelLimits} from '@shared/fixtures';
-import type {Fixture, FixturePreset, LockStatus, SetChannelRequest} from '@shared/ipc';
+import type {Fixture, FixturePreset, LockStatus, Scene, SetChannelRequest} from '@shared/ipc';
 
 import {channelValueOf} from './channelValues';
 import {presetChannelValues} from './presets';
+import {sceneChannelValues} from './scenes';
 
 const NO_LIMITS: ChannelLimits = new Map();
 
@@ -35,6 +36,14 @@ export const channelsAboveLimits = (channelValues: readonly number[], limits: Ch
     channelValueOf(channelValues, channel) > limit ? [{channel, value: limit}] : []
   );
 
+/** whether any of the values would be capped */
+const isAnyAboveLimit = (values: readonly SetChannelRequest[], limits: ChannelLimits): boolean =>
+  values.some(({channel, value}) => value > cappedValue(value, limits.get(channel)));
+
 /** a preset that would set a channel above its cap, e.g. "Laser on"; one setting the laser to 0 stays usable */
 export const isPresetLocked = (fixture: Fixture, preset: FixturePreset, limits: ChannelLimits): boolean =>
-  presetChannelValues(fixture, preset).some(({channel, value}) => value > cappedValue(value, limits.get(channel)));
+  isAnyAboveLimit(presetChannelValues(fixture, preset), limits);
+
+/** a scene that sets a channel above its cap: it can still be played, the capped channels only go up to their cap */
+export const isSceneCapped = (scene: Scene, fixtures: readonly Fixture[], limits: ChannelLimits): boolean =>
+  isAnyAboveLimit(sceneChannelValues(scene, fixtures), limits);
