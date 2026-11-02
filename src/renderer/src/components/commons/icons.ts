@@ -5,6 +5,8 @@
  */
 export {
   IconPlus as AddIcon,
+  IconConePlus as AddFixtureIcon,
+  IconStackPlus as AddSceneIcon,
   IconAdjustments as ChannelsIcon,
   IconChevronUp as CollapseIcon,
   IconPlugConnected as ConnectIcon,
@@ -13,6 +15,7 @@ export {
   IconPencil as EditIcon,
   IconExternalLink as ExternalLinkIcon,
   IconChevronDown as ExpandIcon,
+  IconCone as FixtureIcon,
   IconBulb as FixturesIcon,
   IconFolderOpen as FolderIcon,
   IconHelpCircle as HelpIcon,
@@ -24,6 +27,7 @@ export {
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
   IconDeviceFloppy as SavePresetIcon,
+  IconStack as SceneIcon,
   IconSettings as SettingsIcon,
   IconLockOpen as UnlockIcon,
   IconAlertTriangle as WarningIcon
