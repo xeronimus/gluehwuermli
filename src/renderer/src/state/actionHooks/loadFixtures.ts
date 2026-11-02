@@ -12,8 +12,8 @@ export function useActionLoadFixtures() {
   return async () => {
     setFixtureSetup({type: 'loading'});
     try {
-      const {fixtures} = await fixtureService.load();
-      setFixtureSetup({type: 'loaded', fixtures});
+      const setup = await fixtureService.load();
+      setFixtureSetup({type: 'loaded', setup});
       capShownChannelValues();
     } catch (error) {
       logger.error('loading the fixtures failed', error);
