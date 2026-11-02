@@ -52,7 +52,7 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 ## Project Structure
 
 ```
-electron.vite.config.ts      # aliases per process: `@/` = that process's source root, `@shared/`, `@resources/` (renderer)
+electron.vite.config.ts      # aliases per process: `@/` = that process's source root, `@shared/`, `@assets/` (renderer)
 vitest.config.mts            # one Vitest project per process, with the same aliases
 CHANGELOG.md                 # release notes, Keep a Changelog; what counts as breaking
 electron-builder.yml         # packaging; serialport's native binding is unpacked from the asar
@@ -64,7 +64,7 @@ lingui.config.ts             # locales en (source) and de, catalogs in src/rende
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
   architecture.test.ts       # the import rules below
-  resources/                 # images: app icon (favicon/), mascot
+  assets/                    # images: app icon (favicon/), mascot
   shared/                    # used by every process, depends on nothing but packages (no Node, no Electron)
     dmx.ts                   # universe size, channel/value ranges
     ipcChannels.ts           # IPC channel names (kept apart so the preload doesn't bundle TypeBox)
