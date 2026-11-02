@@ -10,6 +10,19 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- Scenes: named buttons above the fixtures that set the channels of several fixtures at once; the fixtures a scene
+  leaves out stay as they are, so scenes can be layered. In Setup mode, **Add scene** stores the current fader values
+  of the chosen fixtures, and each scene can be renamed, given other fixtures, recaptured or deleted. A scene touching
+  a locked channel stays playable, the channel only goes up to its cap. Scenes are stored in `fixtures.json`; a file
+  without them loads as before, an older app version drops them on its next save
+- Icons for fixtures (a cone) and scenes (a stack), in front of their names and on their Add buttons
+
+### Changed
+
+- The Fixtures view is now called **Show**
+
 ## [0.1.2] - 2026-11-02
 
 ### Added

@@ -34,11 +34,11 @@ const ModeSection = ({lockStatus}: ModeSectionProps) => {
       <p className={message}>
         {setupMode ? (
           <Trans>
-            Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10
-            minutes without input, or on restart.
+            Fixtures, presets and scenes can be changed, and the Channels view is open. Back to Show mode with Lock,
+            after 10 minutes without input, or on restart.
           </Trans>
         ) : (
-          <Trans>Fixtures and presets can be played, not changed. Unlock Setup mode to change them.</Trans>
+          <Trans>Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them.</Trans>
         )}
       </p>
       {setupMode && (
