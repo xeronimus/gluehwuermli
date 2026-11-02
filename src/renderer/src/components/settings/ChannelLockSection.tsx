@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import type {LockStatus} from '@shared/ipc';
 
 import {useActionLiftChannelLock, useActionLockChannels} from '@/state/actionHooks/lockActions';
@@ -13,13 +15,12 @@ interface ChannelLockSectionProps {
   lockStatus: LockStatus;
 }
 
-const LIFT_CONFIRMATION = 'Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value.';
-
 /**
  * The channel lock, independent of the mode: lifting it needs the password in Show mode (in Setup mode it was typed
  * already, a confirmation is enough). It stays lifted until turned on again or the app restarts.
  */
 const ChannelLockSection = ({lockStatus}: ChannelLockSectionProps) => {
+  const {t} = useLingui();
   const liftChannelLock = useActionLiftChannelLock();
   const lockChannels = useActionLockChannels();
   const [askingPassword, setAskingPassword] = useState(false);
@@ -27,37 +28,46 @@ const ChannelLockSection = ({lockStatus}: ChannelLockSectionProps) => {
   const onLift = () => {
     if (lockStatus.mode === 'show') {
       setAskingPassword(true);
-    } else if (window.confirm(LIFT_CONFIRMATION)) {
+    } else if (window.confirm(t`Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value.`)) {
       void liftChannelLock(undefined);
     }
   };
 
   return (
     <section className={settingsSection}>
-      <h2>Channel lock</h2>
+      <h2>
+        <Trans>Channel lock</Trans>
+      </h2>
       <span className={statusVariants[lockStatus.channelLocked ? 'calm' : 'danger']}>
         {lockStatus.channelLocked ? <LockIcon /> : <UnlockIcon />}{' '}
-        {lockStatus.channelLocked ? 'Channel lock on' : 'Channel lock lifted'}
+        {lockStatus.channelLocked ? <Trans>Channel lock on</Trans> : <Trans>Channel lock lifted</Trans>}
       </span>
       <p className={message}>
-        {lockStatus.channelLocked
-          ? 'Channels with a "Max while locked" (e.g. a laser) never go above it, whichever fader or preset sets them.'
-          : 'Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts.'}
+        {lockStatus.channelLocked ? (
+          <Trans>
+            Channels with a "Max while locked" (e.g. a laser) never go above it, whichever fader or preset sets them.
+          </Trans>
+        ) : (
+          <Trans>
+            Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app
+            restarts.
+          </Trans>
+        )}
       </p>
       {!lockStatus.channelLocked && (
         <Button variant="primary" onClick={() => void lockChannels()}>
-          <LockIcon /> Turn channel lock on
+          <LockIcon /> <Trans>Turn channel lock on</Trans>
         </Button>
       )}
       {lockStatus.channelLocked && !askingPassword && (
         <Button onClick={onLift}>
-          <UnlockIcon /> Lift channel lock
+          <UnlockIcon /> <Trans>Lift channel lock</Trans>
         </Button>
       )}
       {lockStatus.channelLocked && askingPassword && (
         <PasswordForm
           isNewPassword={!lockStatus.passwordSet}
-          submitLabel="Lift channel lock"
+          submitLabel={t`Lift channel lock`}
           onSubmit={liftChannelLock}
           onClose={() => setAskingPassword(false)}
         />

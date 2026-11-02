@@ -1,7 +1,9 @@
 import type {
+  ChosenLocale,
   DataFolder,
   DmxOutputStatus,
   FixtureSetup,
+  Locale,
   LockStatus,
   OpenDataFolderResult,
   PasswordResult,
@@ -32,6 +34,10 @@ export interface DmxBridge {
   getDataFolder: () => Promise<DataFolder>;
   /** a folder that can't be opened is a `failed` result, not a rejection; refused in Show mode */
   openDataFolder: () => Promise<OpenDataFolderResult>;
+  /** the language chosen in the app, if any */
+  getLocale: () => Promise<ChosenLocale>;
+  /** remembers the language for the next start; allowed in Show mode too. Rejects if it can't be stored */
+  setLocale: (locale: Locale) => Promise<void>;
   getLockStatus: () => Promise<LockStatus>;
   /** Setup mode; with no password stored yet, stores this one and unlocks */
   unlock: (password: string) => Promise<PasswordResult>;

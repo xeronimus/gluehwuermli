@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import {DataFolderPathState, DataFolderState} from './DataFolderState';
 
 export type DataFolderStateSetter = (
@@ -11,7 +13,7 @@ export type DataFolderStateSetter = (
 
 export interface DataFolderActions {
   setDataFolder: (dataFolder: DataFolderPathState) => void;
-  setDataFolderError: (dataFolderError: string | undefined) => void;
+  setDataFolderError: (dataFolderError: MessageDescriptor | undefined) => void;
 }
 
 export const getDataFolderActions = (set: DataFolderStateSetter): DataFolderActions => ({

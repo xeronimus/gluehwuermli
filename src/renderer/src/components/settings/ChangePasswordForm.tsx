@@ -1,8 +1,13 @@
 import {FormEvent, useState} from 'react';
 
+import type {MessageDescriptor} from '@lingui/core';
+import {msg} from '@lingui/core/macro';
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {PASSWORD_MAX_LENGTH} from '@shared/ipc';
 
 import {changePasswordFormError} from '@/data/passwordForm';
+import {passwordFormErrorMessage} from '@/i18n/messages/passwordMessages';
 import {useActionChangePassword} from '@/state/actionHooks/lockActions';
 import {useAppStore} from '@/state/store';
 
@@ -19,10 +24,10 @@ const EMPTY_FORM = {currentPassword: '', newPassword: '', confirmation: ''};
 
 type FormField = keyof typeof EMPTY_FORM;
 
-const FIELD_LABELS: Record<FormField, string> = {
-  currentPassword: 'Current password',
-  newPassword: 'New password',
-  confirmation: 'Repeat the new password'
+const FIELD_LABELS: Record<FormField, MessageDescriptor> = {
+  currentPassword: msg`Current password`,
+  newPassword: msg`New password`,
+  confirmation: msg`Repeat the new password`
 };
 
 /** a row per step: the current password, then the new one twice */
@@ -33,6 +38,7 @@ const FIELD_ROWS: readonly (readonly FormField[])[] = [['currentPassword'], ['ne
  * lockError at the top of the view
  */
 const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
+  const {t, i18n} = useLingui();
   const changePassword = useActionChangePassword();
   const lockError = useAppStore((state) => state.lockError);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -40,9 +46,11 @@ const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
   const [submitting, setSubmitting] = useState(false);
 
   const error = changePasswordFormError(form);
-  const refusalMessage = refusal === 'wrong-password' ? 'Wrong current password' : refusal && lockError;
+  const refusalMessage =
+    refusal === 'wrong-password' ? t`Wrong current password` : refusal && lockError && i18n._(lockError);
   // nothing to complain about before the new password is typed
-  const shownError = refusalMessage || (form.newPassword ? error : undefined);
+  const shownError =
+    refusalMessage || (form.newPassword && error ? i18n._(passwordFormErrorMessage(error)) : undefined);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -81,8 +89,8 @@ const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
               type="password"
               value={form[field]}
               maxLength={PASSWORD_MAX_LENGTH}
-              placeholder={FIELD_LABELS[field]}
-              aria-label={FIELD_LABELS[field]}
+              placeholder={i18n._(FIELD_LABELS[field])}
+              aria-label={i18n._(FIELD_LABELS[field])}
               autoFocus={field === 'currentPassword'}
               disabled={submitting}
               onChange={(event) => {
@@ -95,10 +103,10 @@ const ChangePasswordForm = ({onChanged, onClose}: ChangePasswordFormProps) => {
       ))}
       <div className={passwordForm}>
         <Button variant="primary" type="submit" disabled={Boolean(error) || submitting}>
-          <PasswordIcon /> Change password
+          <PasswordIcon /> <Trans>Change password</Trans>
         </Button>
         <Button onClick={onClose} disabled={submitting}>
-          Cancel
+          <Trans>Cancel</Trans>
         </Button>
         {shownError && <span className={errorMessage}>{shownError}</span>}
       </div>

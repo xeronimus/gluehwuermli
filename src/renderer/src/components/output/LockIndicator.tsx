@@ -1,3 +1,5 @@
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {useAppStore} from '@/state/store';
 
 import {UnlockIcon} from '../commons/icons';
@@ -13,6 +15,7 @@ interface LockIndicatorProps {
  * during a show, needs none. A click leads to the controls in the Settings view.
  */
 const LockIndicator = ({onClick}: LockIndicatorProps) => {
+  const {t} = useLingui();
   const lockStatus = useAppStore((state) => state.lockStatus);
   if (lockStatus.mode === 'loading') {
     return null;
@@ -21,17 +24,17 @@ const LockIndicator = ({onClick}: LockIndicatorProps) => {
   return (
     <>
       {lockStatus.mode === 'setup' && (
-        <button className={lockIndicatorVariants.setup} onClick={onClick} title="Open the Settings to lock it">
-          <UnlockIcon /> Setup mode
+        <button className={lockIndicatorVariants.setup} onClick={onClick} title={t`Open the Settings to lock it`}>
+          <UnlockIcon /> <Trans>Setup mode</Trans>
         </button>
       )}
       {!lockStatus.channelLocked && (
         <button
           className={lockIndicatorVariants.channelLockLifted}
           onClick={onClick}
-          title="Open the Settings to turn it on"
+          title={t`Open the Settings to turn it on`}
         >
-          <UnlockIcon /> Channel lock lifted
+          <UnlockIcon /> <Trans>Channel lock lifted</Trans>
         </button>
       )}
     </>

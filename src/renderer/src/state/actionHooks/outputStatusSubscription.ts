@@ -1,5 +1,7 @@
 import {useEffect} from 'react';
 
+import {msg} from '@lingui/core/macro';
+
 import logger from '@/data/service/Logger';
 import {dmxService} from '@/data/service/services';
 
@@ -18,7 +20,7 @@ export function useOutputStatusSubscription(): void {
       .catch((error: unknown) => {
         // the bar would keep showing "Not connected", which may be wrong
         logger.error('reading the output status failed', error);
-        setOutputError('Could not read the output status');
+        setOutputError(msg`Could not read the output status`);
       });
     return unsubscribe;
   }, [setOutputStatus, setOutputError]);

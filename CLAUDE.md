@@ -9,7 +9,7 @@ of 16 raw 0–255 faders that moves across channels 1–512, port selection and 
 port is remembered and connected again on start). The app starts in
 **Show mode** (fixtures can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
-lifted with the password, too (ADR 3).
+lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the top bar.
 Planned: scenes, fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
@@ -30,6 +30,8 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 - **Validation:** TypeBox schemas for every IPC payload (`src/shared/ipc.ts`), like my-life's `@my-life/contract`
 - **Faders:** react-range; **icons:** `@tabler/icons-react`
 - **Logging:** loglevel
+- **i18n:** Lingui (as in tinytrend), in the renderer only: `en` is the source language, `de` the catalog to keep
+  complete; the macro runs through `lingui-macro-plugin.mts` (Babel), the `.po` catalogs compile in the build
 - **Testing:** Vitest, one project per process (`vitest.config.mts`), `node` environment
 - **Formatting:** Prettier with sorted imports
 - **Package manager:** pnpm 12, a single package (`pnpm-workspace.yaml` only holds settings: hoisted `node_modules`
@@ -43,7 +45,7 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 | `pnpm start`  | Build and run the production build                                                         |
 | `pnpm build`  | Build to `out/`                                                                            |
 | `pnpm dist`   | Build and package the Windows installer to `dist/`                                         |
-| `pnpm test`   | Typecheck (`tsconfig.json` and `src/renderer/tsconfig.json`), then Vitest                  |
+| `pnpm test`   | `lingui extract`, typecheck, Vitest (fails on a missing German text), `lingui compile`     |
 | `pnpm format` | Import normalizer + Prettier (code and Markdown)                                           |
 | `pnpm ft`     | Format + test                                                                              |
 
@@ -58,6 +60,8 @@ doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   architecture/decisions/    # ADRs (.adr-dir)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
+lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
+lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
   architecture.test.ts       # the import rules below
   resources/                 # images: app icon (favicon/), mascot
@@ -102,7 +106,10 @@ src/
     index.html               # CSP
     tsconfig.json            # the renderer's own (DOM, JSX)
     src/
-      index.tsx, envConfig.ts
+      index.tsx, envConfig.ts  # index.tsx loads the language before the first render
+      i18n/                  # i18n.ts (locales, pickLocale, activateLocale); messages/: the codes of data/, shared/ and
+                             # main as translated messages (fixture errors, output status, password form)
+      locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status), fixtures/
                              # (groups, editor), faders/ (raw channels), settings/ (output port, mode and channel lock,
                              # password form),
@@ -126,6 +133,11 @@ src/
   Fader moves are fire-and-forget (`send`), the rest request/response (`invoke`)
 - **Expected failures are values**: a port that can't be opened, fails or is unplugged ends in the `failed`
   `DmxOutputStatus`, pushed to the renderer over `dmx:status-changed`; the engine never throws for them
+- **Codes, not sentences, outside the UI**: `shared/`, `main/` and the renderer's `data/` never say anything in a
+  language. They return codes (`FixtureError`, the `reason` of a failed `DmxOutputStatus`, `PasswordFormError`) that
+  `i18n/messages/` turns into text; `state/` keeps errors as Lingui `MessageDescriptor`s, so a language switch also
+  changes an error already shown. Raw texts of `serialport` or the OS are shown as they are, inside a translated
+  sentence
 - **One way to wire services** (as in my-life): every provider-specific service is an interface, implemented by a
   factory `xxxFactory(deps)` in `impl/<provider>/`; `services.ts` in main and in the renderer is the single
   composition root and the only module importing from `impl/`. Tests pass fakes (`inMemory`) into the factories

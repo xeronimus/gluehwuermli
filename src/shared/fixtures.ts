@@ -1,6 +1,6 @@
 import Value from 'typebox/value';
 
-import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
+import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
   FIXTURE_DESCRIPTION_MAX_LENGTH,
   FIXTURE_HINT_MAX_LENGTH,
@@ -54,72 +54,94 @@ const duplicatesOf = <T>(values: readonly T[]): T[] => [
   ...new Set(values.filter((value, index) => values.indexOf(value) !== index))
 ];
 
-/** the preset as named in an error message; one still being named in the editor has no name yet */
-const presetLabel = (preset: FixturePreset): string => (isBlank(preset.name) ? 'without a name' : preset.name);
+/**
+ * What keeps a fixture from being saved, as a code: the renderer says it in the UI language, main only checks that
+ * there is none. A preset is named by its name, `undefined` while it has none yet (still being named in the editor).
+ */
+export type FixtureError =
+  | {readonly type: 'name-missing'}
+  | {readonly type: 'start-address-invalid'}
+  | {readonly type: 'description-too-long'}
+  | {readonly type: 'hint-too-long'}
+  | {readonly type: 'channels-missing'}
+  | {readonly type: 'channel-name-missing'}
+  | {readonly type: 'offset-invalid'}
+  | {readonly type: 'offset-used-twice'; readonly offset: number}
+  | {readonly type: 'lock-max-invalid'}
+  | {readonly type: 'past-universe-end'; readonly lastAddress: number}
+  | {readonly type: 'preset-name-missing'}
+  | {readonly type: 'preset-name-too-long'}
+  | {readonly type: 'preset-id-used-twice'; readonly id: string}
+  | {readonly type: 'preset-channels-missing'; readonly presetName: string | undefined}
+  | {readonly type: 'preset-channel-unknown'; readonly presetName: string | undefined}
+  | {readonly type: 'preset-channel-twice'; readonly presetName: string | undefined}
+  | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined};
+
+const presetNameOf = (preset: FixturePreset): string | undefined => (isBlank(preset.name) ? undefined : preset.name);
 
 /** what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each */
-function presetErrors(fixture: Fixture): string[] {
-  const errors: string[] = [];
+function presetErrors(fixture: Fixture): FixtureError[] {
+  const errors: FixtureError[] = [];
   const presets = fixturePresets(fixture);
   const offsets = new Set(fixture.channels.map((channel) => channel.offset));
   if (presets.some((preset) => isBlank(preset.name))) {
-    errors.push('Every preset needs a name');
+    errors.push({type: 'preset-name-missing'});
   }
   if (presets.some((preset) => preset.name.length > FIXTURE_PRESET_NAME_MAX_LENGTH)) {
-    errors.push(`A preset name can have at most ${FIXTURE_PRESET_NAME_MAX_LENGTH} characters`);
+    errors.push({type: 'preset-name-too-long'});
   }
-  duplicatesOf(presets.map((preset) => preset.id)).forEach((id) => errors.push(`Preset id ${id} is used twice`));
+  duplicatesOf(presets.map((preset) => preset.id)).forEach((id) => errors.push({type: 'preset-id-used-twice', id}));
   presets.forEach((preset) => {
-    const label = presetLabel(preset);
+    const presetName = presetNameOf(preset);
     const presetOffsets = preset.values.map((presetValue) => presetValue.offset);
     if (presetOffsets.length === 0) {
-      errors.push(`The preset ${label} needs at least one channel`);
+      errors.push({type: 'preset-channels-missing', presetName});
     }
     if (presetOffsets.some((offset) => !offsets.has(offset))) {
-      errors.push(`The preset ${label} sets a channel the fixture doesn't have`);
+      errors.push({type: 'preset-channel-unknown', presetName});
     }
     if (duplicatesOf(presetOffsets).length > 0) {
-      errors.push(`The preset ${label} sets a channel more than once`);
+      errors.push({type: 'preset-channel-twice', presetName});
     }
     if (preset.values.some((presetValue) => !isDmxValue(presetValue.value))) {
-      errors.push(`The values of the preset ${label} must be whole numbers from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`);
+      errors.push({type: 'preset-value-invalid', presetName});
     }
   });
   return errors;
 }
 
 /** what keeps the fixture from being saved; empty when it is valid */
-export function fixtureErrors(fixture: Fixture): string[] {
-  const errors: string[] = [];
+export function fixtureErrors(fixture: Fixture): FixtureError[] {
+  const errors: FixtureError[] = [];
   if (isBlank(fixture.name)) {
-    errors.push('The fixture needs a name');
+    errors.push({type: 'name-missing'});
   }
   if (!Number.isInteger(fixture.startAddress) || fixture.startAddress < FIRST_DMX_CHANNEL) {
-    errors.push(`The start address must be a whole number from ${FIRST_DMX_CHANNEL} to ${LAST_DMX_CHANNEL}`);
+    errors.push({type: 'start-address-invalid'});
   }
   if ((fixture.description?.length ?? 0) > FIXTURE_DESCRIPTION_MAX_LENGTH) {
-    errors.push(`The description can have at most ${FIXTURE_DESCRIPTION_MAX_LENGTH} characters`);
+    errors.push({type: 'description-too-long'});
   }
   if ((fixture.hint?.length ?? 0) > FIXTURE_HINT_MAX_LENGTH) {
-    errors.push(`The hint can have at most ${FIXTURE_HINT_MAX_LENGTH} characters`);
+    errors.push({type: 'hint-too-long'});
   }
   if (fixture.channels.length === 0) {
-    errors.push('The fixture needs at least one channel');
+    errors.push({type: 'channels-missing'});
   }
   if (fixture.channels.some((channel) => isBlank(channel.name))) {
-    errors.push('Every channel needs a name');
+    errors.push({type: 'channel-name-missing'});
   }
   if (fixture.channels.some((channel) => !Number.isInteger(channel.offset) || channel.offset < 0)) {
-    errors.push('Offsets must be whole numbers from 0');
+    errors.push({type: 'offset-invalid'});
   }
   duplicatesOf(fixture.channels.map((channel) => channel.offset).filter(Number.isInteger)).forEach((offset) =>
-    errors.push(`Offset ${offset} is used by more than one channel`)
+    errors.push({type: 'offset-used-twice', offset})
   );
   if (fixture.channels.some((channel) => channel.lock && !isDmxValue(channel.lock.max))) {
-    errors.push(`The maximum while locked must be a whole number from ${DMX_MIN_VALUE} to ${DMX_MAX_VALUE}`);
+    errors.push({type: 'lock-max-invalid'});
   }
   if (errors.length === 0 && !fitsInUniverse(fixture)) {
-    errors.push(`The fixture ends at address ${lastAddress(fixture)}, after the last one (${LAST_DMX_CHANNEL})`);
+    errors.push({type: 'past-universe-end', lastAddress: lastAddress(fixture)});
   }
   return [...errors, ...presetErrors(fixture)];
 }

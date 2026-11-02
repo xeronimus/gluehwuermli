@@ -1,3 +1,6 @@
+import type {MessageDescriptor} from '@lingui/core';
+import {msg} from '@lingui/core/macro';
+
 import type {LockStatus, PasswordResult} from '@shared/ipc';
 
 import logger from '@/data/service/Logger';
@@ -16,14 +19,14 @@ export type PasswordOutcome = PasswordResult['type'] | 'failed';
 function useLockCall() {
   const setLockError = useAppStore((state) => state.setLockError);
 
-  return async <T>(call: () => Promise<T>, failure: string): Promise<T | undefined> => {
+  return async <T>(call: () => Promise<T>, failure: MessageDescriptor): Promise<T | undefined> => {
     try {
       setLockError(undefined);
       const result = await call();
       applyLockStatus(await lockService.getStatus());
       return result;
     } catch (error) {
-      logger.error(failure, error);
+      logger.error(failure.message ?? failure.id, error);
       setLockError(failure);
       return undefined;
     }
@@ -35,20 +38,20 @@ const outcomeOf = (result: PasswordResult | undefined): PasswordOutcome => resul
 export function useActionUnlock() {
   const lockCall = useLockCall();
   return async (password: string): Promise<PasswordOutcome> =>
-    outcomeOf(await lockCall(() => lockService.unlock(password), 'Could not unlock'));
+    outcomeOf(await lockCall(() => lockService.unlock(password), msg`Could not unlock`));
 }
 
 /** back to Show mode; the channel lock stays as it is */
 export function useActionLock() {
   const lockCall = useLockCall();
-  return async (): Promise<LockStatus | undefined> => lockCall(() => lockService.lock(), 'Could not lock');
+  return async (): Promise<LockStatus | undefined> => lockCall(() => lockService.lock(), msg`Could not lock`);
 }
 
 /** the password is only needed in Show mode */
 export function useActionLiftChannelLock() {
   const lockCall = useLockCall();
   return async (password: string | undefined): Promise<PasswordOutcome> =>
-    outcomeOf(await lockCall(() => lockService.liftChannelLock(password), 'Could not lift the channel lock'));
+    outcomeOf(await lockCall(() => lockService.liftChannelLock(password), msg`Could not lift the channel lock`));
 }
 
 /** Setup mode only; the current password is checked by the main process */
@@ -56,12 +59,12 @@ export function useActionChangePassword() {
   const lockCall = useLockCall();
   return async (currentPassword: string, newPassword: string): Promise<PasswordOutcome> =>
     outcomeOf(
-      await lockCall(() => lockService.changePassword(currentPassword, newPassword), 'Could not change the password')
+      await lockCall(() => lockService.changePassword(currentPassword, newPassword), msg`Could not change the password`)
     );
 }
 
 export function useActionLockChannels() {
   const lockCall = useLockCall();
   return async (): Promise<LockStatus | undefined> =>
-    lockCall(() => lockService.lockChannels(), 'Could not turn the channel lock on');
+    lockCall(() => lockService.lockChannels(), msg`Could not turn the channel lock on`);
 }

@@ -15,10 +15,12 @@ const RENDERER_DATA_DIR = path.join(RENDERER_DIR, 'data');
 const RENDERER_STATE_DIR = path.join(RENDERER_DIR, 'state');
 const RENDERER_COMPONENTS_DIR = path.join(RENDERER_DIR, 'components');
 const RENDERER_DOMAIN_DIR = path.join(RENDERER_DIR, 'domain');
+const RENDERER_I18N_DIR = path.join(RENDERER_DIR, 'i18n');
 
 const COMPOSITION_ROOTS = [path.join(MAIN_DIR, 'services.ts'), path.join(RENDERER_DATA_DIR, 'service', 'services.ts')];
 const ICONS_MODULE = path.join(RENDERER_COMPONENTS_DIR, 'commons', 'icons.ts');
 const ICON_PACKAGE = '@tabler/icons-react';
+const LINGUI_PACKAGE_PREFIX = '@lingui/';
 
 const IMPORT_SPECIFIER_PATTERN = /(?:from|import)\s+'([^']+)'/g;
 
@@ -140,6 +142,28 @@ test('the renderer domain depends on nothing but itself, shared code and package
       target !== undefined &&
       !isInside(RENDERER_DOMAIN_DIR, target) &&
       !isInside(SHARED_DIR, target)
+  );
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+const isLingui = ({specifier}: ImportOfFile) => specifier.startsWith(LINGUI_PACKAGE_PREFIX);
+
+test('only the renderer translates: main, preload and shared code return codes, never import Lingui', () => {
+  const violations = [MAIN_DIR, PRELOAD_DIR, SHARED_DIR].flatMap(importsFrom).filter(isLingui);
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+test('the renderer data and domain layers stay free of Lingui, they return codes the UI translates', () => {
+  const violations = [RENDERER_DATA_DIR, RENDERER_DOMAIN_DIR].flatMap(importsFrom).filter(isLingui);
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+test('the i18n module never depends on the state or UI layer', () => {
+  const violations = importsFrom(RENDERER_I18N_DIR).filter(
+    (anImport) => targetsInside(RENDERER_STATE_DIR)(anImport) || targetsInside(RENDERER_COMPONENTS_DIR)(anImport)
   );
 
   expect(violations.map(describeImport)).toEqual([]);

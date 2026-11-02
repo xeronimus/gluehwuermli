@@ -1,3 +1,5 @@
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {useActionConnectOutput, useActionDisconnectOutput} from '@/state/actionHooks/connectOutput';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useAppStore} from '@/state/store';
@@ -9,6 +11,7 @@ import {message, portControls, settingsSection} from './SettingsView.css';
 
 /** the serial port of the DMX USB Pro: choosing it, connecting and disconnecting; no password needed, also in Show mode */
 const OutputSection = () => {
+  const {t} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
   const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const loadPorts = useActionLoadPorts();
@@ -26,22 +29,24 @@ const OutputSection = () => {
 
   return (
     <section className={settingsSection}>
-      <h2>Output</h2>
+      <h2>
+        <Trans>Output</Trans>
+      </h2>
       <p className={message}>
-        The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending.
+        <Trans>The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending.</Trans>
       </p>
       <div className={portControls}>
         <PortSelect disabled={portLocked} />
-        <Button onClick={() => void loadPorts()} disabled={portLocked} title="Search the serial ports again">
+        <Button onClick={() => void loadPorts()} disabled={portLocked} title={t`Search the serial ports again`}>
           <RefreshPortsIcon />
         </Button>
         {connected ? (
           <Button onClick={() => void disconnect()}>
-            <DisconnectIcon /> Disconnect
+            <DisconnectIcon /> <Trans>Disconnect</Trans>
           </Button>
         ) : (
           <Button variant="primary" onClick={onConnect} disabled={portLocked || !selectedPortPath}>
-            <ConnectIcon /> Connect
+            <ConnectIcon /> <Trans>Connect</Trans>
           </Button>
         )}
       </div>

@@ -1,3 +1,5 @@
+import {msg} from '@lingui/core/macro';
+
 import logger from '@/data/service/Logger';
 import {fixtureService} from '@/data/service/services';
 
@@ -15,7 +17,7 @@ export function useActionLoadFixtures() {
       capShownChannelValues();
     } catch (error) {
       logger.error('loading the fixtures failed', error);
-      setFixtureSetup({type: 'failed', message: 'Could not load the fixtures'});
+      setFixtureSetup({type: 'failed', message: msg`Could not load the fixtures`});
     }
   };
 }

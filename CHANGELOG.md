@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- The app is in German, too: an EN/DE switch in the top bar changes every text without a restart, also in Show mode. The
+  choice is kept in `settings.json`; until one is made, the app follows the language of the OS
+
 ## [0.1.1] - 2026-11-01
 
 ### Added

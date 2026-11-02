@@ -54,8 +54,8 @@ test('a blank or non-numeric field is invalid, not 0', () => {
   const draft = withChannelChange({...draftOf(par), startAddress: ''}, 1, {offset: 'x'});
 
   expect(fixtureErrors(fixtureOfDraft('par', draft))).toEqual([
-    'The start address must be a whole number from 1 to 512',
-    'Offsets must be whole numbers from 0'
+    {type: 'start-address-invalid'},
+    {type: 'offset-invalid'}
   ]);
 });
 
@@ -114,7 +114,7 @@ describe('channel locks', () => {
 
   test('a maximum outside 0..255 is invalid', () => {
     expect(fixtureErrors(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {lockMax: '300'})))).toEqual([
-      'The maximum while locked must be a whole number from 0 to 255'
+      {type: 'lock-max-invalid'}
     ]);
   });
 });
@@ -160,7 +160,9 @@ describe('presets', () => {
 
     const removed = withoutChannel(draftOf(withWarm), 1);
     expect(fixtureOfDraft('par', removed).presets?.[0].values).toEqual([]);
-    expect(fixtureErrors(fixtureOfDraft('par', removed))).toEqual(['The preset Warm needs at least one channel']);
+    expect(fixtureErrors(fixtureOfDraft('par', removed))).toEqual([
+      {type: 'preset-channels-missing', presetName: 'Warm'}
+    ]);
   });
 
   test('a new channel is not part of the existing presets', () => {
@@ -169,9 +171,7 @@ describe('presets', () => {
 
   test('a blank value is invalid, and removing the last preset leaves no presets at all', () => {
     const blank = withPresetValueChange(draftOf(withWarm), 0, 1, {value: ''});
-    expect(fixtureErrors(fixtureOfDraft('par', blank))).toEqual([
-      'The values of the preset Warm must be whole numbers from 0 to 255'
-    ]);
+    expect(fixtureErrors(fixtureOfDraft('par', blank))).toEqual([{type: 'preset-value-invalid', presetName: 'Warm'}]);
 
     expect(fixtureOfDraft('par', withoutPreset(draftOf(withWarm), 0))).toEqual(par);
   });

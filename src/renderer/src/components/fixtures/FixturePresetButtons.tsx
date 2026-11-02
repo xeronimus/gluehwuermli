@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {fixturePresets} from '@shared/fixtures';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH, type Fixture} from '@shared/ipc';
 
@@ -25,6 +27,8 @@ interface FixturePresetButtonsProps {
  * A preset that would set a channel above its cap is disabled while the channel lock is on.
  */
 const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProps) => {
+  const {t} = useLingui();
+  const fixtureName = fixture.name;
   const limits = useAppStore(selectChannelLimits);
   const applyPreset = useActionApplyPreset();
   const savePreset = useActionSavePreset();
@@ -50,12 +54,13 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
     <div className={presetButtons}>
       {fixturePresets(fixture).map((preset) => {
         const locked = isPresetLocked(fixture, preset, limits);
+        const presetName = preset.name;
         return (
           <Button
             key={preset.id}
             onClick={() => applyPreset(fixture, preset)}
             disabled={locked}
-            title={locked ? `${preset.name} sets a locked channel` : `Apply the preset ${preset.name}`}
+            title={locked ? t`${presetName} sets a locked channel` : t`Apply the preset ${presetName}`}
           >
             {locked && <LockIcon />}
             {preset.name}
@@ -67,7 +72,7 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
           <Button
             variant="icon"
             onClick={() => setNewPresetName('')}
-            title={`Save the current values of ${fixture.name} as a preset`}
+            title={t`Save the current values of ${fixtureName} as a preset`}
           >
             <SavePresetIcon />
           </Button>
@@ -77,8 +82,8 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
               className={presetNameInput}
               value={newPresetName}
               maxLength={FIXTURE_PRESET_NAME_MAX_LENGTH}
-              placeholder="Preset name"
-              aria-label="Name of the new preset"
+              placeholder={t`Preset name`}
+              aria-label={t`Name of the new preset`}
               autoFocus
               onChange={(event) => setNewPresetName(event.target.value)}
               onKeyDown={(event) => {
@@ -90,10 +95,10 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
               }}
             />
             <Button variant="primary" onClick={() => void onSave()} disabled={!canSave}>
-              Save
+              <Trans>Save</Trans>
             </Button>
             <Button onClick={() => setNewPresetName(undefined)} disabled={saving}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
           </>
         ))}

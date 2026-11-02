@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import type {Fixture} from '@shared/ipc';
 
 /**
@@ -7,12 +9,12 @@ import type {Fixture} from '@shared/ipc';
 export type FixtureSetupState =
   | {readonly type: 'loading'}
   | {readonly type: 'loaded'; readonly fixtures: readonly Fixture[]}
-  | {readonly type: 'failed'; readonly message: string};
+  | {readonly type: 'failed'; readonly message: MessageDescriptor};
 
 export interface FixturesState {
   fixtureSetup: FixtureSetupState;
   /** the last save or delete that failed */
-  fixturesError: string | undefined;
+  fixturesError: MessageDescriptor | undefined;
 }
 
 export const getDefaultFixturesState = (): FixturesState => ({

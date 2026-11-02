@@ -1,3 +1,5 @@
+import {msg} from '@lingui/core/macro';
+
 import logger from '@/data/service/Logger';
 import {appService} from '@/data/service/services';
 
@@ -13,7 +15,7 @@ export function useActionLoadDataFolder() {
       setDataFolder({type: 'loaded', path});
     } catch (error) {
       logger.error('getting the data folder failed', error);
-      setDataFolder({type: 'failed', message: 'Could not find out where the data folder is'});
+      setDataFolder({type: 'failed', message: msg`Could not find out where the data folder is`});
     }
   };
 }
@@ -27,11 +29,14 @@ export function useActionOpenDataFolder() {
       setDataFolderError(undefined);
       const result = await appService.openDataFolder();
       if (result.type === 'failed') {
-        setDataFolderError(`Could not open the folder: ${result.message}`);
+        const {message} = result;
+        setDataFolderError(msg`Could not open the folder: ${message}`);
+      } else if (result.type === 'refused') {
+        setDataFolderError(msg`The data folder can only be opened in Setup mode`);
       }
     } catch (error) {
       logger.error('opening the data folder failed', error);
-      setDataFolderError('Could not open the folder');
+      setDataFolderError(msg`Could not open the folder`);
     }
   };
 }

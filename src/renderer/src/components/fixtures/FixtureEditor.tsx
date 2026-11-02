@@ -1,11 +1,13 @@
 import {useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {fixtureErrors, overlappingFixtures} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
 import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
-import {describeOverlap} from '@/data/fixtureOverlaps';
+import {fixtureErrorMessage, overlapMessage} from '@/i18n/messages/fixtureMessages';
 import {useActionSaveFixture} from '@/state/actionHooks/saveFixtures';
 
 import Button from '../commons/Button';
@@ -36,8 +38,11 @@ interface FixtureEditorProps {
   onClose: () => void;
 }
 
+const editTitle = ({name: fixtureName}: Fixture) => <Trans>Edit {fixtureName}</Trans>;
+
 /** edits a copy of the fixture; nothing changes until it is saved, and it can't be saved while it has errors */
 const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
+  const {t, i18n} = useLingui();
   const saveFixture = useActionSaveFixture();
   const [id] = useState(() => fixture?.id ?? crypto.randomUUID());
   const [draft, setDraft] = useState(() => (fixture ? draftOf(fixture) : newFixtureDraft()));
@@ -59,22 +64,22 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
   };
 
   return (
-    <section className={fixtureEditor} aria-label="Fixture editor">
-      <h2 className={editorTitle}>{fixture ? `Edit ${fixture.name}` : 'New fixture'}</h2>
+    <section className={fixtureEditor} aria-label={t`Fixture editor`}>
+      <h2 className={editorTitle}>{fixture ? editTitle(fixture) : <Trans>New fixture</Trans>}</h2>
       <div className={editorForm}>
         <div className={fields}>
           <label className={field}>
-            Name
+            <Trans>Name</Trans>
             <input
               className={nameInput}
               value={draft.name}
-              placeholder="e.g. PAR left"
+              placeholder={t`e.g. PAR left`}
               autoFocus
               onChange={(event) => setDraft({...draft, name: event.target.value})}
             />
           </label>
           <label className={field}>
-            Start address
+            <Trans>Start address</Trans>
             <input
               className={addressInput}
               type="number"
@@ -97,16 +102,17 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
 
         {errors.length > 0 && (
           <ul className={errorList}>
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
+            {errors.map((error) => {
+              const text = i18n._(fixtureErrorMessage(error, (message) => i18n._(message)));
+              return <li key={text}>{text}</li>;
+            })}
           </ul>
         )}
         {ownOverlaps.length > 0 && (
           <ul className={warningList}>
             {ownOverlaps.map((overlap) => (
               <li key={overlap.second.id}>
-                <WarningIcon /> {describeOverlap(overlap)}
+                <WarningIcon /> {i18n._(overlapMessage(overlap))}
               </li>
             ))}
           </ul>
@@ -114,10 +120,10 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
 
         <div className={actions}>
           <Button variant="primary" onClick={() => void onSave()} disabled={errors.length > 0 || saving}>
-            Save
+            <Trans>Save</Trans>
           </Button>
           <Button onClick={onClose} disabled={saving}>
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
         </div>
       </div>
