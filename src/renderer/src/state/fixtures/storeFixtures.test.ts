@@ -118,3 +118,23 @@ test('overlapping changes are all stored', async () => {
   expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par, smoke, fog])});
   expect(saved.at(-1)).toEqual(fixtureSetupOf([par, smoke, fog]));
 });
+
+test('a change keeps what else the setup holds, e.g. its scenes', async () => {
+  const fixtureService = inMemoryFixtureServiceFactory();
+  const scenes = [{id: 'intro', name: 'Intro', fixtures: [{fixtureId: 'par', values: [{offset: 0, value: 255}]}]}];
+  const initialState: FixturesState = {
+    ...getDefaultFixturesState(),
+    fixtureSetup: {type: 'loaded', setup: {...fixtureSetupOf([par]), scenes}}
+  };
+  const store = createStore(combine(initialState, (set) => getFixturesActions(set)));
+  const storeFixtures = storeFixturesWith({
+    getState: store.getState,
+    fixtureService,
+    runSerially: createSerialQueue(),
+    log: silentLog
+  });
+
+  await storeFixtures(append(smoke), 'saving', failure('Could not save'));
+
+  expect(await fixtureService.load()).toEqual({...fixtureSetupOf([par, smoke]), scenes});
+});

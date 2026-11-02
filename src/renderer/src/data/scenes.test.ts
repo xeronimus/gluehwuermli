@@ -1,7 +1,16 @@
 import {DMX_UNIVERSE_SIZE} from '@shared/dmx';
 import type {Fixture, FixtureSetup, Scene} from '@shared/ipc';
 
-import {captureScene, editedScene, sceneChannelValues, withFittedScenes, withScene, withoutScene} from './scenes';
+import {withoutFixture} from './fixtureList';
+import {
+  captureScene,
+  changingFixturesAndScenes,
+  editedScene,
+  sceneChannelValues,
+  withFittedScenes,
+  withScene,
+  withoutScene
+} from './scenes';
 
 const par: Fixture = {
   id: 'par',
@@ -174,5 +183,15 @@ describe('withFittedScenes', () => {
     expect(withFittedScenes(setupOf([par, otherChannels], [intro, outro])).scenes).toEqual([
       {...intro, fixtures: [intro.fixtures[0]]}
     ]);
+  });
+});
+
+describe('changingFixturesAndScenes', () => {
+  test('deleting a fixture takes it out of the scenes in the same change', () => {
+    const change = changingFixturesAndScenes((current) => withoutFixture(current, 'smoke'));
+
+    expect(change(setupOf(fixtures, [intro, outro]))).toEqual(
+      setupOf([par], [{...intro, fixtures: [intro.fixtures[0]]}])
+    );
   });
 });
