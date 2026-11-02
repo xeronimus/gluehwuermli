@@ -232,6 +232,17 @@ describe('parseFixtureSetup', () => {
     expect(parseFixtureSetup({version: 1, fixtures: [withPresets]})).toEqual({version: 1, fixtures: [withPresets]});
   });
 
+  test('accepts a setup with scenes, and one without from a file older than scenes', () => {
+    const withScenes = {
+      version: 1,
+      fixtures: [fixtureOf()],
+      scenes: [{id: 'intro', name: 'Intro', fixtures: [{fixtureId: 'par-1', values: [{offset: 1, value: 200}]}]}]
+    };
+
+    expect(parseFixtureSetup(withScenes)).toEqual(withScenes);
+    expect(parseFixtureSetup({version: 1, fixtures: [fixtureOf()]})?.scenes).toBeUndefined();
+  });
+
   test.each([
     [
       'a preset on a channel the fixture lacks',
@@ -241,6 +252,23 @@ describe('parseFixtureSetup', () => {
       'a preset value out of range',
       {version: 1, fixtures: [{...fixtureOf(), presets: [{id: 'p', name: 'P', values: [{offset: 0, value: 300}]}]}]}
     ],
+    [
+      'a scene on a fixture the setup lacks',
+      {
+        version: 1,
+        fixtures: [],
+        scenes: [{id: 's', name: 'S', fixtures: [{fixtureId: 'par-1', values: [{offset: 0, value: 1}]}]}]
+      }
+    ],
+    [
+      'a scene on a channel the fixture lacks',
+      {
+        version: 1,
+        fixtures: [fixtureOf()],
+        scenes: [{id: 's', name: 'S', fixtures: [{fixtureId: 'par-1', values: [{offset: 9, value: 1}]}]}]
+      }
+    ],
+    ['scenes that are no list', {version: 1, fixtures: [], scenes: 'intro'}],
     ['another version', {version: 2, fixtures: []}],
     ['no fixtures list', {version: 1}],
     ['a fixture without channels', {version: 1, fixtures: [fixtureOf({channels: []})]}],
