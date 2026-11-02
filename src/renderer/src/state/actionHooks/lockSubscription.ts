@@ -1,5 +1,7 @@
 import {useEffect} from 'react';
 
+import {msg} from '@lingui/core/macro';
+
 import type {LockStatus} from '@shared/ipc';
 
 import logger from '@/data/service/Logger';
@@ -26,7 +28,7 @@ export function useLockSubscription(): void {
       .catch((error: unknown) => {
         // stays in the loading status, shown like Show mode: nothing becomes editable by mistake
         logger.error('reading the lock status failed', error);
-        setLockError('Could not read whether the app is locked');
+        setLockError(msg`Could not read whether the app is locked`);
       });
     return unsubscribe;
   }, [setLockError]);

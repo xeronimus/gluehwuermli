@@ -13,7 +13,7 @@ asarUnpack:
   - '**/node_modules/@serialport/bindings-cpp/**'
 win:
   target: nsis
-  icon: src/resources/favicon/android-chrome-512x512.png
+  icon: src/assets/favicon/android-chrome-512x512.png
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true

@@ -1,11 +1,14 @@
+import {lingui} from '@lingui/vite-plugin';
 import {vanillaExtractPlugin} from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'electron-vite';
 import {resolve} from 'node:path';
 
-// `@/` points into the source root of each process, `@shared/` to the code all of them use, `@resources/` to the images
+import {linguiMacroPlugin} from './lingui-macro-plugin.mts';
+
+// `@/` points into the source root of each process, `@shared/` to the code all of them use, `@assets/` to the images
 const sharedAlias = {'@shared': resolve('src/shared')};
-const resourcesAlias = {'@resources': resolve('src/resources')};
+const assetsAlias = {'@assets': resolve('src/assets')};
 
 export default defineConfig({
   main: {
@@ -15,7 +18,8 @@ export default defineConfig({
     resolve: {alias: sharedAlias}
   },
   renderer: {
-    plugins: [react(), vanillaExtractPlugin()],
-    resolve: {alias: {...sharedAlias, ...resourcesAlias, '@': resolve('src/renderer/src')}}
+    // the Lingui macro and catalogs only in the renderer: main and shared return codes, the renderer translates them
+    plugins: [react(), linguiMacroPlugin(), vanillaExtractPlugin(), lingui()],
+    resolve: {alias: {...sharedAlias, ...assetsAlias, '@': resolve('src/renderer/src')}}
   }
 });

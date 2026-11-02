@@ -1,11 +1,14 @@
 import {ReactNode} from 'react';
 
-import fireflyLogo from '@resources/favicon/favicon-96x96.png';
+import {Plural, useLingui} from '@lingui/react/macro';
 
-import {describeOutputStatus} from '@/data/outputStatus';
+import fireflyLogo from '@assets/favicon/favicon-96x96.png';
+
+import {outputStatusMessage} from '@/i18n/messages/outputMessages';
 import {selectActiveChannelCount} from '@/state/channels/channelsSelectors';
 import {useAppStore} from '@/state/store';
 
+import LocaleSwitch from './LocaleSwitch';
 import LockIndicator from './LockIndicator';
 import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 
@@ -18,6 +21,7 @@ interface OutputBarProps {
 
 /** the view switch, what is unlocked and the status of the DMX output; the port is chosen in the Settings view */
 const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
+  const {t, i18n} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
   const error = useAppStore((state) => state.outputError);
   const activeChannelCount = useAppStore(selectActiveChannelCount);
@@ -32,12 +36,15 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       <button
         className={statusVariants[outputStatus.type]}
         onClick={onShowSettings}
-        title="Open the Settings to choose the port, connect or disconnect"
+        title={t`Open the Settings to choose the port, connect or disconnect`}
       >
-        {describeOutputStatus(outputStatus)}
+        {i18n._(outputStatusMessage(outputStatus))}
       </button>
-      {error && <span className={outputError}>{error}</span>}
-      <span className={activeChannels}>{activeChannelCount} channels above 0</span>
+      {error && <span className={outputError}>{i18n._(error)}</span>}
+      <span className={activeChannels}>
+        <Plural value={activeChannelCount} one="# channel above 0" other="# channels above 0" />
+      </span>
+      <LocaleSwitch />
     </header>
   );
 };

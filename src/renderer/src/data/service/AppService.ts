@@ -1,8 +1,11 @@
-import type {DataFolder, OpenDataFolderResult} from '@shared/ipc';
+import type {ChosenLocale, DataFolder, Locale, OpenDataFolderResult} from '@shared/ipc';
 
-/** The renderer's access to the app itself, in the main process: where it keeps its files. */
+/** The renderer's access to the app itself, in the main process: where it keeps its files, the chosen language. */
 export default interface AppService {
   getDataFolder: () => Promise<DataFolder>;
-  /** a folder that can't be opened is a `failed` result, not a rejection */
+  /** a folder that can't be opened is a `failed` result, refused in Show mode; not a rejection */
   openDataFolder: () => Promise<OpenDataFolderResult>;
+  getLocale: () => Promise<ChosenLocale>;
+  /** remembers the language for the next start; rejects if it can't be stored */
+  setLocale: (locale: Locale) => Promise<void>;
 }

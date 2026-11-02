@@ -18,6 +18,8 @@ export const IpcChannel = {
   SAVE_FIXTURES: 'fixtures:save',
   GET_DATA_FOLDER: 'app:get-data-folder',
   OPEN_DATA_FOLDER: 'app:open-data-folder',
+  GET_LOCALE: 'app:get-locale',
+  SET_LOCALE: 'app:set-locale',
   GET_LOCK_STATUS: 'app:get-lock-status',
   UNLOCK: 'app:unlock',
   LOCK: 'app:lock',

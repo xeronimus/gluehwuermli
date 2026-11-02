@@ -1,5 +1,7 @@
 import {Component, ErrorInfo, ReactNode} from 'react';
 
+import {Trans} from '@lingui/react/macro';
+
 import logger from '@/data/service/Logger';
 
 import Button from './Button';
@@ -34,9 +36,13 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <div className={errorFallback}>
-          <h2>Something went wrong</h2>
+          <h2>
+            <Trans>Something went wrong</Trans>
+          </h2>
           <p className={errorMessage}>{this.state.error.message}</p>
-          <Button onClick={() => this.setState({error: null})}>Try again</Button>
+          <Button onClick={() => this.setState({error: null})}>
+            <Trans>Try again</Trans>
+          </Button>
         </div>
       );
     }

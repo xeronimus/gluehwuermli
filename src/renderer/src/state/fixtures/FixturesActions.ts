@@ -1,3 +1,5 @@
+import type {MessageDescriptor} from '@lingui/core';
+
 import {FixtureSetupState, FixturesState} from './FixturesState';
 
 export type FixturesStateSetter = (
@@ -8,7 +10,7 @@ export type FixturesStateSetter = (
 
 export interface FixturesActions {
   setFixtureSetup: (fixtureSetup: FixtureSetupState) => void;
-  setFixturesError: (fixturesError: string | undefined) => void;
+  setFixturesError: (fixturesError: MessageDescriptor | undefined) => void;
 }
 
 export const getFixturesActions = (set: FixturesStateSetter): FixturesActions => ({

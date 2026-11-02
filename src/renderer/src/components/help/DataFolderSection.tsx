@@ -1,5 +1,7 @@
 import {useEffect} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import {useActionLoadDataFolder, useActionOpenDataFolder} from '@/state/actionHooks/dataFolder';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
@@ -14,6 +16,7 @@ import {sideSection} from './HelpView.css';
  * it
  */
 const DataFolderSection = () => {
+  const {t, i18n} = useLingui();
   const dataFolder = useAppStore((state) => state.dataFolder);
   const error = useAppStore((state) => state.dataFolderError);
   const setupMode = useAppStore(selectIsSetupMode);
@@ -29,30 +32,38 @@ const DataFolderSection = () => {
 
   return (
     <section className={sideSection}>
-      <h2>Data folder</h2>
+      <h2>
+        <Trans>Data folder</Trans>
+      </h2>
       <p className={message}>
-        The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back
-        up your setup.
+        <Trans>
+          The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back
+          up your setup.
+        </Trans>
       </p>
-      {dataFolder.type === 'loading' && <span className={message}>Looking up the folder…</span>}
-      {dataFolder.type === 'failed' && <span className={errorMessage}>{dataFolder.message}</span>}
+      {dataFolder.type === 'loading' && (
+        <span className={message}>
+          <Trans>Looking up the folder…</Trans>
+        </span>
+      )}
+      {dataFolder.type === 'failed' && <span className={errorMessage}>{i18n._(dataFolder.message)}</span>}
       {dataFolder.type === 'loaded' && (
         <>
           <input
             className={folderPath}
             readOnly
             value={dataFolder.path}
-            aria-label="Data folder"
+            aria-label={t`Data folder`}
             onFocus={(event) => event.currentTarget.select()}
           />
           {setupMode && (
             <Button onClick={() => void openDataFolder()}>
-              <FolderIcon /> Open in Explorer
+              <FolderIcon /> <Trans>Open in Explorer</Trans>
             </Button>
           )}
         </>
       )}
-      {error && <span className={errorMessage}>{error}</span>}
+      {error && <span className={errorMessage}>{i18n._(error)}</span>}
     </section>
   );
 };

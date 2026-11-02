@@ -8,7 +8,7 @@ const smoke: Fixture = {id: 'smoke', name: 'Smoke', startAddress: 1, channels: [
 
 test('no fixtures while loading or after a failed load', () => {
   expect(selectFixtures(getDefaultFixturesState())).toEqual([]);
-  expect(selectFixtures({fixtureSetup: {type: 'failed', message: 'down'}, fixturesError: undefined})).toEqual([]);
+  expect(selectFixtures({fixtureSetup: {type: 'failed', message: {id: 'down'}}, fixturesError: undefined})).toEqual([]);
 });
 
 test('the overlaps of the loaded fixtures', () => {

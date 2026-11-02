@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react';
 
+import {Trans, useLingui} from '@lingui/react/macro';
+
 import type {Fixture} from '@shared/ipc';
 
-import {describeOverlap} from '@/data/fixtureOverlaps';
+import {overlapMessage} from '@/i18n/messages/fixtureMessages';
 import {useActionLoadFixtures} from '@/state/actionHooks/loadFixtures';
 import {useActionDeleteFixture} from '@/state/actionHooks/saveFixtures';
 import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSelectors';
@@ -21,6 +23,7 @@ const NOT_EDITING: Editing = {type: 'none'};
 
 /** one control group per fixture, and adding, editing and deleting them in Setup mode */
 const FixtureView = () => {
+  const {t, i18n} = useLingui();
   const fixtureSetup = useAppStore((state) => state.fixtureSetup);
   const fixtures = useAppStore(selectFixtures);
   const overlaps = useAppStore(selectFixtureOverlaps);
@@ -43,19 +46,26 @@ const FixtureView = () => {
   }, []);
 
   if (fixtureSetup.type === 'loading') {
-    return <span className={message}>Loading the fixtures…</span>;
+    return (
+      <span className={message}>
+        <Trans>Loading the fixtures…</Trans>
+      </span>
+    );
   }
   if (fixtureSetup.type === 'failed') {
     return (
       <div className={fixtureView}>
-        <span className={errorMessage}>{fixtureSetup.message}</span>
-        <Button onClick={() => void loadFixtures()}>Try again</Button>
+        <span className={errorMessage}>{i18n._(fixtureSetup.message)}</span>
+        <Button onClick={() => void loadFixtures()}>
+          <Trans>Try again</Trans>
+        </Button>
       </div>
     );
   }
 
   const onDelete = (fixture: Fixture) => {
-    if (window.confirm(`Delete the fixture ${fixture.name}?`)) {
+    const fixtureName = fixture.name;
+    if (window.confirm(t`Delete the fixture ${fixtureName}?`)) {
       void deleteFixture(fixture);
     }
   };
@@ -64,7 +74,7 @@ const FixtureView = () => {
   if (editing.type !== 'none') {
     return (
       <div className={fixtureView}>
-        {error && <span className={errorMessage}>{error}</span>}
+        {error && <span className={errorMessage}>{i18n._(error)}</span>}
         <FixtureEditor
           fixture={editing.type === 'editing' ? editing.fixture : undefined}
           fixtures={fixtures}
@@ -76,13 +86,13 @@ const FixtureView = () => {
 
   return (
     <div className={fixtureView}>
-      {error && <span className={errorMessage}>{error}</span>}
+      {error && <span className={errorMessage}>{i18n._(error)}</span>}
 
       {overlaps.length > 0 && (
         <ul className={warnings}>
           {overlaps.map((overlap) => (
             <li key={`${overlap.first.id}-${overlap.second.id}`}>
-              <WarningIcon /> {describeOverlap(overlap)}
+              <WarningIcon /> {i18n._(overlapMessage(overlap))}
             </li>
           ))}
         </ul>
@@ -90,8 +100,10 @@ const FixtureView = () => {
 
       {fixtures.length === 0 && (
         <span className={message}>
-          No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control
-          them by name.
+          <Trans>
+            No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control
+            them by name.
+          </Trans>
         </span>
       )}
 
@@ -113,7 +125,7 @@ const FixtureView = () => {
       {setupMode && (
         <div className={footer}>
           <Button onClick={() => setEditing({type: 'adding'})}>
-            <AddIcon /> Add fixture
+            <AddIcon /> <Trans>Add fixture</Trans>
           </Button>
         </div>
       )}

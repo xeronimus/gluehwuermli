@@ -11,7 +11,7 @@
     "^react(-[a-z][a-z0-9-]*)?(/.*)?$",
     "<THIRD_PARTY_MODULES>",
     "^@shared/",
-    "^@resources/",
+    "^@assets/",
     "^@/",
     "^[.]"
   ],
