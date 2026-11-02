@@ -21,7 +21,7 @@ const silentLog = {error: () => {}};
 const failure = (message: string): MessageDescriptor => ({id: message, message});
 const append =
   (fixture: Fixture) =>
-  (fixtures: readonly Fixture[]): Fixture[] => [...fixtures, fixture];
+  (setup: FixtureSetup): FixtureSetup => ({...setup, fixtures: [...setup.fixtures, fixture]});
 
 const failingFixtureService: FixtureService = {
   load: async () => fixtureSetupOf([]),
@@ -31,7 +31,10 @@ const failingFixtureService: FixtureService = {
 };
 
 const storeWithFixtures = (fixtures: readonly Fixture[]) => {
-  const initialState: FixturesState = {...getDefaultFixturesState(), fixtureSetup: {type: 'loaded', fixtures}};
+  const initialState: FixturesState = {
+    ...getDefaultFixturesState(),
+    fixtureSetup: {type: 'loaded', setup: fixtureSetupOf(fixtures)}
+  };
   return createStore(combine(initialState, (set) => getFixturesActions(set)));
 };
 
@@ -53,7 +56,7 @@ test('a stored change is shown and clears an earlier error', async () => {
 
   expect(await storeFixtures(append(smoke), 'saving', failure('Could not save'))).toBe(true);
 
-  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par, smoke]});
+  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par, smoke])});
   expect(store.getState().fixturesError).toBeUndefined();
   expect(await fixtureService.load()).toEqual(fixtureSetupOf([par, smoke]));
 });
@@ -63,7 +66,7 @@ test('a failed save leaves the shown setup unchanged and sets the error', async 
 
   expect(await storeFixtures(append(smoke), 'saving', failure('Could not save the fixture Smoke'))).toBe(false);
 
-  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par]});
+  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par])});
   expect(store.getState().fixturesError).toEqual(failure('Could not save the fixture Smoke'));
 });
 
@@ -89,11 +92,11 @@ test('the store is only updated once the save resolved', async () => {
 
   const storing = storeFixtures(append(smoke), 'saving', failure('Could not save'));
   await vi.waitFor(() => expect(resolveSave).toBeDefined());
-  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par]});
+  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par])});
 
   resolveSave?.();
   await storing;
-  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par, smoke]});
+  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par, smoke])});
 });
 
 test('overlapping changes are all stored', async () => {
@@ -112,6 +115,6 @@ test('overlapping changes are all stored', async () => {
     storeFixtures(append(fog), 'saving', failure('Could not save'))
   ]);
 
-  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', fixtures: [par, smoke, fog]});
+  expect(store.getState().fixtureSetup).toEqual({type: 'loaded', setup: fixtureSetupOf([par, smoke, fog])});
   expect(saved.at(-1)).toEqual(fixtureSetupOf([par, smoke, fog]));
 });

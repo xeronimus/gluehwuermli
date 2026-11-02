@@ -3,7 +3,7 @@ import {msg} from '@lingui/core/macro';
 import type {Fixture} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
-import {withFixture, withoutFixture} from '@/data/fixtureList';
+import {changingFixtures, withFixture, withoutFixture} from '@/data/fixtureList';
 import {capturePreset, withPreset} from '@/data/presets';
 import logger from '@/data/service/Logger';
 import {fixtureService} from '@/data/service/services';
@@ -36,7 +36,7 @@ const couldNotSavePreset = (presetName: string, {name: fixtureName}: Fixture) =>
 export function useActionSaveFixture() {
   return (fixture: Fixture) =>
     storeFixtures(
-      (fixtures) => withFixture(fixtures, fixture),
+      changingFixtures((fixtures) => withFixture(fixtures, fixture)),
       `saving the fixture ${fixture.name}`,
       couldNotSaveFixture(fixture)
     );
@@ -45,7 +45,7 @@ export function useActionSaveFixture() {
 export function useActionDeleteFixture() {
   return (fixture: Fixture) =>
     storeFixtures(
-      (fixtures) => withoutFixture(fixtures, fixture.id),
+      changingFixtures((fixtures) => withoutFixture(fixtures, fixture.id)),
       `deleting the fixture ${fixture.name}`,
       couldNotDeleteFixture(fixture)
     );
@@ -56,7 +56,7 @@ export function useActionSavePreset() {
   return (fixture: Fixture, name: string) => {
     const preset = capturePreset(fixture, useAppStore.getState().channelValues, crypto.randomUUID(), name);
     return storeFixtures(
-      (fixtures) => withPreset(fixtures, fixture.id, preset),
+      changingFixtures((fixtures) => withPreset(fixtures, fixture.id, preset)),
       `saving the preset ${preset.name} of ${fixture.name}`,
       couldNotSavePreset(preset.name, fixture)
     );
