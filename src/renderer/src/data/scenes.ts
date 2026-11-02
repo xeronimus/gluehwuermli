@@ -1,6 +1,7 @@
 import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from '@shared/ipc';
 import {setupScenes} from '@shared/scenes';
 
+import {changingFixtures} from './fixtureList';
 import {currentFixtureValues, fixtureChannelValues} from './presets';
 
 /** what the scene editor sets: the name, the fixtures it covers, and whether to store the current values again */
@@ -93,3 +94,9 @@ export function withFittedScenes(setup: FixtureSetup): FixtureSetup {
   });
   return {...setup, scenes};
 }
+
+/** a change of the fixture list, with the scenes fitted to it in the same save: main refuses scenes that don't fit */
+export const changingFixturesAndScenes =
+  (change: (fixtures: readonly Fixture[]) => Fixture[]) =>
+  (setup: FixtureSetup): FixtureSetup =>
+    withFittedScenes(changingFixtures(change)(setup));

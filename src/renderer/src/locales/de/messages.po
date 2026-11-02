@@ -190,6 +190,10 @@ msgstr "Verbindung mit {path} fehlgeschlagen"
 msgid "Could not delete the fixture {fixtureName}"
 msgstr "Das Gerät {fixtureName} konnte nicht gelöscht werden"
 
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not delete the scene {sceneName}"
+msgstr "Die Szene {sceneName} konnte nicht gelöscht werden"
+
 #: src/renderer/src/state/actionHooks/connectOutput.ts
 msgid "Could not disconnect"
 msgstr "Trennen fehlgeschlagen"
@@ -237,6 +241,10 @@ msgstr "Das Gerät {fixtureName} konnte nicht gespeichert werden"
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the preset {presetName} of {fixtureName}"
 msgstr "Das Preset {presetName} von {fixtureName} konnte nicht gespeichert werden"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not save the scene {sceneName}"
+msgstr "Die Szene {sceneName} konnte nicht gespeichert werden"
 
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not turn the channel lock on"
