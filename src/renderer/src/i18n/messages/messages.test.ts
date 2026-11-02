@@ -6,6 +6,7 @@ import {activateLocale, i18n} from '../i18n';
 import {fixtureErrorMessage, overlapMessage} from './fixtureMessages';
 import {outputStatusMessage} from './outputMessages';
 import {passwordFormErrorMessage} from './passwordMessages';
+import {sceneErrorMessage} from './sceneMessages';
 
 const translate = (message: MessageDescriptor) => i18n._(message);
 
@@ -62,6 +63,19 @@ describe('in English', () => {
   });
 });
 
+describe('scene errors in English', () => {
+  beforeAll(() => activateLocale('en'));
+
+  test('state the limits', () => {
+    expect(translate(sceneErrorMessage({type: 'scene-name-too-long'}))).toBe(
+      'A scene name can have at most 40 characters'
+    );
+    expect(translate(sceneErrorMessage({type: 'scene-value-invalid'}))).toBe(
+      'Scene values must be whole numbers from 0 to 255'
+    );
+  });
+});
+
 describe('in German', () => {
   beforeAll(() => activateLocale('de'));
 
@@ -69,6 +83,9 @@ describe('in German', () => {
     expect(translate(outputStatusMessage({type: 'connected', path: 'COM3'}))).toBe('Sendet auf COM3');
     expect(translate(fixtureErrorMessage({type: 'preset-channels-missing', presetName: undefined}, translate))).toBe(
       'Das Preset ohne Namen braucht mindestens einen Kanal'
+    );
+    expect(translate(sceneErrorMessage({type: 'scene-name-too-long'}))).toBe(
+      'Ein Szenen-Name darf höchstens 40 Zeichen haben'
     );
   });
 

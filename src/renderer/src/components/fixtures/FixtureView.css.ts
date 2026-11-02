@@ -15,6 +15,7 @@ export const footer = style({
   marginTop: 'auto',
   display: 'flex',
   justifyContent: 'flex-end',
+  gap: '8px',
   alignSelf: 'stretch'
 });
 

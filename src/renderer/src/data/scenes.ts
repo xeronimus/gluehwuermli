@@ -1,5 +1,5 @@
 import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from '@shared/ipc';
-import {setupScenes} from '@shared/scenes';
+import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
 import {changingFixtures} from './fixtureList';
 import {currentFixtureValues, fixtureChannelValues} from './presets';
@@ -94,6 +94,16 @@ export function withFittedScenes(setup: FixtureSetup): FixtureSetup {
   });
   return {...setup, scenes};
 }
+
+/** no fader values: what is wrong with a scene doesn't depend on them */
+const NO_CHANNEL_VALUES: readonly number[] = [];
+
+/**
+ * what keeps the scene the editor describes from being saved (no name, no fixture chosen), without reading the
+ * faders: the editor shouldn't re-render on every fader move
+ */
+export const sceneEditErrors = (fixtures: readonly Fixture[], edit: Omit<SceneEdit, 'recapture'>): SceneError[] =>
+  sceneErrors(captureScene(fixtures, NO_CHANNEL_VALUES, 'draft', edit), fixtures);
 
 /** a change of the fixture list, with the scenes fitted to it in the same save: main refuses scenes that don't fit */
 export const changingFixturesAndScenes =
