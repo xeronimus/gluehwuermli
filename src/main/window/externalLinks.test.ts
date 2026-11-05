@@ -1,6 +1,9 @@
 import {REPOSITORY_URL} from '@shared/links';
 
-import {type GuardedWebContents, guardExternalLinks} from './externalLinks';
+import {type GuardedWebContents, guardExternalLinks, isAppPage} from './externalLinks';
+
+const DEV_SERVER_URL = 'http://localhost:5173/';
+const BUILT_PAGE_URL = 'file:///C:/Program%20Files/Gluehwuermli/resources/app.asar/out/renderer/index.html';
 
 describe('guardExternalLinks', () => {
   type NavigateListener = (event: {url: string; preventDefault: () => void}) => void;
@@ -39,7 +42,7 @@ describe('guardExternalLinks', () => {
     const openExternal = async (url: string) => {
       opened.push(url);
     };
-    guardExternalLinks(contents, openExternal, log);
+    guardExternalLinks(contents, DEV_SERVER_URL, openExternal, log);
   });
 
   test('a new window is always denied, the repository opens in the browser instead', () => {
@@ -68,12 +71,42 @@ describe('guardExternalLinks', () => {
     expect(opened).toEqual([]);
   });
 
+  test("the dev server's full reload stays in the window and opens nothing", () => {
+    expect(navigate(DEV_SERVER_URL)).toBe(false);
+    expect(opened).toEqual([]);
+  });
+
+  test('another local web server is no app page: it opens in the browser', () => {
+    expect(navigate('http://localhost:8080/')).toBe(true);
+    expect(opened).toEqual(['http://localhost:8080/']);
+  });
+
   test('a failing browser is logged, not thrown', async () => {
-    guardExternalLinks(contents, () => Promise.reject(new Error('no browser')), log);
+    guardExternalLinks(contents, DEV_SERVER_URL, () => Promise.reject(new Error('no browser')), log);
 
     windowOpenHandler({url: REPOSITORY_URL});
     await Promise.resolve();
 
     expect(warnings).toHaveLength(1);
+  });
+});
+
+describe('isAppPage', () => {
+  test('in development, any page of the dev server', () => {
+    expect(isAppPage(DEV_SERVER_URL, DEV_SERVER_URL)).toBe(true);
+    expect(isAppPage('http://localhost:5173/index.html?t=1#top', DEV_SERVER_URL)).toBe(true);
+    expect(isAppPage('http://localhost:5174/', DEV_SERVER_URL)).toBe(false);
+    expect(isAppPage('https://localhost:5173/', DEV_SERVER_URL)).toBe(false);
+  });
+
+  test('in a build, only the very same file', () => {
+    expect(isAppPage(BUILT_PAGE_URL, BUILT_PAGE_URL)).toBe(true);
+    expect(isAppPage(`${BUILT_PAGE_URL}#top`, BUILT_PAGE_URL)).toBe(true);
+    expect(isAppPage('file:///C:/Windows/System32/calc.exe', BUILT_PAGE_URL)).toBe(false);
+    expect(isAppPage(DEV_SERVER_URL, BUILT_PAGE_URL)).toBe(false);
+  });
+
+  test('not something that is no URL', () => {
+    expect(isAppPage('not a url', DEV_SERVER_URL)).toBe(false);
   });
 });
