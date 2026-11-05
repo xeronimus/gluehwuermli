@@ -27,6 +27,8 @@ import FixturePresetButtons from './FixturePresetButtons';
 export interface FixtureGroupActions {
   onEdit: () => void;
   onDelete: () => void;
+  /** while a scene is being edited: the scene editor works with the fixtures as they are */
+  disabled: boolean;
 }
 
 interface FixtureGroupProps {
@@ -55,10 +57,15 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         {actions && (
           <>
-            <Button variant="icon" onClick={actions.onEdit} title={t`Edit ${fixtureName}`}>
+            <Button variant="icon" onClick={actions.onEdit} disabled={actions.disabled} title={t`Edit ${fixtureName}`}>
               <EditIcon />
             </Button>
-            <Button variant="icon" onClick={actions.onDelete} title={t`Delete ${fixtureName}`}>
+            <Button
+              variant="icon"
+              onClick={actions.onDelete}
+              disabled={actions.disabled}
+              title={t`Delete ${fixtureName}`}
+            >
               <DeleteIcon />
             </Button>
           </>
