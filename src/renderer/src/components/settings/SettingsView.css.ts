@@ -73,6 +73,12 @@ export const passwordInput = style({
   width: '160px'
 });
 
+export const checkboxLabel = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px'
+});
+
 export const portControls = style({
   display: 'flex',
   flexWrap: 'wrap',
