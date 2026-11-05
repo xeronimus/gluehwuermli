@@ -3,8 +3,9 @@
 ## What is this project?
 
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
-a Help view (short manual, the data folder, a link to the repo), fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
-folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
+a Help view (short manual, the data folder, a link to the repo), projects (a `.glp` file wherever the user keeps it, holding the fixtures and scenes of one rig, saved on every change;
+the last one reopens on start, a double-click on a `.glp` opens it, ADR 4), fixtures (named devices with a start address
+and named channels) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
 (named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
 fixture groups), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
@@ -58,6 +59,7 @@ electron.vite.config.ts      # aliases per process: `@/` = that process's source
 vitest.config.mts            # one Vitest project per process, with the same aliases
 CHANGELOG.md                 # release notes, Keep a Changelog; what counts as breaking
 electron-builder.yml         # packaging; serialport's native binding is unpacked from the asar
+build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer
 doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   architecture/decisions/    # ADRs (.adr-dir)
@@ -73,31 +75,35 @@ src/
     ipcChannels.ts           # IPC channel names (kept apart so the preload doesn't bundle TypeBox)
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
+    projects.ts              # project files: parseProjectFile (too-new before invalid), the .glp extension, projectNameOf
     scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
     preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
     links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
-    serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
+    serialQueue.ts           # runs overlapping async tasks one after the other (saves, project switches)
   main/                      # Electron main process
-    index.ts                 # window, lifecycle
+    index.ts                 # single-instance lock (before any service), window, lifecycle, .glp from argv and
+                             # second-instance, window title
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
-    ipc/registerFixtureIpc.ts # fixtures:load / fixtures:save, wired to fixtureIpcHandlers
-    ipc/fixtureIpcHandlers.ts # what fixtures:load / fixtures:save do, without Electron: save refused in Show mode,
-                             # the engine's channel limits follow the setup
+    ipc/registerProjectIpc.ts # project:* channels wired to the session, pushes project:changed / project:open-requested
+    ipc/projectIpcHandlers.ts # the project payloads checked against their schema, without Electron
     ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;
                              # refused in Show mode); app:get/set-blackout-on-quit (blackoutOnQuitIpcHandlers,
                              # also in Show mode)
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
                              # app:change-password, app:user-activity, pushes app:lock-changed
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
-    fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
+    project/                 # ADR 4: projectSession (the open project: start, create, open, recent, save; blackout and
+                             # channel limits on a switch), ProjectFileStore + impl/file (never touches a file it can't
+                             # open), ProjectDialogs + impl/electron, recentProjects, commandLine (argv), windowTitle
     quit/quitGuard.ts        # holds the quit until the DMX port is closed (blackout first if set), at most 2 s
     lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash
                              # (scrypt)
     settings/                # settings.json: settings (schema), SettingsStore + impl/file, appSettings (the one owner,
-                             # merges each change into the whole file: the lock's password, the output's port)
+                             # merges each change into the whole file: the lock's password, the output's port, the
+                             # last and the recent projects)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation away from the app page or new window, only http(s) links
@@ -119,13 +125,15 @@ src/
                              # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status), fixtures/
-                             # (the Show view: fixture groups and editor, scene buttons and editor), faders/ (raw
-                             # channels), settings/ (output port, mode and channel lock, password form),
-                             # help/ (manual, data folder, repo link);
-                             # commons/ (Button, ChannelFader, MarkdownText, ModeToggle, ErrorBoundary, icons.ts)
+                             # (fixture groups and editor, scene buttons and editor), project/ (start view without a
+                             # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
+                             # channels), settings/ (output port, mode and channel lock),
+                             # help/ (manual, open project, data folder, repo link); ShowView.tsx picks the start view
+                             # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
+                             # ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,
-                             # fixtureList, presets, scenes, passwordForm, activityThrottle)
-        service/             # DmxService, FixtureService, AppService, LockService, services.ts (composition root),
+                             # fixtureList, presets, scenes, passwordForm, activityThrottle, recentProjects)
+        service/             # DmxService, ProjectService, AppService, LockService, services.ts (composition root),
                              # impl/electron, impl/inMemory
       domain/                # types (Fader)
       state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, actionHooks/
@@ -155,11 +163,15 @@ src/
   fixture channel's absolute address, so fixtures and the raw channels always show the same values
 - **Show mode is enforced in main** (ADR 3): the `AppLock` owns the mode, the channel lock (independent of each other),
   the password and the idle timer, the `DmxEngine` caps locked channels per address in `setChannel`, whichever view
-  sent the value, and main refuses `fixtures:save`, opening the data folder and lifting the channel lock without the
+  sent the value, and main refuses saving fixtures, creating a project, opening the data folder and lifting the channel lock without the
   password in Show mode. The renderer only mirrors the
   pushed status (`app:lock-changed`), disables and hides, and caps its faders the same way so they show what is sent
-- **Fixture changes are stored first**: add/edit/delete of a fixture or scene save the whole setup and only then update
-  the store; a failed save shows `fixturesError` and leaves the shown setup unchanged. A fixture change fits the scenes
+- **Projects are files, saved on every change** (ADR 4): the `ProjectSession` in main owns the open `.glp`; opening
+  another one blacks out and applies its channel limits in one step. A file that can't be opened is never changed,
+  renamed or set aside. A save names its project, main refuses it for any other. One process only (single-instance
+  lock), a double-clicked `.glp` is handed to the running app
+- **Fixture changes are stored first**: add/edit/delete of a fixture or scene save the whole setup to the project file
+  and only then update the store; a failed save shows `fixturesError` and leaves the shown setup unchanged. A fixture change fits the scenes
   in the same save (`withFittedScenes`), since main refuses scenes naming a fixture or channel that is gone
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
@@ -169,13 +181,13 @@ src/
 ## Versioning and Releases
 
 Semantic Versioning; the version lives in `package.json` and is tagged as `vX.Y.Z` on `main`. What counts as breaking
-(an existing `fixtures.json` or `settings.json` no longer readable without a migration, or a Show/Setup mode change an
+(an existing project file or `settings.json` no longer readable without a migration, or a Show/Setup mode change an
 operator has to relearn) is written at the top of `CHANGELOG.md`. While on `0.x`, breaking changes bump the minor
 version, everything else the patch version.
 
 - Every user-visible change adds a line under `## [Unreleased]` in `CHANGELOG.md` in the same PR (Keep a Changelog
   sections: Added, Changed, Fixed, Removed); internal refactors, tests and docs don't
-- A change to a stored file format bumps its `FIXTURE_SETUP_VERSION` / `SETTINGS_VERSION` and migrates older files
+- A change to a stored file format bumps its `PROJECT_VERSION` / `SETTINGS_VERSION` and migrates older files
 - Releasing: rename `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD` and add a fresh empty `[Unreleased]` with its compare
   link, then `npm version <minor|patch>` (bumps `package.json`, commits, tags) and push the tag
 

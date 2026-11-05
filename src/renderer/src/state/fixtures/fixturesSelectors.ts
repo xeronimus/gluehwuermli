@@ -1,21 +1,24 @@
 import {createSelector} from 'reselect';
 
 import {emptyFixtureSetup, overlappingFixtures} from '@shared/fixtures';
-import type {Fixture, FixtureSetup, Scene} from '@shared/ipc';
+import type {Fixture, FixtureSetup, OpenProject, Scene} from '@shared/ipc';
 import {setupScenes} from '@shared/scenes';
 
 import {FixturesState} from './FixturesState';
 
 const NO_SETUP: FixtureSetup = emptyFixtureSetup();
 
-/** the loaded setup; an empty one while loading or after a failed load */
-export const selectSetup = (state: FixturesState): FixtureSetup =>
-  state.fixtureSetup.type === 'loaded' ? state.fixtureSetup.setup : NO_SETUP;
+/** the open project; none while loading, before the first one or when it couldn't be opened */
+export const selectOpenProject = (state: FixturesState): OpenProject | undefined =>
+  state.project.type === 'open' ? state.project.project : undefined;
 
-/** the loaded fixtures; none while loading or after a failed load */
+/** the open project's setup; an empty one without an open project */
+export const selectSetup = (state: FixturesState): FixtureSetup => selectOpenProject(state)?.setup ?? NO_SETUP;
+
+/** the open project's fixtures; none without an open project */
 export const selectFixtures = (state: FixturesState): readonly Fixture[] => selectSetup(state).fixtures;
 
-/** the loaded scenes; none while loading, after a failed load or in a setup from before scenes */
+/** the open project's scenes; none without an open project or in a setup from before scenes */
 export const selectScenes = (state: FixturesState): readonly Scene[] => setupScenes(selectSetup(state));
 
 export const selectFixtureOverlaps = createSelector([selectFixtures], (fixtures) => overlappingFixtures(fixtures));

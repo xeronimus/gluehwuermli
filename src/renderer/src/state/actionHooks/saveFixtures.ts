@@ -16,7 +16,7 @@ import {
   withoutScene
 } from '@/data/scenes';
 import logger from '@/data/service/Logger';
-import {fixtureService} from '@/data/service/services';
+import {projectService} from '@/data/service/services';
 
 import {type StoreFixtures, storeFixturesWith} from '../fixtures/storeFixtures';
 import {useAppStore} from '../store';
@@ -24,7 +24,7 @@ import {capShownChannelValues} from './capShownChannelValues';
 
 const storeFixturesUncapped = storeFixturesWith({
   getState: useAppStore.getState,
-  fixtureService,
+  projectService,
   runSerially: createSerialQueue(),
   log: logger
 });

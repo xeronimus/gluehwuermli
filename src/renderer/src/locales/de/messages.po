@@ -53,6 +53,10 @@ msgstr "Ein Preset ist ein Knopf an einem Gerät, der mehrere seiner Kanäle auf
 msgid "A preset name can have at most {maxLength} characters"
 msgstr "Ein Preset-Name darf höchstens {maxLength} Zeichen haben"
 
+#: src/renderer/src/components/project/ProjectStartView.tsx
+msgid "A project is a .glp file with the fixtures and scenes of one rig, e.g. one per venue or show. Keep it wherever you like: in Documents, on the Desktop or on a USB stick. Every change is saved to the file right away. The app opens the last project again on its next start, and a double-click on a .glp file opens it."
+msgstr "Ein Projekt ist eine .glp-Datei mit den Geräten und Szenen einer Anlage, z. B. eine pro Lokal oder Show. Leg sie ab, wo du willst: in den Dokumenten, auf dem Desktop oder auf einem USB-Stick. Jede Änderung wird sofort in die Datei gespeichert. Die App öffnet beim nächsten Start wieder das letzte Projekt, und ein Doppelklick auf eine .glp-Datei öffnet sie."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
 msgstr "Eine Szene ist ein Knopf über den Geräten, der die Kanäle mehrerer Geräte aufs Mal setzt, z. B. «Intro» oder «Blackout». Die Geräte, die eine Szene weglässt, bleiben, wie sie sind; so lassen sich Szenen übereinanderlegen: eine Farbszene für die PARs, während die Nebelmaschine weiterläuft."
@@ -117,11 +121,11 @@ msgstr "Frage nach, ob die App gesperrt ist…"
 msgid "Black out on quit"
 msgstr "Blackout beim Beenden"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -207,6 +211,14 @@ msgstr "Den DMX USB Pro anschliessen"
 msgid "Connecting to {path}…"
 msgstr "Verbinde mit {path}…"
 
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not ask the app to open the project"
+msgstr "Die App konnte nicht gebeten werden, das Projekt zu öffnen"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not ask the app which project is open"
+msgstr "Die App konnte nicht gefragt werden, welches Projekt offen ist"
+
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not change the password"
 msgstr "Das Passwort konnte nicht geändert werden"
@@ -243,10 +255,6 @@ msgstr "Die Kanalsperre konnte nicht aufgehoben werden"
 msgid "Could not list the serial ports"
 msgstr "Die seriellen Ports konnten nicht aufgelistet werden"
 
-#: src/renderer/src/state/actionHooks/loadFixtures.ts
-msgid "Could not load the fixtures"
-msgstr "Die Geräte konnten nicht geladen werden"
-
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not lock"
 msgstr "Sperren fehlgeschlagen"
@@ -258,6 +266,10 @@ msgstr "Das Gerät {fixtureName} konnte nicht verschoben werden"
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not move the scene {sceneName}"
 msgstr "Die Szene {sceneName} konnte nicht verschoben werden"
+
+#: src/renderer/src/components/project/ProjectFailureMessage.tsx
+msgid "Could not open <0>{path}</0>:"
+msgstr "<0>{path}</0> konnte nicht geöffnet werden:"
 
 #: src/renderer/src/state/actionHooks/dataFolder.ts
 msgid "Could not open the folder"
@@ -274,6 +286,10 @@ msgstr "Der Status des Ausgangs konnte nicht gelesen werden"
 #: src/renderer/src/state/actionHooks/lockSubscription.ts
 msgid "Could not read whether the app is locked"
 msgstr "Es konnte nicht gelesen werden, ob die App gesperrt ist"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not remove the project from the list"
+msgstr "Das Projekt konnte nicht aus der Liste entfernt werden"
 
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the fixture {fixtureName}"
@@ -298,6 +314,10 @@ msgstr "Die Kanalsperre konnte nicht eingeschaltet werden"
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not unlock"
 msgstr "Entsperren fehlgeschlagen"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Create project"
+msgstr "Projekt erstellen"
 
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Current password"
@@ -326,6 +346,10 @@ msgstr "Die Szene {sceneName} löschen?"
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Description"
 msgstr "Beschreibung"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Discard the fixture or scene you are editing, and open the other project?"
+msgstr "Das Gerät oder die Szene, die du gerade bearbeitest, verwerfen und das andere Projekt öffnen?"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Disconnect"
@@ -356,6 +380,10 @@ msgstr "{fixtureName} bearbeiten"
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Edit the scene {sceneName}"
 msgstr "Szene {sceneName} bearbeiten"
+
+#: src/renderer/src/components/project/ProjectSection.tsx
+msgid "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
+msgstr "Jede Änderung an den Geräten und Szenen wird sofort in die Projektdatei gespeichert. Beim Öffnen eines anderen Projekts gehen zuerst alle Kanäle auf 0."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
@@ -433,10 +461,6 @@ msgstr "Kanalsperre aufheben"
 msgid "Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value."
 msgstr "Kanalsperre aufheben? Gesperrte Kanäle, z. B. ein Laser, lassen sich dann auf jeden Wert setzen."
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
-msgid "Loading the fixtures…"
-msgstr "Lade die Geräte…"
-
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Lock"
 msgstr "Sperren"
@@ -460,6 +484,10 @@ msgstr "Max. bei Sperre"
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Maximum of channel {row} while locked"
 msgstr "Maximum von Kanal {row} bei Sperre"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "missing"
+msgstr "fehlt"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Mode"
@@ -510,8 +538,8 @@ msgstr "Name des neuen Presets"
 msgid "New fixture"
 msgstr "Neues Gerät"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "New password"
 msgstr "Neues Passwort"
 
@@ -522,6 +550,10 @@ msgstr "Neue Szene"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Next channels"
 msgstr "Nächste Kanäle"
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
+msgstr "Noch keine Geräte: Füg die Geräte deiner Anlage unten mit Gerät hinzufügen ein, um sie beim Namen zu steuern."
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
@@ -538,6 +570,15 @@ msgstr "Keine Anleitung, oder nicht sicher, ob sie stimmt? Die Ansicht <0>Kanäl
 #: src/renderer/src/components/fixtures/FixtureHelp.tsx
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "Keine Anleitung? Beweg in der Ansicht <0>Kanäle</0> ab der Adresse des Geräts einen Kanal nach dem anderen und schau, was passiert."
+
+#: src/renderer/src/components/project/ProjectSection.tsx
+#: src/renderer/src/components/project/ProjectStartView.tsx
+msgid "No project open"
+msgstr "Kein Projekt offen"
+
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "No project open. Create or open one in the Show view or in Settings."
+msgstr "Kein Projekt offen. Erstelle oder öffne eines in der Ansicht Show oder in den Einstellungen."
 
 #: src/renderer/src/components/settings/PortSelect.tsx
 msgid "No serial port found"
@@ -571,6 +612,10 @@ msgstr "Offsets müssen ganze Zahlen ab 0 sein"
 msgid "Open in Explorer"
 msgstr "Im Explorer öffnen"
 
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Open project"
+msgstr "Projekt öffnen"
+
 #: src/renderer/src/components/output/OutputBar.tsx
 msgid "Open the Settings to choose the port, connect or disconnect"
 msgstr "Öffnet die Einstellungen, um den Port zu wählen, zu verbinden oder zu trennen"
@@ -584,6 +629,14 @@ msgid "Open the Settings to turn it on"
 msgstr "Öffnet die Einstellungen, um sie einzuschalten"
 
 #: src/renderer/src/components/help/UserManual.tsx
+msgid "Opening another project sets all channels to 0 first, then applies the new project's channel locks. A fixture or scene being edited is dropped, the app asks first. A file that is no valid project, or one saved by a newer version of the app, is not opened and left exactly as it is. To back up a project or take it to another computer, copy the file; its path is shown in the Help view."
+msgstr "Beim Öffnen eines anderen Projekts gehen zuerst alle Kanäle auf 0, dann gelten die Kanalsperren des neuen Projekts. Ein Gerät oder eine Szene, die gerade bearbeitet wird, wird verworfen; die App fragt vorher. Eine Datei, die kein gültiges Projekt ist oder von einer neueren Version der App gespeichert wurde, wird nicht geöffnet und bleibt genau so, wie sie ist. Um ein Projekt zu sichern oder auf einen anderen Computer mitzunehmen, kopier die Datei; ihr Pfad steht in der Ansicht Hilfe."
+
+#: src/renderer/src/components/ShowView.tsx
+msgid "Opening the project…"
+msgstr "Projekt wird geöffnet…"
+
+#: src/renderer/src/components/help/UserManual.tsx
 msgid "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
 msgstr "Wenn du willst, einen <0>Hinweis</0> unter den Fadern (z. B. «2 Min. vor dem Nebel aufwärmen») und eine <1>Beschreibung</1> für alles andere: den DMX-Modus, die DIP-Schalter, wo es hängt. Die Beschreibung ist Markdown (Listen, Tabellen, Links auf Webseiten, die sich in deinem Browser öffnen), mit einer Vorschau im Editor."
 
@@ -591,7 +644,7 @@ msgstr "Wenn du willst, einen <0>Hinweis</0> unter den Fadern (z. B. «2 Min. vo
 msgid "Output"
 msgstr "Ausgang"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Password"
 msgstr "Passwort"
@@ -632,6 +685,27 @@ msgstr "Vorschau"
 msgid "Previous channels"
 msgstr "Vorherige Kanäle"
 
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+#: src/renderer/src/components/project/ProjectSection.tsx
+msgid "Project"
+msgstr "Projekt"
+
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "Project file"
+msgstr "Projektdatei"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Projects"
+msgstr "Projekte"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "Recent projects"
+msgstr "Zuletzt geöffnet"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "Remove {projectName} from the list (the file stays)"
+msgstr "{projectName} aus der Liste entfernen (die Datei bleibt)"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Remove the channel"
 msgstr "Kanal entfernen"
@@ -640,12 +714,12 @@ msgstr "Kanal entfernen"
 msgid "Remove the preset"
 msgstr "Preset entfernen"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 msgid "Repeat it"
 msgstr "Nochmals eingeben"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Repeat the new password"
 msgstr "Neues Passwort nochmals eingeben"
 
@@ -683,6 +757,10 @@ msgstr "Serielle Ports nochmals suchen"
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Sending on {path}"
 msgstr "Sendet auf {path}"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Set password and create"
+msgstr "Passwort setzen und erstellen"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Set password and unlock"
@@ -773,6 +851,10 @@ msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte, ihre Presets un
 msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
 msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nach einem Trennen. Beim nächsten Start verbindet sie sich von selbst damit, sofern das Widget vor dem Start der App eingesteckt ist; sonst startet sie ohne Verbindung: Steck das Widget ein, such die seriellen Ports nochmals und drück auf Verbinden."
 
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
+msgstr "Hier liegen die eigenen Einstellungen der App als JSON-Dateien: der Passwort-Hash, der Ausgabe-Port, die Sprache, die zuletzt geöffneten Projekte und die Fensterposition. Die Geräte und Szenen sind in den Projektdateien."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "Die Kanalsperre ist nach jedem Start an, unabhängig vom Modus. Heb sie in der Ansicht <0>Einstellungen</0> auf, z. B. für eine Show, bei der der Laser hoch genug hängt: im Show-Modus mit dem Passwort, im Setup-Modus mit einer Bestätigung. Sie bleibt dann aufgehoben, auch im Show-Modus und nach Sperren, bis <1>Kanalsperre einschalten</1> oder zu einem Neustart; die Leiste oben zeigt solange <2>Kanalsperre aufgehoben</2>. Wieder eingeschaltet, fallen die gesperrten Kanäle sofort auf ihr Maximum."
@@ -793,6 +875,26 @@ msgstr "Die Beschreibung ist <0>Markdown</0>: <1>**fett**</1>, Listen, die mit <
 msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
 msgstr "Der Editor erklärt jeden Schritt in seiner eigenen Hilfe. Geräte, die sich Adressen teilen, bekommen eine Warnung. Ein Klick auf den Wert eines Faders erhöht ihn um eins, ein Klick auf seinen Namen senkt ihn um eins."
 
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file can't be created: {message}"
+msgstr "Die Datei kann nicht erstellt werden: {message}"
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file can't be read: {message}"
+msgstr "Die Datei kann nicht gelesen werden: {message}"
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file is no Glühwürmli project, or it is damaged. It was left as it is."
+msgstr "Die Datei ist kein Glühwürmli-Projekt, oder sie ist beschädigt. Sie wurde so gelassen, wie sie ist."
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file isn't there: it was moved, renamed or deleted, or it is on a drive that isn't plugged in."
+msgstr "Die Datei ist nicht da: Sie wurde verschoben, umbenannt oder gelöscht, oder sie liegt auf einem Laufwerk, das nicht eingesteckt ist."
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file was saved by a newer version of Glühwürmli (project version {version}). Update the app to open it."
+msgstr "Die Datei wurde von einer neueren Version von Glühwürmli gespeichert (Projektversion {version}). Aktualisiere die App, um sie zu öffnen."
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
 msgstr "Das Gerät endet auf Adresse {lastAddress}, nach der letzten ({lastUniverseAddress})"
@@ -805,13 +907,17 @@ msgstr "Das Gerät braucht einen Namen"
 msgid "The fixture needs at least one channel"
 msgstr "Das Gerät braucht mindestens einen Kanal"
 
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "The fixtures and scenes are stored in this file. Copy it to back up the project or to take it to another computer."
+msgstr "Die Geräte und Szenen sind in dieser Datei gespeichert. Kopier sie, um das Projekt zu sichern oder auf einen anderen Computer mitzunehmen."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
+msgstr "Die Geräte und Szenen einer Anlage sind in einem <0>Projekt</0>: einer .glp-Datei, die du ablegst, wo du willst, in den Dokumenten, auf dem Desktop oder auf einem USB-Stick. Mach ein Projekt pro Lokal oder Show. Jede Änderung an einem Gerät oder einer Szene wird sofort in die Datei gespeichert; einen Speichern-Knopf gibt es nicht."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
 msgstr "Die Geräte erscheinen in der Reihenfolge, in der sie hinzugefügt wurden. Um sie so anzuordnen, wie du deine Anlage bedienst, nimm im Setup-Modus die Pfeile neben dem Namen eines Geräts: Sie verschieben es um einen Platz nach links oder rechts. Die Szenen-Knöpfe haben dieselben Pfeile, ebenso die Presets im Geräte-Editor."
-
-#: src/renderer/src/components/help/DataFolderSection.tsx
-msgid "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."
-msgstr "Die Geräte, die Fensterposition und der Passwort-Hash liegen hier als JSON-Dateien. Kopier den Ordner, um dein Setup zu sichern."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The highest value while the channel lock is on; empty for no lock"
@@ -906,7 +1012,6 @@ msgid "To make one, unlock Setup mode, set the faders to the look you want, pres
 msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
-#: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "Try again"
 msgstr "Nochmals versuchen"
 
@@ -921,6 +1026,10 @@ msgstr "Gib das aktuelle Passwort ein"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Unlock"
 msgstr "Entsperren"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Unlock and create"
+msgstr "Entsperren und erstellen"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Unlock Setup mode"
@@ -942,10 +1051,14 @@ msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von
 msgid "without a name"
 msgstr "ohne Namen"
 
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
+msgstr "Ohne Projekt bietet die Ansicht <0>Show</0> <1>Projekt erstellen</1> und <2>Projekt öffnen</2> an; später sind sie im Bereich <3>Projekt</3> der Ansicht <4>Einstellungen</4>, mit den zuletzt geöffneten Projekten. Ein Projekt zu erstellen braucht den Setup-Modus (im Show-Modus wird zuerst das Passwort verlangt), eines zu öffnen nicht. Ein Doppelklick auf eine .glp-Datei öffnet sie in der App, auch während die App läuft. Die App öffnet beim nächsten Start wieder das letzte Projekt."
+
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Wrong current password"
 msgstr "Falsches aktuelles Passwort"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 msgid "Wrong password"
 msgstr "Falsches Passwort"

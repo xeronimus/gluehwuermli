@@ -1,6 +1,6 @@
 import {IpcRendererEvent, contextBridge, ipcRenderer} from 'electron';
 
-import type {DmxOutputStatus, LockStatus} from '@shared/ipc';
+import type {DmxOutputStatus, LockStatus, ProjectPathRequest, ProjectStatus} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 import {PRELOAD_BRIDGE_GLOBAL, PreloadBridge} from '@shared/preloadBridge';
 
@@ -20,8 +20,27 @@ const preloadBridge: PreloadBridge = {
       ipcRenderer.removeListener(IpcChannel.STATUS_CHANGED, handler);
     };
   },
-  loadFixtures: () => ipcRenderer.invoke(IpcChannel.LOAD_FIXTURES),
-  saveFixtures: (setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, setup),
+  getProjectStatus: () => ipcRenderer.invoke(IpcChannel.GET_PROJECT_STATUS),
+  createProject: () => ipcRenderer.invoke(IpcChannel.CREATE_PROJECT),
+  openProject: () => ipcRenderer.invoke(IpcChannel.OPEN_PROJECT),
+  openRecentProject: (path) => ipcRenderer.invoke(IpcChannel.OPEN_RECENT_PROJECT, {path}),
+  listRecentProjects: () => ipcRenderer.invoke(IpcChannel.LIST_RECENT_PROJECTS),
+  removeRecentProject: (path) => ipcRenderer.invoke(IpcChannel.REMOVE_RECENT_PROJECT, {path}),
+  saveFixtures: (projectPath, setup) => ipcRenderer.invoke(IpcChannel.SAVE_FIXTURES, {projectPath, setup}),
+  onProjectChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, status: ProjectStatus) => listener(status);
+    ipcRenderer.on(IpcChannel.PROJECT_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.PROJECT_CHANGED, handler);
+    };
+  },
+  onProjectOpenRequested: (listener) => {
+    const handler = (_event: IpcRendererEvent, request: ProjectPathRequest) => listener(request.path);
+    ipcRenderer.on(IpcChannel.PROJECT_OPEN_REQUESTED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.PROJECT_OPEN_REQUESTED, handler);
+    };
+  },
   getDataFolder: () => ipcRenderer.invoke(IpcChannel.GET_DATA_FOLDER),
   openDataFolder: () => ipcRenderer.invoke(IpcChannel.OPEN_DATA_FOLDER),
   getLocale: () => ipcRenderer.invoke(IpcChannel.GET_LOCALE),

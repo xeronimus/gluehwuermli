@@ -5,12 +5,12 @@ import {
   FIXTURE_DESCRIPTION_MAX_LENGTH,
   FIXTURE_HINT_MAX_LENGTH,
   FIXTURE_PRESET_NAME_MAX_LENGTH,
-  FIXTURE_SETUP_VERSION,
   type Fixture,
   type FixtureChannel,
   type FixturePreset,
   type FixtureSetup,
-  FixtureSetupSchema
+  FixtureSetupSchema,
+  PROJECT_VERSION
 } from './ipc';
 import {scenesAreValid} from './scenes';
 import {duplicatesOf, isBlank} from './validation';
@@ -28,7 +28,7 @@ export interface FixtureOverlap {
 }
 
 export const fixtureSetupOf = (fixtures: readonly Fixture[]): FixtureSetup => ({
-  version: FIXTURE_SETUP_VERSION,
+  version: PROJECT_VERSION,
   fixtures: [...fixtures]
 });
 

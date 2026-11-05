@@ -17,3 +17,11 @@ win:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+# a double-click on a .glp starts the app with that project, or hands it to the running one (src/main/index.ts)
+fileAssociations:
+  - ext: glp
+    name: Glühwürmli project
+    description: Glühwürmli project
+    # relative to buildResources (build/): the app icon on a page
+    icon: project.ico
+    role: Editor

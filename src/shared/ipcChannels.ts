@@ -14,8 +14,15 @@ export const IpcChannel = {
   DISCONNECT: 'dmx:disconnect',
   GET_STATUS: 'dmx:get-status',
   GET_REMEMBERED_PORT: 'dmx:get-remembered-port',
-  LOAD_FIXTURES: 'fixtures:load',
-  SAVE_FIXTURES: 'fixtures:save',
+  GET_PROJECT_STATUS: 'project:get-status',
+  /** Setup mode only: a save dialog for the new file, then opens the empty project */
+  CREATE_PROJECT: 'project:create',
+  /** an open dialog; allowed in Show mode too */
+  OPEN_PROJECT: 'project:open',
+  OPEN_RECENT_PROJECT: 'project:open-recent',
+  LIST_RECENT_PROJECTS: 'project:list-recent',
+  REMOVE_RECENT_PROJECT: 'project:remove-recent',
+  SAVE_FIXTURES: 'project:save-fixtures',
   GET_DATA_FOLDER: 'app:get-data-folder',
   OPEN_DATA_FOLDER: 'app:open-data-folder',
   GET_LOCALE: 'app:get-locale',
@@ -33,5 +40,9 @@ export const IpcChannel = {
   /** main -> renderer, whenever the output status changes */
   STATUS_CHANGED: 'dmx:status-changed',
   /** main -> renderer, whenever the mode or the channel lock changes */
-  LOCK_CHANGED: 'app:lock-changed'
+  LOCK_CHANGED: 'app:lock-changed',
+  /** main -> renderer, whenever another project was opened (the output was blacked out) */
+  PROJECT_CHANGED: 'project:changed',
+  /** main -> renderer, a .glp was double-clicked while the app runs: the renderer asks about a draft, then opens it */
+  PROJECT_OPEN_REQUESTED: 'project:open-requested'
 } as const;

@@ -12,8 +12,8 @@ import {errorMessage, folderPath, message} from './DataFolderSection.css';
 import {sideSection} from './HelpView.css';
 
 /**
- * where the setup is stored, to back it up or paste in a fixture; a path to copy and, in Setup mode, a button opening
- * it
+ * where the app keeps its settings, e.g. to reset a forgotten password; a path to copy and, in Setup mode, a button
+ * opening it
  */
 const DataFolderSection = () => {
   const {t, i18n} = useLingui();
@@ -37,8 +37,8 @@ const DataFolderSection = () => {
       </h2>
       <p className={message}>
         <Trans>
-          The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back
-          up your setup.
+          The app's own settings are stored here as JSON files: the password hash, the output port, the language, the
+          recent projects and the window position. The fixtures and scenes are in the project files.
         </Trans>
       </p>
       {dataFolder.type === 'loading' && (

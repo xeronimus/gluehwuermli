@@ -18,7 +18,7 @@ const laserBox: Fixture = {
 const stateWith = (lockStatus: LockStatusState) => ({
   ...getDefaultFixturesState(),
   ...getDefaultLockState(),
-  fixtureSetup: {type: 'loaded' as const, setup: fixtureSetupOf([laserBox])},
+  project: {type: 'open' as const, project: {path: 'Rig.glp', setup: fixtureSetupOf([laserBox])}},
   lockStatus
 });
 
