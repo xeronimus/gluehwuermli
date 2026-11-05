@@ -6,7 +6,7 @@ import {isSceneCapped} from '@/data/channelLocks';
 import {useActionApplyScene} from '@/state/actionHooks/applyScene';
 import {useActionDeleteScene, useActionMoveScene} from '@/state/actionHooks/saveFixtures';
 import {selectFixtures, selectScenes} from '@/state/fixtures/fixturesSelectors';
-import {selectChannelLimits} from '@/state/lock/lockSelectors';
+import {selectChannelLimits, selectLiftedChannelLimits} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
@@ -30,6 +30,7 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
   const scenes = useAppStore(selectScenes);
   const fixtures = useAppStore(selectFixtures);
   const limits = useAppStore(selectChannelLimits);
+  const lifted = useAppStore(selectLiftedChannelLimits);
   const applyScene = useActionApplyScene();
   const deleteScene = useActionDeleteScene();
   const moveScene = useActionMoveScene();
@@ -50,14 +51,18 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
       {scenes.map((scene, index) => {
         const sceneName = scene.name;
         const capped = isSceneCapped(scene, fixtures, limits);
+        const capLifted = isSceneCapped(scene, fixtures, lifted);
         const button = (
           <Button
             key={scene.id}
             onClick={() => applyScene(scene)}
+            variant={capLifted ? 'capLifted' : 'default'}
             title={
               capped
                 ? t`Apply the scene ${sceneName}; locked channels go only up to their cap`
-                : t`Apply the scene ${sceneName}`
+                : capLifted
+                  ? t`Apply the scene ${sceneName}; it sets a channel above its cap, the channel lock is lifted`
+                  : t`Apply the scene ${sceneName}`
             }
           >
             <SceneIcon />
