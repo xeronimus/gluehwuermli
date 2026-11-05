@@ -8,8 +8,9 @@ import {
   isAtCap,
   isChannelLockOn,
   isFaderLocked,
-  isPresetLocked,
-  isSceneCapped
+  liftedLimits,
+  presetExceedsLimits,
+  sceneExceedsLimits
 } from './channelLocks';
 
 const laserBox: Fixture = {
@@ -38,6 +39,12 @@ describe('isChannelLockOn and activeLimits', () => {
   test('the fixtures caps while on, none once lifted', () => {
     expect(activeLimits([laserBox], {mode: 'show', passwordSet: false, channelLocked: true})).toEqual(limits);
     expect(activeLimits([laserBox], {mode: 'show', passwordSet: true, channelLocked: false})).toEqual(new Map());
+  });
+
+  test('the lifted caps: none while on or unknown, the fixtures caps once lifted', () => {
+    expect(liftedLimits([laserBox], {mode: 'show', passwordSet: false, channelLocked: true})).toEqual(new Map());
+    expect(liftedLimits([laserBox], undefined)).toEqual(new Map());
+    expect(liftedLimits([laserBox], {mode: 'setup', passwordSet: true, channelLocked: false})).toEqual(limits);
   });
 });
 
@@ -72,17 +79,17 @@ describe('capping values', () => {
   });
 });
 
-describe('isPresetLocked', () => {
+describe('presetExceedsLimits', () => {
   const presetOf = (values: {offset: number; value: number}[]) => ({id: 'p', name: 'P', values});
 
   test('a preset setting a channel above its cap is locked', () => {
-    expect(isPresetLocked(laserBox, presetOf([{offset: 1, value: 255}]), limits)).toBe(true);
-    expect(isPresetLocked(laserBox, presetOf([{offset: 2, value: 100}]), limits)).toBe(true);
+    expect(presetExceedsLimits(laserBox, presetOf([{offset: 1, value: 255}]), limits)).toBe(true);
+    expect(presetExceedsLimits(laserBox, presetOf([{offset: 2, value: 100}]), limits)).toBe(true);
   });
 
   test('a preset setting locked channels within their cap, or none, is not', () => {
     expect(
-      isPresetLocked(
+      presetExceedsLimits(
         laserBox,
         presetOf([
           {offset: 1, value: 0},
@@ -91,12 +98,12 @@ describe('isPresetLocked', () => {
         limits
       )
     ).toBe(false);
-    expect(isPresetLocked(laserBox, presetOf([{offset: 0, value: 255}]), limits)).toBe(false);
-    expect(isPresetLocked(laserBox, presetOf([{offset: 1, value: 255}]), new Map())).toBe(false);
+    expect(presetExceedsLimits(laserBox, presetOf([{offset: 0, value: 255}]), limits)).toBe(false);
+    expect(presetExceedsLimits(laserBox, presetOf([{offset: 1, value: 255}]), new Map())).toBe(false);
   });
 });
 
-describe('isSceneCapped', () => {
+describe('sceneExceedsLimits', () => {
   const sceneOf = (values: {offset: number; value: number}[]) => ({
     id: 'show',
     name: 'Show',
@@ -104,13 +111,13 @@ describe('isSceneCapped', () => {
   });
 
   test('a scene setting a channel above its cap is capped', () => {
-    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [laserBox], limits)).toBe(true);
+    expect(sceneExceedsLimits(sceneOf([{offset: 1, value: 255}]), [laserBox], limits)).toBe(true);
   });
 
   test('within the caps, without caps, or on a fixture that is gone, it is not', () => {
-    expect(isSceneCapped(sceneOf([{offset: 2, value: 50}]), [laserBox], limits)).toBe(false);
-    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [laserBox], new Map())).toBe(false);
-    expect(isSceneCapped(sceneOf([{offset: 1, value: 255}]), [], limits)).toBe(false);
+    expect(sceneExceedsLimits(sceneOf([{offset: 2, value: 50}]), [laserBox], limits)).toBe(false);
+    expect(sceneExceedsLimits(sceneOf([{offset: 1, value: 255}]), [laserBox], new Map())).toBe(false);
+    expect(sceneExceedsLimits(sceneOf([{offset: 1, value: 255}]), [], limits)).toBe(false);
   });
 });
 

@@ -5,10 +5,10 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {fixturePresets} from '@shared/fixtures';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH, type Fixture} from '@shared/ipc';
 
-import {isPresetLocked} from '@/data/channelLocks';
+import {presetExceedsLimits} from '@/data/channelLocks';
 import {useActionApplyPreset} from '@/state/actionHooks/applyPreset';
 import {useActionSavePreset} from '@/state/actionHooks/saveFixtures';
-import {selectChannelLimits} from '@/state/lock/lockSelectors';
+import {selectChannelLimits, selectLiftedChannelLimits} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
@@ -30,6 +30,7 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
   const {t} = useLingui();
   const fixtureName = fixture.name;
   const limits = useAppStore(selectChannelLimits);
+  const lifted = useAppStore(selectLiftedChannelLimits);
   const applyPreset = useActionApplyPreset();
   const savePreset = useActionSavePreset();
   // undefined while not saving a preset
@@ -53,14 +54,22 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
   return (
     <div className={presetButtons}>
       {fixturePresets(fixture).map((preset) => {
-        const locked = isPresetLocked(fixture, preset, limits);
+        const locked = presetExceedsLimits(fixture, preset, limits);
+        const capLifted = presetExceedsLimits(fixture, preset, lifted);
         const presetName = preset.name;
         return (
           <Button
             key={preset.id}
             onClick={() => applyPreset(fixture, preset)}
             disabled={locked}
-            title={locked ? t`${presetName} sets a locked channel` : t`Apply the preset ${presetName}`}
+            variant={capLifted ? 'capLifted' : 'default'}
+            title={
+              locked
+                ? t`${presetName} sets a locked channel`
+                : capLifted
+                  ? t`Apply the preset ${presetName}; it sets a channel above its cap, the channel lock is lifted`
+                  : t`Apply the preset ${presetName}`
+            }
           >
             {locked && <LockIcon />}
             {preset.name}
