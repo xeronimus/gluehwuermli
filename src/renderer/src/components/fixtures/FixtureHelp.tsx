@@ -1,7 +1,7 @@
 import {Trans} from '@lingui/react/macro';
 
-import {HelpIcon} from '../commons/icons';
-import {fixtureHelp, helpBody, helpExample, helpSummary} from './FixtureHelp.css';
+import EditorHelp from './EditorHelp';
+import {helpExample} from './EditorHelp.css';
 
 interface FixtureHelpProps {
   /** open when adding a fixture, where the help is needed most; the user can still toggle it */
@@ -10,75 +10,68 @@ interface FixtureHelpProps {
 
 /** how to turn a device's manual into a fixture: the start address, channel names and offsets */
 const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
-  <details className={fixtureHelp} open={initiallyOpen}>
-    <summary className={helpSummary}>
-      <HelpIcon /> <Trans>How to set up a fixture</Trans>
-    </summary>
-    <div className={helpBody}>
-      <ol>
-        <li>
-          <Trans>
-            Look up the <strong>channel list</strong> (often called DMX chart or DMX mode) in the device's manual. Many
-            devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it.
-          </Trans>
-        </li>
-        <li>
-          <Trans>
-            Set the <strong>start address</strong> to the DMX address set on the device (its display or DIP switches).
-            The device listens there and on the addresses after it.
-          </Trans>
-        </li>
-        <li>
-          <Trans>
-            Add a <strong>channel</strong> for every entry of the list you want to control, named as you like. Its{' '}
-            <strong>offset</strong> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and
-            so on. Leave out the ones you don't need, the gaps are fine.
-          </Trans>
-        </li>
-        <li>
-          <Trans>
-            The <strong>Address</strong> column shows where each channel lands. Fixtures sharing addresses get a
-            warning: on purpose, e.g. two PARs moving together, or by mistake.
-          </Trans>
-        </li>
-      </ol>
-      <p className={helpExample}>
+  <EditorHelp title={<Trans>How to set up a fixture</Trans>} initiallyOpen={initiallyOpen}>
+    <ol>
+      <li>
         <Trans>
-          Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2
-          (12).
+          Look up the <strong>channel list</strong> (often called DMX chart or DMX mode) in the device's manual. Many
+          devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it.
         </Trans>
-      </p>
-      <p>
+      </li>
+      <li>
         <Trans>
-          The <strong>hint</strong> is shown below the faders, for what you need while playing, e.g. "warm up 2 min
-          before smoke". Use the <strong>description</strong> for anything else worth knowing about the device: the DMX
-          mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the
-          fixture.
+          Set the <strong>start address</strong> to the DMX address set on the device (its display or DIP switches). The
+          device listens there and on the addresses after it.
         </Trans>
-      </p>
-      <p>
+      </li>
+      <li>
         <Trans>
-          The description is <strong>Markdown</strong>: <code>**bold**</code>, lists starting with <code>-</code>,
-          tables, and links like <code>[manual](https://…)</code>, which open in your browser. Only links to web pages (
-          <code>http://</code> or <code>https://</code>) can be clicked, any other shows as text.{' '}
-          <strong>Preview</strong> shows how it will look.
+          Add a <strong>channel</strong> for every entry of the list you want to control, named as you like. Its{' '}
+          <strong>offset</strong> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and
+          so on. Leave out the ones you don't need, the gaps are fine.
         </Trans>
-      </p>
-      <p>
+      </li>
+      <li>
         <Trans>
-          A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white".
-          The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save
-          button next to the presets.
+          The <strong>Address</strong> column shows where each channel lands. Fixtures sharing addresses get a warning:
+          on purpose, e.g. two PARs moving together, or by mistake.
         </Trans>
-      </p>
-      <p>
-        <Trans>
-          No manual? Use the <strong>Channels</strong> tab to move one channel after the other from the device's address
-          and watch what it does.
-        </Trans>
-      </p>
-    </div>
-  </details>
+      </li>
+    </ol>
+    <p className={helpExample}>
+      <Trans>
+        Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12).
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        The <strong>hint</strong> is shown below the faders, for what you need while playing, e.g. "warm up 2 min before
+        smoke". Use the <strong>description</strong> for anything else worth knowing about the device: the DMX mode, DIP
+        switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        The description is <strong>Markdown</strong>: <code>**bold**</code>, lists starting with <code>-</code>, tables,
+        and links like <code>[manual](https://…)</code>, which open in your browser. Only links to web pages (
+        <code>http://</code> or <code>https://</code>) can be clicked, any other shows as text. <strong>Preview</strong>{' '}
+        shows how it will look.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white". The
+        channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next
+        to the presets.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        No manual? Use the <strong>Channels</strong> tab to move one channel after the other from the device's address
+        and watch what it does.
+      </Trans>
+    </p>
+  </EditorHelp>
 );
 
 export default FixtureHelp;
