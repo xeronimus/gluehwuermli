@@ -97,7 +97,8 @@ src/
                              # merges each change into the whole file: the lock's password, the output's port)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
-                             # externalLinks: no navigation or new window, only http(s) links open in the browser
+                             # externalLinks: no navigation away from the app page or new window, only http(s) links
+                             # open in the browser
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3)
       enttecProPacket.ts     # label 6 framing
