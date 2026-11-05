@@ -4,6 +4,7 @@ import type {Fixture, Scene} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
 import {changingFixtures, withFixture, withoutFixture} from '@/data/fixtureList';
+import {type MoveDirection, movedWithId} from '@/data/listOrder';
 import {capturePreset, withPreset} from '@/data/presets';
 import {
   type SceneEdit,
@@ -11,6 +12,7 @@ import {
   changingFixturesAndScenes,
   editedScene,
   withScene,
+  withSceneMoved,
   withoutScene
 } from '@/data/scenes';
 import logger from '@/data/service/Logger';
@@ -41,6 +43,8 @@ const couldNotSavePreset = (presetName: string, {name: fixtureName}: Fixture) =>
   msg`Could not save the preset ${presetName} of ${fixtureName}`;
 const couldNotSaveScene = (sceneName: string) => msg`Could not save the scene ${sceneName}`;
 const couldNotDeleteScene = ({name: sceneName}: Scene) => msg`Could not delete the scene ${sceneName}`;
+const couldNotMoveFixture = ({name: fixtureName}: Fixture) => msg`Could not move the fixture ${fixtureName}`;
+const couldNotMoveScene = ({name: sceneName}: Scene) => msg`Could not move the scene ${sceneName}`;
 
 /** adds the fixture, or replaces the one with its id */
 export function useActionSaveFixture() {
@@ -96,6 +100,26 @@ export function useActionEditScene() {
       couldNotSaveScene(edit.name.trim())
     );
   };
+}
+
+/** one place earlier or later in the Show view; the scenes don't change, they don't depend on the order */
+export function useActionMoveFixture() {
+  return (fixture: Fixture, direction: MoveDirection) =>
+    storeFixtures(
+      changingFixtures((fixtures) => movedWithId(fixtures, fixture.id, direction)),
+      `moving the fixture ${fixture.name}`,
+      couldNotMoveFixture(fixture)
+    );
+}
+
+/** one place earlier or later among the scene buttons */
+export function useActionMoveScene() {
+  return (scene: Scene, direction: MoveDirection) =>
+    storeFixtures(
+      (setup) => withSceneMoved(setup, scene.id, direction),
+      `moving the scene ${scene.name}`,
+      couldNotMoveScene(scene)
+    );
 }
 
 export function useActionDeleteScene() {

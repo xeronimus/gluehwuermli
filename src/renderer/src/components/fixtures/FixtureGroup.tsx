@@ -5,11 +5,13 @@ import {useLingui} from '@lingui/react/macro';
 import type {Fixture} from '@shared/ipc';
 
 import {addressRangeOf, fixtureFaders} from '@/data/fixtureFaders';
+import type {MoveDirection} from '@/data/listOrder';
 import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
 import MarkdownText from '../commons/MarkdownText';
+import MoveButtons from '../commons/MoveButtons';
 import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon, FixtureIcon} from '../commons/icons';
 import {
   fixtureGroup,
@@ -27,6 +29,10 @@ import FixturePresetButtons from './FixturePresetButtons';
 export interface FixtureGroupActions {
   onEdit: () => void;
   onDelete: () => void;
+  onMove: (direction: MoveDirection) => void;
+  /** where the fixture is in the Show view, of `count` fixtures */
+  index: number;
+  count: number;
   /** while a scene is being edited: the scene editor works with the fixtures as they are */
   disabled: boolean;
 }
@@ -57,6 +63,13 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         {actions && (
           <>
+            <MoveButtons
+              index={actions.index}
+              count={actions.count}
+              onMove={actions.onMove}
+              disabled={actions.disabled}
+              titles={{earlier: t`Move ${fixtureName} to the left`, later: t`Move ${fixtureName} to the right`}}
+            />
             <Button variant="icon" onClick={actions.onEdit} disabled={actions.disabled} title={t`Edit ${fixtureName}`}>
               <EditIcon />
             </Button>

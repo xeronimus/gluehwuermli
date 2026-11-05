@@ -156,6 +156,13 @@ const UserManual = () => (
           value raises it by one, a click on its name lowers it by one.
         </Trans>
       </p>
+      <p>
+        <Trans>
+          The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows
+          next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have
+          the same arrows, and so do the presets in the fixture editor.
+        </Trans>
+      </p>
     </section>
 
     <section className={manualSection}>

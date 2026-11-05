@@ -243,6 +243,14 @@ msgstr "Could not load the fixtures"
 msgid "Could not lock"
 msgstr "Could not lock"
 
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not move the fixture {fixtureName}"
+msgstr "Could not move the fixture {fixtureName}"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not move the scene {sceneName}"
+msgstr "Could not move the scene {sceneName}"
+
 #: src/renderer/src/state/actionHooks/dataFolder.ts
 msgid "Could not open the folder"
 msgstr "Could not open the folder"
@@ -444,6 +452,30 @@ msgstr "Maximum of channel {row} while locked"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Mode"
 msgstr "Mode"
+
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Move {fixtureName} to the left"
+msgstr "Move {fixtureName} to the left"
+
+#: src/renderer/src/components/fixtures/FixtureGroup.tsx
+msgid "Move {fixtureName} to the right"
+msgstr "Move {fixtureName} to the right"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Move preset {presetNumber} to the left"
+msgstr "Move preset {presetNumber} to the left"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Move preset {presetNumber} to the right"
+msgstr "Move preset {presetNumber} to the right"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Move the scene {sceneName} to the left"
+msgstr "Move the scene {sceneName} to the left"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Move the scene {sceneName} to the right"
+msgstr "Move the scene {sceneName} to the right"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
@@ -756,6 +788,10 @@ msgstr "The fixture needs a name"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The fixture needs at least one channel"
 msgstr "The fixture needs at least one channel"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
+msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."

@@ -2,6 +2,8 @@ import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel} from '@shared/dmx';
 import {fixturePresets} from '@shared/fixtures';
 import type {Fixture, FixtureChannel, FixturePreset} from '@shared/ipc';
 
+import {type MoveDirection, moved} from './listOrder';
+
 /** a fixture as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
 export interface FixtureDraft {
   readonly name: string;
@@ -178,4 +180,10 @@ export const withPresetValueChange = (
 export const withoutPreset = (draft: FixtureDraft, presetIndex: number): FixtureDraft => ({
   ...draft,
   presets: draft.presets.filter((_, current) => current !== presetIndex)
+});
+
+/** the preset one place earlier or later: the order of the fixture's preset buttons */
+export const withPresetMoved = (draft: FixtureDraft, presetIndex: number, direction: MoveDirection): FixtureDraft => ({
+  ...draft,
+  presets: moved(draft.presets, presetIndex, direction)
 });

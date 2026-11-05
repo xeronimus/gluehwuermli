@@ -4,12 +4,13 @@ import type {Scene} from '@shared/ipc';
 
 import {isSceneCapped} from '@/data/channelLocks';
 import {useActionApplyScene} from '@/state/actionHooks/applyScene';
-import {useActionDeleteScene} from '@/state/actionHooks/saveFixtures';
+import {useActionDeleteScene, useActionMoveScene} from '@/state/actionHooks/saveFixtures';
 import {selectFixtures, selectScenes} from '@/state/fixtures/fixturesSelectors';
 import {selectChannelLimits} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import MoveButtons from '../commons/MoveButtons';
 import {DeleteIcon, EditIcon, LockIcon, SceneIcon} from '../commons/icons';
 import {sceneButtons, sceneEntry} from './SceneButtons.css';
 
@@ -21,8 +22,8 @@ interface SceneButtonsProps {
 }
 
 /**
- * A button per scene, setting the channels of its fixtures at once. In Setup mode each comes with an edit and a delete
- * button. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
+ * A button per scene, setting the channels of its fixtures at once. In Setup mode each comes with move, edit and delete
+ * buttons. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
  */
 const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
   const {t} = useLingui();
@@ -31,6 +32,7 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
   const limits = useAppStore(selectChannelLimits);
   const applyScene = useActionApplyScene();
   const deleteScene = useActionDeleteScene();
+  const moveScene = useActionMoveScene();
 
   if (scenes.length === 0) {
     return null;
@@ -45,7 +47,7 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
 
   return (
     <div className={sceneButtons} role="group" aria-label={t`Scenes`}>
-      {scenes.map((scene) => {
+      {scenes.map((scene, index) => {
         const sceneName = scene.name;
         const capped = isSceneCapped(scene, fixtures, limits);
         const button = (
@@ -69,6 +71,16 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
         return (
           <span key={scene.id} className={sceneEntry}>
             {button}
+            <MoveButtons
+              index={index}
+              count={scenes.length}
+              onMove={(direction) => void moveScene(scene, direction)}
+              disabled={actionsDisabled}
+              titles={{
+                earlier: t`Move the scene ${sceneName} to the left`,
+                later: t`Move the scene ${sceneName} to the right`
+              }}
+            />
             <Button
               variant="icon"
               onClick={() => onEdit(scene)}
