@@ -16,13 +16,15 @@ import {sceneButtons, sceneEntry} from './SceneButtons.css';
 interface SceneButtonsProps {
   /** undefined in Show mode: scenes can be played, not changed */
   onEdit: ((scene: Scene) => void) | undefined;
+  /** while a scene is being edited: no other edit, and the scene being edited can't be deleted under the editor */
+  actionsDisabled: boolean;
 }
 
 /**
  * A button per scene, setting the channels of its fixtures at once. In Setup mode each comes with an edit and a delete
  * button. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
  */
-const SceneButtons = ({onEdit}: SceneButtonsProps) => {
+const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
   const {t} = useLingui();
   const scenes = useAppStore(selectScenes);
   const fixtures = useAppStore(selectFixtures);
@@ -67,10 +69,20 @@ const SceneButtons = ({onEdit}: SceneButtonsProps) => {
         return (
           <span key={scene.id} className={sceneEntry}>
             {button}
-            <Button variant="icon" onClick={() => onEdit(scene)} title={t`Edit the scene ${sceneName}`}>
+            <Button
+              variant="icon"
+              onClick={() => onEdit(scene)}
+              disabled={actionsDisabled}
+              title={t`Edit the scene ${sceneName}`}
+            >
               <EditIcon />
             </Button>
-            <Button variant="icon" onClick={() => onDelete(scene)} title={t`Delete the scene ${sceneName}`}>
+            <Button
+              variant="icon"
+              onClick={() => onDelete(scene)}
+              disabled={actionsDisabled}
+              title={t`Delete the scene ${sceneName}`}
+            >
               <DeleteIcon />
             </Button>
           </span>

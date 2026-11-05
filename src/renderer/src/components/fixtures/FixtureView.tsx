@@ -91,14 +91,20 @@ const FixtureView = () => {
     );
   }
 
+  // the scene editor works with the setup as it is: editing or deleting fixtures and scenes waits until it closes
+  const editingScene = editing.type === 'adding-scene' || editing.type === 'editing-scene';
+
   return (
     <div className={fixtureView}>
       {error && <span className={errorMessage}>{i18n._(error)}</span>}
 
-      <SceneButtons onEdit={setupMode ? (scene) => setEditing({type: 'editing-scene', scene}) : undefined} />
+      <SceneButtons
+        onEdit={setupMode ? (scene) => setEditing({type: 'editing-scene', scene}) : undefined}
+        actionsDisabled={editingScene}
+      />
 
       {/* above the fixtures, not in place of them: the look is set with their faders while the scene is named */}
-      {(editing.type === 'adding-scene' || editing.type === 'editing-scene') && (
+      {editingScene && (
         <SceneEditor
           key={editing.type === 'editing-scene' ? editing.scene.id : 'new'}
           scene={editing.type === 'editing-scene' ? editing.scene : undefined}
@@ -132,7 +138,11 @@ const FixtureView = () => {
             fixture={fixture}
             actions={
               setupMode
-                ? {onEdit: () => setEditing({type: 'editing', fixture}), onDelete: () => onDelete(fixture)}
+                ? {
+                    onEdit: () => setEditing({type: 'editing', fixture}),
+                    onDelete: () => onDelete(fixture),
+                    disabled: editingScene
+                  }
                 : undefined
             }
           />
