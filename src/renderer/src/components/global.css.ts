@@ -44,6 +44,46 @@ globalStyle('select:focus-visible, input:focus-visible, textarea:focus-visible',
   borderColor: vars.colors.focusBorder
 });
 
+// -- checkboxes: a dark box like the other inputs, filled with the firefly accent when checked, instead of Chromium's
+// white and blue. The tick is a background image: a data URI can't read the theme vars, so it takes the plain colour
+const checkboxTick = `url("data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="${colors.onPrimary}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+)}")`;
+
+globalStyle('input[type="checkbox"]', {
+  appearance: 'none',
+  flexShrink: 0,
+  width: '16px',
+  height: '16px',
+  margin: 0,
+  padding: 0,
+  borderRadius: vars.constants.radiusSm,
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: '100%',
+  cursor: 'pointer'
+});
+
+globalStyle('input[type="checkbox"]:hover:not(:disabled)', {
+  borderColor: vars.colors.focusBorder
+});
+
+globalStyle('input[type="checkbox"]:checked', {
+  backgroundColor: vars.colors.primary,
+  backgroundImage: checkboxTick,
+  borderColor: vars.colors.primary
+});
+
+globalStyle('input[type="checkbox"]:checked:hover:not(:disabled), input[type="checkbox"]:checked:focus-visible', {
+  backgroundColor: vars.colors.primaryHover,
+  borderColor: vars.colors.primaryHover
+});
+
+globalStyle('input[type="checkbox"]:disabled', {
+  cursor: 'default',
+  opacity: 0.5
+});
+
 // -- scrollbars: thin, a rounded thumb on no track, like the rest of the desk. Chromium's own pseudo-elements: the
 // standard `scrollbar-color` / `scrollbar-width` would override them and can't round the thumb
 globalStyle('::-webkit-scrollbar', {
