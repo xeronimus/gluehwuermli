@@ -87,11 +87,13 @@ src/
     ipc/fixtureIpcHandlers.ts # what fixtures:load / fixtures:save do, without Electron: save refused in Show mode,
                              # the engine's channel limits follow the setup
     ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;
-                             # refused in Show mode)
+                             # refused in Show mode); app:get/set-blackout-on-quit (blackoutOnQuitIpcHandlers,
+                             # also in Show mode)
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
                              # app:change-password, app:user-activity, pushes app:lock-changed
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     fixtures/FixtureStore.ts # store interface; impl/file (JSON in userData, atomic write, invalid file set aside)
+    quit/quitGuard.ts        # holds the quit until the DMX port is closed (blackout first if set), at most 2 s
     lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash
                              # (scrypt)
     settings/                # settings.json: settings (schema), SettingsStore + impl/file, appSettings (the one owner,

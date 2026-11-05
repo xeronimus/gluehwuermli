@@ -26,7 +26,9 @@ export const SettingsSchema = Type.Object({
   /** the port the output was last connected to, connected again on start (dmx/portMemory.ts) */
   outputPortPath: Type.Optional(Type.String({minLength: 1})),
   /** the language chosen in the app; without it, the OS language decides */
-  locale: Type.Optional(LocaleSchema)
+  locale: Type.Optional(LocaleSchema),
+  /** sends an all-zero universe before the port is closed on quit; without it, the rig keeps its last look */
+  blackoutOnQuit: Type.Optional(Type.Boolean())
 });
 export type Settings = Static<typeof SettingsSchema>;
 

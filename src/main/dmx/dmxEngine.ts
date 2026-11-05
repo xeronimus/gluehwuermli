@@ -38,8 +38,16 @@ export interface DmxEngine {
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
 
-  /** stops the timer and closes the port */
-  dispose: () => Promise<void>;
+  /**
+   * on quit: stops the timer, waits for a packet still being written, sends an all-zero universe first with `blackout`
+   * (the widget keeps sending the last one it got), then closes the port. Never rejects, a blackout that can't be
+   * written is logged and the port closed anyway
+   */
+  dispose: (options?: DisposeOptions) => Promise<void>;
+}
+
+export interface DisposeOptions {
+  blackout?: boolean;
 }
 
 export interface DmxEngineDependencies {
@@ -64,7 +72,8 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
   let currentStatus: DmxOutputStatus = {type: 'disconnected'};
   let connection: DmxConnection | undefined;
   let universeChanged = false;
-  let writeInFlight = false;
+  /** the tick's write still running, if any: a write is never started before the last one is done */
+  let pendingWrite: Promise<void> | undefined;
   let limits: ChannelLimits = new Map();
   let limitsEnforced = true;
 
@@ -116,13 +125,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     setStatus({type: 'failed', path, reason: 'port-closed'});
   };
 
-  const sendUniverseIfChanged = async () => {
-    if (!connection || !universeChanged || writeInFlight) {
-      return;
-    }
-    const target = connection;
-    universeChanged = false;
-    writeInFlight = true;
+  const writeUniverse = async (target: DmxConnection) => {
     try {
       log.debug(`sending universe to ${target.path}: ${describeActiveChannels(universe)}`);
       await target.write(enttecProDmxPacket(universe));
@@ -131,9 +134,44 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
       if (target === connection) {
         await failConnection(target.path, error);
       }
-    } finally {
-      writeInFlight = false;
     }
+  };
+
+  const sendUniverseIfChanged = async () => {
+    if (!connection || !universeChanged || pendingWrite) {
+      return;
+    }
+    universeChanged = false;
+    pendingWrite = writeUniverse(connection);
+    try {
+      await pendingWrite;
+    } finally {
+      pendingWrite = undefined;
+    }
+  };
+
+  /** skips the tick: it is stopped already, and the zeros have to go out even if nothing changed */
+  const blackOut = async () => {
+    const target = connection;
+    if (!target) {
+      return;
+    }
+    universe.fill(DMX_MIN_VALUE);
+    try {
+      await target.write(enttecProDmxPacket(universe));
+      log.info(`blacked out the DMX output on ${target.path}`);
+    } catch (error) {
+      log.warn(`blacking out the DMX output on ${target.path} failed`, error);
+    }
+  };
+
+  const shutDown = async ({blackout = false}: DisposeOptions) => {
+    // the zeros must be the last packet out, and close() must not cut off a packet being written
+    await pendingWrite;
+    if (blackout) {
+      await blackOut();
+    }
+    await closeConnection();
   };
 
   const refreshTimer = setInterval(() => void sendUniverseIfChanged(), refreshIntervalMs);
@@ -192,9 +230,9 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
       statusListeners.add(listener);
       return () => statusListeners.delete(listener);
     },
-    dispose: async () => {
+    dispose: async (options = {}) => {
       clearInterval(refreshTimer);
-      await runSerially(closeConnection);
+      await runSerially(() => shutDown(options));
     }
   };
 }

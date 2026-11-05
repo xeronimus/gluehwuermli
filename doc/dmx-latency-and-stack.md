@@ -78,9 +78,11 @@ Art-Net/sACN output (another `DmxPortConnector`), or moving the engine to Tauri,
 
 ## Open questions
 
-- **What happens on quit?** The widget keeps sending the last universe as long as it has USB power, even after the
-  app closes the port. Today quitting leaves the rig as it is. Whether to black out first (send all zeros, then
-  close) is a decision to make before the first show.
+- **What happens on quit?** Resolved (#39). The widget keeps sending the last universe as long as it has USB power,
+  even after the app closes the port. Quitting holds the quit until the port is closed (`main/quit/quitGuard.ts`, at
+  most 2 s, so a hanging port can't keep the app open). The setting **Black out on quit** (off by default) sends an
+  all-zero universe first, bypassing the tick, and waits until it has been written. An unplugged widget or a crash of
+  the main process still leaves the rig with its last look.
 - **Fades and chases** will run as timers in the main process, like the refresh tick. `setInterval` there has a
   jitter of a few ms, which is fine for lighting. If it ever isn't, move the engine to a `utilityProcess` or a worker
   thread.

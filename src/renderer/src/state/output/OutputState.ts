@@ -10,6 +10,8 @@ export interface OutputState {
   selectedPortPath: string | undefined;
   /** the port last chosen by hand, kept while it is unplugged; a preselection is never one */
   chosenPortPath: string | undefined;
+  /** whether quitting sends an all-zero universe first, as stored in main; undefined until it is loaded */
+  blackoutOnQuit: boolean | undefined;
 
   /** a failure talking to the main process, not one of the port (that one is in outputStatus) */
   outputError: MessageDescriptor | undefined;
@@ -20,5 +22,6 @@ export const getDefaultOutputState = (): OutputState => ({
   availablePorts: [],
   selectedPortPath: undefined,
   chosenPortPath: undefined,
+  blackoutOnQuit: undefined,
   outputError: undefined
 });

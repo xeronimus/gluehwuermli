@@ -6,10 +6,14 @@ import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
 import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
+import BlackoutOnQuitToggle from './BlackoutOnQuitToggle';
 import PortSelect from './PortSelect';
 import {message, portControls, settingsSection} from './SettingsView.css';
 
-/** the serial port of the DMX USB Pro: choosing it, connecting and disconnecting; no password needed, also in Show mode */
+/**
+ * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting, and whether quitting blacks out the
+ * rig; no password needed, also in Show mode
+ */
 const OutputSection = () => {
   const {t} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
@@ -50,6 +54,7 @@ const OutputSection = () => {
           </Button>
         )}
       </div>
+      <BlackoutOnQuitToggle />
     </section>
   );
 };
