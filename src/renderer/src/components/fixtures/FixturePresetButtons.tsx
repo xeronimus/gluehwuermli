@@ -5,7 +5,7 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {fixturePresets} from '@shared/fixtures';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH, type Fixture} from '@shared/ipc';
 
-import {isPresetLocked} from '@/data/channelLocks';
+import {presetExceedsLimits} from '@/data/channelLocks';
 import {useActionApplyPreset} from '@/state/actionHooks/applyPreset';
 import {useActionSavePreset} from '@/state/actionHooks/saveFixtures';
 import {selectChannelLimits, selectLiftedChannelLimits} from '@/state/lock/lockSelectors';
@@ -54,8 +54,8 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
   return (
     <div className={presetButtons}>
       {fixturePresets(fixture).map((preset) => {
-        const locked = isPresetLocked(fixture, preset, limits);
-        const capLifted = isPresetLocked(fixture, preset, lifted);
+        const locked = presetExceedsLimits(fixture, preset, limits);
+        const capLifted = presetExceedsLimits(fixture, preset, lifted);
         const presetName = preset.name;
         return (
           <Button

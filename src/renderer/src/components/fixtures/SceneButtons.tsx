@@ -2,7 +2,7 @@ import {useLingui} from '@lingui/react/macro';
 
 import type {Scene} from '@shared/ipc';
 
-import {isSceneCapped} from '@/data/channelLocks';
+import {sceneExceedsLimits} from '@/data/channelLocks';
 import {useActionApplyScene} from '@/state/actionHooks/applyScene';
 import {useActionDeleteScene, useActionMoveScene} from '@/state/actionHooks/saveFixtures';
 import {selectFixtures, selectScenes} from '@/state/fixtures/fixturesSelectors';
@@ -50,8 +50,8 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
     <div className={sceneButtons} role="group" aria-label={t`Scenes`}>
       {scenes.map((scene, index) => {
         const sceneName = scene.name;
-        const capped = isSceneCapped(scene, fixtures, limits);
-        const capLifted = isSceneCapped(scene, fixtures, lifted);
+        const capped = sceneExceedsLimits(scene, fixtures, limits);
+        const capLifted = sceneExceedsLimits(scene, fixtures, lifted);
         const button = (
           <Button
             key={scene.id}
