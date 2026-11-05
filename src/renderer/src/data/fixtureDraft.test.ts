@@ -8,6 +8,7 @@ import {
   withChannelChange,
   withNewChannel,
   withNewPreset,
+  withPresetMoved,
   withPresetName,
   withPresetValueChange,
   withoutChannel,
@@ -174,5 +175,15 @@ describe('presets', () => {
     expect(fixtureErrors(fixtureOfDraft('par', blank))).toEqual([{type: 'preset-value-invalid', presetName: 'Warm'}]);
 
     expect(fixtureOfDraft('par', withoutPreset(draftOf(withWarm), 0))).toEqual(par);
+  });
+
+  test('a moved preset keeps its values and changes the order of the presets only', () => {
+    const cold = {id: 'cold', name: 'Cold', values: [{offset: 0, value: 90}]};
+    const withBoth = {...withWarm, presets: [...withWarm.presets, cold]};
+
+    const moved = withPresetMoved(draftOf(withBoth), 1, 'earlier');
+
+    expect(fixtureOfDraft('par', moved).presets).toEqual([cold, ...withWarm.presets]);
+    expect(withPresetMoved(draftOf(withBoth), 1, 'later')).toEqual(draftOf(withBoth));
   });
 });
