@@ -105,9 +105,17 @@ msgstr "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, 
 msgid "Apply the preset {presetName}"
 msgstr "Apply the preset {presetName}"
 
+#: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+msgid "Apply the preset {presetName}; it sets a channel above its cap, the channel lock is lifted"
+msgstr "Apply the preset {presetName}; it sets a channel above its cap, the channel lock is lifted"
+
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Apply the scene {sceneName}"
 msgstr "Apply the scene {sceneName}"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Apply the scene {sceneName}; it sets a channel above its cap, the channel lock is lifted"
+msgstr "Apply the scene {sceneName}; it sets a channel above its cap, the channel lock is lifted"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Apply the scene {sceneName}; locked channels go only up to their cap"
@@ -159,8 +167,16 @@ msgid "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 msgstr "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 
 #: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
+msgstr "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
 msgid "Channel {label} is capped at {limit} by the channel lock"
 msgstr "Channel {label} is capped at {limit} by the channel lock"
+
+#: src/renderer/src/components/commons/ChannelFader.tsx
+msgid "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
+msgstr "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channel lock"

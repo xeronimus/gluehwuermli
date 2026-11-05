@@ -9,7 +9,8 @@ import {
   isChannelLockOn,
   isFaderLocked,
   isPresetLocked,
-  isSceneCapped
+  isSceneCapped,
+  liftedLimits
 } from './channelLocks';
 
 const laserBox: Fixture = {
@@ -38,6 +39,12 @@ describe('isChannelLockOn and activeLimits', () => {
   test('the fixtures caps while on, none once lifted', () => {
     expect(activeLimits([laserBox], {mode: 'show', passwordSet: false, channelLocked: true})).toEqual(limits);
     expect(activeLimits([laserBox], {mode: 'show', passwordSet: true, channelLocked: false})).toEqual(new Map());
+  });
+
+  test('the lifted caps: none while on or unknown, the fixtures caps once lifted', () => {
+    expect(liftedLimits([laserBox], {mode: 'show', passwordSet: false, channelLocked: true})).toEqual(new Map());
+    expect(liftedLimits([laserBox], undefined)).toEqual(new Map());
+    expect(liftedLimits([laserBox], {mode: 'setup', passwordSet: true, channelLocked: false})).toEqual(limits);
   });
 });
 
