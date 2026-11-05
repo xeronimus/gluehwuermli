@@ -14,7 +14,7 @@ import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {app, backdrop, contentVariants} from './App.css';
+import {app, backdrop, contentVariants, showViewVariants} from './App.css';
 import ShowView from './ShowView';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
@@ -28,6 +28,9 @@ import {defaultTheme} from './themes.css';
 
 type View = 'fixtures' | 'channels' | 'settings' | 'help';
 
+/** the views other than Show, mounted only while open */
+type OtherView = Exclude<View, 'fixtures'>;
+
 /** the raw channels reach every address, the fixtures only theirs: Setup mode only */
 const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
   {id: 'fixtures', label: i18n._(msg`Show`), Icon: FixturesIcon},
@@ -38,8 +41,7 @@ const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
   {id: 'help', label: i18n._(msg`Help`), Icon: HelpIcon}
 ];
 
-const VIEW_CONTENT: Record<View, () => ReactNode> = {
-  fixtures: () => <ShowView />,
+const VIEW_CONTENT: Record<OtherView, () => ReactNode> = {
   channels: () => <FaderBank />,
   settings: () => <SettingsView projectSection={(className) => <ProjectSection className={className} />} />,
   help: () => <HelpView />
@@ -81,7 +83,17 @@ const App = () => {
         />
       </ErrorBoundary>
       <main className={contentClass}>
-        <ErrorBoundary key={view}>{VIEW_CONTENT[view]()}</ErrorBoundary>
+        {/*
+          The Show view stays mounted, only hidden, while another view is open: a fixture or scene editor keeps its
+          draft in component state, and unmounting would drop it without a word. Kept, the draft is still there when
+          the user comes back, and opening another project from Settings asks before it drops it (hasOpenDraft).
+        */}
+        <div className={showViewVariants[view === 'fixtures' ? 'shown' : 'hidden']}>
+          <ErrorBoundary>
+            <ShowView />
+          </ErrorBoundary>
+        </div>
+        {view !== 'fixtures' && <ErrorBoundary key={view}>{VIEW_CONTENT[view]()}</ErrorBoundary>}
       </main>
     </div>
   );
