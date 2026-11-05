@@ -20,12 +20,19 @@ change bumps the minor version and everything else the patch version.
 - Icons for fixtures (a cone) and scenes (a stack), in front of their names and on their Add buttons
 - The order of the fixtures, the scene buttons and a fixture's presets can be changed in Setup mode, with arrows next
   to each of them (the presets' in the fixture editor)
+- **Black out on quit** in the Output section of the Settings view: closing the app sets all channels to 0 before it
+  closes the port, so the rig goes dark instead of keeping its last look. Off by default, changed in Setup mode, kept
+  in `settings.json`
 
 ### Changed
 
 - The Fixtures view is now called **Show**
 - In Setup mode, the Show view has an orange frame
 - The Edit/Preview toggle of a fixture's description shows only icons, its names as tooltips
+
+### Fixed
+
+- Quitting waits until the DMX port is closed (at most 2 s), instead of leaving that to chance
 
 ## [0.1.2] - 2026-11-02
 
