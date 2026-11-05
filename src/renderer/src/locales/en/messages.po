@@ -90,8 +90,8 @@ msgid "Address"
 msgstr "Address"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section, changed in Setup mode), closing the app sets all channels to 0 first."
-msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section, changed in Setup mode), closing the app sets all channels to 0 first."
+msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section), closing the app sets all channels to 0 first."
+msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section), closing the app sets all channels to 0 first."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -701,8 +701,8 @@ msgid "Set the <0>start address</0> to the DMX address set on the device (its di
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
-msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone. Can be changed in Setup mode."
-msgstr "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone. Can be changed in Setup mode."
+msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
+msgstr "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Setting up a fixture"

@@ -175,7 +175,7 @@ export const SetLocaleRequestSchema = Type.Object({
 });
 export type SetLocaleRequest = Static<typeof SetLocaleRequestSchema>;
 
-/** whether an all-zero universe is sent before the port is closed on quit; read, and set in Setup mode only */
+/** whether an all-zero universe is sent before the port is closed on quit; also changed in Show mode */
 export const BlackoutOnQuitSchema = Type.Object({
   enabled: Type.Boolean()
 });

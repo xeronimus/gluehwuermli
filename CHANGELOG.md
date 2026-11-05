@@ -21,8 +21,8 @@ change bumps the minor version and everything else the patch version.
 - The order of the fixtures, the scene buttons and a fixture's presets can be changed in Setup mode, with arrows next
   to each of them (the presets' in the fixture editor)
 - **Black out on quit** in the Output section of the Settings view: closing the app sets all channels to 0 before it
-  closes the port, so the rig goes dark instead of keeping its last look. Off by default, changed in Setup mode, kept
-  in `settings.json`
+  closes the port, so the rig goes dark instead of keeping its last look. Off by default, no password needed, kept in
+  `settings.json`
 
 ### Changed
 

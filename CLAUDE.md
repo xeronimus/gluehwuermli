@@ -88,7 +88,7 @@ src/
                              # the engine's channel limits follow the setup
     ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;
                              # refused in Show mode); app:get/set-blackout-on-quit (blackoutOnQuitIpcHandlers,
-                             # set refused in Show mode)
+                             # also in Show mode)
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
                              # app:change-password, app:user-activity, pushes app:lock-changed
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store

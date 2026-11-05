@@ -20,7 +20,7 @@ export function useActionLoadBlackoutOnQuit() {
   };
 }
 
-/** stored first: a change main refuses (Show mode) or can't store leaves the shown setting as it was */
+/** stored first: a change main can't store leaves the shown setting as it was */
 export function useActionSetBlackoutOnQuit() {
   const setBlackoutOnQuit = useAppStore((state) => state.setBlackoutOnQuit);
   const setOutputError = useAppStore((state) => state.setOutputError);
