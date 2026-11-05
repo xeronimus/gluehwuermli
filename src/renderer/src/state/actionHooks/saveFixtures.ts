@@ -3,8 +3,8 @@ import {msg} from '@lingui/core/macro';
 import type {Fixture, Scene} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
-import {changingFixtures, withFixture, withoutFixture} from '@/data/fixtureList';
-import {type MoveDirection, movedWithId} from '@/data/listOrder';
+import {changingFixtures, withFixture, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
+import type {MoveDirection} from '@/data/listOrder';
 import {capturePreset, withPreset} from '@/data/presets';
 import {
   type SceneEdit,
@@ -106,7 +106,7 @@ export function useActionEditScene() {
 export function useActionMoveFixture() {
   return (fixture: Fixture, direction: MoveDirection) =>
     storeFixtures(
-      changingFixtures((fixtures) => movedWithId(fixtures, fixture.id, direction)),
+      changingFixtures((fixtures) => withFixtureMoved(fixtures, fixture.id, direction)),
       `moving the fixture ${fixture.name}`,
       couldNotMoveFixture(fixture)
     );
