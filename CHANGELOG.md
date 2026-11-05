@@ -44,6 +44,8 @@ change bumps the minor version and everything else the patch version.
 - The Edit/Preview toggle of a fixture's description shows only icons, its names as tooltips
 - A fixture or scene being edited and not saved yet is kept while another view is open (Settings, Channels, Help),
   instead of being dropped
+- Checkboxes match the dark desk: a dark box, filled with the yellow accent when checked, instead of the browser's
+  white and blue
 
 ### Fixed
 
