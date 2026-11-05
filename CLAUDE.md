@@ -62,6 +62,7 @@ doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   architecture/decisions/    # ADRs (.adr-dir)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
+scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through a DMX USB Pro (-Port, -From, -To)
 lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
