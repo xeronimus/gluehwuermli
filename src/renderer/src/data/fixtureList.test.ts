@@ -1,6 +1,6 @@
-import type {Fixture} from '@shared/ipc';
+import type {Fixture, FixtureSetup} from '@shared/ipc';
 
-import {withFixture, withoutFixture} from './fixtureList';
+import {changingFixtures, withFixture, withoutFixture} from './fixtureList';
 
 const fixtureOf = (id: string, name: string): Fixture => ({
   id,
@@ -25,4 +25,10 @@ test('an edited fixture replaces the one with its id, in place', () => {
 test('removes the fixture with the id, an unknown id changes nothing', () => {
   expect(withoutFixture([left, right], 'left')).toEqual([right]);
   expect(withoutFixture([left, right], 'smoke')).toEqual([left, right]);
+});
+
+test('a change of the list changes only the fixtures of the setup', () => {
+  const setup: FixtureSetup = {version: 1, fixtures: [left]};
+
+  expect(changingFixtures((fixtures) => [...fixtures, right])(setup)).toEqual({version: 1, fixtures: [left, right]});
 });

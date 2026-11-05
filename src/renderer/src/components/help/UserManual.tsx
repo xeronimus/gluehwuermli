@@ -59,8 +59,8 @@ const UserManual = () => (
       </h2>
       <p>
         <Trans>
-          The app always starts in <strong>Show mode</strong>: the fixtures and their presets can be played, but not
-          changed, and the Channels view is off. Anything else needs <strong>Setup mode</strong>: in the{' '}
+          The app always starts in <strong>Show mode</strong>: the fixtures, their presets and the scenes can be played,
+          but not changed, and the Channels view is off. Anything else needs <strong>Setup mode</strong>: in the{' '}
           <strong>Settings</strong> view, press <strong>Unlock Setup mode</strong> and type the password. The first
           time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar
           says so.
@@ -69,8 +69,8 @@ const UserManual = () => (
       <p>
         <Trans>
           Setup mode returns to Show mode with the <strong>Lock</strong> button, after 10 minutes without input and
-          whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock
-          stays as it is.
+          whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel
+          lock stays as it is.
         </Trans>
       </p>
       <p>
@@ -95,9 +95,11 @@ const UserManual = () => (
       <p>
         <Trans>
           A fixture's channel can have a <strong>Max while locked</strong> (in the fixture editor): while the channel
-          lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro
-          channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they
-          are greyed out), and a preset that would set it higher is disabled.
+          lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a
+          macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0
+          they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher
+          stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the
+          scene's button shows a lock.
         </Trans>
       </p>
       <p>
@@ -125,7 +127,7 @@ const UserManual = () => (
       <p>
         <Trans>
           A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press{' '}
-          <strong>Add fixture</strong> in the <strong>Fixtures</strong> view:
+          <strong>Add fixture</strong> in the <strong>Show</strong> view:
         </Trans>
       </p>
       <ol>
@@ -165,6 +167,27 @@ const UserManual = () => (
           A preset is a button on a fixture that sets several of its channels at once, e.g. "Warm white". To make one,
           set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or
           choose which channels it sets: the ones it leaves out stay as they are.
+        </Trans>
+      </p>
+    </section>
+
+    <section className={manualSection}>
+      <h2>
+        <Trans>Scenes</Trans>
+      </h2>
+      <p>
+        <Trans>
+          A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. "Intro" or
+          "Blackout". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the
+          PARs while the smoke machine keeps running.
+        </Trans>
+      </p>
+      <p>
+        <Trans>
+          To make one, unlock Setup mode, set the faders to the look you want, press <strong>Add scene</strong> next to{' '}
+          <strong>Add fixture</strong>, name it and choose its fixtures: their current values are stored. The edit
+          button next to a scene renames it or changes its fixtures; check <strong>Save current values</strong> to store
+          what the faders show now. Deleting a fixture takes it out of every scene.
         </Trans>
       </p>
     </section>

@@ -1,5 +1,6 @@
 import {BrowserWindow, app, screen, shell} from 'electron';
 import {join} from 'node:path';
+import {pathToFileURL} from 'node:url';
 
 import appIcon from '../assets/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
@@ -40,7 +41,12 @@ function createMainWindow(placement: WindowPlacement): BrowserWindow {
     }
   });
 
-  guardExternalLinks(window.webContents, (url) => shell.openExternal(url), log);
+  // electron-vite sets the dev server URL in development (`pnpm dev`), with hot reload of the renderer
+  const devServerUrl = process.env['ELECTRON_RENDERER_URL'];
+  const appPageUrl =
+    !app.isPackaged && devServerUrl ? devServerUrl : pathToFileURL(join(__dirname, '../renderer/index.html')).href;
+
+  guardExternalLinks(window.webContents, appPageUrl, (url) => shell.openExternal(url), log);
 
   window.on('ready-to-show', () => {
     // maximized only now: maximize() shows a hidden window, before its content is there
@@ -50,13 +56,7 @@ function createMainWindow(placement: WindowPlacement): BrowserWindow {
     window.show();
   });
 
-  // electron-vite sets the dev server URL in development (`pnpm dev`), with hot reload of the renderer
-  const devServerUrl = process.env['ELECTRON_RENDERER_URL'];
-  if (!app.isPackaged && devServerUrl) {
-    void window.loadURL(devServerUrl);
-  } else {
-    void window.loadFile(join(__dirname, '../renderer/index.html'));
-  }
+  void window.loadURL(appPageUrl);
 
   return window;
 }

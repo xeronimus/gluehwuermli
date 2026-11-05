@@ -2,7 +2,7 @@ import {globalStyle, style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-export const fixtureHelp = style({
+export const editorHelp = style({
   width: '100%',
   boxSizing: 'border-box',
   padding: '8px 12px',

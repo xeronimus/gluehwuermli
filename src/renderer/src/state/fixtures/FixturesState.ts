@@ -1,6 +1,6 @@
 import type {MessageDescriptor} from '@lingui/core';
 
-import type {Fixture} from '@shared/ipc';
+import type {FixtureSetup} from '@shared/ipc';
 
 /**
  * `failed` when the stored setup can't be read (e.g. a file locked by another program) or the main process can't be
@@ -8,7 +8,7 @@ import type {Fixture} from '@shared/ipc';
  */
 export type FixtureSetupState =
   | {readonly type: 'loading'}
-  | {readonly type: 'loaded'; readonly fixtures: readonly Fixture[]}
+  | {readonly type: 'loaded'; readonly setup: FixtureSetup}
   | {readonly type: 'failed'; readonly message: MessageDescriptor};
 
 export interface FixturesState {
