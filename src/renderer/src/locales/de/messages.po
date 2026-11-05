@@ -702,7 +702,7 @@ msgstr "Setz die <0>Startadresse</0> auf die DMX-Adresse, die am Gerät eingeste
 
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
-msgstr "Setzt alle Kanäle auf 0, bevor die App den Port schliesst. Sonst sendet das Widget die letzte Stimmung weiter, auch wenn die App zu ist."
+msgstr "Setzt alle Kanäle auf 0, bevor die App den Port schliesst. Sonst sendet das Widget die letzten Werte weiter, auch wenn die App zu ist."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Setting up a fixture"
