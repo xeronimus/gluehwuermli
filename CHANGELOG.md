@@ -18,6 +18,8 @@ change bumps the minor version and everything else the patch version.
   a locked channel stays playable, the channel only goes up to its cap. Scenes are stored in `fixtures.json`; a file
   without them loads as before, an older app version drops them on its next save
 - Icons for fixtures (a cone) and scenes (a stack), in front of their names and on their Add buttons
+- The order of the fixtures, the scene buttons and a fixture's presets can be changed in Setup mode, with arrows next
+  to each of them (the presets' in the fixture editor)
 
 ### Changed
 

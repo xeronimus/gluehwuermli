@@ -2,6 +2,7 @@ import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from
 import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
 import {changingFixtures} from './fixtureList';
+import {type MoveDirection, movedWithId} from './listOrder';
 import {currentFixtureValues, fixtureChannelValues} from './presets';
 
 /** what the scene editor sets: the name, the fixtures it covers, and whether to store the current values again */
@@ -69,6 +70,12 @@ export const withScene = (setup: FixtureSetup, scene: Scene): FixtureSetup => {
 export const withoutScene = (setup: FixtureSetup, sceneId: string): FixtureSetup => ({
   ...setup,
   scenes: setupScenes(setup).filter(({id}) => id !== sceneId)
+});
+
+/** the setup with the scene one place earlier or later among the scene buttons */
+export const withSceneMoved = (setup: FixtureSetup, sceneId: string, direction: MoveDirection): FixtureSetup => ({
+  ...setup,
+  scenes: movedWithId(setupScenes(setup), sceneId, direction)
 });
 
 /** the values for channels the fixture still has; none for a fixture that was deleted */

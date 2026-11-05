@@ -6,7 +6,7 @@ import type {Fixture, Scene} from '@shared/ipc';
 
 import {overlapMessage} from '@/i18n/messages/fixtureMessages';
 import {useActionLoadFixtures} from '@/state/actionHooks/loadFixtures';
-import {useActionDeleteFixture} from '@/state/actionHooks/saveFixtures';
+import {useActionDeleteFixture, useActionMoveFixture} from '@/state/actionHooks/saveFixtures';
 import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
@@ -28,7 +28,7 @@ type Editing =
 
 const NOT_EDITING: Editing = {type: 'none'};
 
-/** the scene buttons and one control group per fixture, and adding, editing and deleting both in Setup mode */
+/** the scene buttons and one control group per fixture; adding, editing, moving and deleting both in Setup mode */
 const FixtureView = () => {
   const {t, i18n} = useLingui();
   const fixtureSetup = useAppStore((state) => state.fixtureSetup);
@@ -37,6 +37,7 @@ const FixtureView = () => {
   const error = useAppStore((state) => state.fixturesError);
   const loadFixtures = useActionLoadFixtures();
   const deleteFixture = useActionDeleteFixture();
+  const moveFixture = useActionMoveFixture();
   const setupMode = useAppStore(selectIsSetupMode);
   const [editing, setEditing] = useState<Editing>(NOT_EDITING);
 
@@ -132,7 +133,7 @@ const FixtureView = () => {
       )}
 
       <div className={fixtureGroups}>
-        {fixtures.map((fixture) => (
+        {fixtures.map((fixture, index) => (
           <FixtureGroup
             key={fixture.id}
             fixture={fixture}
@@ -141,6 +142,9 @@ const FixtureView = () => {
                 ? {
                     onEdit: () => setEditing({type: 'editing', fixture}),
                     onDelete: () => onDelete(fixture),
+                    onMove: (direction) => void moveFixture(fixture, direction),
+                    index,
+                    count: fixtures.length,
                     disabled: editingScene
                   }
                 : undefined
