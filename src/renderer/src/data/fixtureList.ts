@@ -1,5 +1,7 @@
 import type {Fixture, FixtureSetup} from '@shared/ipc';
 
+import {type MoveDirection, movedWithId} from './listOrder';
+
 /** the list with `fixture` replacing the one with its id, or appended if it is new */
 export const withFixture = (fixtures: readonly Fixture[], fixture: Fixture): Fixture[] =>
   fixtures.some(({id}) => id === fixture.id)
@@ -8,6 +10,13 @@ export const withFixture = (fixtures: readonly Fixture[], fixture: Fixture): Fix
 
 export const withoutFixture = (fixtures: readonly Fixture[], fixtureId: string): Fixture[] =>
   fixtures.filter(({id}) => id !== fixtureId);
+
+/** the list with the fixture one place earlier or later: the order of the Show view */
+export const withFixtureMoved = (
+  fixtures: readonly Fixture[],
+  fixtureId: string,
+  direction: MoveDirection
+): Fixture[] => movedWithId(fixtures, fixtureId, direction);
 
 /** a change of the fixture list as a change of the setup: the rest of the setup stays as it is */
 export const changingFixtures =
