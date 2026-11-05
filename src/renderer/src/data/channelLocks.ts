@@ -45,15 +45,15 @@ const isAnyAboveLimit = (values: readonly SetChannelRequest[], limits: ChannelLi
   values.some(({channel, value}) => value > cappedValue(value, limits.get(channel)));
 
 /**
- * a preset that would set a channel above its cap, e.g. "Laser on"; one setting the laser to 0 stays usable. With the
- * lifted caps: a preset that goes above a cap only because the channel lock is lifted
+ * whether a preset sets a channel above one of the caps, e.g. "Laser on"; one setting the laser to 0 doesn't. With the
+ * active caps the preset is locked, with the lifted ones it goes above a cap only because the channel lock is lifted
  */
-export const isPresetLocked = (fixture: Fixture, preset: FixturePreset, limits: ChannelLimits): boolean =>
+export const presetExceedsLimits = (fixture: Fixture, preset: FixturePreset, limits: ChannelLimits): boolean =>
   isAnyAboveLimit(presetChannelValues(fixture, preset), limits);
 
 /**
- * a scene that sets a channel above its cap: it can still be played, the capped channels only go up to their cap. With
- * the lifted caps: a scene that goes above a cap only because the channel lock is lifted
+ * whether a scene sets a channel above one of the caps. With the active caps it can still be played, the capped
+ * channels only go up to their cap; with the lifted ones it goes above a cap only because the channel lock is lifted
  */
-export const isSceneCapped = (scene: Scene, fixtures: readonly Fixture[], limits: ChannelLimits): boolean =>
+export const sceneExceedsLimits = (scene: Scene, fixtures: readonly Fixture[], limits: ChannelLimits): boolean =>
   isAnyAboveLimit(sceneChannelValues(scene, fixtures), limits);
