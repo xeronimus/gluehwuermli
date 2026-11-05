@@ -1,3 +1,4 @@
+import {fixtureSetupOf} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
 import {getDefaultFixturesState} from '../fixtures/FixturesState';
@@ -17,7 +18,7 @@ const laserBox: Fixture = {
 const stateWith = (lockStatus: LockStatusState) => ({
   ...getDefaultFixturesState(),
   ...getDefaultLockState(),
-  fixtureSetup: {type: 'loaded' as const, fixtures: [laserBox]},
+  fixtureSetup: {type: 'loaded' as const, setup: fixtureSetupOf([laserBox])},
   lockStatus
 });
 

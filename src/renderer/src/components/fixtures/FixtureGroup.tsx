@@ -10,7 +10,7 @@ import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
 import Button from '../commons/Button';
 import ChannelFader from '../commons/ChannelFader';
 import MarkdownText from '../commons/MarkdownText';
-import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon} from '../commons/icons';
+import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon, FixtureIcon} from '../commons/icons';
 import {
   fixtureGroup,
   groupAddresses,
@@ -27,6 +27,8 @@ import FixturePresetButtons from './FixturePresetButtons';
 export interface FixtureGroupActions {
   onEdit: () => void;
   onDelete: () => void;
+  /** while a scene is being edited: the scene editor works with the fixtures as they are */
+  disabled: boolean;
 }
 
 interface FixtureGroupProps {
@@ -48,14 +50,22 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
   return (
     <section className={fixtureGroup} aria-label={fixture.name}>
       <header className={groupHeader}>
-        <span className={groupName}>{fixture.name}</span>
+        <span className={groupName}>
+          <FixtureIcon />
+          {fixture.name}
+        </span>
         <span className={groupAddresses}>{addressRangeOf(fixture)}</span>
         {actions && (
           <>
-            <Button variant="icon" onClick={actions.onEdit} title={t`Edit ${fixtureName}`}>
+            <Button variant="icon" onClick={actions.onEdit} disabled={actions.disabled} title={t`Edit ${fixtureName}`}>
               <EditIcon />
             </Button>
-            <Button variant="icon" onClick={actions.onDelete} title={t`Delete ${fixtureName}`}>
+            <Button
+              variant="icon"
+              onClick={actions.onDelete}
+              disabled={actions.disabled}
+              title={t`Delete ${fixtureName}`}
+            >
               <DeleteIcon />
             </Button>
           </>

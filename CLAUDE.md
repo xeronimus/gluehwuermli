@@ -4,13 +4,15 @@
 
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port). Today:
 a Help view (short manual, the data folder, a link to the repo), fixtures (named devices with a start address and named channels, stored in `fixtures.json` in Electron's `userData`
-folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), a bank
+folder) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
+(named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
+fixture groups), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
 port is remembered and connected again on start). The app starts in
-**Show mode** (fixtures can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
+**Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the top bar.
-Planned: scenes, fades and chases.
+Planned: fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -70,6 +72,8 @@ src/
     ipcChannels.ts           # IPC channel names (kept apart so the preload doesn't bundle TypeBox)
     ipc.ts                   # TypeBox schemas + types of every IPC payload and of the output status, parse* guards
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
+    scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
+    validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
     preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
     links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
     serialQueue.ts           # runs overlapping async tasks one after the other (fixture saves in main and renderer)
@@ -93,7 +97,8 @@ src/
                              # merges each change into the whole file: the lock's password, the output's port)
     window/                  # main window position/size between sessions: windowState (schema, restorableBounds),
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
-                             # externalLinks: no navigation or new window, only http(s) links open in the browser
+                             # externalLinks: no navigation away from the app page or new window, only http(s) links
+                             # open in the browser
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3)
       enttecProPacket.ts     # label 6 framing
@@ -108,15 +113,15 @@ src/
     src/
       index.tsx, envConfig.ts  # index.tsx loads the language before the first render
       i18n/                  # i18n.ts (locales, pickLocale, activateLocale); messages/: the codes of data/, shared/ and
-                             # main as translated messages (fixture errors, output status, password form)
+                             # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status), fixtures/
-                             # (groups, editor), faders/ (raw channels), settings/ (output port, mode and channel lock,
-                             # password form),
+                             # (the Show view: fixture groups and editor, scene buttons and editor), faders/ (raw
+                             # channels), settings/ (output port, mode and channel lock, password form),
                              # help/ (manual, data folder, repo link);
                              # commons/ (Button, ChannelFader, MarkdownText, ModeToggle, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,
-                             # fixtureList, presets, passwordForm, activityThrottle)
+                             # fixtureList, presets, scenes, passwordForm, activityThrottle)
         service/             # DmxService, FixtureService, AppService, LockService, services.ts (composition root),
                              # impl/electron, impl/inMemory
       domain/                # types (Fader)
@@ -150,8 +155,9 @@ src/
   sent the value, and main refuses `fixtures:save`, opening the data folder and lifting the channel lock without the
   password in Show mode. The renderer only mirrors the
   pushed status (`app:lock-changed`), disables and hides, and caps its faders the same way so they show what is sent
-- **Fixture changes are stored first**: add/edit/delete save the whole setup and only then update the store; a failed
-  save shows `fixturesError` and leaves the shown setup unchanged
+- **Fixture changes are stored first**: add/edit/delete of a fixture or scene save the whole setup and only then update
+  the store; a failed save shows `fixturesError` and leaves the shown setup unchanged. A fixture change fits the scenes
+  in the same save (`withFittedScenes`), since main refuses scenes naming a fixture or channel that is gone
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
   `domain/` imports only `domain/`, `shared/` and packages, `data/` never imports `state/` or `components/`, `state/`

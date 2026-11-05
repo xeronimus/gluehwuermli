@@ -38,12 +38,12 @@ msgid "A <0>preset</0> is a button on the fixture that sets several channels at 
 msgstr "Ein <0>Preset</0> ist ein Knopf am Gerät, der mehrere Kanäle aufs Mal setzt, z. B. «Warmweiss». Kanäle ohne Häkchen bleiben, wie sie sind. Am schnellsten machst du eines, indem du die Fader einstellst und auf den Speichern-Knopf neben den Presets drückst."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Fixtures</1> view:"
-msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmaschine. Drück im Setup-Modus in der Ansicht <1>Geräte</1> auf <0>Gerät hinzufügen</0>:"
+msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
+msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmaschine. Drück im Setup-Modus in der Ansicht <1>Show</1> auf <0>Gerät hinzufügen</0>:"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled."
-msgstr "Ein Kanal eines Geräts kann ein <0>Max. bei Sperre</0> haben (im Geräte-Editor): Solange die Kanalsperre an ist, geht der Kanal nie darüber, egal ob ein Fader, ein Preset oder eine Ansicht ihn setzt. Ein Laser bekommt 0, ein Makrokanal, der die eigenen Programme des Geräts startet, z. B. 50. Seine Fader zeigen ein Schloss und halten beim Maximum an (bei 0 sind sie ausgegraut), und ein Preset, das ihn höher setzen würde, ist deaktiviert."
+msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
+msgstr "Ein Kanal eines Geräts kann ein <0>Max. bei Sperre</0> haben (im Geräte-Editor): Solange die Kanalsperre an ist, geht der Kanal nie darüber, egal ob ein Fader, ein Preset, eine Szene oder eine Ansicht ihn setzt. Ein Laser bekommt 0, ein Makrokanal, der die eigenen Programme des Geräts startet, z. B. 50. Seine Fader zeigen ein Schloss und halten beim Maximum an (bei 0 sind sie ausgegraut), und ein Preset, das ihn höher setzen würde, ist deaktiviert. Eine Szene, die ihn höher setzen würde, lässt sich weiter spielen, damit ein Look der ganzen Anlage trotzdem geht: Der Kanal geht nur bis zu seinem Maximum, und der Knopf der Szene zeigt ein Schloss."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
@@ -52,6 +52,14 @@ msgstr "Ein Preset ist ein Knopf an einem Gerät, der mehrere seiner Kanäle auf
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A preset name can have at most {maxLength} characters"
 msgstr "Ein Preset-Name darf höchstens {maxLength} Zeichen haben"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
+msgstr "Eine Szene ist ein Knopf über den Geräten, der die Kanäle mehrerer Geräte aufs Mal setzt, z. B. «Intro» oder «Blackout». Die Geräte, die eine Szene weglässt, bleiben, wie sie sind; so lassen sich Szenen übereinanderlegen: eine Farbszene für die PARs, während die Nebelmaschine weiterläuft."
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "A scene name can have at most {maxLength} characters"
+msgstr "Ein Szenen-Name darf höchstens {maxLength} Zeichen haben"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
@@ -73,6 +81,10 @@ msgstr "Gerät hinzufügen"
 msgid "Add preset"
 msgstr "Preset hinzufügen"
 
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "Add scene"
+msgstr "Szene hinzufügen"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Address"
 msgstr "Adresse"
@@ -89,12 +101,21 @@ msgstr "Alles Wissenswerte, in Markdown: der DMX-Modus, die DIP-Schalter, wo es 
 msgid "Apply the preset {presetName}"
 msgstr "Preset {presetName} anwenden"
 
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Apply the scene {sceneName}"
+msgstr "Szene {sceneName} anwenden"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Apply the scene {sceneName}; locked channels go only up to their cap"
+msgstr "Szene {sceneName} anwenden; gesperrte Kanäle gehen nur bis zu ihrem Maximum"
+
 #: src/renderer/src/components/settings/SettingsView.tsx
 msgid "Asking whether the app is locked…"
 msgstr "Frage nach, ob die App gesperrt ist…"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Cancel"
@@ -162,6 +183,10 @@ msgstr "Kanäle ({channelCount})"
 msgid "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
 msgstr "Kanäle mit einem «Max. bei Sperre» (z. B. ein Laser) gehen nie darüber, egal welcher Fader oder welches Preset sie setzt."
 
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Choose at least one fixture"
+msgstr "Wähl mindestens ein Gerät"
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen</1> (ein Klick auf den Status oben in der Leiste führt dorthin; kein Passwort nötig). Ein Port, der nach einem Enttec aussieht, ist mit <2>Enttec?</2> markiert und schon ausgewählt. Erst nach dem Start der App eingesteckt? Such die Ports mit dem Aktualisieren-Knopf nochmals."
@@ -189,6 +214,10 @@ msgstr "Verbindung mit {path} fehlgeschlagen"
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not delete the fixture {fixtureName}"
 msgstr "Das Gerät {fixtureName} konnte nicht gelöscht werden"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not delete the scene {sceneName}"
+msgstr "Die Szene {sceneName} konnte nicht gelöscht werden"
 
 #: src/renderer/src/state/actionHooks/connectOutput.ts
 msgid "Could not disconnect"
@@ -238,6 +267,10 @@ msgstr "Das Gerät {fixtureName} konnte nicht gespeichert werden"
 msgid "Could not save the preset {presetName} of {fixtureName}"
 msgstr "Das Preset {presetName} von {fixtureName} konnte nicht gespeichert werden"
 
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not save the scene {sceneName}"
+msgstr "Die Szene {sceneName} konnte nicht gespeichert werden"
+
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not turn the channel lock on"
 msgstr "Die Kanalsperre konnte nicht eingeschaltet werden"
@@ -261,6 +294,14 @@ msgstr "{fixtureName} löschen"
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "Delete the fixture {fixtureName}?"
 msgstr "Das Gerät {fixtureName} löschen?"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Delete the scene {sceneName}"
+msgstr "Szene {sceneName} löschen"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+msgid "Delete the scene {sceneName}?"
+msgstr "Die Szene {sceneName} löschen?"
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Description"
@@ -291,9 +332,18 @@ msgstr "Bearbeiten"
 msgid "Edit {fixtureName}"
 msgstr "{fixtureName} bearbeiten"
 
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Edit the scene {sceneName}"
+msgstr "Szene {sceneName} bearbeiten"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
 msgstr "Jeder Kanal braucht einen Namen"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Every fixture of the scene needs at least one channel"
+msgstr "Jedes Gerät der Szene braucht mindestens einen Kanal"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every preset needs a name"
@@ -311,21 +361,25 @@ msgstr "Herausfinden, was ein Gerät macht"
 msgid "Fixture editor"
 msgstr "Geräte-Editor"
 
-#: src/renderer/src/components/App.tsx
-msgid "Fixtures"
-msgstr "Geräte"
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Fixtures in the scene"
+msgstr "Geräte in der Szene"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
-msgid "Fixtures and presets can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
-msgstr "Geräte und Presets lassen sich ändern, und die Ansicht Kanäle ist offen. Zurück in den Show-Modus mit Sperren, nach 10 Minuten ohne Eingabe oder beim Neustart."
+msgid "Fixtures, presets and scenes can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
+msgstr "Geräte, Presets und Szenen lassen sich ändern, und die Ansicht Kanäle ist offen. Zurück in den Show-Modus mit Sperren, nach 10 Minuten ohne Eingabe oder beim Neustart."
 
 #: src/renderer/src/components/settings/ModeSection.tsx
-msgid "Fixtures and presets can be played, not changed. Unlock Setup mode to change them."
-msgstr "Geräte und Presets lassen sich spielen, aber nicht ändern. Entsperr den Setup-Modus, um sie zu ändern."
+msgid "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
+msgstr "Geräte, Presets und Szenen lassen sich spielen, aber nicht ändern. Entsperr den Setup-Modus, um sie zu ändern."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Passwort vergessen? Schliess die App, lösch <0>settings.json</0> im Datenordner (siehe Abschnitt Datenordner) und starte sie neu: Das nächste Passwort, nach dem gefragt wird, wird zum neuen."
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
+msgstr "Gib der Szene einen <0>Namen</0> und setze ein Häkchen bei den <1>Geräten</1>, die sie umfasst. Beim <2>Speichern</2> wird der aktuelle Wert jedes Kanals der angehakten Geräte gespeichert."
 
 #: src/renderer/src/components/App.tsx
 msgid "Help"
@@ -338,6 +392,10 @@ msgstr "Beschreibung ausblenden"
 #: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
 msgid "Hint"
 msgstr "Hinweis"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "How scenes work"
+msgstr "So funktionieren Szenen"
 
 #: src/renderer/src/components/fixtures/FixtureHelp.tsx
 msgid "How to set up a fixture"
@@ -388,6 +446,7 @@ msgid "Mode"
 msgstr "Modus"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Name"
 msgstr "Name"
 
@@ -411,6 +470,10 @@ msgstr "Neues Gerät"
 #: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "New password"
 msgstr "Neues Passwort"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "New scene"
+msgstr "Neue Szene"
 
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Next channels"
@@ -513,6 +576,10 @@ msgstr "Presets ({presetCount})"
 msgid "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
 msgstr "Drück auf <0>Verbinden</0>. Sobald die App ans Widget sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
 
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
+msgstr "Ein Druck auf die Szene setzt diese Werte wieder. Geräte ohne Häkchen werden weggelassen und bleiben, wie sie sind; so lassen sich Szenen übereinanderlegen, z. B. eine Farbszene für die PARs, während die Nebelmaschine weiterläuft."
+
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Preview"
 msgstr "Vorschau"
@@ -540,12 +607,30 @@ msgstr "Neues Passwort nochmals eingeben"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Save"
 msgstr "Speichern"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Save current values"
+msgstr "Aktuelle Werte speichern"
 
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "Save the current values of {fixtureName} as a preset"
 msgstr "Die aktuellen Werte von {fixtureName} als Preset speichern"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Scene editor"
+msgstr "Szenen-Editor"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "Scene values must be whole numbers from {minValue} to {maxValue}"
+msgstr "Szenen-Werte müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Scenes"
+msgstr "Szenen"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Search the serial ports again"
@@ -558,6 +643,10 @@ msgstr "Sendet auf {path}"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Set password and unlock"
 msgstr "Passwort setzen und entsperren"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Set the <0>faders</0> of the fixtures below to the look you want. They stay usable while this form is open; pressing a preset or another scene helps, too."
+msgstr "Stelle die <0>Fader</0> der Geräte unten auf den gewünschten Look. Sie bleiben bedienbar, solange dieses Formular offen ist; auch ein Preset oder eine andere Szene hilft dabei."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
@@ -581,8 +670,12 @@ msgid "Setup mode"
 msgstr "Setup-Modus"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture being edited and not saved yet is dropped then. The channel lock stays as it is."
-msgstr "Der Setup-Modus geht zurück in den Show-Modus mit dem Knopf <0>Sperren</0>, nach 10 Minuten ohne Eingabe und bei jedem Neustart der App. Ein Gerät, das gerade bearbeitet und noch nicht gespeichert ist, geht dann verloren. Die Kanalsperre bleibt, wie sie ist."
+msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
+msgstr "Der Setup-Modus geht zurück in den Show-Modus mit dem Knopf <0>Sperren</0>, nach 10 Minuten ohne Eingabe und bei jedem Neustart der App. Ein Gerät oder eine Szene, noch in Bearbeitung und nicht gespeichert, geht dann verloren. Die Kanalsperre bleibt, wie sie ist."
+
+#: src/renderer/src/components/App.tsx
+msgid "Show"
+msgstr "Show"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Show mode"
@@ -625,8 +718,8 @@ msgid "The <0>hint</0> is shown below the faders, for what you need while playin
 msgstr "Der <0>Hinweis</0> steht unter den Fadern, für das, was du beim Spielen brauchst, z. B. «2 Min. vor dem Nebel aufwärmen». Die <1>Beschreibung</1> ist für alles andere Wissenswerte über das Gerät: den DMX-Modus, die DIP-Schalter, wo es hängt, wem es gehört. Sie bleibt versteckt, bis du sie beim Gerät aufklappst."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app always starts in <0>Show mode</0>: the fixtures and their presets can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
-msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte und ihre Presets lassen sich spielen, aber nicht ändern, und die Ansicht Kanäle ist aus. Für alles andere braucht es den <1>Setup-Modus</1>: Drück in der Ansicht <2>Einstellungen</2> auf <3>Setup-Modus entsperren</3> und gib das Passwort ein. Beim ersten Mal gibt es noch keines: Das, das du (zweimal) eingibst, wird zum Passwort. Solange der Setup-Modus offen ist, zeigt die Leiste oben das an."
+msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte, ihre Presets und die Szenen lassen sich spielen, aber nicht ändern, und die Ansicht Kanäle ist aus. Für alles andere braucht es den <1>Setup-Modus</1>: Drück in der Ansicht <2>Einstellungen</2> auf <3>Setup-Modus entsperren</3> und gib das Passwort ein. Beim ersten Mal gibt es noch keines: Das, das du (zweimal) eingibst, wird zum Passwort. Solange der Setup-Modus offen ist, zeigt die Leiste oben das an."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
@@ -720,6 +813,26 @@ msgstr "Das Preset {preset} setzt einen Kanal mehr als einmal"
 msgid "The preset {preset} sets a channel the fixture doesn't have"
 msgstr "Das Preset {preset} setzt einen Kanal, den das Gerät nicht hat"
 
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene names a fixture that doesn't exist"
+msgstr "Die Szene nennt ein Gerät, das es nicht gibt"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene names a fixture twice"
+msgstr "Die Szene nennt ein Gerät zweimal"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene needs a name"
+msgstr "Die Szene braucht einen Namen"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene sets a channel its fixture doesn't have"
+msgstr "Die Szene setzt einen Kanal, den ihr Gerät nicht hat"
+
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The scene sets a channel twice"
+msgstr "Die Szene setzt einen Kanal zweimal"
+
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
 msgstr "Der serielle Port des Enttec DMX USB Pro. Die Leiste oben zeigt, ob die App sendet."
@@ -735,6 +848,10 @@ msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 #: src/renderer/src/components/fixtures/FixtureView.tsx
@@ -760,6 +877,14 @@ msgstr "Setup-Modus entsperren"
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Wert von {label} in Preset {presetNumber}"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
+msgstr "Einzelne Werte lassen sich hier nicht ändern. Ein Kanal, der einem Gerät später hinzugefügt wird, kommt erst in eine Szene, wenn sie mit «Aktuelle Werte speichern» gespeichert wird; wird ein Gerät gelöscht, fällt es aus jeder Szene. Solange die Kanalsperre an ist, geht ein gesperrter Kanal nur bis zu seinem Maximum, was auch immer die Szene gespeichert hat."
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
+msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von Häkchen die schon gespeicherten Werte nicht: Nur ein neu angehaktes Gerät wird mit dem gespeichert, was seine Fader jetzt zeigen. <0>Aktuelle Werte speichern</0> speichert für jedes angehakte Gerät, was die Fader jetzt zeigen, und ersetzt die gespeicherten Werte. Um den Look einer Szene zu ändern, drückst du die Szene, passt die Fader an und speicherst sie mit «Aktuelle Werte speichern»."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "without a name"
