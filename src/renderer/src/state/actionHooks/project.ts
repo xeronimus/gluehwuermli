@@ -49,10 +49,8 @@ async function openWith(open: () => Promise<ProjectOpenResult>, action: string, 
   setProjectError(undefined);
   try {
     const result = await open();
-    if (result.type === 'opened') {
-      // the main process pushes the switch too; applying it here doesn't wait for that
-      applySwitchedProject({type: 'open', project: result.project});
-    } else if (result.type === 'failed') {
+    // an opened project is not applied here: the main process pushes the switch (onChanged) before it answers
+    if (result.type === 'failed') {
       setProjectError({type: 'file', path: result.path, error: result.error});
     }
   } catch (error) {

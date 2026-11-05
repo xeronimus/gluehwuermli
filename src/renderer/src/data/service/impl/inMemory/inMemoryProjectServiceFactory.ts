@@ -10,18 +10,22 @@ const NO_LISTENER = () => () => {};
 
 /**
  * a ProjectService without the main process, forgetting everything on reload: a plain browser, or a test. There are
- * no files and no dialogs: creating starts the one in-memory project afresh, opening is always cancelled
+ * no files and no dialogs: creating starts the one in-memory project afresh (pushed to onChanged, as main does),
+ * opening is always cancelled
  */
 export function inMemoryProjectServiceFactory(
   initialStatus: ProjectStatus = {type: 'open', project: {path: IN_MEMORY_PROJECT_PATH, setup: emptyFixtureSetup()}}
 ): ProjectService {
   let status = initialStatus;
+  const changeListeners = new Set<(status: ProjectStatus) => void>();
 
   return {
     getStatus: async () => status,
     create: async () => {
-      status = {type: 'open', project: {path: IN_MEMORY_PROJECT_PATH, setup: emptyFixtureSetup()}};
-      return {type: 'opened', project: status.project};
+      const project = {path: IN_MEMORY_PROJECT_PATH, setup: emptyFixtureSetup()};
+      status = {type: 'open', project};
+      changeListeners.forEach((listener) => listener(status));
+      return {type: 'opened', project};
     },
     openWithDialog: async () => ({type: 'cancelled'}),
     openRecent: async (path) => ({type: 'failed', path, error: {reason: 'missing'}}),
@@ -33,7 +37,10 @@ export function inMemoryProjectServiceFactory(
       }
       status = {type: 'open', project: {path: projectPath, setup}};
     },
-    onChanged: NO_LISTENER,
+    onChanged: (listener) => {
+      changeListeners.add(listener);
+      return () => changeListeners.delete(listener);
+    },
     onOpenRequested: NO_LISTENER
   };
 }
