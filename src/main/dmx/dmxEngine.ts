@@ -143,8 +143,11 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     }
     universeChanged = false;
     pendingWrite = writeUniverse(connection);
-    await pendingWrite;
-    pendingWrite = undefined;
+    try {
+      await pendingWrite;
+    } finally {
+      pendingWrite = undefined;
+    }
   };
 
   /** skips the tick: it is stopped already, and the zeros have to go out even if nothing changed */
