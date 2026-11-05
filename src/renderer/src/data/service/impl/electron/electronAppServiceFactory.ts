@@ -7,5 +7,7 @@ export const electronAppServiceFactory = (bridge: PreloadBridge): AppService => 
   getDataFolder: () => bridge.getDataFolder(),
   openDataFolder: () => bridge.openDataFolder(),
   getLocale: () => bridge.getLocale(),
-  setLocale: (locale) => bridge.setLocale(locale)
+  setLocale: (locale) => bridge.setLocale(locale),
+  getBlackoutOnQuit: () => bridge.getBlackoutOnQuit(),
+  setBlackoutOnQuit: (enabled) => bridge.setBlackoutOnQuit(enabled)
 });

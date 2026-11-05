@@ -90,8 +90,8 @@ msgid "Address"
 msgstr "Address"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out."
-msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out."
+msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section), closing the app sets all channels to 0 first."
+msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section), closing the app sets all channels to 0 first."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -112,6 +112,10 @@ msgstr "Apply the scene {sceneName}; locked channels go only up to their cap"
 #: src/renderer/src/components/settings/SettingsView.tsx
 msgid "Asking whether the app is locked…"
 msgstr "Asking whether the app is locked…"
+
+#: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
+msgid "Black out on quit"
+msgstr "Black out on quit"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
@@ -227,6 +231,10 @@ msgstr "Could not disconnect"
 msgid "Could not find out where the data folder is"
 msgstr "Could not find out where the data folder is"
 
+#: src/renderer/src/state/actionHooks/blackoutOnQuit.ts
+msgid "Could not find out whether the app blacks out on quit"
+msgstr "Could not find out whether the app blacks out on quit"
+
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not lift the channel lock"
 msgstr "Could not lift the channel lock"
@@ -278,6 +286,10 @@ msgstr "Could not save the preset {presetName} of {fixtureName}"
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the scene {sceneName}"
 msgstr "Could not save the scene {sceneName}"
+
+#: src/renderer/src/state/actionHooks/blackoutOnQuit.ts
+msgid "Could not store whether the app blacks out on quit"
+msgstr "Could not store whether the app blacks out on quit"
 
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not turn the channel lock on"
@@ -687,6 +699,10 @@ msgstr "Set the <0>start address</0> to the DMX address set on the device (its d
 #: src/renderer/src/components/fixtures/FixtureHelp.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
+
+#: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
+msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
+msgstr "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Setting up a fixture"

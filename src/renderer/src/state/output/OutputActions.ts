@@ -16,6 +16,7 @@ export interface OutputActions {
   setSelectedPortPath: (selectedPortPath: string | undefined) => void;
   /** a port chosen by hand: selected, and preferred over the remembered port from then on */
   choosePortPath: (chosenPortPath: string | undefined) => void;
+  setBlackoutOnQuit: (blackoutOnQuit: boolean) => void;
   setOutputError: (outputError: MessageDescriptor | undefined) => void;
 }
 
@@ -25,5 +26,6 @@ export const getOutputActions = (set: OutputStateSetter): OutputActions => ({
   setSelectedPortPath: (selectedPortPath) => set({selectedPortPath}, undefined, 'output/setSelectedPortPath'),
   choosePortPath: (chosenPortPath) =>
     set({chosenPortPath, selectedPortPath: chosenPortPath}, undefined, 'output/choosePortPath'),
+  setBlackoutOnQuit: (blackoutOnQuit) => set({blackoutOnQuit}, undefined, 'output/setBlackoutOnQuit'),
   setOutputError: (outputError) => set({outputError}, undefined, 'output/setOutputError')
 });

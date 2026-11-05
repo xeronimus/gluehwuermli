@@ -233,6 +233,106 @@ describe('overlapping calls', () => {
   });
 });
 
+describe('dispose on quit', () => {
+  /** channel 1 is at byte 5, after the 4 header bytes and the start code */
+  const isAllZero = (packet: Uint8Array | undefined) =>
+    packet?.subarray(5, 5 + 512).every((value) => value === 0) ?? false;
+
+  test('with blackout, sends an all-zero universe and then closes the port', async () => {
+    engine.setChannel(1, 255);
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+
+    await engine.dispose({blackout: true});
+
+    expect(connector.writtenPackets).toHaveLength(2);
+    expect(isAllZero(connector.writtenPackets[1])).toBe(true);
+    expect(connector.openPaths).toEqual([]);
+  });
+
+  test('the blackout goes out even if the channels are capped', async () => {
+    engine.setChannelLimits(new Map([[1, 0]]));
+    engine.setChannel(2, 255);
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+
+    await engine.dispose({blackout: true});
+
+    expect(isAllZero(connector.writtenPackets.at(-1))).toBe(true);
+  });
+
+  test('without blackout, closes the port and sends nothing more', async () => {
+    engine.setChannel(1, 255);
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+
+    await engine.dispose();
+
+    expect(connector.writtenPackets).toHaveLength(1);
+    expect(connector.openPaths).toEqual([]);
+  });
+
+  test('a blackout that fails to write is logged and the port closed anyway', async () => {
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+    connector.failNextWrite(new Error('write failed'));
+
+    await expect(engine.dispose({blackout: true})).resolves.toBeUndefined();
+
+    expect(connector.openPaths).toEqual([]);
+  });
+
+  test('without a port, a blackout writes nothing', async () => {
+    await engine.dispose({blackout: true});
+
+    expect(connector.writtenPackets).toEqual([]);
+  });
+
+  test('waits for a packet still being written, so the zeros go out last', async () => {
+    let releaseWrite = () => {};
+    const heldWrite = new Promise<void>((resolve) => {
+      releaseWrite = resolve;
+    });
+    const heldConnector: InMemoryConnector = {
+      ...connector,
+      open: async (path) => {
+        const connection = await connector.open(path);
+        let held = true;
+        return {
+          ...connection,
+          write: async (packet) => {
+            if (held) {
+              held = false;
+              await heldWrite;
+            }
+            await connection.write(packet);
+          }
+        };
+      }
+    };
+    const heldEngine = dmxEngineFactory({
+      connector: heldConnector,
+      refreshIntervalMs: REFRESH_INTERVAL_MS,
+      log: silentLog
+    });
+    heldEngine.setChannel(1, 255);
+    await heldEngine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+
+    const disposing = heldEngine.dispose({blackout: true});
+    await vi.advanceTimersByTimeAsync(0);
+    expect(connector.openPaths).toEqual([SIMULATED_PORT_PATH]);
+
+    releaseWrite();
+    await disposing;
+
+    expect(connector.writtenPackets).toHaveLength(2);
+    expect(channelValueIn(connector.writtenPackets[0], 1)).toBe(255);
+    expect(isAllZero(connector.writtenPackets[1])).toBe(true);
+    expect(connector.openPaths).toEqual([]);
+  });
+});
+
 describe('describeActiveChannels', () => {
   test('lists the channels above 0, numbered from 1', () => {
     const universe = new Uint8Array(512);
