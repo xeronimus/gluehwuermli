@@ -15,6 +15,10 @@ export const isChannelLockOn = (lockStatus: LockStatus | undefined): boolean => 
 export const activeLimits = (fixtures: readonly Fixture[], lockStatus: LockStatus | undefined): ChannelLimits =>
   isChannelLockOn(lockStatus) ? channelLimits(fixtures) : NO_LIMITS;
 
+/** the caps that don't apply now: the fixtures' ones once the channel lock is lifted, none while it is on */
+export const liftedLimits = (fixtures: readonly Fixture[], lockStatus: LockStatus | undefined): ChannelLimits =>
+  isChannelLockOn(lockStatus) ? NO_LIMITS : channelLimits(fixtures);
+
 /** the value the main process sends for it: capped at the channel's limit, if it has one */
 export const cappedValue = (value: number, limit: number | undefined): number =>
   limit === undefined ? value : Math.min(value, limit);
@@ -40,10 +44,16 @@ export const channelsAboveLimits = (channelValues: readonly number[], limits: Ch
 const isAnyAboveLimit = (values: readonly SetChannelRequest[], limits: ChannelLimits): boolean =>
   values.some(({channel, value}) => value > cappedValue(value, limits.get(channel)));
 
-/** a preset that would set a channel above its cap, e.g. "Laser on"; one setting the laser to 0 stays usable */
-export const isPresetLocked = (fixture: Fixture, preset: FixturePreset, limits: ChannelLimits): boolean =>
+/**
+ * whether a preset sets a channel above one of the caps, e.g. "Laser on"; one setting the laser to 0 doesn't. With the
+ * active caps the preset is locked, with the lifted ones it goes above a cap only because the channel lock is lifted
+ */
+export const presetExceedsLimits = (fixture: Fixture, preset: FixturePreset, limits: ChannelLimits): boolean =>
   isAnyAboveLimit(presetChannelValues(fixture, preset), limits);
 
-/** a scene that sets a channel above its cap: it can still be played, the capped channels only go up to their cap */
-export const isSceneCapped = (scene: Scene, fixtures: readonly Fixture[], limits: ChannelLimits): boolean =>
+/**
+ * whether a scene sets a channel above one of the caps. With the active caps it can still be played, the capped
+ * channels only go up to their cap; with the lifted ones it goes above a cap only because the channel lock is lifted
+ */
+export const sceneExceedsLimits = (scene: Scene, fixtures: readonly Fixture[], limits: ChannelLimits): boolean =>
   isAnyAboveLimit(sceneChannelValues(scene, fixtures), limits);

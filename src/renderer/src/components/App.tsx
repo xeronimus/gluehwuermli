@@ -6,6 +6,7 @@ import {useLingui} from '@lingui/react/macro';
 
 import mascot from '@assets/gluehwuermli_mascot.png';
 
+import envConfig from '@/envConfig';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
 import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
@@ -14,7 +15,7 @@ import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {app, backdrop, contentVariants, showViewVariants} from './App.css';
+import {app, backdrop, contentVariants, showViewVariants, versionLabel} from './App.css';
 import ShowView from './ShowView';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
@@ -76,6 +77,7 @@ const App = () => {
   return (
     <div className={`${defaultTheme} ${app}`}>
       <img className={backdrop} src={mascot} alt="" />
+      <span className={versionLabel}>v{envConfig.version}</span>
       <ErrorBoundary>
         <OutputBar
           viewToggle={<ModeToggle modes={viewsFor(setupMode, i18n)} activeId={view} onSelect={setView} />}

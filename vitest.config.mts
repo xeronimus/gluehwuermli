@@ -4,10 +4,12 @@ import {resolve} from 'node:path';
 import {defineConfig} from 'vitest/config';
 
 import {linguiMacroPlugin} from './lingui-macro-plugin.mts';
+import packageJson from './package.json' with {type: 'json'};
 
 // the same aliases as electron.vite.config.ts, one project per process since `@/` differs between them
 const sharedAlias = {'@shared': resolve('src/shared')};
 const assetsAlias = {'@assets': resolve('src/assets')};
+const appVersion = {__APP_VERSION__: JSON.stringify(packageJson.version)};
 
 export default defineConfig({
   test: {
@@ -29,6 +31,7 @@ export default defineConfig({
       {
         extends: true,
         plugins: [linguiMacroPlugin(), vanillaExtractPlugin(), lingui()],
+        define: appVersion,
         resolve: {alias: {...sharedAlias, ...assetsAlias, '@': resolve('src/renderer/src')}},
         test: {name: 'renderer', include: ['src/renderer/src/**/*.test.{ts,tsx}']}
       }

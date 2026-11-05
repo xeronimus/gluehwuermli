@@ -14,6 +14,9 @@ export const channelFader = style({
   borderRadius: vars.constants.radiusMd
 });
 
+/** a channel whose cap is lifted with the channel lock, e.g. a laser that can be switched on now */
+export const channelFaderCapLifted = style([channelFader, {borderColor: vars.colors.danger}]);
+
 /** the value above the fader and the label below it, clickable to step the value without the look of a button */
 export const faderStepButton = style({
   display: 'flex',

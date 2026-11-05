@@ -8,11 +8,12 @@ import {cappedValue, isAtCap, isFaderLocked} from '@/data/channelLocks';
 import {toPercent} from '@/data/channelValues';
 import Fader from '@/domain/Fader';
 import {selectChannelValue} from '@/state/channels/channelsSelectors';
-import {selectChannelLimit} from '@/state/lock/lockSelectors';
+import {selectChannelLimit, selectLiftedChannelLimit} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import {
   channelFader,
+  channelFaderCapLifted,
   faderLabel,
   faderLabelButton,
   faderLock,
@@ -39,6 +40,7 @@ interface ChannelFaderProps {
  */
 const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
   const limit = useAppStore((state) => selectChannelLimit(state, fader.channel));
+  const liftedLimit = useAppStore((state) => selectLiftedChannelLimit(state, fader.channel));
   const value = cappedValue(
     useAppStore((state) => selectChannelValue(state, fader.channel)),
     limit
@@ -47,13 +49,19 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
   const locked = isFaderLocked(limit);
   const label = fader.label;
   const lockedTitle = t`Channel ${label} is capped at ${limit} by the channel lock`;
+  const liftedTitle = t`Channel ${label} is not capped at ${liftedLimit}: the channel lock is lifted`;
   const raiseTitle =
-    limit === undefined
-      ? t`Channel ${label} +${DMX_STEP}`
-      : t`Channel ${label} +${DMX_STEP}, capped at ${limit} by the channel lock`;
+    limit !== undefined
+      ? t`Channel ${label} +${DMX_STEP}, capped at ${limit} by the channel lock`
+      : liftedLimit !== undefined
+        ? t`Channel ${label} +${DMX_STEP}, not capped at ${liftedLimit}: the channel lock is lifted`
+        : t`Channel ${label} +${DMX_STEP}`;
 
   return (
-    <div className={channelFader}>
+    <div
+      className={liftedLimit === undefined ? channelFader : channelFaderCapLifted}
+      title={liftedLimit === undefined ? undefined : liftedTitle}
+    >
       <button
         className={faderStepButton}
         onClick={() => onChange(fader.channel, value + DMX_STEP)}
