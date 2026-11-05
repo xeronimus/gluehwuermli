@@ -1,4 +1,4 @@
-import {style} from '@vanilla-extract/css';
+import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from './themes.css';
 
@@ -15,12 +15,23 @@ export const app = style({
 });
 
 /** a column, so a view can grow to the full height (FixtureView keeps its Add button at the bottom) */
-export const content = style({
+const contentBase = style({
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
   overflow: 'auto',
   padding: '24px'
+});
+
+export const contentVariants = styleVariants({
+  default: [contentBase],
+  inSetupMode: [
+    contentBase,
+    {
+      border: `2px solid ${vars.colors.warning}`,
+      borderRadius: 6
+    }
+  ]
 });
 
 /** the mascot, faint in the bottom left corner, behind everything and never in the way of a click */

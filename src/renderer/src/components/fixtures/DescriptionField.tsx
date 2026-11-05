@@ -17,8 +17,8 @@ const DESCRIPTION_ROWS = 6;
 type DescriptionMode = 'edit' | 'preview';
 
 const descriptionModes = (i18n: I18n): readonly Mode<DescriptionMode>[] => [
-  {id: 'edit', label: i18n._(msg`Edit`), Icon: EditIcon},
-  {id: 'preview', label: i18n._(msg`Preview`), Icon: PreviewIcon}
+  {id: 'edit', label: i18n._(msg`Edit`), Icon: EditIcon, iconOnly: true},
+  {id: 'preview', label: i18n._(msg`Preview`), Icon: PreviewIcon, iconOnly: true}
 ];
 
 interface DescriptionFieldProps {

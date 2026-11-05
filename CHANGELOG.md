@@ -24,6 +24,8 @@ change bumps the minor version and everything else the patch version.
 ### Changed
 
 - The Fixtures view is now called **Show**
+- In Setup mode, the Show view has an orange frame
+- The Edit/Preview toggle of a fixture's description shows only icons, its names as tooltips
 
 ## [0.1.2] - 2026-11-02
 

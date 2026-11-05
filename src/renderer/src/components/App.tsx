@@ -13,7 +13,7 @@ import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {app, backdrop, content} from './App.css';
+import {app, backdrop, contentVariants} from './App.css';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
 import {ChannelsIcon, FixturesIcon, HelpIcon, SettingsIcon} from './commons/icons';
@@ -47,6 +47,7 @@ const App = () => {
   const {i18n} = useLingui();
   const [view, setView] = useState<View>('fixtures');
   const setupMode = useAppStore(selectIsSetupMode);
+  const contentClass = view === 'fixtures' && setupMode ? contentVariants.inSetupMode : contentVariants.default;
 
   // here, not in a view: the mode applies to every view, and the main process's idle timer to the whole window
   useLockSubscription();
@@ -75,7 +76,7 @@ const App = () => {
           onShowSettings={() => setView('settings')}
         />
       </ErrorBoundary>
-      <main className={content}>
+      <main className={contentClass}>
         <ErrorBoundary key={view}>{VIEW_CONTENT[view]()}</ErrorBoundary>
       </main>
     </div>
