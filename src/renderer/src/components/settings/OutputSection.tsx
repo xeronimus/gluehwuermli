@@ -11,8 +11,8 @@ import PortSelect from './PortSelect';
 import {message, portControls, settingsSection} from './SettingsView.css';
 
 /**
- * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting, no password needed, also in Show mode;
- * and whether quitting blacks out the rig, changed in Setup mode only
+ * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting, and whether quitting blacks out the
+ * rig; no password needed, also in Show mode
  */
 const OutputSection = () => {
   const {t} = useLingui();

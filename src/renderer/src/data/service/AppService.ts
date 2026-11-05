@@ -12,6 +12,6 @@ export default interface AppService {
   /** remembers the language for the next start; rejects if it can't be stored */
   setLocale: (locale: Locale) => Promise<void>;
   getBlackoutOnQuit: () => Promise<BlackoutOnQuit>;
-  /** Setup mode only: rejects in Show mode, or if it can't be stored */
+  /** rejects if it can't be stored */
   setBlackoutOnQuit: (enabled: boolean) => Promise<void>;
 }

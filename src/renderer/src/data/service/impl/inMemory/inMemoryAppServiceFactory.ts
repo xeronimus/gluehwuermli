@@ -4,7 +4,7 @@ import type AppService from '@/data/service/AppService';
 
 /**
  * an AppService without the main process: a plain browser, or a test. There is no folder, the chosen language and the
- * blackout on quit are kept until the page reloads; there is no mode to refuse the blackout setting in
+ * blackout on quit are kept until the page reloads
  */
 export function inMemoryAppServiceFactory(dataFolder = 'none: nothing is stored outside the app'): AppService {
   let chosenLocale: ChosenLocale = {type: 'none'};

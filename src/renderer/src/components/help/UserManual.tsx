@@ -49,8 +49,8 @@ const UserManual = () => (
         <Trans>
           After <strong>Disconnect</strong>, and after closing the app, the widget keeps sending the last values for as
           long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out.
-          With <strong>Black out on quit</strong> on (in the Output section, changed in Setup mode), closing the app
-          sets all channels to 0 first.
+          With <strong>Black out on quit</strong> on (in the Output section), closing the app sets all channels to 0
+          first.
         </Trans>
       </p>
     </section>

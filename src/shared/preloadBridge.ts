@@ -41,7 +41,7 @@ export interface PreloadBridge {
   setLocale: (locale: Locale) => Promise<void>;
   /** whether quitting sends an all-zero universe before the port is closed */
   getBlackoutOnQuit: () => Promise<BlackoutOnQuit>;
-  /** Setup mode only (rejects in Show mode, or when it can't be stored) */
+  /** allowed in Show mode too; rejects if it can't be stored */
   setBlackoutOnQuit: (enabled: boolean) => Promise<void>;
   getLockStatus: () => Promise<LockStatus>;
   /** Setup mode; with no password stored yet, stores this one and unlocks */

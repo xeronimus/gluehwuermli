@@ -104,7 +104,7 @@ void app.whenReady().then(async () => {
     dataFolder,
     services.appLock.isSetupMode,
     localeIpcHandlers(services.settings),
-    blackoutOnQuitIpcHandlers({settings: services.settings, isSetupMode: services.appLock.isSetupMode})
+    blackoutOnQuitIpcHandlers(services.settings)
   );
   registerLockIpc(services.appLock);
   // after the channel limits, so the output is capped from its first packet; the renderer gets the status pushed
