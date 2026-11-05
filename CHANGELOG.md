@@ -32,6 +32,7 @@ change bumps the minor version and everything else the patch version.
 - **Black out on quit** in the Output section of the Settings view: closing the app sets all channels to 0 before it
   closes the port, so the rig goes dark instead of keeping its last look. Off by default, no password needed, kept in
   `settings.json`
+- The app version, small in the bottom left corner of every view
 
 ### Changed
 
