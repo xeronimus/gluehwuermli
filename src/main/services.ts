@@ -4,12 +4,14 @@ import {DmxEngine, dmxEngineFactory} from './dmx/dmxEngine';
 import {inMemoryConnectorFactory} from './dmx/impl/inMemory/inMemoryConnectorFactory';
 import {serialPortConnectorFactory} from './dmx/impl/serialport/serialPortConnectorFactory';
 import {type PortMemory, forgetfulPortMemory, portMemoryFactory} from './dmx/portMemory';
-import type {FixtureStore} from './fixtures/FixtureStore';
-import {fileFixtureStoreFactory} from './fixtures/impl/file/fileFixtureStoreFactory';
 import {AppLock, appLockFactory} from './lock/appLock';
 import log from './log';
+import {electronProjectDialogsFactory} from './project/impl/electron/electronProjectDialogsFactory';
+import {fileProjectFileStoreFactory} from './project/impl/file/fileProjectFileStoreFactory';
+import {type ProjectSession, projectSessionFactory} from './project/projectSession';
 import {type AppSettings, appSettingsFactory} from './settings/appSettings';
 import {fileSettingsStoreFactory} from './settings/impl/file/fileSettingsStoreFactory';
+import {fileExists} from './storage/fileExists';
 import type {WindowStateStore} from './window/WindowStateStore';
 import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateStoreFactory';
 
@@ -28,16 +30,16 @@ const WRONG_PASSWORD_DELAY_MS = 1000;
 export interface MainServices {
   dmxPortConnector: DmxPortConnector;
   dmxEngine: DmxEngine;
-  fixtureStore: FixtureStore;
   windowStateStore: WindowStateStore;
   settings: AppSettings;
   appLock: AppLock;
   portMemory: PortMemory;
+  projectSession: ProjectSession;
 }
 
 export interface MainServicesOptions {
-  /** where the fixture setup is stored, in Electron's userData folder */
-  fixtureFilePath: string;
+  /** where the file dialogs for projects start: the user's Documents folder */
+  projectFolder: string;
   /** where the main window's position and size are stored, in Electron's userData folder */
   windowStateFilePath: string;
   /** where the settings (the password hash, the last port) are stored, in Electron's userData folder */
@@ -47,12 +49,10 @@ export interface MainServicesOptions {
 /** The composition root of the main process: creates every service once; the only module importing from impl/. */
 export function createMainServices(
   config: MainConfig,
-  {fixtureFilePath, windowStateFilePath, settingsFilePath}: MainServicesOptions
+  {projectFolder, windowStateFilePath, settingsFilePath}: MainServicesOptions
 ): MainServices {
   const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory();
   const dmxEngine = dmxEngineFactory({connector: dmxPortConnector, refreshIntervalMs: DMX_REFRESH_INTERVAL_MS, log});
-
-  const fixtureStore = fileFixtureStoreFactory({filePath: fixtureFilePath, log});
 
   const windowStateStore = fileWindowStateStoreFactory({filePath: windowStateFilePath, log});
 
@@ -69,5 +69,15 @@ export function createMainServices(
     ? forgetfulPortMemory
     : portMemoryFactory({engine: dmxEngine, connector: dmxPortConnector, settings, log});
 
-  return {dmxPortConnector, dmxEngine, fixtureStore, windowStateStore, settings, appLock, portMemory};
+  const projectSession = projectSessionFactory({
+    store: fileProjectFileStoreFactory(),
+    engine: dmxEngine,
+    settings,
+    isSetupMode: appLock.isSetupMode,
+    dialogs: electronProjectDialogsFactory(projectFolder),
+    fileExists,
+    log
+  });
+
+  return {dmxPortConnector, dmxEngine, windowStateStore, settings, appLock, portMemory, projectSession};
 }

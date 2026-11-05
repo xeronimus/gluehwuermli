@@ -2,7 +2,16 @@ import {globalStyle, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
+/** two columns, the second wraps below the first when the window is too narrow for both */
 export const settingsView = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'flex-start',
+  gap: '16px'
+});
+
+/** the project and the output on the left, the locks and the password on the right */
+export const settingsColumn = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -54,23 +63,12 @@ export const errorMessage = style({
   color: vars.colors.danger
 });
 
-export const passwordForm = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  gap: '6px'
-});
-
 /** changing the password: a row each for the current password, the new one twice, and the buttons */
 export const changePasswordForm = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '6px'
-});
-
-export const passwordInput = style({
-  width: '160px'
 });
 
 export const checkboxLabel = style({

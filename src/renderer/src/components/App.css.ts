@@ -34,6 +34,15 @@ export const contentVariants = styleVariants({
   ]
 });
 
+/**
+ * The Show view stays mounted while another view is open, only hidden: an unsaved fixture or scene edit survives a
+ * look at Settings or Channels, and opening another project from there still asks before it drops it
+ */
+export const showViewVariants = styleVariants({
+  shown: {flex: 1, display: 'flex', flexDirection: 'column'},
+  hidden: {display: 'none'}
+});
+
 /** the mascot, faint in the bottom left corner, behind everything and never in the way of a click */
 export const backdrop = style({
   position: 'absolute',

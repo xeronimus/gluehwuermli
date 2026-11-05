@@ -130,19 +130,87 @@ export const SceneSchema = Type.Object({
 });
 export type Scene = Static<typeof SceneSchema>;
 
-/** the version of the stored setup, so a later format change can migrate an older file instead of dropping it */
-export const FIXTURE_SETUP_VERSION = 1;
+/**
+ * the version of a project file, so a later format change can migrate an older file instead of dropping it; a file
+ * with a higher one is refused, never overwritten
+ */
+export const PROJECT_VERSION = 1;
 
-/** every fixture, as stored in the fixtures file and sent over LOAD_FIXTURES / SAVE_FIXTURES */
+/** every fixture and scene of a project, as stored in its .glp file; the file name is the project's name */
 export const FixtureSetupSchema = Type.Object({
-  version: Type.Literal(FIXTURE_SETUP_VERSION),
+  version: Type.Literal(PROJECT_VERSION),
   fixtures: Type.Array(FixtureSchema),
   /** optional, so older files load */
   scenes: Type.Optional(Type.Array(SceneSchema))
 });
 export type FixtureSetup = Static<typeof FixtureSetupSchema>;
 
-/** Electron's userData folder, where the app keeps its files (the fixture setup, the window state) */
+/**
+ * why a project file couldn't be opened or created, as a code: the renderer says it in the UI language. `unreadable`
+ * and `not-writable` carry the raw text of the OS, shown as it is
+ */
+export const ProjectErrorSchema = Type.Union([
+  Type.Object({reason: Type.Literal('missing')}),
+  Type.Object({reason: Type.Literal('unreadable'), message: Type.String()}),
+  /** no JSON, another shape, or a setup that fails its validation */
+  Type.Object({reason: Type.Literal('invalid')}),
+  /** written by a newer version of the app */
+  Type.Object({reason: Type.Literal('too-new'), version: Type.Number()}),
+  /** a new project's file couldn't be created, e.g. a read-only folder */
+  Type.Object({reason: Type.Literal('not-writable'), message: Type.String()})
+]);
+export type ProjectError = Static<typeof ProjectErrorSchema>;
+
+/** a project open in the app: its .glp file and what it holds */
+export const OpenProjectSchema = Type.Object({
+  path: Type.String({minLength: 1}),
+  setup: FixtureSetupSchema
+});
+export type OpenProject = Static<typeof OpenProjectSchema>;
+
+/**
+ * the project the app works on: `none` before the first one, `failed` when the last one couldn't be opened on start.
+ * Pushed over PROJECT_CHANGED whenever another project is opened
+ */
+export const ProjectStatusSchema = Type.Union([
+  Type.Object({type: Type.Literal('none')}),
+  Type.Object({type: Type.Literal('open'), project: OpenProjectSchema}),
+  Type.Object({type: Type.Literal('failed'), path: Type.String({minLength: 1}), error: ProjectErrorSchema})
+]);
+export type ProjectStatus = Static<typeof ProjectStatusSchema>;
+
+/**
+ * what creating or opening a project answers: `cancelled` when the file dialog was closed, `failed` when the file
+ * couldn't be opened (the project open before stays open)
+ */
+export const ProjectOpenResultSchema = Type.Union([
+  Type.Object({type: Type.Literal('opened'), project: OpenProjectSchema}),
+  Type.Object({type: Type.Literal('cancelled')}),
+  Type.Object({type: Type.Literal('failed'), path: Type.String({minLength: 1}), error: ProjectErrorSchema})
+]);
+export type ProjectOpenResult = Static<typeof ProjectOpenResultSchema>;
+
+/** a project opened before; `exists` false when its file is gone (deleted, moved, on a stick not plugged in) */
+export const RecentProjectSchema = Type.Object({
+  path: Type.String({minLength: 1}),
+  exists: Type.Boolean()
+});
+export type RecentProject = Static<typeof RecentProjectSchema>;
+
+/** a project file named by its path: opening a recent one, removing it from the list, a .glp double-clicked */
+export const ProjectPathRequestSchema = Type.Object({
+  path: Type.String({minLength: 1})
+});
+export type ProjectPathRequest = Static<typeof ProjectPathRequestSchema>;
+
+/** the changed setup, with the project it belongs to: a save meant for another project is refused */
+export const SaveFixturesRequestSchema = Type.Object({
+  projectPath: Type.String({minLength: 1}),
+  setup: Type.Unknown()
+});
+export type SaveFixturesRequest = Static<typeof SaveFixturesRequestSchema>;
+
+/** Electron's userData folder, where the app keeps its own files (the settings, the window state) */
 export const DataFolderSchema = Type.Object({
   path: Type.String({minLength: 1})
 });
@@ -249,3 +317,9 @@ export const parseLiftChannelLockRequest = (payload: unknown): LiftChannelLockRe
 
 export const parseChangePasswordRequest = (payload: unknown): ChangePasswordRequest | undefined =>
   Value.Check(ChangePasswordRequestSchema, payload) ? payload : undefined;
+
+export const parseProjectPathRequest = (payload: unknown): ProjectPathRequest | undefined =>
+  Value.Check(ProjectPathRequestSchema, payload) ? payload : undefined;
+
+export const parseSaveFixturesRequest = (payload: unknown): SaveFixturesRequest | undefined =>
+  Value.Check(SaveFixturesRequestSchema, payload) ? payload : undefined;

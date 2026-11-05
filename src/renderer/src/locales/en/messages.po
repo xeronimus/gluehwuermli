@@ -53,6 +53,10 @@ msgstr "A preset is a button on a fixture that sets several of its channels at o
 msgid "A preset name can have at most {maxLength} characters"
 msgstr "A preset name can have at most {maxLength} characters"
 
+#: src/renderer/src/components/project/ProjectStartView.tsx
+msgid "A project is a .glp file with the fixtures and scenes of one rig, e.g. one per venue or show. Keep it wherever you like: in Documents, on the Desktop or on a USB stick. Every change is saved to the file right away. The app opens the last project again on its next start, and a double-click on a .glp file opens it."
+msgstr "A project is a .glp file with the fixtures and scenes of one rig, e.g. one per venue or show. Keep it wherever you like: in Documents, on the Desktop or on a USB stick. Every change is saved to the file right away. The app opens the last project again on its next start, and a double-click on a .glp file opens it."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
 msgstr "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
@@ -117,11 +121,11 @@ msgstr "Asking whether the app is locked…"
 msgid "Black out on quit"
 msgstr "Black out on quit"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -207,6 +211,14 @@ msgstr "Connecting the DMX USB Pro"
 msgid "Connecting to {path}…"
 msgstr "Connecting to {path}…"
 
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not ask the app to open the project"
+msgstr "Could not ask the app to open the project"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not ask the app which project is open"
+msgstr "Could not ask the app which project is open"
+
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not change the password"
 msgstr "Could not change the password"
@@ -243,10 +255,6 @@ msgstr "Could not lift the channel lock"
 msgid "Could not list the serial ports"
 msgstr "Could not list the serial ports"
 
-#: src/renderer/src/state/actionHooks/loadFixtures.ts
-msgid "Could not load the fixtures"
-msgstr "Could not load the fixtures"
-
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not lock"
 msgstr "Could not lock"
@@ -258,6 +266,10 @@ msgstr "Could not move the fixture {fixtureName}"
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not move the scene {sceneName}"
 msgstr "Could not move the scene {sceneName}"
+
+#: src/renderer/src/components/project/ProjectFailureMessage.tsx
+msgid "Could not open <0>{path}</0>:"
+msgstr "Could not open <0>{path}</0>:"
 
 #: src/renderer/src/state/actionHooks/dataFolder.ts
 msgid "Could not open the folder"
@@ -274,6 +286,10 @@ msgstr "Could not read the output status"
 #: src/renderer/src/state/actionHooks/lockSubscription.ts
 msgid "Could not read whether the app is locked"
 msgstr "Could not read whether the app is locked"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Could not remove the project from the list"
+msgstr "Could not remove the project from the list"
 
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the fixture {fixtureName}"
@@ -298,6 +314,10 @@ msgstr "Could not turn the channel lock on"
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not unlock"
 msgstr "Could not unlock"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Create project"
+msgstr "Create project"
 
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Current password"
@@ -326,6 +346,10 @@ msgstr "Delete the scene {sceneName}?"
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Description"
 msgstr "Description"
+
+#: src/renderer/src/state/actionHooks/project.ts
+msgid "Discard the fixture or scene you are editing, and open the other project?"
+msgstr "Discard the fixture or scene you are editing, and open the other project?"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Disconnect"
@@ -356,6 +380,10 @@ msgstr "Edit {fixtureName}"
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Edit the scene {sceneName}"
 msgstr "Edit the scene {sceneName}"
+
+#: src/renderer/src/components/project/ProjectSection.tsx
+msgid "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
+msgstr "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
@@ -433,10 +461,6 @@ msgstr "Lift channel lock"
 msgid "Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value."
 msgstr "Lift the channel lock? Locked channels, e.g. a laser, can then be set to any value."
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
-msgid "Loading the fixtures…"
-msgstr "Loading the fixtures…"
-
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Lock"
 msgstr "Lock"
@@ -460,6 +484,10 @@ msgstr "Max while locked"
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Maximum of channel {row} while locked"
 msgstr "Maximum of channel {row} while locked"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "missing"
+msgstr "missing"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Mode"
@@ -510,8 +538,8 @@ msgstr "Name of the new preset"
 msgid "New fixture"
 msgstr "New fixture"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "New password"
 msgstr "New password"
 
@@ -522,6 +550,10 @@ msgstr "New scene"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Next channels"
 msgstr "Next channels"
+
+#: src/renderer/src/components/fixtures/FixtureView.tsx
+msgid "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
+msgstr "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
@@ -538,6 +570,15 @@ msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode
 #: src/renderer/src/components/fixtures/FixtureHelp.tsx
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
+
+#: src/renderer/src/components/project/ProjectSection.tsx
+#: src/renderer/src/components/project/ProjectStartView.tsx
+msgid "No project open"
+msgstr "No project open"
+
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "No project open. Create or open one in the Show view or in Settings."
+msgstr "No project open. Create or open one in the Show view or in Settings."
 
 #: src/renderer/src/components/settings/PortSelect.tsx
 msgid "No serial port found"
@@ -571,6 +612,10 @@ msgstr "Offsets must be whole numbers from 0"
 msgid "Open in Explorer"
 msgstr "Open in Explorer"
 
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Open project"
+msgstr "Open project"
+
 #: src/renderer/src/components/output/OutputBar.tsx
 msgid "Open the Settings to choose the port, connect or disconnect"
 msgstr "Open the Settings to choose the port, connect or disconnect"
@@ -584,6 +629,14 @@ msgid "Open the Settings to turn it on"
 msgstr "Open the Settings to turn it on"
 
 #: src/renderer/src/components/help/UserManual.tsx
+msgid "Opening another project sets all channels to 0 first, then applies the new project's channel locks. A fixture or scene being edited is dropped, the app asks first. A file that is no valid project, or one saved by a newer version of the app, is not opened and left exactly as it is. To back up a project or take it to another computer, copy the file; its path is shown in the Help view."
+msgstr "Opening another project sets all channels to 0 first, then applies the new project's channel locks. A fixture or scene being edited is dropped, the app asks first. A file that is no valid project, or one saved by a newer version of the app, is not opened and left exactly as it is. To back up a project or take it to another computer, copy the file; its path is shown in the Help view."
+
+#: src/renderer/src/components/ShowView.tsx
+msgid "Opening the project…"
+msgstr "Opening the project…"
+
+#: src/renderer/src/components/help/UserManual.tsx
 msgid "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
 msgstr "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
 
@@ -591,7 +644,7 @@ msgstr "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min b
 msgid "Output"
 msgstr "Output"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Password"
 msgstr "Password"
@@ -632,6 +685,27 @@ msgstr "Preview"
 msgid "Previous channels"
 msgstr "Previous channels"
 
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+#: src/renderer/src/components/project/ProjectSection.tsx
+msgid "Project"
+msgstr "Project"
+
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "Project file"
+msgstr "Project file"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Projects"
+msgstr "Projects"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "Recent projects"
+msgstr "Recent projects"
+
+#: src/renderer/src/components/project/RecentProjectList.tsx
+msgid "Remove {projectName} from the list (the file stays)"
+msgstr "Remove {projectName} from the list (the file stays)"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Remove the channel"
 msgstr "Remove the channel"
@@ -640,12 +714,12 @@ msgstr "Remove the channel"
 msgid "Remove the preset"
 msgstr "Remove the preset"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 msgid "Repeat it"
 msgstr "Repeat it"
 
+#: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
-#: src/renderer/src/components/settings/PasswordForm.tsx
 msgid "Repeat the new password"
 msgstr "Repeat the new password"
 
@@ -683,6 +757,10 @@ msgstr "Search the serial ports again"
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Sending on {path}"
 msgstr "Sending on {path}"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Set password and create"
+msgstr "Set password and create"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Set password and unlock"
@@ -773,6 +851,10 @@ msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets a
 msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
 msgstr "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
 
+#: src/renderer/src/components/help/DataFolderSection.tsx
+msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
+msgstr "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
@@ -793,6 +875,26 @@ msgstr "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with
 msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
 msgstr "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
 
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file can't be created: {message}"
+msgstr "The file can't be created: {message}"
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file can't be read: {message}"
+msgstr "The file can't be read: {message}"
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file is no Glühwürmli project, or it is damaged. It was left as it is."
+msgstr "The file is no Glühwürmli project, or it is damaged. It was left as it is."
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file isn't there: it was moved, renamed or deleted, or it is on a drive that isn't plugged in."
+msgstr "The file isn't there: it was moved, renamed or deleted, or it is on a drive that isn't plugged in."
+
+#: src/renderer/src/i18n/messages/projectMessages.ts
+msgid "The file was saved by a newer version of Glühwürmli (project version {version}). Update the app to open it."
+msgstr "The file was saved by a newer version of Glühwürmli (project version {version}). Update the app to open it."
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
 msgstr "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
@@ -805,13 +907,17 @@ msgstr "The fixture needs a name"
 msgid "The fixture needs at least one channel"
 msgstr "The fixture needs at least one channel"
 
+#: src/renderer/src/components/help/ProjectInfoSection.tsx
+msgid "The fixtures and scenes are stored in this file. Copy it to back up the project or to take it to another computer."
+msgstr "The fixtures and scenes are stored in this file. Copy it to back up the project or to take it to another computer."
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
+msgstr "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
 msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
-
-#: src/renderer/src/components/help/DataFolderSection.tsx
-msgid "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."
-msgstr "The fixtures, the window position and the password hash are stored here as JSON files. Copy the folder to back up your setup."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The highest value while the channel lock is on; empty for no lock"
@@ -906,7 +1012,6 @@ msgid "To make one, unlock Setup mode, set the faders to the look you want, pres
 msgstr "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
-#: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "Try again"
 msgstr "Try again"
 
@@ -921,6 +1026,10 @@ msgstr "Type the current password"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Unlock"
 msgstr "Unlock"
+
+#: src/renderer/src/components/project/ProjectButtons.tsx
+msgid "Unlock and create"
+msgstr "Unlock and create"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Unlock Setup mode"
@@ -942,10 +1051,14 @@ msgstr "When editing, renaming the scene or ticking and unticking fixtures doesn
 msgid "without a name"
 msgstr "without a name"
 
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
+msgstr "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
+
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Wrong current password"
 msgstr "Wrong current password"
 
-#: src/renderer/src/components/settings/PasswordForm.tsx
+#: src/renderer/src/components/commons/PasswordForm.tsx
 msgid "Wrong password"
 msgstr "Wrong password"
