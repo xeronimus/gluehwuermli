@@ -4,6 +4,7 @@ import {pathToFileURL} from 'node:url';
 
 import appIcon from '../assets/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
+import {blackoutOnQuitIpcHandlers} from './ipc/blackoutOnQuitIpcHandlers';
 import {fixtureIpcHandlers} from './ipc/fixtureIpcHandlers';
 import {localeIpcHandlers} from './ipc/localeIpcHandlers';
 import {registerAppIpc} from './ipc/registerAppIpc';
@@ -11,6 +12,7 @@ import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerFixtureIpc} from './ipc/registerFixtureIpc';
 import {registerLockIpc} from './ipc/registerLockIpc';
 import log, {configureLog} from './log';
+import {quitGuardFactory} from './quit/quitGuard';
 import {createMainServices} from './services';
 import {guardExternalLinks} from './window/externalLinks';
 import {persistWindowState} from './window/persistWindowState';
@@ -20,6 +22,8 @@ const MAIN_WINDOW_SIZE = {width: 1280, height: 800};
 const FIXTURE_FILE_NAME = 'fixtures.json';
 const WINDOW_STATE_FILE_NAME = 'window-state.json';
 const SETTINGS_FILE_NAME = 'settings.json';
+/** closing the port takes a few ms; a port that hangs must not keep the app from quitting */
+const QUIT_TIMEOUT_MS = 2000;
 
 const boundsOf = (placement: WindowPlacement) =>
   placement.type === 'restored' ? {...placement.bounds, fullscreen: placement.fullScreen} : placement.size;
@@ -96,7 +100,12 @@ void app.whenReady().then(async () => {
   await applyStoredChannelLimits();
   registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory);
   registerFixtureIpc(fixtureHandlers);
-  registerAppIpc(dataFolder, services.appLock.isSetupMode, localeIpcHandlers(services.settings));
+  registerAppIpc(
+    dataFolder,
+    services.appLock.isSetupMode,
+    localeIpcHandlers(services.settings),
+    blackoutOnQuitIpcHandlers({settings: services.settings, isSetupMode: services.appLock.isSetupMode})
+  );
   registerLockIpc(services.appLock);
   // after the channel limits, so the output is capped from its first packet; the renderer gets the status pushed
   void services.portMemory.reconnect();
@@ -116,8 +125,17 @@ app.on('window-all-closed', () => {
   }
 });
 
-// The widget keeps sending the last universe after the port is closed, as long as it has USB power: quitting does not
-// black out the rig (see doc/dmx-latency-and-stack.md, "Open questions")
-app.on('will-quit', () => {
-  services.dmxEngine.dispose().catch((error: unknown) => log.warn('closing the DMX port on quit failed', error));
-});
+/**
+ * The widget keeps sending the last universe after the port is closed, as long as it has USB power: without the
+ * blackout setting, quitting leaves the rig as it is (doc/dmx-latency-and-stack.md)
+ */
+const shutDownOutput = async () => {
+  const {blackoutOnQuit} = await services.settings.load();
+  await services.dmxEngine.dispose({blackout: blackoutOnQuit === true});
+};
+
+// will-quit, not before-quit: the windows are closed by then, nobody sees a window that doesn't react
+app.on(
+  'will-quit',
+  quitGuardFactory({shutdown: shutDownOutput, quit: () => app.quit(), timeoutMs: QUIT_TIMEOUT_MS, log})
+);

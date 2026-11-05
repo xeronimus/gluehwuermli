@@ -175,6 +175,12 @@ export const SetLocaleRequestSchema = Type.Object({
 });
 export type SetLocaleRequest = Static<typeof SetLocaleRequestSchema>;
 
+/** whether an all-zero universe is sent before the port is closed on quit; read, and set in Setup mode only */
+export const BlackoutOnQuitSchema = Type.Object({
+  enabled: Type.Boolean()
+});
+export type BlackoutOnQuit = Static<typeof BlackoutOnQuitSchema>;
+
 /**
  * Two independent locks, both on after every start. The mode: in Show mode fixtures can be played, not changed; Setup
  * mode (unlocked with the password) allows changing them. The channel lock caps the locked channels; lifting it needs
@@ -231,6 +237,9 @@ export const parseConnectRequest = (payload: unknown): ConnectRequest | undefine
 
 export const parseSetLocaleRequest = (payload: unknown): SetLocaleRequest | undefined =>
   Value.Check(SetLocaleRequestSchema, payload) ? payload : undefined;
+
+export const parseBlackoutOnQuit = (payload: unknown): BlackoutOnQuit | undefined =>
+  Value.Check(BlackoutOnQuitSchema, payload) ? payload : undefined;
 
 export const parseUnlockRequest = (payload: unknown): UnlockRequest | undefined =>
   Value.Check(UnlockRequestSchema, payload) ? payload : undefined;

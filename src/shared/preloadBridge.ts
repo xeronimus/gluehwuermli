@@ -1,4 +1,5 @@
 import type {
+  BlackoutOnQuit,
   ChosenLocale,
   DataFolder,
   DmxOutputStatus,
@@ -38,6 +39,10 @@ export interface PreloadBridge {
   getLocale: () => Promise<ChosenLocale>;
   /** remembers the language for the next start; allowed in Show mode too. Rejects if it can't be stored */
   setLocale: (locale: Locale) => Promise<void>;
+  /** whether quitting sends an all-zero universe before the port is closed */
+  getBlackoutOnQuit: () => Promise<BlackoutOnQuit>;
+  /** Setup mode only (rejects in Show mode, or when it can't be stored) */
+  setBlackoutOnQuit: (enabled: boolean) => Promise<void>;
   getLockStatus: () => Promise<LockStatus>;
   /** Setup mode; with no password stored yet, stores this one and unlocks */
   unlock: (password: string) => Promise<PasswordResult>;
