@@ -10,6 +10,7 @@ import {
   sceneEditErrors,
   withFittedScenes,
   withScene,
+  withSceneMoved,
   withoutScene
 } from './scenes';
 
@@ -144,6 +145,13 @@ describe('withScene and withoutScene', () => {
   test('removes the scene with the id, an unknown id changes nothing', () => {
     expect(withoutScene(setupOf(fixtures, [intro, outro]), 'intro').scenes).toEqual([outro]);
     expect(withoutScene(setupOf(fixtures, [intro, outro]), 'finale').scenes).toEqual([intro, outro]);
+  });
+
+  test('moves the scene with the id, the fixtures stay as they are', () => {
+    const moved = withSceneMoved(setupOf(fixtures, [intro, outro]), 'outro', 'earlier');
+
+    expect(moved).toEqual(setupOf(fixtures, [outro, intro]));
+    expect(withSceneMoved(setupOf(fixtures, [intro, outro]), 'outro', 'later').scenes).toEqual([intro, outro]);
   });
 });
 

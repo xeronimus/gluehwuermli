@@ -3,9 +3,17 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH} from '@shared/ipc';
 
-import {FixtureDraft, withNewPreset, withPresetName, withPresetValueChange, withoutPreset} from '@/data/fixtureDraft';
+import {
+  FixtureDraft,
+  withNewPreset,
+  withPresetMoved,
+  withPresetName,
+  withPresetValueChange,
+  withoutPreset
+} from '@/data/fixtureDraft';
 
 import Button from '../commons/Button';
+import MoveButtons from '../commons/MoveButtons';
 import {AddIcon, RemoveIcon} from '../commons/icons';
 import {sectionTitle} from './FixtureEditor.css';
 import {
@@ -50,6 +58,15 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                   placeholder={t`e.g. Warm white`}
                   aria-label={t`Name of preset ${presetNumber}`}
                   onChange={(event) => onChange(withPresetName(draft, presetIndex, event.target.value))}
+                />
+                <MoveButtons
+                  index={presetIndex}
+                  count={presetCount}
+                  onMove={(direction) => onChange(withPresetMoved(draft, presetIndex, direction))}
+                  titles={{
+                    earlier: t`Move preset ${presetNumber} to the left`,
+                    later: t`Move preset ${presetNumber} to the right`
+                  }}
                 />
                 <Button onClick={() => onChange(withoutPreset(draft, presetIndex))} title={t`Remove the preset`}>
                   <RemoveIcon />

@@ -20,6 +20,8 @@ export {
   IconFolderOpen as FolderIcon,
   IconHelpCircle as HelpIcon,
   IconLock as LockIcon,
+  IconArrowLeft as MoveEarlierIcon,
+  IconArrowRight as MoveLaterIcon,
   IconChevronRight as NextIcon,
   IconKey as PasswordIcon,
   IconEye as PreviewIcon,
