@@ -377,6 +377,10 @@ msgstr "Geräte, Presets und Szenen lassen sich spielen, aber nicht ändern. Ent
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Passwort vergessen? Schliess die App, lösch <0>settings.json</0> im Datenordner (siehe Abschnitt Datenordner) und starte sie neu: Das nächste Passwort, nach dem gefragt wird, wird zum neuen."
 
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
+msgstr "Gib der Szene einen <0>Namen</0> und setze ein Häkchen bei den <1>Geräten</1>, die sie umfasst. Beim <2>Speichern</2> wird der aktuelle Wert jedes Kanals der angehakten Geräte gespeichert."
+
 #: src/renderer/src/components/App.tsx
 msgid "Help"
 msgstr "Hilfe"
@@ -388,6 +392,10 @@ msgstr "Beschreibung ausblenden"
 #: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
 msgid "Hint"
 msgstr "Hinweis"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "How scenes work"
+msgstr "So funktionieren Szenen"
 
 #: src/renderer/src/components/fixtures/FixtureHelp.tsx
 msgid "How to set up a fixture"
@@ -568,6 +576,10 @@ msgstr "Presets ({presetCount})"
 msgid "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
 msgstr "Drück auf <0>Verbinden</0>. Sobald die App ans Widget sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
 
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
+msgstr "Ein Druck auf die Szene setzt diese Werte wieder. Geräte ohne Häkchen werden weggelassen und bleiben, wie sie sind; so lassen sich Szenen übereinanderlegen, z. B. eine Farbszene für die PARs, während die Nebelmaschine weiterläuft."
+
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Preview"
 msgstr "Vorschau"
@@ -631,6 +643,10 @@ msgstr "Sendet auf {path}"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Set password and unlock"
 msgstr "Passwort setzen und entsperren"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Set the <0>faders</0> of the fixtures below to the look you want. They stay usable while this form is open; pressing a preset or another scene helps, too."
+msgstr "Stelle die <0>Fader</0> der Geräte unten auf den gewünschten Look. Sie bleiben bedienbar, solange dieses Formular offen ist; auch ein Preset oder eine andere Szene hilft dabei."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
@@ -861,6 +877,14 @@ msgstr "Setup-Modus entsperren"
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Wert von {label} in Preset {presetNumber}"
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
+msgstr "Einzelne Werte lassen sich hier nicht ändern. Ein Kanal, der einem Gerät später hinzugefügt wird, kommt erst in eine Szene, wenn sie mit «Aktuelle Werte speichern» gespeichert wird; wird ein Gerät gelöscht, fällt es aus jeder Szene. Solange die Kanalsperre an ist, geht ein gesperrter Kanal nur bis zu seinem Maximum, was auch immer die Szene gespeichert hat."
+
+#: src/renderer/src/components/fixtures/SceneHelp.tsx
+msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
+msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von Häkchen die schon gespeicherten Werte nicht: Nur ein neu angehaktes Gerät wird mit dem gespeichert, was seine Fader jetzt zeigen. <0>Aktuelle Werte speichern</0> speichert für jedes angehakte Gerät, was die Fader jetzt zeigen, und ersetzt die gespeicherten Werte. Um den Look einer Szene zu ändern, drückst du die Szene, passt die Fader an und speicherst sie mit «Aktuelle Werte speichern»."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "without a name"

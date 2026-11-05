@@ -14,14 +14,18 @@ import Button from '../commons/Button';
 import {
   actions,
   checkboxLabel,
+  columns,
   editorTitle,
   errorList,
   field,
   fixtureChoices,
   fixtureChoicesTitle,
+  formColumn,
+  helpColumn,
   nameInput,
   sceneEditor
 } from './SceneEditor.css';
+import SceneHelp from './SceneHelp';
 
 interface SceneEditorProps {
   /** undefined to add a new scene */
@@ -69,58 +73,66 @@ const SceneEditor = ({scene, onClose}: SceneEditorProps) => {
   return (
     <section className={sceneEditor} aria-label={t`Scene editor`}>
       <h2 className={editorTitle}>{scene ? editTitle(scene) : <Trans>New scene</Trans>}</h2>
-      <label className={field}>
-        <Trans>Name</Trans>
-        <input
-          className={nameInput}
-          value={name}
-          maxLength={SCENE_NAME_MAX_LENGTH}
-          autoFocus
-          onChange={(event) => setName(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              void onSave();
-            } else if (event.key === 'Escape' && !saving) {
-              onClose();
-            }
-          }}
-        />
-      </label>
-      <fieldset className={fixtureChoices}>
-        <legend className={fixtureChoicesTitle}>
-          <Trans>Fixtures in the scene</Trans>
-        </legend>
-        {fixtures.map((fixture) => (
-          <label key={fixture.id} className={checkboxLabel}>
+      <div className={columns}>
+        <div className={formColumn}>
+          <label className={field}>
+            <Trans>Name</Trans>
             <input
-              type="checkbox"
-              checked={fixtureIds.includes(fixture.id)}
-              onChange={(event) => onToggleFixture(fixture.id, event.target.checked)}
+              className={nameInput}
+              value={name}
+              maxLength={SCENE_NAME_MAX_LENGTH}
+              autoFocus
+              onChange={(event) => setName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  void onSave();
+                } else if (event.key === 'Escape' && !saving) {
+                  onClose();
+                }
+              }}
             />
-            {fixture.name}
           </label>
-        ))}
-      </fieldset>
-      {scene && (
-        <label className={checkboxLabel}>
-          <input type="checkbox" checked={recapture} onChange={(event) => setRecapture(event.target.checked)} />
-          <Trans>Save current values</Trans>
-        </label>
-      )}
-      {errors.length > 0 && (
-        <ul className={errorList}>
-          {errors.map((error) => (
-            <li key={error.type}>{i18n._(sceneErrorMessage(error))}</li>
-          ))}
-        </ul>
-      )}
-      <div className={actions}>
-        <Button variant="primary" onClick={() => void onSave()} disabled={!canSave}>
-          <Trans>Save</Trans>
-        </Button>
-        <Button onClick={onClose} disabled={saving}>
-          <Trans>Cancel</Trans>
-        </Button>
+          <fieldset className={fixtureChoices}>
+            <legend className={fixtureChoicesTitle}>
+              <Trans>Fixtures in the scene</Trans>
+            </legend>
+            {fixtures.map((fixture) => (
+              <label key={fixture.id} className={checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={fixtureIds.includes(fixture.id)}
+                  onChange={(event) => onToggleFixture(fixture.id, event.target.checked)}
+                />
+                {fixture.name}
+              </label>
+            ))}
+          </fieldset>
+          {scene && (
+            <label className={checkboxLabel}>
+              <input type="checkbox" checked={recapture} onChange={(event) => setRecapture(event.target.checked)} />
+              <Trans>Save current values</Trans>
+            </label>
+          )}
+          {errors.length > 0 && (
+            <ul className={errorList}>
+              {errors.map((error) => (
+                <li key={error.type}>{i18n._(sceneErrorMessage(error))}</li>
+              ))}
+            </ul>
+          )}
+          <div className={actions}>
+            <Button variant="primary" onClick={() => void onSave()} disabled={!canSave}>
+              <Trans>Save</Trans>
+            </Button>
+            <Button onClick={onClose} disabled={saving}>
+              <Trans>Cancel</Trans>
+            </Button>
+          </div>
+        </div>
+        {/* next to the form, so it is read while choosing, without pushing the fixtures' faders down */}
+        <div className={helpColumn}>
+          <SceneHelp initiallyOpen={!scene} />
+        </div>
       </div>
     </section>
   );

@@ -14,6 +14,25 @@ export const sceneEditor = style({
   borderRadius: vars.constants.radiusMd
 });
 
+/** the form on the left, the help on the right; the help moves below the form when there is no room */
+export const columns = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'flex-start',
+  gap: '16px 24px'
+});
+
+export const formColumn = style({
+  flex: '1 1 320px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px'
+});
+
+export const helpColumn = style({
+  flex: '1 1 360px'
+});
+
 export const editorTitle = style({
   margin: 0,
   fontSize: '1em',
