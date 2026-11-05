@@ -134,6 +134,37 @@ test('after disconnecting nothing is sent', async () => {
   expect(connector.writtenPackets).toHaveLength(1);
 });
 
+describe('blackout while running (another project opened)', () => {
+  beforeEach(async () => {
+    await engine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+  });
+
+  test('with new limits in the same step: one all-zero packet, and the next values are capped', async () => {
+    engine.setChannel(1, 255);
+    engine.setChannel(29, 200);
+    await nextTick();
+
+    engine.blackout();
+    engine.setChannelLimits(new Map([[29, 0]]));
+    await nextTick();
+
+    expect(connector.writtenPackets).toHaveLength(3);
+    expect(connector.writtenPackets[2]?.slice(5, 5 + 512).every((value) => value === 0)).toBe(true);
+
+    engine.setChannel(29, 255);
+    await nextTick();
+    expect(connector.writtenPackets).toHaveLength(3);
+  });
+
+  test('is sent even if all channels were 0 already', async () => {
+    engine.blackout();
+    await nextTick();
+
+    expect(connector.writtenPackets).toHaveLength(2);
+  });
+});
+
 describe('channel limits', () => {
   const LASER = 29;
   const MACRO = 37;

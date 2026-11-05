@@ -9,18 +9,20 @@ import mascot from '@assets/gluehwuermli_mascot.png';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
 import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
+import {useProjectSubscription} from '@/state/actionHooks/project';
 import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import {app, backdrop, contentVariants} from './App.css';
+import ShowView from './ShowView';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
 import {ChannelsIcon, FixturesIcon, HelpIcon, SettingsIcon} from './commons/icons';
 import FaderBank from './faders/FaderBank';
-import FixtureView from './fixtures/FixtureView';
 import HelpView from './help/HelpView';
 import OutputBar from './output/OutputBar';
+import ProjectSection from './project/ProjectSection';
 import SettingsView from './settings/SettingsView';
 import {defaultTheme} from './themes.css';
 
@@ -37,9 +39,9 @@ const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
 ];
 
 const VIEW_CONTENT: Record<View, () => ReactNode> = {
-  fixtures: () => <FixtureView />,
+  fixtures: () => <ShowView />,
   channels: () => <FaderBank />,
-  settings: () => <SettingsView />,
+  settings: () => <SettingsView projectSection={(className) => <ProjectSection className={className} />} />,
   help: () => <HelpView />
 };
 
@@ -54,6 +56,8 @@ const App = () => {
   useUserActivityReporting();
   // the output status shows in the bar, whichever view is open
   useOutputStatusSubscription();
+  // the open project, and a .glp double-clicked while the app runs, whichever view is open
+  useProjectSubscription();
 
   const loadPorts = useActionLoadPorts();
   // the ports are external state: list them once on start, not only when Settings opens (loadPorts is a new function

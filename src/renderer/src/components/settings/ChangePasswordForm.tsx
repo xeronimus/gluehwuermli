@@ -12,8 +12,9 @@ import {useActionChangePassword} from '@/state/actionHooks/lockActions';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import {passwordForm, passwordInput} from '../commons/PasswordForm.css';
 import {PasswordIcon} from '../commons/icons';
-import {changePasswordForm, errorMessage, passwordForm, passwordInput} from './SettingsView.css';
+import {changePasswordForm, errorMessage} from './SettingsView.css';
 
 interface ChangePasswordFormProps {
   onChanged: () => void;

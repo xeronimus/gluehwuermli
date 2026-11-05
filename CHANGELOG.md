@@ -4,7 +4,7 @@ All notable changes to Glühwürmli are documented in this file. The format is b
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-What counts as a breaking change: an existing `fixtures.json` or `settings.json` that can no longer be read without a
+What counts as a breaking change: an existing project file (`.glp`) or `settings.json` that can no longer be read without a
 migration, or a change to Show and Setup mode that an operator has to relearn. While the version is `0.x`, a breaking
 change bumps the minor version and everything else the patch version.
 
@@ -12,11 +12,20 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
+- Projects: the fixtures and scenes of a rig live in a `.glp` file wherever you keep it (Documents, Desktop, a USB
+  stick), one per venue or show. Every change is saved to the file right away. **Create project** (Setup mode) and
+  **Open project** in the Show view when no project is open, and in the new **Project** section of the Settings view
+  with the recent projects (a missing file is marked and can be removed from the list). The app opens the last project
+  again on start; the window title and the Help view show which one is open. Opening another project sets all channels
+  to 0 first, and asks before it drops a fixture or scene being edited. A file that is no valid project, or one from a
+  newer version of the app, is not opened and left as it is
+- The installer registers `.glp` files with their own icon: a double-click opens the project in the app, in the
+  running one if it is open already
 - Scenes: named buttons above the fixtures that set the channels of several fixtures at once; the fixtures a scene
   leaves out stay as they are, so scenes can be layered. In Setup mode, **Add scene** stores the current fader values
   of the chosen fixtures, and each scene can be renamed, given other fixtures, recaptured or deleted. A scene touching
-  a locked channel stays playable, the channel only goes up to its cap. Scenes are stored in `fixtures.json`; a file
-  without them loads as before, an older app version drops them on its next save
+  a locked channel stays playable, the channel only goes up to its cap. Scenes are stored with the fixtures; a file
+  without them loads as before
 - Icons for fixtures (a cone) and scenes (a stack), in front of their names and on their Add buttons
 - The order of the fixtures, the scene buttons and a fixture's presets can be changed in Setup mode, with arrows next
   to each of them (the presets' in the fixture editor)
@@ -33,6 +42,11 @@ change bumps the minor version and everything else the patch version.
 ### Fixed
 
 - Quitting waits until the DMX port is closed (at most 2 s), instead of leaving that to chance
+
+### Removed
+
+- `fixtures.json` in the data folder is no longer read or written: create a project, or paste the content of an old
+  `fixtures.json` into a `.glp` file and open it
 
 ## [0.1.2] - 2026-11-02
 

@@ -12,6 +12,9 @@ export const PasswordHashSchema = Type.Object({
 });
 export type PasswordHash = Static<typeof PasswordHashSchema>;
 
+/** enough for the venues of a season, short enough to scan */
+export const RECENT_PROJECTS_MAX = 8;
+
 /**
  * the version of the stored settings, so a later format change can migrate an older file. New optional fields keep
  * it: a file without them is still valid, and an older app version ignores them
@@ -28,7 +31,11 @@ export const SettingsSchema = Type.Object({
   /** the language chosen in the app; without it, the OS language decides */
   locale: Type.Optional(LocaleSchema),
   /** sends an all-zero universe before the port is closed on quit; without it, the rig keeps its last look */
-  blackoutOnQuit: Type.Optional(Type.Boolean())
+  blackoutOnQuit: Type.Optional(Type.Boolean()),
+  /** the .glp opened last, opened again on start (project/projectSession.ts) */
+  lastProjectPath: Type.Optional(Type.String({minLength: 1})),
+  /** the projects opened before, the latest first */
+  recentProjectPaths: Type.Optional(Type.Array(Type.String({minLength: 1}), {maxItems: RECENT_PROJECTS_MAX}))
 });
 export type Settings = Static<typeof SettingsSchema>;
 

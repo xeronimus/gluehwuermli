@@ -5,13 +5,15 @@ import {REPOSITORY_URL} from '@shared/links';
 import {ExternalLinkIcon} from '../commons/icons';
 import DataFolderSection from './DataFolderSection';
 import {helpView, repositoryLink, sideColumn, sideSection} from './HelpView.css';
+import ProjectInfoSection from './ProjectInfoSection';
 import UserManual from './UserManual';
 
-/** the user manual, where the app keeps its files, and where it comes from */
+/** the user manual, the open project's file, where the app keeps its settings, and where it comes from */
 const HelpView = () => (
   <div className={helpView}>
     <UserManual />
     <aside className={sideColumn}>
+      <ProjectInfoSection />
       <DataFolderSection />
       <section className={sideSection}>
         <h2>

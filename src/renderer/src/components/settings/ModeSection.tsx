@@ -7,8 +7,8 @@ import type {LockStatus} from '@shared/ipc';
 import {useActionLock, useActionUnlock} from '@/state/actionHooks/lockActions';
 
 import Button from '../commons/Button';
+import PasswordForm from '../commons/PasswordForm';
 import {LockIcon, UnlockIcon} from '../commons/icons';
-import PasswordForm from './PasswordForm';
 import {message, settingsSection, statusVariants} from './SettingsView.css';
 
 interface ModeSectionProps {

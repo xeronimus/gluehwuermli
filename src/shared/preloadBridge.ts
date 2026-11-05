@@ -8,6 +8,9 @@ import type {
   LockStatus,
   OpenDataFolderResult,
   PasswordResult,
+  ProjectOpenResult,
+  ProjectStatus,
+  RecentProject,
   RememberedPort,
   SerialPortDescription,
   SetChannelRequest
@@ -28,10 +31,21 @@ export interface PreloadBridge {
   getRememberedPort: () => Promise<RememberedPort>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
-  /** the stored fixture setup; an empty one when there is no valid file yet */
-  loadFixtures: () => Promise<FixtureSetup>;
-  /** rejects when the main process refuses the setup or cannot write it */
-  saveFixtures: (setup: FixtureSetup) => Promise<void>;
+  getProjectStatus: () => Promise<ProjectStatus>;
+  /** rejects in Show mode or when the new file can't be written */
+  createProject: () => Promise<ProjectOpenResult>;
+  openProject: () => Promise<ProjectOpenResult>;
+  /** rejects for a path that is neither recent nor double-clicked */
+  openRecentProject: (path: string) => Promise<ProjectOpenResult>;
+  listRecentProjects: () => Promise<readonly RecentProject[]>;
+  /** rejects if the list can't be stored */
+  removeRecentProject: (path: string) => Promise<void>;
+  /** rejects when the main process refuses the setup (Show mode, another project) or cannot write it */
+  saveFixtures: (projectPath: string, setup: FixtureSetup) => Promise<void>;
+  /** returns the function that removes the listener again */
+  onProjectChanged: (listener: (status: ProjectStatus) => void) => () => void;
+  /** returns the function that removes the listener again */
+  onProjectOpenRequested: (listener: (path: string) => void) => () => void;
   getDataFolder: () => Promise<DataFolder>;
   /** a folder that can't be opened is a `failed` result, not a rejection; refused in Show mode */
   openDataFolder: () => Promise<OpenDataFolderResult>;

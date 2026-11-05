@@ -2,23 +2,30 @@ import {fixtureSetupOf} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
 import {FixturesState, getDefaultFixturesState} from './FixturesState';
-import {selectFixtureOverlaps, selectFixtures, selectSetup} from './fixturesSelectors';
+import {selectFixtureOverlaps, selectFixtures, selectOpenProject, selectSetup} from './fixturesSelectors';
 
 const par: Fixture = {id: 'par', name: 'PAR', startAddress: 1, channels: [{name: 'Dimmer', offset: 0}]};
 const smoke: Fixture = {id: 'smoke', name: 'Smoke', startAddress: 1, channels: [{name: 'Smoke', offset: 0}]};
 
-test('an empty setup and no fixtures while loading or after a failed load', () => {
-  expect(selectSetup(getDefaultFixturesState())).toEqual(fixtureSetupOf([]));
-  expect(selectFixtures(getDefaultFixturesState())).toEqual([]);
-  expect(selectFixtures({fixtureSetup: {type: 'failed', message: {id: 'down'}}, fixturesError: undefined})).toEqual([]);
-});
-
-test('the overlaps of the loaded fixtures', () => {
-  const state: FixturesState = {
-    fixtureSetup: {type: 'loaded', setup: fixtureSetupOf([par, smoke])},
-    fixturesError: undefined
+test('an empty setup and no fixtures without an open project', () => {
+  const failed: FixturesState = {
+    ...getDefaultFixturesState(),
+    project: {type: 'failed', path: 'D:\\Gone.glp', error: {reason: 'missing'}}
   };
 
+  expect(selectSetup(getDefaultFixturesState())).toEqual(fixtureSetupOf([]));
+  expect(selectFixtures(getDefaultFixturesState())).toEqual([]);
+  expect(selectFixtures(failed)).toEqual([]);
+  expect(selectOpenProject(failed)).toBeUndefined();
+});
+
+test('the overlaps of the open project', () => {
+  const state: FixturesState = {
+    ...getDefaultFixturesState(),
+    project: {type: 'open', project: {path: 'D:\\Waldfest.glp', setup: fixtureSetupOf([par, smoke])}}
+  };
+
+  expect(selectOpenProject(state)?.path).toBe('D:\\Waldfest.glp');
   expect(selectFixtures(state)).toEqual([par, smoke]);
   expect(selectFixtureOverlaps(state)).toEqual([{first: par, second: smoke, addresses: [1]}]);
 });

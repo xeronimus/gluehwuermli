@@ -24,6 +24,12 @@ export interface DmxEngine {
   /** the caps per address (the channel lock); while they are enforced, channels above their new cap drop to it */
   setChannelLimits: (limits: ChannelLimits) => void;
 
+  /**
+   * all channels to 0, sent with the next tick (another project was opened: its fixtures may sit on other addresses).
+   * Unlike the blackout of dispose, the output keeps running
+   */
+  blackout: () => void;
+
   /** on from the start, so nothing goes out uncapped before the fixtures are loaded; turning it on caps right away */
   setLimitsEnforced: (enforced: boolean) => void;
 
@@ -214,6 +220,10 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
         return;
       }
       writeChannel(channel, value);
+    },
+    blackout: () => {
+      universe.fill(DMX_MIN_VALUE);
+      universeChanged = true;
     },
     setChannelLimits: (next) => {
       limits = next;
