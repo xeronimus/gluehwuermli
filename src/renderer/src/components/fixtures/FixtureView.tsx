@@ -5,7 +5,6 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import type {Fixture, Scene} from '@shared/ipc';
 
 import {overlapMessage} from '@/i18n/messages/fixtureMessages';
-import {useActionLoadFixtures} from '@/state/actionHooks/loadFixtures';
 import {useActionDeleteFixture, useActionMoveFixture} from '@/state/actionHooks/saveFixtures';
 import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
@@ -28,48 +27,32 @@ type Editing =
 
 const NOT_EDITING: Editing = {type: 'none'};
 
-/** the scene buttons and one control group per fixture; adding, editing, moving and deleting both in Setup mode */
+/**
+ * the open project's scene buttons and one control group per fixture; adding, editing, moving and deleting both in
+ * Setup mode
+ */
 const FixtureView = () => {
   const {t, i18n} = useLingui();
-  const fixtureSetup = useAppStore((state) => state.fixtureSetup);
   const fixtures = useAppStore(selectFixtures);
   const overlaps = useAppStore(selectFixtureOverlaps);
   const error = useAppStore((state) => state.fixturesError);
-  const loadFixtures = useActionLoadFixtures();
   const deleteFixture = useActionDeleteFixture();
   const moveFixture = useActionMoveFixture();
   const setupMode = useAppStore(selectIsSetupMode);
+  const setHasOpenDraft = useAppStore((state) => state.setHasOpenDraft);
   const [editing, setEditing] = useState<Editing>(NOT_EDITING);
+  const hasOpenDraft = editing.type !== 'none';
 
   // locking (the Lock button, being idle) drops an unsaved edit (set during render, React re-renders right away)
   if (editing.type !== 'none' && !setupMode) {
     setEditing(NOT_EDITING);
   }
 
-  // the stored setup is external state: load it once, not again every time the tab is shown
+  // a double-clicked .glp asks before it drops the draft; the main process pushes that request outside React
   useEffect(() => {
-    if (useAppStore.getState().fixtureSetup.type === 'loading') {
-      void loadFixtures();
-    }
-  }, []);
-
-  if (fixtureSetup.type === 'loading') {
-    return (
-      <span className={message}>
-        <Trans>Loading the fixtures…</Trans>
-      </span>
-    );
-  }
-  if (fixtureSetup.type === 'failed') {
-    return (
-      <div className={fixtureView}>
-        <span className={errorMessage}>{i18n._(fixtureSetup.message)}</span>
-        <Button onClick={() => void loadFixtures()}>
-          <Trans>Try again</Trans>
-        </Button>
-      </div>
-    );
-  }
+    setHasOpenDraft(hasOpenDraft);
+    return () => setHasOpenDraft(false);
+  }, [hasOpenDraft, setHasOpenDraft]);
 
   const onDelete = (fixture: Fixture) => {
     const fixtureName = fixture.name;
@@ -125,10 +108,15 @@ const FixtureView = () => {
 
       {fixtures.length === 0 && (
         <span className={message}>
-          <Trans>
-            No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control
-            them by name.
-          </Trans>
+          {/* in Setup mode the Add fixture button is right below, there is nothing to unlock */}
+          {setupMode ? (
+            <Trans>No fixtures yet: add the devices of your rig with Add fixture below, to control them by name.</Trans>
+          ) : (
+            <Trans>
+              No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to
+              control them by name.
+            </Trans>
+          )}
         </span>
       )}
 

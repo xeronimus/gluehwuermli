@@ -9,22 +9,27 @@ import mascot from '@assets/gluehwuermli_mascot.png';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
 import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
+import {useProjectSubscription} from '@/state/actionHooks/project';
 import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {app, backdrop, contentVariants} from './App.css';
+import {app, backdrop, contentVariants, showViewVariants} from './App.css';
+import ShowView from './ShowView';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
 import {ChannelsIcon, FixturesIcon, HelpIcon, SettingsIcon} from './commons/icons';
 import FaderBank from './faders/FaderBank';
-import FixtureView from './fixtures/FixtureView';
 import HelpView from './help/HelpView';
 import OutputBar from './output/OutputBar';
+import ProjectSection from './project/ProjectSection';
 import SettingsView from './settings/SettingsView';
 import {defaultTheme} from './themes.css';
 
 type View = 'fixtures' | 'channels' | 'settings' | 'help';
+
+/** the views other than Show, mounted only while open */
+type OtherView = Exclude<View, 'fixtures'>;
 
 /** the raw channels reach every address, the fixtures only theirs: Setup mode only */
 const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
@@ -36,10 +41,9 @@ const viewsFor = (setupMode: boolean, i18n: I18n): readonly Mode<View>[] => [
   {id: 'help', label: i18n._(msg`Help`), Icon: HelpIcon}
 ];
 
-const VIEW_CONTENT: Record<View, () => ReactNode> = {
-  fixtures: () => <FixtureView />,
+const VIEW_CONTENT: Record<OtherView, () => ReactNode> = {
   channels: () => <FaderBank />,
-  settings: () => <SettingsView />,
+  settings: () => <SettingsView projectSection={(className) => <ProjectSection className={className} />} />,
   help: () => <HelpView />
 };
 
@@ -54,6 +58,8 @@ const App = () => {
   useUserActivityReporting();
   // the output status shows in the bar, whichever view is open
   useOutputStatusSubscription();
+  // the open project, and a .glp double-clicked while the app runs, whichever view is open
+  useProjectSubscription();
 
   const loadPorts = useActionLoadPorts();
   // the ports are external state: list them once on start, not only when Settings opens (loadPorts is a new function
@@ -77,7 +83,17 @@ const App = () => {
         />
       </ErrorBoundary>
       <main className={contentClass}>
-        <ErrorBoundary key={view}>{VIEW_CONTENT[view]()}</ErrorBoundary>
+        {/*
+          The Show view stays mounted, only hidden, while another view is open: a fixture or scene editor keeps its
+          draft in component state, and unmounting would drop it without a word. Kept, the draft is still there when
+          the user comes back, and opening another project from Settings asks before it drops it (hasOpenDraft).
+        */}
+        <div className={showViewVariants[view === 'fixtures' ? 'shown' : 'hidden']}>
+          <ErrorBoundary>
+            <ShowView />
+          </ErrorBoundary>
+        </div>
+        {view !== 'fixtures' && <ErrorBoundary key={view}>{VIEW_CONTENT[view]()}</ErrorBoundary>}
       </main>
     </div>
   );

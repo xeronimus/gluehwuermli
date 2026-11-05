@@ -8,9 +8,9 @@ import {passwordFormError} from '@/data/passwordForm';
 import {passwordFormErrorMessage} from '@/i18n/messages/passwordMessages';
 import type {PasswordOutcome} from '@/state/actionHooks/lockActions';
 
-import Button from '../commons/Button';
-import {UnlockIcon} from '../commons/icons';
-import {errorMessage, passwordForm, passwordInput} from './SettingsView.css';
+import Button from './Button';
+import {errorMessage, passwordForm, passwordInput} from './PasswordForm.css';
+import {UnlockIcon} from './icons';
 
 interface PasswordFormProps {
   /** no password set yet: the one typed (twice) becomes the password */

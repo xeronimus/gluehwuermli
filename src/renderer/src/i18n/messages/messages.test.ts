@@ -6,6 +6,7 @@ import {activateLocale, i18n} from '../i18n';
 import {fixtureErrorMessage, overlapMessage} from './fixtureMessages';
 import {outputStatusMessage} from './outputMessages';
 import {passwordFormErrorMessage} from './passwordMessages';
+import {projectErrorMessage} from './projectMessages';
 import {sceneErrorMessage} from './sceneMessages';
 
 const translate = (message: MessageDescriptor) => i18n._(message);
@@ -60,6 +61,19 @@ describe('in English', () => {
 
   test('a password form error states the limit', () => {
     expect(translate(passwordFormErrorMessage('too-short'))).toBe('The password needs at least 4 characters');
+  });
+});
+
+describe('project errors in English', () => {
+  beforeAll(() => activateLocale('en'));
+
+  test('a reason of the OS is shown as it is, a newer version is named', () => {
+    expect(translate(projectErrorMessage({reason: 'unreadable', message: 'EBUSY: resource busy'}))).toBe(
+      "The file can't be read: EBUSY: resource busy"
+    );
+    expect(translate(projectErrorMessage({reason: 'too-new', version: 2}))).toBe(
+      'The file was saved by a newer version of Glühwürmli (project version 2). Update the app to open it.'
+    );
   });
 });
 

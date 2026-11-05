@@ -3,15 +3,15 @@ import type {MessageDescriptor} from '@lingui/core';
 import type {FixtureSetup} from '@shared/ipc';
 import type {SerialQueue} from '@shared/serialQueue';
 
-import type FixtureService from '@/data/service/FixtureService';
+import type ProjectService from '@/data/service/ProjectService';
 
 import type {FixturesActions} from './FixturesActions';
 import type {FixturesState} from './FixturesState';
-import {selectSetup} from './fixturesSelectors';
+import {selectOpenProject} from './fixturesSelectors';
 
 export interface StoreFixturesDependencies {
   getState: () => FixturesState & FixturesActions;
-  fixtureService: FixtureService;
+  projectService: Pick<ProjectService, 'saveFixtures'>;
   /** one queue for every save: each change starts from the setup the previous one stored, so none gets lost */
   runSerially: SerialQueue;
   log: {error: (...message: unknown[]) => void};
@@ -28,17 +28,24 @@ export type StoreFixtures = (
 ) => Promise<boolean>;
 
 /**
- * Stores the changed setup first and only then shows it: unlike a fader move, a lost change to the setup would go
- * unnoticed. A failed save sets `fixturesError` and leaves the shown setup as it was.
+ * Stores the changed setup in the open project's file first and only then shows it: unlike a fader move, a lost change
+ * to the setup would go unnoticed. A failed save sets `fixturesError` and leaves the shown setup as it was; without an
+ * open project there is nothing to change.
  */
 export const storeFixturesWith =
-  ({getState, fixtureService, runSerially, log}: StoreFixturesDependencies): StoreFixtures =>
+  ({getState, projectService, runSerially, log}: StoreFixturesDependencies): StoreFixtures =>
   (change, action, failure) =>
     runSerially(async () => {
-      const setup = change(selectSetup(getState()));
+      const project = selectOpenProject(getState());
+      if (!project) {
+        log.error(`${action} failed: no project is open`);
+        getState().setFixturesError(failure);
+        return false;
+      }
+      const setup = change(project.setup);
       try {
-        await fixtureService.save(setup);
-        getState().setFixtureSetup({type: 'loaded', setup});
+        await projectService.saveFixtures(project.path, setup);
+        getState().setProject({type: 'open', project: {path: project.path, setup}});
         getState().setFixturesError(undefined);
         return true;
       } catch (error) {

@@ -3,7 +3,7 @@ import type {SetChannelRequest} from '@shared/ipc';
 import {clampBankStart} from '@/data/channelBank';
 import {withChannelValue, withChannelValues} from '@/data/channelValues';
 
-import {ChannelsState} from './ChannelsState';
+import {ChannelsState, getDefaultChannelsState} from './ChannelsState';
 
 export type ChannelsStateSetter = (
   partial: ChannelsState | Partial<ChannelsState> | ((state: ChannelsState) => ChannelsState | Partial<ChannelsState>),
@@ -15,6 +15,8 @@ export interface ChannelsActions {
   setChannelValue: (channel: number, value: number) => void;
   /** several channels in one update, e.g. a preset */
   setChannelValues: (values: readonly SetChannelRequest[]) => void;
+  /** every fader to 0, as the main process blacked out the output; sends nothing */
+  clearChannelValues: () => void;
   /** moves the fader bank; only changes what is shown, sends nothing */
   setBankStart: (start: number) => void;
 }
@@ -33,6 +35,9 @@ export const getChannelsActions = (set: ChannelsStateSetter): ChannelsActions =>
       undefined,
       'channels/setChannelValues'
     ),
+
+  clearChannelValues: () =>
+    set({channelValues: getDefaultChannelsState().channelValues}, undefined, 'channels/clearChannelValues'),
 
   setBankStart: (start) => set({bankStart: clampBankStart(start)}, undefined, 'channels/setBankStart')
 });
