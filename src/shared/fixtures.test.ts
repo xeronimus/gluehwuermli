@@ -1,4 +1,5 @@
 import {
+  addressRuleConflicts,
   channelAddress,
   channelLimits,
   emptyFixtureSetup,
@@ -10,7 +11,7 @@ import {
   overlappingFixtures,
   parseFixtureSetup
 } from './fixtures';
-import type {Fixture} from './ipc';
+import type {ChannelValues, Fixture} from './ipc';
 
 const fixtureOf = (overrides: Partial<Fixture> = {}): Fixture => ({
   id: 'par-1',
@@ -147,6 +148,28 @@ describe('fixtureErrors', () => {
     expect(fixtureErrors(coloredAs('red'))).toEqual([{type: 'color-invalid'}]);
   });
 
+  test("reports each problem of the channels' value rules once", () => {
+    const fixture = fixtureOf({
+      channels: [
+        {name: 'Dimmer', offset: 0, values: {mode: 'continuous', min: 200, max: 100}},
+        {name: 'Strobe', offset: 1, values: {mode: 'steps', min: 200, max: 100, step: 0}}
+      ]
+    });
+
+    expect(fixtureErrors(fixture)).toEqual([{type: 'values-min-above-max'}, {type: 'values-step-invalid'}]);
+  });
+
+  test('a preset value must be one its channel stops at', () => {
+    const withGoboPreset = (value: number) =>
+      fixtureOf({
+        channels: [{name: 'Gobo', offset: 0, values: {mode: 'positions', positions: [{value: 5}, {value: 200}]}}],
+        presets: [{id: 'star', name: 'Star', values: [{offset: 0, value}]}]
+      });
+
+    expect(fixtureErrors(withGoboPreset(200))).toEqual([]);
+    expect(fixtureErrors(withGoboPreset(100))).toEqual([{type: 'preset-value-invalid', presetName: 'Star'}]);
+  });
+
   test('reports a fixture not fitting in the universe', () => {
     expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([{type: 'past-universe-end', lastAddress: 513}]);
   });
@@ -182,6 +205,23 @@ describe('overlappingFixtures', () => {
     const sparse = fixtureOf({id: 'sparse', startAddress: 1, channels: [{name: 'Pan', offset: 8}]});
 
     expect(overlappingFixtures([left, right, sparse])).toEqual([]);
+  });
+});
+
+describe('addressRuleConflicts', () => {
+  const dimmerOf = (id: string, values?: ChannelValues): Fixture =>
+    fixtureOf({id, name: id, channels: [{name: 'Dimmer', offset: 0, ...(values && {values})}]});
+  const fromHundred: ChannelValues = {mode: 'continuous', min: 100, max: 255};
+
+  test('fixtures sharing an address with the same rules, or both without, are no conflict', () => {
+    expect(addressRuleConflicts([dimmerOf('a'), dimmerOf('b')])).toEqual([]);
+    expect(addressRuleConflicts([dimmerOf('a', fromHundred), dimmerOf('b', fromHundred)])).toEqual([]);
+  });
+
+  test('fixtures sharing an address with different rules, also one without, conflict on that address', () => {
+    const conflicts = addressRuleConflicts([dimmerOf('a'), dimmerOf('b', fromHundred)]);
+
+    expect(conflicts.map(({first, second, addresses}) => [first.id, second.id, addresses])).toEqual([['a', 'b', [10]]]);
   });
 });
 
@@ -249,6 +289,32 @@ describe('parseFixtureSetup', () => {
     });
     expect(parseFixtureSetup({version: 1, fixtures: [coloredAs('#7F00FF')]})).toBeUndefined();
     expect(parseFixtureSetup({version: 1, fixtures: [coloredAs('red')]})).toBeUndefined();
+  });
+
+  test('accepts channels with value rules, rejects invalid rules and values the channel can not have', () => {
+    const steps = fixtureOf({
+      channels: [{name: 'Strobe', offset: 0, values: {mode: 'steps', min: 0, max: 200, step: 50}}],
+      presets: [{id: 'fast', name: 'Fast', values: [{offset: 0, value: 150}]}]
+    });
+    const invalidRules = fixtureOf({channels: [{name: 'Gobo', offset: 0, values: {mode: 'positions', positions: []}}]});
+    const offStepPreset = {...steps, presets: [{id: 'fast', name: 'Fast', values: [{offset: 0, value: 120}]}]};
+    const unknownMode = {...fixtureOf(), channels: [{name: 'X', offset: 0, values: {mode: 'ramp'}}]};
+
+    expect(parseFixtureSetup({version: 1, fixtures: [steps]})).toEqual({version: 1, fixtures: [steps]});
+    expect(parseFixtureSetup({version: 1, fixtures: [invalidRules]})).toBeUndefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [offStepPreset]})).toBeUndefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [unknownMode]})).toBeUndefined();
+  });
+
+  test('rejects fixtures sharing an address with different value rules', () => {
+    const plain = fixtureOf({id: 'a'});
+    const ranged = fixtureOf({
+      id: 'b',
+      channels: [{name: 'Red', offset: 0, values: {mode: 'continuous', min: 50, max: 255}}]
+    });
+
+    expect(parseFixtureSetup({version: 1, fixtures: [plain, fixtureOf({id: 'b'})]})).toBeDefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [plain, ranged]})).toBeUndefined();
   });
 
   test('accepts a channel with a lock, rejects a lock without a valid maximum', () => {

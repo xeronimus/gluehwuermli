@@ -1,5 +1,12 @@
 import Value from 'typebox/value';
 
+import {
+  type ValueRulesError,
+  channelValueRules,
+  isValidValueOf,
+  sameValueRules,
+  valueRulesErrors
+} from './channelValueRules';
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
   CHANNEL_COLOR_PATTERN,
@@ -80,6 +87,7 @@ export type FixtureError =
   | {readonly type: 'offset-used-twice'; readonly offset: number}
   | {readonly type: 'lock-max-invalid'}
   | {readonly type: 'color-invalid'}
+  | {readonly type: ValueRulesError}
   | {readonly type: 'past-universe-end'; readonly lastAddress: number}
   | {readonly type: 'preset-name-missing'}
   | {readonly type: 'preset-name-too-long'}
@@ -87,9 +95,30 @@ export type FixtureError =
   | {readonly type: 'preset-channels-missing'; readonly presetName: string | undefined}
   | {readonly type: 'preset-channel-unknown'; readonly presetName: string | undefined}
   | {readonly type: 'preset-channel-twice'; readonly presetName: string | undefined}
-  | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined};
+  | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined}
+  | {
+      readonly type: 'shared-address-rules-differ';
+      readonly otherFixtureName: string;
+      readonly addresses: readonly number[];
+    };
 
 const presetNameOf = (preset: FixturePreset): string | undefined => (isBlank(preset.name) ? undefined : preset.name);
+
+/** the order the rule errors are listed in, whichever channel has them */
+const VALUE_RULES_ERRORS: readonly ValueRulesError[] = [
+  'values-invalid',
+  'values-min-above-max',
+  'values-step-invalid',
+  'values-positions-too-few',
+  'values-position-twice',
+  'values-position-name-too-long'
+];
+
+/** each problem of the channels' value rules once, like the other channel errors */
+function valueRulesErrorsOf(fixture: Fixture): FixtureError[] {
+  const found = new Set(fixture.channels.flatMap((channel) => valueRulesErrors(channelValueRules(channel))));
+  return VALUE_RULES_ERRORS.filter((type) => found.has(type)).map((type) => ({type}));
+}
 
 /** what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each */
 function presetErrors(fixture: Fixture): FixtureError[] {
@@ -115,7 +144,7 @@ function presetErrors(fixture: Fixture): FixtureError[] {
     if (duplicatesOf(presetOffsets).length > 0) {
       errors.push({type: 'preset-channel-twice', presetName});
     }
-    if (preset.values.some((presetValue) => !isDmxValue(presetValue.value))) {
+    if (preset.values.some(({offset, value}) => !isValidValueOf(fixture, offset, value))) {
       errors.push({type: 'preset-value-invalid', presetName});
     }
   });
@@ -155,6 +184,7 @@ export function fixtureErrors(fixture: Fixture): FixtureError[] {
   if (!fixture.channels.every(hasValidColor)) {
     errors.push({type: 'color-invalid'});
   }
+  errors.push(...valueRulesErrorsOf(fixture));
   if (errors.length === 0 && !fitsInUniverse(fixture)) {
     errors.push({type: 'past-universe-end', lastAddress: lastAddress(fixture)});
   }
@@ -171,6 +201,33 @@ export function overlappingFixtures(fixtures: readonly Fixture[]): FixtureOverla
     })
   );
 }
+
+/** the channel of the fixture on this address, if it has one there */
+const channelAt = (fixture: Fixture, address: number): FixtureChannel | undefined =>
+  fixture.channels.find((channel) => channelAddress(fixture, channel) === address);
+
+/** the addresses the two fixtures share where their channels stop at different values */
+function addressesWithOtherRules({first, second, addresses}: FixtureOverlap): number[] {
+  return addresses.filter((address) => {
+    const firstChannel = channelAt(first, address);
+    const secondChannel = channelAt(second, address);
+    return (
+      firstChannel !== undefined &&
+      secondChannel !== undefined &&
+      !sameValueRules(channelValueRules(firstChannel), channelValueRules(secondChannel))
+    );
+  });
+}
+
+/**
+ * every pair of fixtures sharing an address where their channels have different value rules: their faders would
+ * stop at different values on the same address, so such a setup can't be saved. Only the addresses in question
+ */
+export const addressRuleConflicts = (fixtures: readonly Fixture[]): FixtureOverlap[] =>
+  overlappingFixtures(fixtures).flatMap((overlap) => {
+    const addresses = addressesWithOtherRules(overlap);
+    return addresses.length > 0 ? [{...overlap, addresses}] : [];
+  });
 
 /** the highest value per DMX address while the channel lock is on; an address missing here is never capped */
 export type ChannelLimits = ReadonlyMap<number, number>;
@@ -193,13 +250,14 @@ export function channelLimits(fixtures: readonly Fixture[]): ChannelLimits {
 const hasUniqueIds = (fixtures: readonly Fixture[]) => new Set(fixtures.map(({id}) => id)).size === fixtures.length;
 
 /**
- * the payload if it is a setup the app can work with (schema, unique ids, every fixture and every scene valid),
- * otherwise undefined
+ * the payload if it is a setup the app can work with (schema, unique ids, every fixture and every scene valid, no
+ * shared address with different value rules), otherwise undefined
  */
 export const parseFixtureSetup = (payload: unknown): FixtureSetup | undefined =>
   Value.Check(FixtureSetupSchema, payload) &&
   hasUniqueIds(payload.fixtures) &&
   payload.fixtures.every((fixture) => fixtureErrors(fixture).length === 0) &&
+  addressRuleConflicts(payload.fixtures).length === 0 &&
   scenesAreValid(payload)
     ? payload
     : undefined;

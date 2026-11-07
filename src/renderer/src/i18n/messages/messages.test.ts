@@ -85,7 +85,7 @@ describe('scene errors in English', () => {
       'A scene name can have at most 40 characters'
     );
     expect(translate(sceneErrorMessage({type: 'scene-value-invalid'}))).toBe(
-      'Scene values must be whole numbers from 0 to 255'
+      'Scene values must be whole numbers from 0 to 255 that their channels can have'
     );
   });
 });
