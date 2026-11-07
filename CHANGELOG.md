@@ -17,6 +17,13 @@ change bumps the minor version and everything else the patch version.
 - A fixture channel can have a color (a hex value like `#ff00ff`, in the fixture editor): its fader is tinted with it,
   also at 0, filled with it below the handle and glows the brighter the higher the value. The Channels view stays as it
   is
+- A fixture channel can restrict its fader (the **Values** column in the fixture editor's Channels tab): **Continuous**
+  from a min to a max, e.g. a dimmer that does nothing below 100; **Steps** of a step size; or **Positions**, only the
+  values listed, each with an optional name, e.g. the slots of a gobo wheel. The fader stops only at those values, its
+  step buttons go to the next and the previous one, and a positions fader shows its positions beside the track to
+  click. A preset picks a position from a list. Presets and scenes are moved to the nearest valid value when the rules
+  change. Fixtures sharing an address need the same values there. The Channels view, blackout and the channel lock
+  stay as they are
 
 ### Changed
 
