@@ -176,6 +176,13 @@ const UserManual = () => (
         </li>
         <li>
           <Trans>
+            Optionally, a channel's <strong>color</strong> as a hex value, e.g. ff0000 for red or #7f00ff for UV: its
+            fader is filled with it and glows the brighter the higher the value, so the red channel is found at a
+            glance.
+          </Trans>
+        </li>
+        <li>
+          <Trans>
             Optionally, a <strong>hint</strong> shown below the faders (e.g. "warm up 2 min before smoke") and a{' '}
             <strong>description</strong> for anything else: the DMX mode, DIP switches, where it hangs. The description
             is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor.
