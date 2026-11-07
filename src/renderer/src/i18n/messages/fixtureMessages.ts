@@ -44,6 +44,8 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
     }
     case 'lock-max-invalid':
       return msg`The maximum while locked must be a whole number from ${minValue} to ${maxValue}`;
+    case 'color-invalid':
+      return msg`A color must be a hex value like #ff00ff`;
     case 'past-universe-end': {
       const {lastAddress} = error;
       return msg`The fixture ends at address ${lastAddress}, after the last one (${lastUniverseAddress})`;

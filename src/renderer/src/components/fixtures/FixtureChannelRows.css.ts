@@ -11,7 +11,7 @@ export const channelsSection = style({
 /** its rows line up with the preset columns beside it */
 export const channelRows = style({
   display: 'grid',
-  gridTemplateColumns: '200px 90px 64px 120px auto',
+  gridTemplateColumns: '200px auto 64px auto 110px auto',
   gridAutoRows: vars.constants.editorRowHeight,
   gap: '6px 8px',
   alignItems: 'center',
@@ -28,15 +28,15 @@ export const channelNameInput = style({
   boxSizing: 'border-box'
 });
 
-export const offsetInput = style({
-  width: '100%',
+/** room for three digits next to the spinner: offsets go up to 511, values up to 255 */
+const threeDigitInput = style({
+  width: 'calc(3ch + 40px)',
   boxSizing: 'border-box'
 });
 
-export const lockMaxInput = style({
-  width: '100%',
-  boxSizing: 'border-box'
-});
+export const offsetInput = threeDigitInput;
+
+export const lockMaxInput = threeDigitInput;
 
 export const channelAddress = style({
   justifySelf: 'center',

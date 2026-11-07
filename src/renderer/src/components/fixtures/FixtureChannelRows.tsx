@@ -14,6 +14,7 @@ import {
 
 import Button from '../commons/Button';
 import {AddIcon, RemoveIcon} from '../commons/icons';
+import ChannelColorField from './ChannelColorField';
 import {
   addChannel,
   channelAddress,
@@ -29,14 +30,17 @@ import {sectionTitle} from './FixtureEditor.css';
 /** shown while the start address or the offset doesn't give a valid address */
 const NO_ADDRESS = '–';
 
+/** the placeholder of an empty lock field: the column's title says that empty means no lock */
+const NO_LOCK = '–';
+
 interface FixtureChannelRowsProps {
   draft: FixtureDraft;
   onChange: (draft: FixtureDraft) => void;
 }
 
 /**
- * a row per channel of the fixture being edited: its name, its offset from the start address, where it lands and its
- * cap while the channel lock is on
+ * a row per channel of the fixture being edited: its name, its offset from the start address, where it lands, its
+ * cap while the channel lock is on and the color its fader glows in
  */
 const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
   const {t} = useLingui();
@@ -58,6 +62,12 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
         </span>
         <span className={columnHeader} title={t`The highest value while the channel lock is on; empty for no lock`}>
           <Trans>Max while locked</Trans>
+        </span>
+        <span
+          className={columnHeader}
+          title={t`The color its fader glows in, a hex value like #ff00ff; empty for none`}
+        >
+          <Trans>Color</Trans>
         </span>
         <span />
         {draft.channels.map((channel, index) => {
@@ -87,9 +97,14 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
                 min={DMX_MIN_VALUE}
                 max={DMX_MAX_VALUE}
                 value={channel.lockMax}
-                placeholder={t`no lock`}
+                placeholder={NO_LOCK}
                 aria-label={t`Maximum of channel ${row} while locked`}
                 onChange={(event) => onChange(withChannelChange(draft, index, {lockMax: event.target.value}))}
+              />
+              <ChannelColorField
+                color={channel.color}
+                row={row}
+                onChange={(color) => onChange(withChannelChange(draft, index, {color}))}
               />
               <Button onClick={() => onChange(withoutChannel(draft, index))} title={t`Remove the channel`}>
                 <RemoveIcon />

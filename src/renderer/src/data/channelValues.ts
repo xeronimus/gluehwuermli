@@ -11,6 +11,10 @@ export const toDmxValue = (position: number): number =>
 
 export const toPercent = (value: number): number => Math.round((value / DMX_MAX_VALUE) * PERCENT);
 
+/** how strongly a colored fader glows at `value`: 0 (none) at the lowest value, 1 (full) at the highest */
+export const glowLevel = (value: number): number =>
+  Math.min(1, Math.max(0, (value - DMX_MIN_VALUE) / (DMX_MAX_VALUE - DMX_MIN_VALUE)));
+
 /** a copy of `channelValues` (index 0 is channel 1) with `channel` set to `value` */
 export const withChannelValue = (channelValues: readonly number[], channel: number, value: number): number[] =>
   channelValues.map((current, index) => (index === channel - FIRST_DMX_CHANNEL ? value : current));
