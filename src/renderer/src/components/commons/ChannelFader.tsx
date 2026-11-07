@@ -14,8 +14,8 @@ import {selectChannelLimit, selectLiftedChannelLimit} from '@/state/lock/lockSel
 import {useAppStore} from '@/state/store';
 
 import {
+  channelFader,
   channelFaderCapLifted,
-  channelFaderVariants,
   faderColor,
   faderLabel,
   faderLabelButton,
@@ -26,7 +26,6 @@ import {
   faderThumb,
   faderThumbLocked,
   faderTrack,
-  faderTrackArea,
   faderTrackColored,
   faderValue
 } from './ChannelFader.css';
@@ -55,7 +54,7 @@ interface ChannelFaderProps {
  * a vertical 0..255 fader; reads only its own channel from the store, so moving it re-renders only itself. A fixture
  * channel with value rules stops only at its values (the handle at the real DMX value), the others at every value.
  * A click on the value above it goes to the next stop, a click on the label below it to the previous one. A
- * positions fader shows its positions beside the track. A channel capped by the channel lock stops at its cap (one
+ * positions fader shows a tick per position, named on mouse over. A channel capped by the channel lock stops at its cap (one
  * capped at 0 can't be moved at all) and shows the value the main process sends. A fader with a color fills its track
  * with it below the handle and glows the stronger the closer the value is to its max
  */
@@ -80,10 +79,7 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
 
   return (
     <div
-      className={[
-        channelFaderVariants[positions.length > 0 ? 'positions' : 'plain'],
-        liftedLimit === undefined ? '' : channelFaderCapLifted
-      ].join(' ')}
+      className={liftedLimit === undefined ? channelFader : channelFaderCapLifted}
       title={liftedLimit === undefined ? undefined : titles.lifted}
     >
       <button
@@ -95,31 +91,27 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
         <span className={faderValue}>{value}</span>
         <span className={faderPercent}>{toPercent(value)}%</span>
       </button>
-      <div className={faderTrackArea}>
-        <Range
-          direction={Direction.Up}
-          min={DMX_MIN_VALUE}
-          max={DMX_MAX_VALUE}
-          step={SLIDER_STEP}
-          values={[value]}
-          disabled={locked}
-          onChange={([position]) => sendIfChanged(snappedFaderValue(fader, position ?? DMX_MIN_VALUE))}
-          renderTrack={({props, children}) => (
-            // react-range positions the thumb through the style it passes in; the color goes in as CSS variables
-            <div {...props} style={{...props.style, ...trackLook.colorVars}} className={trackLook.className}>
-              {positions.length > 0 && (
-                <FaderTicks faderLabel={fader.label} positions={positions} disabled={locked} onSelect={sendIfChanged} />
-              )}
-              {children}
-            </div>
-          )}
-          renderThumb={({props: {key, ...thumbProps}}) => (
-            <div key={key} {...thumbProps} className={locked ? faderThumbLocked : faderThumb} aria-label={titles.thumb}>
-              {limit !== undefined && <LockIcon className={faderLock} />}
-            </div>
-          )}
-        />
-      </div>
+      <Range
+        direction={Direction.Up}
+        min={DMX_MIN_VALUE}
+        max={DMX_MAX_VALUE}
+        step={SLIDER_STEP}
+        values={[value]}
+        disabled={locked}
+        onChange={([position]) => sendIfChanged(snappedFaderValue(fader, position ?? DMX_MIN_VALUE))}
+        renderTrack={({props, children}) => (
+          // react-range positions the thumb through the style it passes in; the color goes in as CSS variables
+          <div {...props} style={{...props.style, ...trackLook.colorVars}} className={trackLook.className}>
+            {positions.length > 0 && <FaderTicks positions={positions} disabled={locked} onSelect={sendIfChanged} />}
+            {children}
+          </div>
+        )}
+        renderThumb={({props: {key, ...thumbProps}}) => (
+          <div key={key} {...thumbProps} className={locked ? faderThumbLocked : faderThumb} aria-label={titles.thumb}>
+            {limit !== undefined && <LockIcon className={faderLock} />}
+          </div>
+        )}
+      />
       <button
         className={faderLabelButton}
         onClick={() => lowered !== undefined && onChange(fader.channel, lowered)}
