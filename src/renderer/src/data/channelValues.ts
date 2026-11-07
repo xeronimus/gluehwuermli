@@ -1,3 +1,4 @@
+import type {ValueRange} from '@shared/channelValueRules';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL} from '@shared/dmx';
 import type {SetChannelRequest} from '@shared/ipc';
 
@@ -11,9 +12,18 @@ export const toDmxValue = (position: number): number =>
 
 export const toPercent = (value: number): number => Math.round((value / DMX_MAX_VALUE) * PERCENT);
 
-/** how strongly a colored fader glows at `value`: 0 (none) at the lowest value, 1 (full) at the highest */
-export const glowLevel = (value: number): number =>
-  Math.min(1, Math.max(0, (value - DMX_MIN_VALUE) / (DMX_MAX_VALUE - DMX_MIN_VALUE)));
+const DMX_RANGE: ValueRange = {min: DMX_MIN_VALUE, max: DMX_MAX_VALUE};
+
+/**
+ * how strongly a colored fader glows at `value`: 0 (none) at the lowest value of its range or below (0 after a
+ * blackout), 1 (full) at its highest
+ */
+export function glowLevel(value: number, {min, max}: ValueRange = DMX_RANGE): number {
+  if (max <= min) {
+    return value >= max ? 1 : 0;
+  }
+  return Math.min(1, Math.max(0, (value - min) / (max - min)));
+}
 
 /** a copy of `channelValues` (index 0 is channel 1) with `channel` set to `value` */
 export const withChannelValue = (channelValues: readonly number[], channel: number, value: number): number[] =>

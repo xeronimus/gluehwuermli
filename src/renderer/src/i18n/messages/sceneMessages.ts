@@ -32,7 +32,7 @@ export function sceneErrorMessage(error: SceneError): MessageDescriptor {
     case 'scene-value-invalid': {
       const minValue = DMX_MIN_VALUE;
       const maxValue = DMX_MAX_VALUE;
-      return msg`Scene values must be whole numbers from ${minValue} to ${maxValue}`;
+      return msg`Scene values must be whole numbers from ${minValue} to ${maxValue} that their channels can have`;
     }
   }
 }

@@ -3,7 +3,12 @@ import {msg, plural} from '@lingui/core/macro';
 
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import type {FixtureError, FixtureOverlap} from '@shared/fixtures';
-import {FIXTURE_DESCRIPTION_MAX_LENGTH, FIXTURE_HINT_MAX_LENGTH, FIXTURE_PRESET_NAME_MAX_LENGTH} from '@shared/ipc';
+import {
+  CHANNEL_POSITION_NAME_MAX_LENGTH,
+  FIXTURE_DESCRIPTION_MAX_LENGTH,
+  FIXTURE_HINT_MAX_LENGTH,
+  FIXTURE_PRESET_NAME_MAX_LENGTH
+} from '@shared/ipc';
 
 // the limits as named variables, so the catalog shows {maxLength} rather than {0}
 const minValue = DMX_MIN_VALUE;
@@ -46,6 +51,20 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
       return msg`The maximum while locked must be a whole number from ${minValue} to ${maxValue}`;
     case 'color-invalid':
       return msg`A color must be a hex value like #ff00ff`;
+    case 'values-invalid':
+      return msg`The values of a channel must be whole numbers from ${minValue} to ${maxValue}`;
+    case 'values-min-above-max':
+      return msg`A channel's min can't be above its max`;
+    case 'values-step-invalid':
+      return msg`A channel's step size must be a whole number from 1`;
+    case 'values-positions-too-few':
+      return msg`A channel with positions needs at least two of them`;
+    case 'values-position-twice':
+      return msg`A channel has the same position twice`;
+    case 'values-position-name-too-long': {
+      const maxLength = CHANNEL_POSITION_NAME_MAX_LENGTH;
+      return msg`A position name can have at most ${maxLength} characters`;
+    }
     case 'past-universe-end': {
       const {lastAddress} = error;
       return msg`The fixture ends at address ${lastAddress}, after the last one (${lastUniverseAddress})`;
@@ -74,7 +93,13 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
     }
     case 'preset-value-invalid': {
       const preset = presetLabel(error.presetName, translate);
-      return msg`The values of the preset ${preset} must be whole numbers from ${minValue} to ${maxValue}`;
+      return msg`The values of the preset ${preset} must be whole numbers from ${minValue} to ${maxValue} that their channels can have`;
+    }
+    case 'shared-address-rules-differ': {
+      const {otherFixtureName} = error;
+      const addressList = error.addresses.join(', ');
+      const addressCount = error.addresses.length;
+      return msg`${otherFixtureName} uses ${plural(addressCount, {one: 'address', other: 'addresses'})} ${addressList} too, with other values: shared channels need the same mode and values`;
     }
   }
 }

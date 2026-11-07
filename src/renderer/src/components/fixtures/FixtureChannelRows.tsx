@@ -15,6 +15,8 @@ import {
 import Button from '../commons/Button';
 import {AddIcon, RemoveIcon} from '../commons/icons';
 import ChannelColorField from './ChannelColorField';
+import ChannelPositionsList from './ChannelPositionsList';
+import ChannelValuesField from './ChannelValuesField';
 import {
   addChannel,
   channelAddress,
@@ -25,7 +27,6 @@ import {
   lockMaxInput,
   offsetInput
 } from './FixtureChannelRows.css';
-import {sectionTitle} from './FixtureEditor.css';
 
 /** shown while the start address or the offset doesn't give a valid address */
 const NO_ADDRESS = '–';
@@ -39,17 +40,14 @@ interface FixtureChannelRowsProps {
 }
 
 /**
- * a row per channel of the fixture being edited: its name, its offset from the start address, where it lands, its
- * cap while the channel lock is on and the color its fader glows in
+ * a row per channel of the fixture being edited: its name, its offset from the start address, where it lands, the
+ * values its fader stops at, its cap while the channel lock is on and the color its fader glows in. The positions of a
+ * positions channel are listed below its row
  */
 const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
   const {t} = useLingui();
-  const channelCount = draft.channels.length;
   return (
     <div className={channelsSection}>
-      <h3 className={sectionTitle}>
-        <Trans>Channels ({channelCount})</Trans>
-      </h3>
       <div className={channelRows}>
         <span className={columnHeader}>
           <Trans>Channel</Trans>
@@ -59,6 +57,12 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
         </span>
         <span className={columnHeader}>
           <Trans>Address</Trans>
+        </span>
+        <span
+          className={columnHeader}
+          title={t`Where the fader stops: every value from min to max, in steps, or only at some positions`}
+        >
+          <Trans>Values</Trans>
         </span>
         <span className={columnHeader} title={t`The highest value while the channel lock is on; empty for no lock`}>
           <Trans>Max while locked</Trans>
@@ -91,6 +95,11 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
                 onChange={(event) => onChange(withChannelChange(draft, index, {offset: event.target.value}))}
               />
               <span className={channelAddress}>{draftChannelAddress(draft, channel) ?? NO_ADDRESS}</span>
+              <ChannelValuesField
+                values={channel.values}
+                row={row}
+                onChange={(values) => onChange(withChannelChange(draft, index, {values}))}
+              />
               <input
                 className={lockMaxInput}
                 type="number"
@@ -109,6 +118,13 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
               <Button onClick={() => onChange(withoutChannel(draft, index))} title={t`Remove the channel`}>
                 <RemoveIcon />
               </Button>
+              {channel.values.mode === 'positions' && (
+                <ChannelPositionsList
+                  values={channel.values}
+                  row={row}
+                  onChange={(values) => onChange(withChannelChange(draft, index, {values}))}
+                />
+              )}
             </Fragment>
           );
         })}

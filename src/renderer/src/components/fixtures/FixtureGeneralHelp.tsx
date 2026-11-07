@@ -1,15 +1,14 @@
 import {Trans} from '@lingui/react/macro';
 
 import EditorHelp from './EditorHelp';
-import {helpExample} from './EditorHelp.css';
 
-interface FixtureHelpProps {
+interface FixtureGeneralHelpProps {
   /** open when adding a fixture, where the help is needed most; the user can still toggle it */
   initiallyOpen: boolean;
 }
 
-/** how to turn a device's manual into a fixture: the start address, channel names and offsets */
-const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
+/** how to turn a device's manual into a fixture: its DMX mode, its start address, the hint and the description */
+const FixtureGeneralHelp = ({initiallyOpen}: FixtureGeneralHelpProps) => (
   <EditorHelp title={<Trans>How to set up a fixture</Trans>} initiallyOpen={initiallyOpen}>
     <ol>
       <li>
@@ -24,25 +23,7 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
           device listens there and on the addresses after it.
         </Trans>
       </li>
-      <li>
-        <Trans>
-          Add a <strong>channel</strong> for every entry of the list you want to control, named as you like. Its{' '}
-          <strong>offset</strong> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and
-          so on. Leave out the ones you don't need, the gaps are fine.
-        </Trans>
-      </li>
-      <li>
-        <Trans>
-          The <strong>Address</strong> column shows where each channel lands. Fixtures sharing addresses get a warning:
-          on purpose, e.g. two PARs moving together, or by mistake.
-        </Trans>
-      </li>
     </ol>
-    <p className={helpExample}>
-      <Trans>
-        Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12).
-      </Trans>
-    </p>
     <p>
       <Trans>
         The <strong>hint</strong> is shown below the faders, for what you need while playing, e.g. "warm up 2 min before
@@ -60,13 +41,6 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
     </p>
     <p>
       <Trans>
-        A <strong>preset</strong> is a button on the fixture that sets several channels at once, e.g. "Warm white". The
-        channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next
-        to the presets.
-      </Trans>
-    </p>
-    <p>
-      <Trans>
         No manual? Use the <strong>Channels</strong> tab to move one channel after the other from the device's address
         and watch what it does.
       </Trans>
@@ -74,4 +48,4 @@ const FixtureHelp = ({initiallyOpen}: FixtureHelpProps) => (
   </EditorHelp>
 );
 
-export default FixtureHelp;
+export default FixtureGeneralHelp;

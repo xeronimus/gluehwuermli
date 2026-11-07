@@ -75,6 +75,17 @@ describe('captureScene', () => {
     });
   });
 
+  test('captures a value between two stops of a channel as the nearest stop', () => {
+    const smokeInSteps: Fixture = {
+      ...smoke,
+      channels: [{name: 'Smoke', offset: 0, values: {mode: 'steps', min: 0, max: 200, step: 100}}]
+    };
+
+    expect(captureScene([smokeInSteps], channelValues, 'now', {name: 'Now', fixtureIds: ['smoke']}).fixtures).toEqual([
+      {fixtureId: 'smoke', values: [{offset: 0, value: 100}]}
+    ]);
+  });
+
   test('leaves out the fixtures not chosen and ids that are unknown', () => {
     expect(
       captureScene(fixtures, channelValues, 'new', {name: 'Fog', fixtureIds: ['smoke', 'laser']}).fixtures
@@ -183,6 +194,21 @@ describe('withFittedScenes', () => {
         ...intro,
         fixtures: [{fixtureId: 'par', values: [{offset: 0, value: 255}]}, intro.fixtures[1]]
       }
+    ]);
+  });
+
+  test('a channel with new value rules moves the scene values to the nearest valid one, valid ones stay', () => {
+    const smokeInSteps: Fixture = {
+      ...smoke,
+      channels: [{name: 'Smoke', offset: 0, values: {mode: 'steps', min: 0, max: 255, step: 100}}]
+    };
+    const parFromHundred: Fixture = {
+      ...par,
+      channels: [{name: 'Red', offset: 0, values: {mode: 'continuous', min: 100, max: 255}}, par.channels[1]]
+    };
+
+    expect(withFittedScenes(setupOf([parFromHundred, smokeInSteps], [intro])).scenes).toEqual([
+      {...intro, fixtures: [intro.fixtures[0], {fixtureId: 'smoke', values: [{offset: 0, value: 0}]}]}
     ]);
   });
 

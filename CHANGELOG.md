@@ -17,6 +17,13 @@ change bumps the minor version and everything else the patch version.
 - A fixture channel can have a color (a hex value like `#ff00ff`, in the fixture editor): its fader is tinted with it,
   also at 0, filled with it below the handle and glows the brighter the higher the value. The Channels view stays as it
   is
+- A fixture channel can restrict its fader (the **Values** column in the fixture editor's Channels tab): **Continuous**
+  from a min to a max, e.g. a dimmer that does nothing below 100; **Steps** of a step size; or **Positions**, only the
+  values listed, each with an optional name, e.g. the slots of a gobo wheel. The fader stops only at those values, its
+  step buttons and the arrow keys on its handle go to the next and the previous one, and a positions fader shows a tick per position on its track
+  (named on mouse over) to click. A preset picks a position from a list. Presets and scenes are moved to the nearest valid value when the rules
+  change. Fixtures sharing an address need the same values there. The Channels view, blackout and the channel lock
+  stay as they are
 
 ### Changed
 
@@ -24,6 +31,11 @@ change bumps the minor version and everything else the patch version.
   to last is still remembered and chosen again on start
 - **Connect** and **Disconnect** are in the top bar now, next to the output status and the chosen port (still in the
   Settings view as well); the port is still chosen in the Settings view
+- The fixture editor is split into the tabs **General** (name, start address, hint, description), **Channels** and
+  **Presets**, each with its own help. Errors and **Save** stay below the tabs, and a tab with an error is marked. In
+  the Presets tab a channel with a color shows it next to its name
+- In a preset, the value of a channel that isn't ticked can be entered right away: entering it (typing or the arrows)
+  ticks the channel, also for a value of 0
 
 ## [0.2.0] - 2026-11-05
 

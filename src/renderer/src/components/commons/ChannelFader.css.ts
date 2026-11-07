@@ -70,6 +70,8 @@ export const faderLabel = style({
 });
 
 export const faderTrack = style({
+  // the ticks of a positions fader are placed in it
+  position: 'relative',
   width: '6px',
   height: vars.constants.faderHeight,
   borderRadius: '3px',

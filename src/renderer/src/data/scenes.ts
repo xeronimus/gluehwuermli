@@ -3,7 +3,7 @@ import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
 import {changingFixtures} from './fixtureList';
 import {type MoveDirection, movedWithId} from './listOrder';
-import {currentFixtureValues, fixtureChannelValues} from './presets';
+import {currentFixtureValues, fittedFixtureValues, fixtureChannelValues} from './presets';
 
 /** what the scene editor sets: the name, the fixtures it covers, and whether to store the current values again */
 export interface SceneEdit {
@@ -78,17 +78,27 @@ export const withSceneMoved = (setup: FixtureSetup, sceneId: string, direction: 
   scenes: movedWithId(setupScenes(setup), sceneId, direction)
 });
 
-/** the values for channels the fixture still has; none for a fixture that was deleted */
+/**
+ * the values for channels the fixture still has, each fitted to the nearest value its channel can have; none for a
+ * fixture that was deleted
+ */
 function fittedSceneFixture(sceneFixture: SceneFixture, fixtures: readonly Fixture[]): SceneFixture[] {
   const fixture = fixtures.find(({id}) => id === sceneFixture.fixtureId);
-  const offsets = new Set(fixture?.channels.map(({offset}) => offset));
-  const values = sceneFixture.values.filter(({offset}) => offsets.has(offset));
+  if (!fixture) {
+    return [];
+  }
+  const offsets = new Set(fixture.channels.map(({offset}) => offset));
+  const values = fittedFixtureValues(
+    fixture,
+    sceneFixture.values.filter(({offset}) => offsets.has(offset))
+  );
   return values.length > 0 ? [{...sceneFixture, values}] : [];
 }
 
 /**
  * The scenes fitted to the setup's fixtures, after one was deleted or edited: a deleted fixture leaves every scene,
- * a removed channel leaves the scenes' values. A scene fixture without values left and a scene without fixtures left
+ * a removed channel leaves the scenes' values, a channel with other value rules moves them to its nearest valid
+ * value. A scene fixture without values left and a scene without fixtures left
  * are removed. New channels are not added: they get a value when the scene is recaptured.
  */
 export function withFittedScenes(setup: FixtureSetup): FixtureSetup {

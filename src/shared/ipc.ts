@@ -64,6 +64,37 @@ export type ChannelLock = Static<typeof ChannelLockSchema>;
 /** a channel's color as stored: `#rrggbb`, lower case (what the user types is normalized, fixtures.ts) */
 export const CHANNEL_COLOR_PATTERN = '^#[0-9a-f]{6}$';
 
+const DmxValueSchema = Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE});
+
+/** short enough to sit beside a fader's track */
+export const CHANNEL_POSITION_NAME_MAX_LENGTH = 20;
+
+/** a value a positions channel can have, e.g. a slot of a gobo wheel; shown by its name, or its value without one */
+export const ChannelPositionSchema = Type.Object({
+  value: DmxValueSchema,
+  name: Type.Optional(Type.String({minLength: 1, maxLength: CHANNEL_POSITION_NAME_MAX_LENGTH}))
+});
+export type ChannelPosition = Static<typeof ChannelPositionSchema>;
+
+/**
+ * The values a fixture channel's fader stops at (channelValueRules.ts): every value from min to max, steps from min
+ * to max, or only some positions. Checked by the fixture validation (fixtures.ts), not here: the renderer validates
+ * what is typed with the same functions.
+ */
+export const ChannelValuesSchema = Type.Union([
+  Type.Object({mode: Type.Literal('continuous'), min: DmxValueSchema, max: DmxValueSchema}),
+  Type.Object({
+    mode: Type.Literal('steps'),
+    min: DmxValueSchema,
+    max: DmxValueSchema,
+    step: Type.Integer({minimum: 1, maximum: DMX_MAX_VALUE})
+  }),
+  Type.Object({mode: Type.Literal('positions'), positions: Type.Array(ChannelPositionSchema)})
+]);
+export type ChannelValues = Static<typeof ChannelValuesSchema>;
+
+export type ChannelValueMode = ChannelValues['mode'];
+
 /** one channel of a fixture: its address is the fixture's start address plus `offset` */
 export const FixtureChannelSchema = Type.Object({
   name: Type.String({minLength: 1}),
@@ -71,7 +102,9 @@ export const FixtureChannelSchema = Type.Object({
   /** optional, so older files load; a channel without one is never capped */
   lock: Type.Optional(ChannelLockSchema),
   /** optional, so older files load; the color its fader glows in, a channel without one looks like a raw channel */
-  color: Type.Optional(Type.String({pattern: CHANNEL_COLOR_PATTERN}))
+  color: Type.Optional(Type.String({pattern: CHANNEL_COLOR_PATTERN})),
+  /** optional, so older files load; a channel without one goes from 0 to 255 */
+  values: Type.Optional(ChannelValuesSchema)
 });
 export type FixtureChannel = Static<typeof FixtureChannelSchema>;
 

@@ -17,6 +17,13 @@ test('a fader per channel, on the start address plus the offset', () => {
   ]);
 });
 
+test('a channel with value rules gives a fader stopping at them, the others none', () => {
+  const values = {mode: 'steps', min: 0, max: 200, step: 50} as const;
+  const strobe = {id: 'strobe', name: 'Strobe', startAddress: 5, channels: [{name: 'Rate', offset: 0, values}]};
+
+  expect(fixtureFaders(strobe)).toEqual([{channel: 5, label: 'Rate', values}]);
+});
+
 test('a colored channel gives a fader in its color, the others none', () => {
   const par = {
     id: 'par',

@@ -21,6 +21,10 @@ msgstr "{activeChannelCount, plural, one {# Kanal über 0} other {# Kanäle übe
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
 
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "{otherFixtureName} uses {addressCount, plural, one {address} other {addresses}} {addressList} too, with other values: shared channels need the same mode and values"
+msgstr "{otherFixtureName} nutzt {addressCount, plural, one {Adresse} other {die Adressen}} {addressList} auch, mit anderen Werten: Geteilte Kanäle brauchen denselben Modus und dieselben Werte"
+
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "{path}: {message}"
 msgstr "{path}: {message}"
@@ -29,13 +33,37 @@ msgstr "{path}: {message}"
 msgid "{path}: the port was closed, is the widget still plugged in?"
 msgstr "{path}: Der Port wurde geschlossen. Steckt das Widget noch?"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "{positionCount, plural, one {# position, listed below} other {# positions, listed below}}"
+msgstr "{positionCount, plural, one {# Position, unten aufgelistet} other {# Positionen, unten aufgelistet}}"
+
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "{presetName} sets a locked channel"
 msgstr "{presetName} setzt einen gesperrten Kanal"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
+
+#: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 msgstr "Ein <0>Preset</0> ist ein Knopf am Gerät, der mehrere Kanäle aufs Mal setzt, z. B. «Warmweiss». Kanäle ohne Häkchen bleiben, wie sie sind. Am schnellsten machst du eines, indem du die Fader einstellst und auf den Speichern-Knopf neben den Presets drückst."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel has the same position twice"
+msgstr "Ein Kanal hat dieselbe Position zweimal"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel with positions needs at least two of them"
+msgstr "Ein Kanal mit Positionen braucht mindestens zwei davon"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel's min can't be above its max"
+msgstr "Das Min. eines Kanals darf nicht über seinem Max. liegen"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel's step size must be a whole number from 1"
+msgstr "Die Schrittweite eines Kanals muss eine ganze Zahl ab 1 sein"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
@@ -48,6 +76,10 @@ msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmasc
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
 msgstr "Ein Kanal eines Geräts kann ein <0>Max. bei Sperre</0> haben (im Geräte-Editor): Solange die Kanalsperre an ist, geht der Kanal nie darüber, egal ob ein Fader, ein Preset, eine Szene oder eine Ansicht ihn setzt. Ein Laser bekommt 0, ein Makrokanal, der die eigenen Programme des Geräts startet, z. B. 50. Seine Fader zeigen ein Schloss und halten beim Maximum an (bei 0 sind sie ausgegraut), und ein Preset, das ihn höher setzen würde, ist deaktiviert. Eine Szene, die ihn höher setzen würde, lässt sich weiter spielen, damit ein Look der ganzen Anlage trotzdem geht: Der Kanal geht nur bis zu seinem Maximum, und der Knopf der Szene zeigt ein Schloss."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A position name can have at most {maxLength} characters"
+msgstr "Ein Positionsname darf höchstens {maxLength} Zeichen haben"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
@@ -73,7 +105,7 @@ msgstr "Ein Szenen-Name darf höchstens {maxLength} Zeichen haben"
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 msgstr "Füge für jeden Eintrag der Kanalliste des Geräts, den du steuern willst, einen <0>Kanal</0> hinzu. Sein <1>Offset</1> ist seine Nummer in der Anleitung minus 1: Kanal 1 hat Offset 0, Kanal 2 Offset 1."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Füge für jeden Eintrag der Liste, den du steuern willst, einen <0>Kanal</0> hinzu, benannt, wie du magst. Sein <1>Offset</1> ist seine Nummer in der Anleitung minus 1: Kanal 1 hat Offset 0, Kanal 2 Offset 1 und so weiter. Lass weg, was du nicht brauchst, Lücken sind kein Problem."
 
@@ -84,6 +116,10 @@ msgstr "Kanal hinzufügen"
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "Add fixture"
 msgstr "Gerät hinzufügen"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Add position"
+msgstr "Position hinzufügen"
 
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Add preset"
@@ -133,6 +169,10 @@ msgstr "Frage nach, ob die App gesperrt ist…"
 msgid "Black out on quit"
 msgstr "Blackout beim Beenden"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "by"
+msgstr "in Schritten von"
+
 #: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
@@ -154,33 +194,49 @@ msgstr "Kanal"
 msgid "Channel {channelNumber}"
 msgstr "Kanal {channelNumber}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label}"
 msgstr "Kanal {label}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} -{DMX_STEP}"
 msgstr "Kanal {label} −{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}"
 msgstr "Kanal {label} +{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 msgstr "Kanal {label} +{DMX_STEP}, von der Kanalsperre auf {limit} begrenzt"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Kanal {label} +{DMX_STEP}, nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is capped at {limit} by the channel lock"
 msgstr "Kanal {label} ist von der Kanalsperre auf {limit} begrenzt"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Kanal {label} ist nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value"
+msgstr "Kanal {label}: nächster Wert"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, capped at {limit} by the channel lock"
+msgstr "Kanal {label}: nächster Wert, von der Kanalsperre auf {limit} begrenzt"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, not capped at {liftedLimit}: the channel lock is lifted"
+msgstr "Kanal {label}: nächster Wert, nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: previous value"
+msgstr "Kanal {label}: vorheriger Wert"
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channel lock"
@@ -203,7 +259,7 @@ msgstr "Kanalsperren"
 msgid "Channels"
 msgstr "Kanäle"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Channels ({channelCount})"
 msgstr "Kanäle ({channelCount})"
 
@@ -238,6 +294,10 @@ msgstr "Den DMX USB Pro anschliessen"
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Connecting to {path}…"
 msgstr "Verbinde mit {path}…"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Continuous"
+msgstr "Stufenlos"
 
 #: src/renderer/src/state/actionHooks/project.ts
 msgid "Could not ask the app to open the project"
@@ -387,7 +447,7 @@ msgstr "Trennen"
 msgid "e.g. Dimmer"
 msgstr "z. B. Dimmer"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 msgid "e.g. PAR left"
 msgstr "z. B. PAR links"
 
@@ -425,7 +485,7 @@ msgstr "Jedes Gerät der Szene braucht mindestens einen Kanal"
 msgid "Every preset needs a name"
 msgstr "Jedes Preset braucht einen Namen"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Beispiel: ein RGB-PAR im 3-Kanal-Modus auf Adresse 10: Rot Offset 0 (10), Grün Offset 1 (11), Blau Offset 2 (12)."
 
@@ -453,9 +513,17 @@ msgstr "Geräte, Presets und Szenen lassen sich spielen, aber nicht ändern. Ent
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Passwort vergessen? Schliess die App, lösch <0>settings.json</0> im Datenordner (siehe Abschnitt Datenordner) und starte sie neu: Das nächste Passwort, nach dem gefragt wird, wird zum neuen."
 
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "General"
+msgstr "Allgemein"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 msgstr "Gib der Szene einen <0>Namen</0> und setze ein Häkchen bei den <1>Geräten</1>, die sie umfasst. Beim <2>Speichern</2> wird der aktuelle Wert jedes Kanals der angehakten Geräte gespeichert."
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "Has errors"
+msgstr "Hat Fehler"
 
 #: src/renderer/src/components/App.tsx
 msgid "Help"
@@ -465,17 +533,29 @@ msgstr "Hilfe"
 msgid "Hide the description"
 msgstr "Beschreibung ausblenden"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Highest value of channel {row}"
+msgstr "Höchster Wert von Kanal {row}"
+
 #: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
 msgid "Hint"
 msgstr "Hinweis"
+
+#: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
+msgid "How presets work"
+msgstr "So funktionieren Presets"
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "How scenes work"
 msgstr "So funktionieren Szenen"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "How to set up a fixture"
 msgstr "So richtest du ein Gerät ein"
+
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "How to set up the channels"
+msgstr "So richtest du die Kanäle ein"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
@@ -497,13 +577,17 @@ msgstr "Sperren"
 msgid "Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts."
 msgstr "Gesperrte Kanäle lassen sich auf jeden Wert setzen, auch im Show-Modus, bis die Sperre wieder eingeschaltet wird oder die App neu startet."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in the device's manual. Many devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it."
 msgstr "Such in der Anleitung des Geräts die <0>Kanalliste</0> (oft DMX-Chart oder DMX-Modus genannt). Viele Geräte haben mehrere Modi, z. B. 3 oder 7 Kanäle: Wähl einen aus und stell das Gerät darauf ein."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Looking up the folder…"
 msgstr "Suche den Ordner…"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Lowest value of channel {row}"
+msgstr "Tiefster Wert von Kanal {row}"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Max while locked"
@@ -545,7 +629,7 @@ msgstr "Szene {sceneName} nach links verschieben"
 msgid "Move the scene {sceneName} to the right"
 msgstr "Szene {sceneName} nach rechts verschieben"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Name"
 msgstr "Name"
@@ -554,6 +638,10 @@ msgstr "Name"
 msgid "Name of channel {row}"
 msgstr "Name von Kanal {row}"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Name of position {positionNumber} of channel {row}"
+msgstr "Name von Position {positionNumber} von Kanal {row}"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Name of preset {presetNumber}"
 msgstr "Name von Preset {presetNumber}"
@@ -561,6 +649,10 @@ msgstr "Name von Preset {presetNumber}"
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "Name of the new preset"
 msgstr "Name des neuen Presets"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Name, e.g. Star (optional)"
+msgstr "Name, z. B. Stern (optional)"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "New fixture"
@@ -591,7 +683,7 @@ msgstr "Noch keine Geräte: Entsperr den Setup-Modus in den Einstellungen und f�
 msgid "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
 msgstr "Keine Anleitung, oder nicht sicher, ob sie stimmt? Die Ansicht <0>Kanäle</0> (nur im Setup-Modus) hat einen Fader für jeden DMX-Kanal, 16 aufs Mal. Spring zur Adresse des Geräts, beweg einen Kanal nach dem anderen und schau, was passiert. Geräte und Kanäle zeigen dieselben Werte: Ein Fader, den du in der einen Ansicht bewegst, hat sich auch in der anderen bewegt."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "Keine Anleitung? Beweg in der Ansicht <0>Kanäle</0> ab der Adresse des Geräts einen Kanal nach dem anderen und schau, was passiert."
 
@@ -686,6 +778,10 @@ msgstr "Passwort"
 msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 msgstr "Steck den Enttec DMX USB Pro ein und schliess deine Geräte an seinen DMX-Ausgang an. Windows zeigt ihn als seriellen Port an (zum Beispiel COM3)."
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Positions"
+msgstr "Positionen"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Preset id {id} is used twice"
 msgstr "Die Preset-ID {id} kommt zweimal vor"
@@ -698,7 +794,7 @@ msgstr "Preset-Name"
 msgid "Presets"
 msgstr "Presets"
 
-#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
@@ -743,6 +839,10 @@ msgstr "{projectName} aus der Liste entfernen (die Datei bleibt)"
 msgid "Remove the channel"
 msgstr "Kanal entfernen"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Remove the position"
+msgstr "Position entfernen"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Remove the preset"
 msgstr "Preset entfernen"
@@ -775,8 +875,8 @@ msgid "Scene editor"
 msgstr "Szenen-Editor"
 
 #: src/renderer/src/i18n/messages/sceneMessages.ts
-msgid "Scene values must be whole numbers from {minValue} to {maxValue}"
-msgstr "Szenen-Werte müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+msgid "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
+msgstr "Szenenwerte müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 #: src/renderer/src/components/help/UserManual.tsx
@@ -807,7 +907,7 @@ msgstr "Stelle die <0>Fader</0> der Geräte unten auf den gewünschten Look. Sie
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
 msgstr "Setz die <0>Startadresse</0> auf die DMX-Adresse, die am Gerät eingestellt ist (auf seinem Display oder mit den DIP-Schaltern)."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 msgstr "Setz die <0>Startadresse</0> auf die DMX-Adresse, die am Gerät eingestellt ist (auf seinem Display oder mit den DIP-Schaltern). Das Gerät hört dort und auf den Adressen danach."
 
@@ -860,7 +960,7 @@ msgstr "Da ist etwas schiefgelaufen"
 msgid "Source code"
 msgstr "Quellcode"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 msgid "Start address"
 msgstr "Startadresse"
 
@@ -868,11 +968,19 @@ msgstr "Startadresse"
 msgid "Start channel"
 msgstr "Startkanal"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Step size of channel {row}"
+msgstr "Schrittweite von Kanal {row}"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Steps"
+msgstr "Stufen"
+
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
 msgstr "Die Spalte <0>Adresse</0> zeigt, wo jeder Kanal landet. Geräte, die sich Adressen teilen, bekommen eine Warnung: mit Absicht, z. B. zwei PARs, die zusammen gehen, oder aus Versehen."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 msgstr "Der <0>Hinweis</0> steht unter den Fadern, für das, was du beim Spielen brauchst, z. B. «2 Min. vor dem Nebel aufwärmen». Die <1>Beschreibung</1> ist für alles andere Wissenswerte über das Gerät: den DMX-Modus, die DIP-Schalter, wo es hängt, wem es gehört. Sie bleibt versteckt, bis du sie beim Gerät aufklappst."
 
@@ -904,7 +1012,7 @@ msgstr "Der Datenordner lässt sich nur im Setup-Modus öffnen"
 msgid "The description can have at most {maxLength} characters"
 msgstr "Die Beschreibung darf höchstens {maxLength} Zeichen haben"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 msgstr "Die Beschreibung ist <0>Markdown</0>: <1>**fett**</1>, Listen, die mit <2>-</2> beginnen, Tabellen und Links wie <3>[Anleitung](https://…)</3>, die sich in deinem Browser öffnen. Nur Links auf Webseiten (<4>http://</4> oder <5>https://</5>) lassen sich anklicken, alle anderen erscheinen als Text. <6>Vorschau</6> zeigt, wie es aussehen wird."
 
@@ -1037,8 +1145,12 @@ msgid "The start address must be a whole number from {firstAddress} to {lastUniv
 msgstr "Die Startadresse muss eine ganze Zahl von {firstAddress} bis {lastUniverseAddress} sein"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
-msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue}"
-msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+msgid "The values of a channel must be whole numbers from {minValue} to {maxValue}"
+msgstr "Die Werte eines Kanals müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue} that their channels can have"
+msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
@@ -1076,13 +1188,29 @@ msgstr "Setup-Modus entsperren"
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Wert von {label} in Preset {presetNumber}"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Value of position {positionNumber} of channel {row}"
+msgstr "Wert von Position {positionNumber} von Kanal {row}"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Values"
+msgstr "Werte"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
 msgstr "Einzelne Werte lassen sich hier nicht ändern. Ein Kanal, der einem Gerät später hinzugefügt wird, kommt erst in eine Szene, wenn sie mit «Aktuelle Werte speichern» gespeichert wird; wird ein Gerät gelöscht, fällt es aus jeder Szene. Solange die Kanalsperre an ist, geht ein gesperrter Kanal nur bis zu seinem Maximum, was auch immer die Szene gespeichert hat."
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Values of channel {row}"
+msgstr "Werte von Kanal {row}"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von Häkchen die schon gespeicherten Werte nicht: Nur ein neu angehaktes Gerät wird mit dem gespeichert, was seine Fader jetzt zeigen. <0>Aktuelle Werte speichern</0> speichert für jedes angehakte Gerät, was die Fader jetzt zeigen, und ersetzt die gespeicherten Werte. Um den Look einer Szene zu ändern, drückst du die Szene, passt die Fader an und speicherst sie mit «Aktuelle Werte speichern»."
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
+msgstr "Wo der Fader anhält: bei jedem Wert von Min. bis Max., in Stufen oder nur bei einigen Positionen"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "without a name"

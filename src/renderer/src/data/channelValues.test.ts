@@ -24,6 +24,15 @@ describe('glowLevel', () => {
     expect(glowLevel(51)).toBeCloseTo(0.2);
   });
 
+  test('follows the range of a fader with value rules: none at its min and below, full at its max', () => {
+    expect(glowLevel(100, {min: 100, max: 200})).toBe(0);
+    expect(glowLevel(0, {min: 100, max: 200})).toBe(0);
+    expect(glowLevel(150, {min: 100, max: 200})).toBeCloseTo(0.5);
+    expect(glowLevel(200, {min: 100, max: 200})).toBe(1);
+    expect(glowLevel(7, {min: 7, max: 7})).toBe(1);
+    expect(glowLevel(0, {min: 7, max: 7})).toBe(0);
+  });
+
   test('stays within 0..1 for a value out of range', () => {
     expect(glowLevel(-5)).toBe(0);
     expect(glowLevel(300)).toBe(1);
