@@ -32,6 +32,8 @@ const FaderTicks = ({positions, disabled, onSelect}: FaderTicksProps) =>
         className={tickMark}
         style={assignInlineVars({[tickBottom]: `${(value / DMX_MAX_VALUE) * PERCENT}%`})}
         disabled={disabled}
+        // no tab stop of its own: the keys on the handle and the step buttons reach every position already
+        tabIndex={-1}
         title={title}
         aria-label={title}
         onMouseDown={keepFromSlider}

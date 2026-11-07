@@ -1,12 +1,14 @@
 import Fader from '@/domain/Fader';
 
 import {
+  faderKeyStops,
   faderMode,
   faderPositions,
   faderRange,
   loweredFaderValue,
   raisedFaderValue,
-  snappedFaderValue
+  snappedFaderValue,
+  steppedFaderValue
 } from './faderStops';
 
 const raw: Fader = {channel: 1, label: '1'};
@@ -42,6 +44,17 @@ test('the step buttons go to the next and the previous stop, also from a value o
   expect(loweredFaderValue(gobo, 200)).toBe(6);
   expect(loweredFaderValue(gobo, 5)).toBeUndefined();
   expect(loweredFaderValue(gobo, 0)).toBeUndefined();
+});
+
+test('the keys on the handle move by stops, Page Up and Down by ten, as far as the fader goes', () => {
+  expect(faderKeyStops('ArrowUp')).toBe(1);
+  expect(faderKeyStops('PageDown')).toBe(-10);
+  expect(faderKeyStops('Tab')).toBeUndefined();
+  expect(steppedFaderValue(raw, 40, 10)).toBe(50);
+  expect(steppedFaderValue(raw, 250, 10)).toBe(255);
+  expect(steppedFaderValue(gobo, 6, 1)).toBe(200);
+  expect(steppedFaderValue(gobo, 200, -10)).toBe(5);
+  expect(steppedFaderValue(strobe, 100, 1)).toBeUndefined();
 });
 
 test('a positions fader lists its positions lowest first, the others none', () => {

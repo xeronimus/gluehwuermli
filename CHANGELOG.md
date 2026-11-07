@@ -20,7 +20,7 @@ change bumps the minor version and everything else the patch version.
 - A fixture channel can restrict its fader (the **Values** column in the fixture editor's Channels tab): **Continuous**
   from a min to a max, e.g. a dimmer that does nothing below 100; **Steps** of a step size; or **Positions**, only the
   values listed, each with an optional name, e.g. the slots of a gobo wheel. The fader stops only at those values, its
-  step buttons go to the next and the previous one, and a positions fader shows a tick per position on its track
+  step buttons and the arrow keys on its handle go to the next and the previous one, and a positions fader shows a tick per position on its track
   (named on mouse over) to click. A preset picks a position from a list. Presets and scenes are moved to the nearest valid value when the rules
   change. Fixtures sharing an address need the same values there. The Channels view, blackout and the channel lock
   stay as they are
