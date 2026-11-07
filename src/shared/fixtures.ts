@@ -2,6 +2,7 @@ import Value from 'typebox/value';
 
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
+  CHANNEL_COLOR_PATTERN,
   FIXTURE_DESCRIPTION_MAX_LENGTH,
   FIXTURE_HINT_MAX_LENGTH,
   FIXTURE_PRESET_NAME_MAX_LENGTH,
@@ -47,6 +48,20 @@ export const lastAddress = (fixture: Fixture): number => Math.max(fixture.startA
 export const fitsInUniverse = (fixture: Fixture): boolean =>
   fixture.startAddress >= FIRST_DMX_CHANNEL && lastAddress(fixture) <= LAST_DMX_CHANNEL;
 
+const STORED_COLOR = new RegExp(CHANNEL_COLOR_PATTERN);
+
+/** a color as typed: six hex digits, with or without the `#`, in any case */
+const TYPED_COLOR = /^#?([0-9a-f]{6})$/i;
+
+/** the color as stored (`#rrggbb`, lower case) for what the user typed, e.g. `FF00FF`; undefined if it is none */
+export function normalizedChannelColor(text: string): string | undefined {
+  const hexDigits = TYPED_COLOR.exec(text.trim())?.[1];
+  return hexDigits === undefined ? undefined : `#${hexDigits.toLowerCase()}`;
+}
+
+const hasValidColor = (channel: FixtureChannel): boolean =>
+  channel.color === undefined || STORED_COLOR.test(channel.color);
+
 /** the fixture's presets; none in a file from before presets existed */
 export const fixturePresets = (fixture: Fixture): readonly FixturePreset[] => fixture.presets ?? [];
 
@@ -64,6 +79,7 @@ export type FixtureError =
   | {readonly type: 'offset-invalid'}
   | {readonly type: 'offset-used-twice'; readonly offset: number}
   | {readonly type: 'lock-max-invalid'}
+  | {readonly type: 'color-invalid'}
   | {readonly type: 'past-universe-end'; readonly lastAddress: number}
   | {readonly type: 'preset-name-missing'}
   | {readonly type: 'preset-name-too-long'}
@@ -135,6 +151,9 @@ export function fixtureErrors(fixture: Fixture): FixtureError[] {
   );
   if (fixture.channels.some((channel) => channel.lock && !isDmxValue(channel.lock.max))) {
     errors.push({type: 'lock-max-invalid'});
+  }
+  if (!fixture.channels.every(hasValidColor)) {
+    errors.push({type: 'color-invalid'});
   }
   if (errors.length === 0 && !fitsInUniverse(fixture)) {
     errors.push({type: 'past-universe-end', lastAddress: lastAddress(fixture)});

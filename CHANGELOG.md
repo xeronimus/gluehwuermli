@@ -14,6 +14,9 @@ change bumps the minor version and everything else the patch version.
 
 - Works with the Eurolite USB-DMX512 PRO as well as the Enttec DMX USB Pro: the port is opened with the settings the
   Eurolite interface expects (250000 baud, 2 stop bits), which the Enttec Pro ignores
+- A fixture channel can have a color (a hex value like `#ff00ff`, in the fixture editor): its fader is tinted with it,
+  also at 0, filled with it below the handle and glows the brighter the higher the value. The Channels view stays as it
+  is
 
 ### Changed
 

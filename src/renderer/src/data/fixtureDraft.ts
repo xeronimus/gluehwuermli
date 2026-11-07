@@ -1,5 +1,5 @@
 import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel} from '@shared/dmx';
-import {fixturePresets} from '@shared/fixtures';
+import {fixturePresets, normalizedChannelColor} from '@shared/fixtures';
 import type {Fixture, FixtureChannel, FixturePreset} from '@shared/ipc';
 
 import {type MoveDirection, moved} from './listOrder';
@@ -19,6 +19,8 @@ export interface FixtureChannelDraft {
   readonly offset: string;
   /** the channel's cap while the channel lock is on; blank for none */
   readonly lockMax: string;
+  /** the color its fader glows in, as typed (`ff00ff`, `#FF00FF`); blank for none */
+  readonly color: string;
 }
 
 /**
@@ -43,7 +45,14 @@ const FIRST_OFFSET = 0;
 
 const NO_LOCK = '';
 
-const channelDraftAt = (offset: number): FixtureChannelDraft => ({name: '', offset: String(offset), lockMax: NO_LOCK});
+const NO_COLOR = '';
+
+const channelDraftAt = (offset: number): FixtureChannelDraft => ({
+  name: '',
+  offset: String(offset),
+  lockMax: NO_LOCK,
+  color: NO_COLOR
+});
 
 export const newFixtureDraft = (): FixtureDraft => ({
   name: '',
@@ -69,7 +78,8 @@ export const draftOf = (fixture: Fixture): FixtureDraft => ({
   channels: fixture.channels.map((channel) => ({
     name: channel.name,
     offset: String(channel.offset),
-    lockMax: channel.lock ? String(channel.lock.max) : NO_LOCK
+    lockMax: channel.lock ? String(channel.lock.max) : NO_LOCK,
+    color: channel.color ?? NO_COLOR
   })),
   description: fixture.description ?? '',
   hint: fixture.hint ?? '',
@@ -83,10 +93,14 @@ const replacedAt = <T>(items: readonly T[], index: number, replace: (item: T) =>
 /** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
 const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
 
+/** the color as stored; one that isn't a color stays as typed, which fixtureErrors reports */
+const colorOf = (text: string): string => normalizedChannelColor(text) ?? text.trim();
+
 const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => ({
   name: channel.name.trim(),
   offset: numberOf(channel.offset),
-  ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}})
+  ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}}),
+  ...(channel.color.trim() !== NO_COLOR && {color: colorOf(channel.color)})
 });
 
 const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): FixturePreset => ({
@@ -99,8 +113,8 @@ const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): Fixture
 });
 
 /**
- * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description, hint or lock and an
- * empty list of presets are left out.
+ * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description, hint, lock or color
+ * and an empty list of presets are left out.
  */
 export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   const description = draft.description.trim();

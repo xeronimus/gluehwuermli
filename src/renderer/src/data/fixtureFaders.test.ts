@@ -17,6 +17,23 @@ test('a fader per channel, on the start address plus the offset', () => {
   ]);
 });
 
+test('a colored channel gives a fader in its color, the others none', () => {
+  const par = {
+    id: 'par',
+    name: 'PAR',
+    startAddress: 1,
+    channels: [
+      {name: 'Red', offset: 0, color: '#ff0000'},
+      {name: 'Dimmer', offset: 1}
+    ]
+  };
+
+  expect(fixtureFaders(par)).toEqual([
+    {channel: 1, label: 'Red', color: '#ff0000'},
+    {channel: 2, label: 'Dimmer'}
+  ]);
+});
+
 test('the address range, or a single address for a one-channel fixture', () => {
   const par = {id: 'par', name: 'PAR', startAddress: 10, channels: [{name: 'Blue', offset: 2}]};
   const smoke = {id: 'smoke', name: 'Smoke', startAddress: 12, channels: [{name: 'Smoke', offset: 0}]};

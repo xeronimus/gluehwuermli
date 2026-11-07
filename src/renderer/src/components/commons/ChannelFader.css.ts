@@ -1,4 +1,4 @@
-import {style} from '@vanilla-extract/css';
+import {createVar, style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
@@ -77,6 +77,35 @@ export const faderTrack = style({
   // the whole column catches the pointer, not only the 6px of the track
   boxShadow: `0 0 0 1px ${vars.colors.border}`
 });
+
+/** the color of a colored fader, `#rrggbb` */
+export const faderColor = createVar();
+
+/** how far a colored fader is up, 0..1: the height of its fill and the strength of its glow */
+export const faderLevel = createVar();
+
+/** blur and spread of the glow at full level; none at 0 */
+const GLOW_BLUR = '16px';
+const GLOW_SPREAD = '4px';
+
+/** how much of the color the track keeps above the handle, so the color shows at 0, too */
+const TINT_STRENGTH = '28%';
+
+/**
+ * a fixture channel with a color: the track is filled with it below the handle, tinted with it above, and glows with
+ * the value
+ */
+export const faderTrackColored = style([
+  faderTrack,
+  {
+    background: `linear-gradient(to top, ${faderColor} calc(${faderLevel} * 100%), color-mix(in srgb, ${faderColor} ${TINT_STRENGTH}, ${vars.colors.surfaceRaised}) 0)`,
+    // the border ring stays first, so the track keeps its outline on a color close to the theme's background
+    boxShadow: [
+      `0 0 0 1px ${vars.colors.border}`,
+      `0 0 calc(${faderLevel} * ${GLOW_BLUR}) calc(${faderLevel} * ${GLOW_SPREAD}) ${faderColor}`
+    ].join(', ')
+  }
+]);
 
 export const faderThumb = style({
   display: 'flex',

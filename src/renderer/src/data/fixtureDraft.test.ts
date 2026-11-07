@@ -63,28 +63,30 @@ test('a blank or non-numeric field is invalid, not 0', () => {
 test('a new channel goes after the highest offset, or to 0 when there is none', () => {
   const withGap = withChannelChange(draftOf(par), 1, {offset: '4'});
 
-  expect(withNewChannel(withGap).channels[2]).toEqual({name: '', offset: '5', lockMax: ''});
-  expect(withNewChannel(withoutChannel(newFixtureDraft(), 0)).channels).toEqual([{name: '', offset: '0', lockMax: ''}]);
+  expect(withNewChannel(withGap).channels[2]).toEqual({name: '', offset: '5', lockMax: '', color: ''});
+  expect(withNewChannel(withoutChannel(newFixtureDraft(), 0)).channels).toEqual([
+    {name: '', offset: '0', lockMax: '', color: ''}
+  ]);
 });
 
 test('removes the channel at the index', () => {
-  expect(withoutChannel(draftOf(par), 0).channels).toEqual([{name: 'Green', offset: '1', lockMax: ''}]);
+  expect(withoutChannel(draftOf(par), 0).channels).toEqual([{name: 'Green', offset: '1', lockMax: '', color: ''}]);
 });
 
 test('a channel lands on the start address plus its offset', () => {
   const draft = draftOf(par);
 
-  expect(draftChannelAddress(draft, {name: 'Red', offset: '0', lockMax: ''})).toBe(10);
-  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2', lockMax: ''})).toBe(12);
+  expect(draftChannelAddress(draft, {name: 'Red', offset: '0', lockMax: '', color: ''})).toBe(10);
+  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2', lockMax: '', color: ''})).toBe(12);
 });
 
 test('no address while a field is blank or invalid, or past the universe', () => {
   expect(
-    draftChannelAddress({...draftOf(par), startAddress: ''}, {name: 'Red', offset: '0', lockMax: ''})
+    draftChannelAddress({...draftOf(par), startAddress: ''}, {name: 'Red', offset: '0', lockMax: '', color: ''})
   ).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '', lockMax: ''})).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1', lockMax: ''})).toBeUndefined();
-  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503', lockMax: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '', lockMax: '', color: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1', lockMax: '', color: ''})).toBeUndefined();
+  expect(draftChannelAddress(draftOf(par), {name: 'Red', offset: '503', lockMax: '', color: ''})).toBeUndefined();
 });
 
 describe('channel locks', () => {
@@ -97,7 +99,7 @@ describe('channel locks', () => {
   };
 
   test('a fixture with a locked channel survives the round trip through a draft', () => {
-    expect(draftOf(laser).channels[1]).toEqual({name: 'Laser', offset: '1', lockMax: '0'});
+    expect(draftOf(laser).channels[1]).toEqual({name: 'Laser', offset: '1', lockMax: '0', color: ''});
     expect(fixtureOfDraft('par', draftOf(laser))).toEqual(laser);
   });
 
@@ -117,6 +119,36 @@ describe('channel locks', () => {
     expect(fixtureErrors(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {lockMax: '300'})))).toEqual([
       {type: 'lock-max-invalid'}
     ]);
+  });
+});
+
+describe('channel colors', () => {
+  const uv = {...par, channels: [{name: 'UV', offset: 0, color: '#7f00ff'}]};
+
+  test('a fixture with a colored channel survives the round trip through a draft', () => {
+    expect(draftOf(uv).channels[0]).toEqual({name: 'UV', offset: '0', lockMax: '', color: '#7f00ff'});
+    expect(fixtureOfDraft('par', draftOf(uv))).toEqual(uv);
+  });
+
+  test('a typed color is stored normalized, a blank one is no color', () => {
+    expect(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {color: ' 7F00FF '})).channels[0]).toEqual({
+      name: 'Red',
+      offset: 0,
+      color: '#7f00ff'
+    });
+    expect(fixtureOfDraft('par', withChannelChange(draftOf(uv), 0, {color: '  '})).channels[0]).toEqual({
+      name: 'UV',
+      offset: 0
+    });
+  });
+
+  test('anything but six hex digits is invalid', () => {
+    const coloredAs = (color: string) =>
+      fixtureErrors(fixtureOfDraft('par', withChannelChange(draftOf(par), 0, {color})));
+
+    expect(coloredAs('#ff00f')).toEqual([{type: 'color-invalid'}]);
+    expect(coloredAs('red')).toEqual([{type: 'color-invalid'}]);
+    expect(coloredAs('#gg0000')).toEqual([{type: 'color-invalid'}]);
   });
 });
 
