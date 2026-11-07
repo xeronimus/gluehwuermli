@@ -1,8 +1,8 @@
-import {createVar, style} from '@vanilla-extract/css';
+import {createVar, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-export const channelFader = style({
+const channelFader = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -14,8 +14,27 @@ export const channelFader = style({
   borderRadius: vars.constants.radiusMd
 });
 
-/** a channel whose cap is lifted with the channel lock, e.g. a laser that can be switched on now */
-export const channelFaderCapLifted = style([channelFader, {borderColor: vars.colors.danger}]);
+/** room for the positions' names beside the track */
+const POSITION_LABELS_WIDTH = '72px';
+
+/** a positions fader is wider: its track sits left, the names of its positions to the right of it */
+export const channelFaderVariants = styleVariants({
+  plain: [channelFader],
+  positions: [channelFader, {width: `calc(${vars.constants.faderWidth} + ${POSITION_LABELS_WIDTH})`}]
+});
+
+/** a channel whose cap is lifted with the channel lock, e.g. a laser that can be switched on now; on top of a variant */
+export const channelFaderCapLifted = style({borderColor: vars.colors.danger});
+
+/** the track's column: the track in the middle, or on the left of a positions fader with the names beside it */
+export const faderTrackArea = style({
+  display: 'flex',
+  justifyContent: 'center',
+  alignSelf: 'stretch',
+  selectors: {
+    [`${channelFaderVariants.positions} &`]: {justifyContent: 'flex-start', paddingLeft: '22px'}
+  }
+});
 
 /** the value above the fader and the label below it, clickable to step the value without the look of a button */
 export const faderStepButton = style({
@@ -70,6 +89,8 @@ export const faderLabel = style({
 });
 
 export const faderTrack = style({
+  // the ticks of a positions fader are placed in it
+  position: 'relative',
   width: '6px',
   height: vars.constants.faderHeight,
   borderRadius: '3px',

@@ -4,14 +4,15 @@ import type {Fixture} from '@shared/ipc';
 import Fader from '@/domain/Fader';
 
 /**
- * one fader per channel of the fixture, on its absolute DMX channel, labelled with the channel's name and in the
- * channel's color if it has one
+ * one fader per channel of the fixture, on its absolute DMX channel, labelled with the channel's name, in the
+ * channel's color and stopping at the channel's values if it has them
  */
 export const fixtureFaders = (fixture: Fixture): Fader[] =>
   fixture.channels.map((channel) => ({
     channel: channelAddress(fixture, channel),
     label: channel.name,
-    ...(channel.color !== undefined && {color: channel.color})
+    ...(channel.color !== undefined && {color: channel.color}),
+    ...(channel.values !== undefined && {values: channel.values})
   }));
 
 /** the addresses the fixture uses, e.g. "10–12", or "12" for a single channel */

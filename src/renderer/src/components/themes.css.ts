@@ -19,10 +19,13 @@ export const colors = {
   focusBorder: '#5a5348'
 };
 
+/** the length of a fader's track; a number too, for laying out the labels of a positions fader (FaderTicks) */
+export const FADER_HEIGHT_PX = 260;
+
 const constants = {
   radiusSm: '4px',
   radiusMd: '7px',
-  faderHeight: '260px',
+  faderHeight: `${FADER_HEIGHT_PX}px`,
   faderWidth: '56px',
   /** a row of the fixture editor's channels and of its presets */
   editorRowHeight: '34px'
