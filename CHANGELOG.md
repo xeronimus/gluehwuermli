@@ -10,6 +10,10 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- A right click on a fader sets its channel to the fader's lowest value: 0, or the min of a channel with value rules
+
 ## [0.2.1] - 2026-11-07
 
 ### Added
