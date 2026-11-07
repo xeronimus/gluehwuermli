@@ -1,4 +1,4 @@
-import {style, styleVariants} from '@vanilla-extract/css';
+import {globalStyle, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
@@ -50,6 +50,26 @@ export const statusVariants = styleVariants({
   connecting: [statusBase, {color: vars.colors.warning}],
   connected: [statusBase, {color: vars.colors.success}],
   failed: [statusBase, {color: vars.colors.danger}]
+});
+
+/** the selected port and Connect / Disconnect */
+export const outputConnection = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px'
+});
+
+// a compact button, so the bar doesn't grow
+globalStyle(`${outputConnection} button`, {
+  padding: '2px 10px',
+  fontSize: '0.9em'
+});
+
+export const selectedPort = style({
+  fontFamily: vars.fonts.mono,
+  fontSize: '0.9em',
+  color: vars.colors.textSecondary,
+  whiteSpace: 'nowrap'
 });
 
 export const activeChannels = style({

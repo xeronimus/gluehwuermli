@@ -45,7 +45,7 @@ export const DmxOutputStatusSchema = Type.Union([
 ]);
 export type DmxOutputStatus = Static<typeof DmxOutputStatusSchema>;
 
-/** the port the output was last connected to, connected again on start and preselected; `none` before the first one */
+/** the port the output was last connected to, preselected on start (never connected on its own); `none` before the first one */
 export const RememberedPortSchema = Type.Union([
   Type.Object({type: Type.Literal('none')}),
   Type.Object({type: Type.Literal('remembered'), path: Type.String({minLength: 1})})

@@ -215,7 +215,7 @@ msgstr "Wähl mindestens ein Gerät"
 msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen</1> (ein Klick auf den Status oben in der Leiste führt dorthin; kein Passwort nötig). Ein Port, der nach einem Enttec aussieht, ist mit <2>Enttec?</2> markiert und schon ausgewählt. Erst nach dem Start der App eingesteckt? Such die Ports mit dem Aktualisieren-Knopf nochmals."
 
-#: src/renderer/src/components/settings/OutputSection.tsx
+#: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Connect"
 msgstr "Verbinden"
 
@@ -367,7 +367,7 @@ msgstr "Beschreibung"
 msgid "Discard the fixture or scene you are editing, and open the other project?"
 msgstr "Das Gerät oder die Szene, die du gerade bearbeitest, verwerfen und das andere Projekt öffnen?"
 
-#: src/renderer/src/components/settings/OutputSection.tsx
+#: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Disconnect"
 msgstr "Trennen"
 
@@ -466,8 +466,8 @@ msgid "How to set up a fixture"
 msgstr "So richtest du ein Gerät ein"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders kept their values and are sent again as soon as the port is open."
-msgstr "Lässt sich der Port nicht öffnen oder wird das Widget während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das, klick auf den Status und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
+msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgstr "Lässt sich der Port nicht öffnen oder wird das Widget während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Lift channel lock"
@@ -587,6 +587,10 @@ msgstr "Keine Anleitung, oder nicht sicher, ob sie stimmt? Die Ansicht <0>Kanäl
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "Keine Anleitung? Beweg in der Ansicht <0>Kanäle</0> ab der Adresse des Geräts einen Kanal nach dem anderen und schau, was passiert."
 
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "No port selected"
+msgstr "Kein Port gewählt"
+
 #: src/renderer/src/components/project/ProjectSection.tsx
 #: src/renderer/src/components/project/ProjectStartView.tsx
 msgid "No project open"
@@ -597,6 +601,7 @@ msgid "No project open. Create or open one in the Show view or in Settings."
 msgstr "Kein Projekt offen. Erstelle oder öffne eines in der Ansicht Show oder in den Einstellungen."
 
 #: src/renderer/src/components/settings/PortSelect.tsx
+#: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "No serial port found"
 msgstr "Kein serieller Port gefunden"
 
@@ -633,8 +638,8 @@ msgid "Open project"
 msgstr "Projekt öffnen"
 
 #: src/renderer/src/components/output/OutputBar.tsx
-msgid "Open the Settings to choose the port, connect or disconnect"
-msgstr "Öffnet die Einstellungen, um den Port zu wählen, zu verbinden oder zu trennen"
+msgid "Open the Settings to choose the port"
+msgstr "Öffnet die Einstellungen, um den Port zu wählen"
 
 #: src/renderer/src/components/output/LockIndicator.tsx
 msgid "Open the Settings to lock it"
@@ -686,8 +691,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
-msgstr "Drück auf <0>Verbinden</0>. Sobald die App ans Widget sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+msgstr "Drück oben in der Leiste (oder in den Einstellungen) auf <0>Verbinden</0>. Sobald die App ans Widget sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -864,8 +869,8 @@ msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets an
 msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte, ihre Presets und die Szenen lassen sich spielen, aber nicht ändern, und die Ansicht Kanäle ist aus. Für alles andere braucht es den <1>Setup-Modus</1>: Drück in der Ansicht <2>Einstellungen</2> auf <3>Setup-Modus entsperren</3> und gib das Passwort ein. Beim ersten Mal gibt es noch keines: Das, das du (zweimal) eingibst, wird zum Passwort. Solange der Setup-Modus offen ist, zeigt die Leiste oben das an."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
-msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nach einem Trennen. Beim nächsten Start verbindet sie sich von selbst damit, sofern das Widget vor dem Start der App eingesteckt ist; sonst startet sie ohne Verbindung: Steck das Widget ein, such die seriellen Ports nochmals und drück auf Verbinden."
+msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
+msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nach einem Trennen, und wählt ihn beim nächsten Start wieder aus. Sie startet immer ohne Verbindung, damit nichts gesendet wird, bevor du auf Verbinden drückst. Erst nach dem Start der App eingesteckt? Such die seriellen Ports in den Einstellungen nochmals und drück dann auf Verbinden."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
@@ -1008,8 +1013,8 @@ msgid "The scene sets a channel twice"
 msgstr "Die Szene setzt einen Kanal zweimal"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
-msgid "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
-msgstr "Der serielle Port des Enttec DMX USB Pro. Die Leiste oben zeigt, ob die App sendet."
+msgid "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
+msgstr "Der serielle Port des Enttec DMX USB Pro. Die App startet immer ohne Verbindung: Drück hier oder oben in der Leiste auf Verbinden."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"

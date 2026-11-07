@@ -1,35 +1,26 @@
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import {useActionConnectOutput, useActionDisconnectOutput} from '@/state/actionHooks/connectOutput';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {ConnectIcon, DisconnectIcon, RefreshPortsIcon} from '../commons/icons';
+import ConnectButton from '../commons/ConnectButton';
+import {RefreshPortsIcon} from '../commons/icons';
 import BlackoutOnQuitToggle from './BlackoutOnQuitToggle';
 import PortSelect from './PortSelect';
 import {message, portControls, settingsSection} from './SettingsView.css';
 
 /**
- * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting, and whether quitting blacks out the
- * rig; no password needed, also in Show mode
+ * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting (also in the top bar, but the port
+ * select is locked while connected, so changing the port works without leaving the Settings), and whether quitting
+ * blacks out the rig; no password needed, also in Show mode
  */
 const OutputSection = () => {
   const {t} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
-  const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const loadPorts = useActionLoadPorts();
-  const connect = useActionConnectOutput();
-  const disconnect = useActionDisconnectOutput();
 
-  const connected = outputStatus.type === 'connected';
-  const portLocked = connected || outputStatus.type === 'connecting';
-
-  const onConnect = () => {
-    if (selectedPortPath) {
-      void connect(selectedPortPath);
-    }
-  };
+  const portLocked = outputStatus.type === 'connected' || outputStatus.type === 'connecting';
 
   return (
     <section className={settingsSection}>
@@ -37,22 +28,17 @@ const OutputSection = () => {
         <Trans>Output</Trans>
       </h2>
       <p className={message}>
-        <Trans>The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending.</Trans>
+        <Trans>
+          The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the
+          top bar.
+        </Trans>
       </p>
       <div className={portControls}>
         <PortSelect disabled={portLocked} />
         <Button onClick={() => void loadPorts()} disabled={portLocked} title={t`Search the serial ports again`}>
           <RefreshPortsIcon />
         </Button>
-        {connected ? (
-          <Button onClick={() => void disconnect()}>
-            <DisconnectIcon /> <Trans>Disconnect</Trans>
-          </Button>
-        ) : (
-          <Button variant="primary" onClick={onConnect} disabled={portLocked || !selectedPortPath}>
-            <ConnectIcon /> <Trans>Connect</Trans>
-          </Button>
-        )}
+        <ConnectButton />
       </div>
       <BlackoutOnQuitToggle />
     </section>
