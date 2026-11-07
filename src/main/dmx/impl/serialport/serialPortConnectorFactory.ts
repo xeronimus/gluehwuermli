@@ -5,8 +5,12 @@ import type {SerialPortDescription} from '@shared/ipc';
 import type {DmxConnection, DmxPortConnector} from '@/dmx/DmxPortConnector';
 import {isLikelyEnttecPro} from '@/dmx/portDetection';
 
-/** ignored by the Pro's virtual COM port (USB is as fast as it is), but serialport needs one */
-const BAUD_RATE = 57600;
+/**
+ * 250000 8N2: the Enttec Pro ignores the port settings (a virtual COM port, USB is as fast as it is); the Eurolite
+ * USB-DMX512 PRO speaks the same protocol through a real serial link and expects them
+ */
+const BAUD_RATE = 250000;
+const STOP_BITS = 2;
 
 type PortInfo = Awaited<ReturnType<typeof SerialPort.list>>[number];
 
@@ -58,7 +62,7 @@ export const serialPortConnectorFactory = (): DmxPortConnector => ({
 
   open: (path) =>
     new Promise((resolve, reject) => {
-      const port = new SerialPort({path, baudRate: BAUD_RATE, autoOpen: false});
+      const port = new SerialPort({path, baudRate: BAUD_RATE, stopBits: STOP_BITS, autoOpen: false});
       port.open((error) => (error ? reject(error) : resolve(connectionOf(port))));
     })
 });

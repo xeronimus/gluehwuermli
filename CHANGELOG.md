@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- Works with the Eurolite USB-DMX512 PRO as well as the Enttec DMX USB Pro: the port is opened with the settings the
+  Eurolite interface expects (250000 baud, 2 stop bits), which the Enttec Pro ignores
+
 ## [0.2.0] - 2026-11-05
 
 ### Added
