@@ -1,4 +1,4 @@
-import {KeyboardEvent} from 'react';
+import {KeyboardEvent, MouseEvent} from 'react';
 import {Direction, Range} from 'react-range';
 
 import {assignInlineVars} from '@vanilla-extract/dynamic';
@@ -65,7 +65,8 @@ interface ChannelFaderProps {
  * A click on the value above it goes to the next stop, a click on the label below it to the previous one. A
  * positions fader shows a tick per position, named on mouse over. A channel capped by the channel lock stops at its cap (one
  * capped at 0 can't be moved at all) and shows the value the main process sends. A fader with a color fills its track
- * with it below the handle and glows the stronger the closer the value is to its max
+ * with it below the handle and glows the stronger the closer the value is to its max. A right click anywhere on it sets
+ * it to its min (instead of the browser's context menu)
  */
 const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
   const limit = useAppStore((state) => selectChannelLimit(state, fader.channel));
@@ -76,13 +77,20 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
   );
   const titles = useFaderTitles(fader, {limit, liftedLimit});
   const locked = isFaderLocked(limit);
-  const trackLook = trackLookOf(fader.color, value, faderRange(fader));
+  const range = faderRange(fader);
+  const trackLook = trackLookOf(fader.color, value, range);
   const positions = faderPositions(fader);
   const raised = raisedFaderValue(fader, value);
   const lowered = loweredFaderValue(fader, value);
   const sendIfChanged = (next: number) => {
     if (next !== value) {
       onChange(fader.channel, next);
+    }
+  };
+  const setToMin = (event: MouseEvent) => {
+    event.preventDefault();
+    if (!locked) {
+      sendIfChanged(range.min);
     }
   };
   // the arrow and page keys go from stop to stop like the step buttons; other keys (Tab) stay with react-range
@@ -104,6 +112,7 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
     <div
       className={liftedLimit === undefined ? channelFader : channelFaderCapLifted}
       title={liftedLimit === undefined ? undefined : titles.lifted}
+      onContextMenu={setToMin}
     >
       <button
         className={faderStepButton}
