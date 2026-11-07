@@ -25,7 +25,6 @@ import {
   lockMaxInput,
   offsetInput
 } from './FixtureChannelRows.css';
-import {sectionTitle} from './FixtureEditor.css';
 
 /** shown while the start address or the offset doesn't give a valid address */
 const NO_ADDRESS = '–';
@@ -44,12 +43,8 @@ interface FixtureChannelRowsProps {
  */
 const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
   const {t} = useLingui();
-  const channelCount = draft.channels.length;
   return (
     <div className={channelsSection}>
-      <h3 className={sectionTitle}>
-        <Trans>Channels ({channelCount})</Trans>
-      </h3>
       <div className={channelRows}>
         <span className={columnHeader}>
           <Trans>Channel</Trans>

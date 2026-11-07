@@ -8,7 +8,6 @@ export const channelsSection = style({
   flexShrink: 0
 });
 
-/** its rows line up with the preset columns beside it */
 export const channelRows = style({
   display: 'grid',
   gridTemplateColumns: '200px auto 64px auto 110px auto',

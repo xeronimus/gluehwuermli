@@ -1,6 +1,8 @@
 import {Trans, useLingui} from '@lingui/react/macro';
+import {assignInlineVars} from '@vanilla-extract/dynamic';
 
 import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
+import {normalizedChannelColor} from '@shared/fixtures';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH} from '@shared/ipc';
 
 import {
@@ -9,15 +11,18 @@ import {
   withPresetMoved,
   withPresetName,
   withPresetValueChange,
+  withPresetValueEntered,
   withoutPreset
 } from '@/data/fixtureDraft';
 
 import Button from '../commons/Button';
 import MoveButtons from '../commons/MoveButtons';
 import {AddIcon, RemoveIcon} from '../commons/icons';
-import {sectionTitle} from './FixtureEditor.css';
 import {
   addPreset,
+  channelColorBubble,
+  channelColorBubbleColor,
+  presetChannelLabel,
   presetChannelName,
   presetColumn,
   presetColumns,
@@ -25,7 +30,7 @@ import {
   presetNameInput,
   presetValue,
   presetsSection,
-  valueInput
+  valueInputVariants
 } from './FixturePresetColumns.css';
 
 interface FixturePresetColumnsProps {
@@ -34,17 +39,15 @@ interface FixturePresetColumnsProps {
 }
 
 /**
- * the presets of the fixture being edited, a column each: a name, and for each channel (in line with its row in
- * FixtureChannelRows) whether the preset sets it and to what
+ * the presets of the fixture being edited, a column each: a name, and for each channel whether the preset sets it and
+ * to what; entering a value ticks the channel. The channels are named, with a bubble in their color if they have one: the rows no longer stand beside the
+ * channel rows of FixtureChannelRows
  */
 const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
   const {t} = useLingui();
   const presetCount = draft.presets.length;
   return (
     <div className={presetsSection}>
-      <h3 className={sectionTitle}>
-        <Trans>Presets ({presetCount})</Trans>
-      </h3>
       <div className={presetColumns}>
         {draft.presets.map((preset, presetIndex) => {
           const presetNumber = presetIndex + 1;
@@ -76,6 +79,7 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                 const value = preset.values[channelIndex];
                 const channelNumber = channelIndex + 1;
                 const label = channel.name || t`Channel ${channelNumber}`;
+                const color = normalizedChannelColor(channel.color);
                 return (
                   // the index is the identity of a channel row, as in FixtureChannelRows
                   <label key={channelIndex} className={presetValue}>
@@ -88,19 +92,26 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                         )
                       }
                     />
-                    <span className={presetChannelName} title={label}>
-                      {label}
+                    <span className={presetChannelLabel}>
+                      {color !== undefined && (
+                        <span
+                          className={channelColorBubble}
+                          style={assignInlineVars({[channelColorBubbleColor]: color})}
+                        />
+                      )}
+                      <span className={presetChannelName} title={label}>
+                        {label}
+                      </span>
                     </span>
                     <input
-                      className={valueInput}
+                      className={valueInputVariants[value?.included ? 'included' : 'leftOut']}
                       type="number"
                       min={DMX_MIN_VALUE}
                       max={DMX_MAX_VALUE}
                       value={value?.value ?? ''}
-                      disabled={!value?.included}
                       aria-label={t`Value of ${label} in preset ${presetNumber}`}
                       onChange={(event) =>
-                        onChange(withPresetValueChange(draft, presetIndex, channelIndex, {value: event.target.value}))
+                        onChange(withPresetValueEntered(draft, presetIndex, channelIndex, event.target.value))
                       }
                     />
                   </label>

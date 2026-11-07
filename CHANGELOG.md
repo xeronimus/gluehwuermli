@@ -24,6 +24,11 @@ change bumps the minor version and everything else the patch version.
   to last is still remembered and chosen again on start
 - **Connect** and **Disconnect** are in the top bar now, next to the output status and the chosen port (still in the
   Settings view as well); the port is still chosen in the Settings view
+- The fixture editor is split into the tabs **General** (name, start address, hint, description), **Channels** and
+  **Presets**, each with its own help. Errors and **Save** stay below the tabs, and a tab with an error is marked. In
+  the Presets tab a channel with a color shows it next to its name
+- In a preset, the value of a channel that isn't ticked can be entered right away: entering it (typing or the arrows)
+  ticks the channel, also for a value of 0
 
 ## [0.2.0] - 2026-11-05
 
