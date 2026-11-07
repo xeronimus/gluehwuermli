@@ -6,7 +6,8 @@ A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pr
 250000 8N2). Today:
 a Help view (short manual, the data folder, a link to the repo), projects (a `.glp` file wherever the user keeps it, holding the fixtures and scenes of one rig, saved on every change;
 the last one reopens on start, a double-click on a `.glp` opens it, ADR 4), fixtures (named devices with a start address
-and named channels, each with an optional color its fader fills and glows in) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
+and named channels, each with an optional color its fader fills and glows in and optional value rules: a range, steps
+or named positions its fader stops at) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
 (named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
 fixture groups), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
@@ -79,6 +80,8 @@ src/
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
     projects.ts              # project files: parseProjectFile (too-new before invalid), the .glp extension, projectNameOf
     scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
+    channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
+                             # scene values checked against them
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
     preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
     links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
@@ -132,10 +135,10 @@ src/
                              # channels), settings/ (output port, mode and channel lock),
                              # help/ (manual, open project, data folder, repo link); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
-                             # Tabs, ErrorBoundary, icons.ts)
+                             # Tabs, FaderTicks, useFaderTitles, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
-                             # fixtureEditorTabs, fixtureFaders, fixtureList, presets, scenes, tabs, passwordForm,
-                             # activityThrottle, recentProjects)
+                             # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, faderTicks,
+                             # fixtureList, presets, scenes, tabs, passwordForm, activityThrottle, recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, services.ts (composition root),
                              # impl/electron, impl/inMemory
       domain/                # types (Fader)
@@ -163,7 +166,9 @@ src/
   rather than mocking modules
 - **Optimistic UI**: a fader updates the store and sends the value in the same handler (`useActionSetChannelValue`),
   no round trip. Each `ChannelFader` subscribes to its own channel only. A fixture fader is a `ChannelFader` on the
-  fixture channel's absolute address, so fixtures and the raw channels always show the same values
+  fixture channel's absolute address, so fixtures and the raw channels always show the same values. A fixture fader
+  with value rules snaps in the renderer (`faderStops`) and only sends valid values; main checks the rules only when
+  saving (presets, scenes, shared addresses), not per address
 - **Show mode is enforced in main** (ADR 3): the `AppLock` owns the mode, the channel lock (independent of each other),
   the password and the idle timer, the `DmxEngine` caps locked channels per address in `setChannel`, whichever view
   sent the value, and main refuses saving fixtures, creating a project, opening the data folder and lifting the channel lock without the
