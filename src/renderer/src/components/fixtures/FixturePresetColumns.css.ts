@@ -83,9 +83,21 @@ const valueInput = style({
 });
 
 /** a channel the preset leaves out still takes a value (which ticks it), but looks unused until then */
+const leftOut = {opacity: 0.45, selectors: {'&:focus, &:hover': {opacity: 1}}};
+
 export const valueInputVariants = styleVariants({
   included: [valueInput],
-  leftOut: [valueInput, {opacity: 0.45, selectors: {'&:focus, &:hover': {opacity: 1}}}]
+  leftOut: [valueInput, leftOut]
+});
+
+/** the picker of a positions channel, wide enough for a short name */
+const valueSelect = style({
+  maxWidth: '110px'
+});
+
+export const valueSelectVariants = styleVariants({
+  included: [valueSelect],
+  leftOut: [valueSelect, leftOut]
 });
 
 export const addPreset = style({

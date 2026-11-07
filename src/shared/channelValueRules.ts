@@ -40,7 +40,8 @@ function positionErrors(rules: Extract<ChannelValues, {mode: 'positions'}>): Val
   if (values.length < MIN_POSITIONS) {
     errors.push('values-positions-too-few');
   }
-  if (duplicatesOf(values).length > 0) {
+  // only among valid values: a blank one (NaN) is reported as invalid, and indexOf never finds NaN
+  if (duplicatesOf(values.filter(isDmxValue)).length > 0) {
     errors.push('values-position-twice');
   }
   if (rules.positions.some(({name}) => (name?.length ?? 0) > CHANNEL_POSITION_NAME_MAX_LENGTH)) {

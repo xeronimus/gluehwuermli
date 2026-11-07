@@ -1,7 +1,6 @@
 import {Trans, useLingui} from '@lingui/react/macro';
 import {assignInlineVars} from '@vanilla-extract/dynamic';
 
-import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 import {normalizedChannelColor} from '@shared/fixtures';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH} from '@shared/ipc';
 
@@ -29,9 +28,9 @@ import {
   presetHeader,
   presetNameInput,
   presetValue,
-  presetsSection,
-  valueInputVariants
+  presetsSection
 } from './FixturePresetColumns.css';
+import PresetValueField from './PresetValueField';
 
 interface FixturePresetColumnsProps {
   draft: FixtureDraft;
@@ -103,17 +102,16 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                         {label}
                       </span>
                     </span>
-                    <input
-                      className={valueInputVariants[value?.included ? 'included' : 'leftOut']}
-                      type="number"
-                      min={DMX_MIN_VALUE}
-                      max={DMX_MAX_VALUE}
-                      value={value?.value ?? ''}
-                      aria-label={t`Value of ${label} in preset ${presetNumber}`}
-                      onChange={(event) =>
-                        onChange(withPresetValueEntered(draft, presetIndex, channelIndex, event.target.value))
-                      }
-                    />
+                    {value && (
+                      <PresetValueField
+                        channel={channel}
+                        presetValue={value}
+                        label={t`Value of ${label} in preset ${presetNumber}`}
+                        onEnter={(entered) =>
+                          onChange(withPresetValueEntered(draft, presetIndex, channelIndex, entered))
+                        }
+                      />
+                    )}
                   </label>
                 );
               })}

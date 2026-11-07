@@ -10,8 +10,9 @@ export const channelsSection = style({
 
 export const channelRows = style({
   display: 'grid',
-  gridTemplateColumns: '200px auto 64px auto 110px auto',
-  gridAutoRows: vars.constants.editorRowHeight,
+  gridTemplateColumns: '200px auto 64px auto auto 110px auto',
+  // a channel's positions list is taller than a row
+  gridAutoRows: `minmax(${vars.constants.editorRowHeight}, auto)`,
   gap: '6px 8px',
   alignItems: 'center',
   justifyItems: 'start'

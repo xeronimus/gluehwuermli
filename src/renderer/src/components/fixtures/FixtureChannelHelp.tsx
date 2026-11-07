@@ -26,6 +26,15 @@ const FixtureChannelHelp = ({initiallyOpen}: FixtureChannelHelpProps) => (
         </Trans>
       </li>
     </ol>
+    <p>
+      <Trans>
+        <strong>Values</strong> sets where the fader stops. <strong>Continuous</strong> goes through every value from
+        min to max, e.g. a dimmer that does nothing below 100. <strong>Steps</strong> goes from min to max by the step
+        size, e.g. a strobe in steps of 10. <strong>Positions</strong> stops only at the values listed, each with an
+        optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows them beside its track, and a
+        preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value.
+      </Trans>
+    </p>
     <p className={helpExample}>
       <Trans>
         Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12).

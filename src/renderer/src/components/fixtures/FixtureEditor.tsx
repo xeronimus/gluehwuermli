@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import {fixtureErrors, overlappingFixtures} from '@shared/fixtures';
+import {fixtureErrors, overlappingFixtures, sharedAddressErrors} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
 import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
@@ -43,11 +43,17 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
   const [saving, setSaving] = useState(false);
 
   const candidate = fixtureOfDraft(id, draft);
-  const errors = fixtureErrors(candidate);
-  const tabErrors = tabsWithErrors(errors);
   const otherFixtures = fixtures.filter((other) => other.id !== id);
-  const overlaps = errors.length === 0 ? overlappingFixtures([candidate, ...otherFixtures]) : [];
-  const ownOverlaps = overlaps.filter((overlap) => overlap.first.id === id);
+  const ownErrors = fixtureErrors(candidate);
+  // only once the fixture itself is valid: its addresses and rules are known then
+  const sharedErrors = ownErrors.length === 0 ? sharedAddressErrors(candidate, otherFixtures) : [];
+  const errors = [...ownErrors, ...sharedErrors];
+  const tabErrors = tabsWithErrors(errors);
+  const conflictingIds = new Set(sharedErrors.map((error) => error.otherFixtureId));
+  // a shared address with other rules is an error already, the warning is for shared addresses that can be saved
+  const ownOverlaps = (ownErrors.length === 0 ? overlappingFixtures([candidate, ...otherFixtures]) : []).filter(
+    (overlap) => overlap.first.id === id && !conflictingIds.has(overlap.second.id)
+  );
   const helpOpen = !fixture;
   const channelCount = draft.channels.length;
   const presetCount = draft.presets.length;
