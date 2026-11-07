@@ -67,7 +67,7 @@ export function createMainServices(
 
   const portMemory = config.simulatedOutput
     ? forgetfulPortMemory
-    : portMemoryFactory({engine: dmxEngine, connector: dmxPortConnector, settings, log});
+    : portMemoryFactory({engine: dmxEngine, settings, log});
 
   const projectSession = projectSessionFactory({
     store: fileProjectFileStoreFactory(),

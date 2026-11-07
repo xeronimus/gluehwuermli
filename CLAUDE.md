@@ -10,7 +10,7 @@ and named channels) with a fader per channel and presets (named buttons setting 
 (named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
 fixture groups), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
-port is remembered and connected again on start). The app starts in
+port is remembered and preselected on start, the app always starts disconnected; Connect / Disconnect in the top bar). The app starts in
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the top bar.

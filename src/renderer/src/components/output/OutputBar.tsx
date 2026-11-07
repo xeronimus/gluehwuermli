@@ -11,6 +11,7 @@ import {useAppStore} from '@/state/store';
 import LocaleSwitch from './LocaleSwitch';
 import LockIndicator from './LockIndicator';
 import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
+import OutputConnection from './OutputConnection';
 
 interface OutputBarProps {
   /** switches between the app's views, shown next to the title */
@@ -19,7 +20,10 @@ interface OutputBarProps {
   onShowSettings: () => void;
 }
 
-/** the view switch, what is unlocked and the status of the DMX output; the port is chosen in the Settings view */
+/**
+ * the view switch, what is unlocked, the status of the DMX output and Connect / Disconnect; the port is chosen in the
+ * Settings view
+ */
 const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const {t, i18n} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
@@ -36,10 +40,11 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       <button
         className={statusVariants[outputStatus.type]}
         onClick={onShowSettings}
-        title={t`Open the Settings to choose the port, connect or disconnect`}
+        title={t`Open the Settings to choose the port`}
       >
         {i18n._(outputStatusMessage(outputStatus))}
       </button>
+      <OutputConnection />
       {error && <span className={outputError}>{i18n._(error)}</span>}
       <span className={activeChannels}>
         <Plural value={activeChannelCount} one="# channel above 0" other="# channels above 0" />

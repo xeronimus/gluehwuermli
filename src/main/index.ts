@@ -119,7 +119,7 @@ function startApp(): void {
   });
 
   void app.whenReady().then(async () => {
-    // the project's channel locks apply before the output connects, so it is capped from its first packet
+    // the project's channel locks apply before anything can be connected, so the output is capped from its first packet
     await projectSession.start(projectPathFromArgv(process.argv, process.cwd()));
     registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory);
     registerProjectIpc(projectSession, projectIpcHandlers(projectSession));
@@ -130,8 +130,6 @@ function startApp(): void {
       blackoutOnQuitIpcHandlers(services.settings)
     );
     registerLockIpc(services.appLock);
-    // the renderer gets the status pushed
-    void services.portMemory.reconnect();
     void openMainWindow();
 
     // macOS: re-create the window when the dock icon is clicked and none is open

@@ -215,7 +215,7 @@ msgstr "Choose at least one fixture"
 msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 
-#: src/renderer/src/components/settings/OutputSection.tsx
+#: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Connect"
 msgstr "Connect"
 
@@ -367,7 +367,7 @@ msgstr "Description"
 msgid "Discard the fixture or scene you are editing, and open the other project?"
 msgstr "Discard the fixture or scene you are editing, and open the other project?"
 
-#: src/renderer/src/components/settings/OutputSection.tsx
+#: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Disconnect"
 msgstr "Disconnect"
 
@@ -466,8 +466,8 @@ msgid "How to set up a fixture"
 msgstr "How to set up a fixture"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders kept their values and are sent again as soon as the port is open."
-msgstr "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgstr "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Lift channel lock"
@@ -587,6 +587,10 @@ msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 
+#: src/renderer/src/i18n/messages/outputMessages.ts
+msgid "No port selected"
+msgstr "No port selected"
+
 #: src/renderer/src/components/project/ProjectSection.tsx
 #: src/renderer/src/components/project/ProjectStartView.tsx
 msgid "No project open"
@@ -597,6 +601,7 @@ msgid "No project open. Create or open one in the Show view or in Settings."
 msgstr "No project open. Create or open one in the Show view or in Settings."
 
 #: src/renderer/src/components/settings/PortSelect.tsx
+#: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "No serial port found"
 msgstr "No serial port found"
 
@@ -633,8 +638,8 @@ msgid "Open project"
 msgstr "Open project"
 
 #: src/renderer/src/components/output/OutputBar.tsx
-msgid "Open the Settings to choose the port, connect or disconnect"
-msgstr "Open the Settings to choose the port, connect or disconnect"
+msgid "Open the Settings to choose the port"
+msgstr "Open the Settings to choose the port"
 
 #: src/renderer/src/components/output/LockIndicator.tsx
 msgid "Open the Settings to lock it"
@@ -686,8 +691,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
-msgstr "Press <0>Connect</0>. The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -864,8 +869,8 @@ msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets an
 msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
-msgstr "The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected: plug the widget in, search the serial ports again and press Connect."
+msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
+msgstr "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
@@ -1008,8 +1013,8 @@ msgid "The scene sets a channel twice"
 msgstr "The scene sets a channel twice"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
-msgid "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
-msgstr "The serial port of the Enttec DMX USB Pro. The top bar shows whether the app is sending."
+msgid "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
+msgstr "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
