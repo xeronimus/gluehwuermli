@@ -99,7 +99,7 @@ describe('remembering', () => {
   });
 });
 
-test('a remembered port that is listed is not connected on start', async () => {
+test('a remembered port is only remembered, never connected', async () => {
   stored = {version: 1, outputPortPath: 'COM4'};
   const statuses: string[] = [];
   engine.onStatusChanged((status) => statuses.push(status.type));

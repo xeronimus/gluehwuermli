@@ -24,7 +24,7 @@ const OutputConnection = () => {
       {!connected && (
         <span className={selectedPort}>{port.type === 'selected' ? port.path : i18n._(noPortMessage(port))}</span>
       )}
-      <ConnectButton />
+      <ConnectButton size="compact" />
     </span>
   );
 };
