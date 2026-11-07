@@ -1,4 +1,4 @@
-import {isDmxValue} from './dmx';
+import {isValidValueOf} from './channelValueRules';
 import {type Fixture, type FixtureSetup, SCENE_NAME_MAX_LENGTH, type Scene, type SceneFixture} from './ipc';
 import {duplicatesOf, isBlank} from './validation';
 
@@ -39,7 +39,7 @@ function sceneFixtureErrors(sceneFixture: SceneFixture, fixture: Fixture): Scene
   if (duplicatesOf(sceneOffsets).length > 0) {
     errors.push({type: 'scene-channel-twice'});
   }
-  if (sceneFixture.values.some((sceneValue) => !isDmxValue(sceneValue.value))) {
+  if (sceneFixture.values.some(({offset, value}) => !isValidValueOf(fixture, offset, value))) {
     errors.push({type: 'scene-value-invalid'});
   }
   return errors;

@@ -21,6 +21,10 @@ msgstr "{activeChannelCount, plural, one {# Kanal über 0} other {# Kanäle übe
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
 
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "{otherFixtureName} uses {addressCount, plural, one {address} other {addresses}} {addressList} too, with other values: shared channels need the same mode and values"
+msgstr "{otherFixtureName} nutzt {addressCount, plural, one {Adresse} other {die Adressen}} {addressList} auch, mit anderen Werten: Geteilte Kanäle brauchen denselben Modus und dieselben Werte"
+
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "{path}: {message}"
 msgstr "{path}: {message}"
@@ -38,6 +42,22 @@ msgid "A <0>preset</0> is a button on the fixture that sets several channels at 
 msgstr "Ein <0>Preset</0> ist ein Knopf am Gerät, der mehrere Kanäle aufs Mal setzt, z. B. «Warmweiss». Kanäle ohne Häkchen bleiben, wie sie sind. Am schnellsten machst du eines, indem du die Fader einstellst und auf den Speichern-Knopf neben den Presets drückst."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel has the same position twice"
+msgstr "Ein Kanal hat dieselbe Position zweimal"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel with positions needs at least two of them"
+msgstr "Ein Kanal mit Positionen braucht mindestens zwei davon"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel's min can't be above its max"
+msgstr "Das Min. eines Kanals darf nicht über seinem Max. liegen"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A channel's step size must be a whole number from 1"
+msgstr "Die Schrittweite eines Kanals muss eine ganze Zahl ab 1 sein"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
 msgstr "Eine Farbe muss ein Hex-Wert wie #ff00ff sein"
 
@@ -48,6 +68,10 @@ msgstr "Ein Gerät ist ein Teil deiner Anlage, z. B. ein PAR oder eine Nebelmasc
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
 msgstr "Ein Kanal eines Geräts kann ein <0>Max. bei Sperre</0> haben (im Geräte-Editor): Solange die Kanalsperre an ist, geht der Kanal nie darüber, egal ob ein Fader, ein Preset, eine Szene oder eine Ansicht ihn setzt. Ein Laser bekommt 0, ein Makrokanal, der die eigenen Programme des Geräts startet, z. B. 50. Seine Fader zeigen ein Schloss und halten beim Maximum an (bei 0 sind sie ausgegraut), und ein Preset, das ihn höher setzen würde, ist deaktiviert. Eine Szene, die ihn höher setzen würde, lässt sich weiter spielen, damit ein Look der ganzen Anlage trotzdem geht: Der Kanal geht nur bis zu seinem Maximum, und der Knopf der Szene zeigt ein Schloss."
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "A position name can have at most {maxLength} characters"
+msgstr "Ein Positionsname darf höchstens {maxLength} Zeichen haben"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
@@ -791,8 +815,8 @@ msgid "Scene editor"
 msgstr "Szenen-Editor"
 
 #: src/renderer/src/i18n/messages/sceneMessages.ts
-msgid "Scene values must be whole numbers from {minValue} to {maxValue}"
-msgstr "Szenen-Werte müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+msgid "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
+msgstr "Szenenwerte müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 #: src/renderer/src/components/help/UserManual.tsx
@@ -1053,8 +1077,12 @@ msgid "The start address must be a whole number from {firstAddress} to {lastUniv
 msgstr "Die Startadresse muss eine ganze Zahl von {firstAddress} bis {lastUniverseAddress} sein"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
-msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue}"
-msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+msgid "The values of a channel must be whole numbers from {minValue} to {maxValue}"
+msgstr "Die Werte eines Kanals müssen ganze Zahlen von {minValue} bis {maxValue} sein"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue} that their channels can have"
+msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
