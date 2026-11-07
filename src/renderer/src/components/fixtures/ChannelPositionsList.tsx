@@ -1,0 +1,64 @@
+import {Fragment} from 'react';
+
+import {Trans, useLingui} from '@lingui/react/macro';
+
+import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
+import {CHANNEL_POSITION_NAME_MAX_LENGTH} from '@shared/ipc';
+
+import {type ChannelValuesDraft, withNewPosition, withPositionChange, withoutPosition} from '@/data/channelValuesDraft';
+
+import Button from '../commons/Button';
+import {AddIcon, RemoveIcon} from '../commons/icons';
+import {positionNameInput, positionRows, positionValueInput, positionsList} from './ChannelPositionsList.css';
+
+interface ChannelPositionsListProps {
+  values: ChannelValuesDraft;
+  row: number;
+  onChange: (values: ChannelValuesDraft) => void;
+}
+
+/** the positions of a positions channel, below its row in the channels: a value and an optional name each */
+const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps) => {
+  const {t} = useLingui();
+  return (
+    <div className={positionsList}>
+      <div className={positionRows}>
+        {values.positions.map((position, index) => {
+          const positionNumber = index + 1;
+          return (
+            // the index is the identity of a position: they are only appended or removed, never reordered
+            <Fragment key={index}>
+              <input
+                className={positionValueInput}
+                type="number"
+                min={DMX_MIN_VALUE}
+                max={DMX_MAX_VALUE}
+                value={position.value}
+                aria-label={t`Value of position ${positionNumber} of channel ${row}`}
+                onChange={(event) => onChange(withPositionChange(values, index, {value: event.target.value}))}
+              />
+              <input
+                className={positionNameInput}
+                value={position.name}
+                maxLength={CHANNEL_POSITION_NAME_MAX_LENGTH}
+                placeholder={t`Name, e.g. Star (optional)`}
+                aria-label={t`Name of position ${positionNumber} of channel ${row}`}
+                onChange={(event) => onChange(withPositionChange(values, index, {name: event.target.value}))}
+              />
+              <Button onClick={() => onChange(withoutPosition(values, index))} title={t`Remove the position`}>
+                <RemoveIcon />
+              </Button>
+            </Fragment>
+          );
+        })}
+      </div>
+      <span>
+        <Button onClick={() => onChange(withNewPosition(values))}>
+          <AddIcon /> <Trans>Add position</Trans>
+        </Button>
+      </span>
+    </div>
+  );
+};
+
+export default ChannelPositionsList;

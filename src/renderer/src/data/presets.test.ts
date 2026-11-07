@@ -1,6 +1,6 @@
 import type {Fixture} from '@shared/ipc';
 
-import {capturePreset, presetChannelValues, withPreset} from './presets';
+import {capturePreset, fittedFixtureValues, presetChannelValues, withPreset} from './presets';
 
 const spot: Fixture = {
   id: 'spot',
@@ -59,6 +59,34 @@ describe('capturePreset', () => {
         {offset: 3, value: 0}
       ]
     });
+  });
+});
+
+describe('fitting to value rules', () => {
+  const gobo: Fixture = {
+    ...spot,
+    channels: [
+      {name: 'Gobo', offset: 0, values: {mode: 'positions', positions: [{value: 5}, {value: 6}, {value: 200}]}}
+    ]
+  };
+
+  test('captures a value off the positions as the nearest position', () => {
+    const channelValues = Array<number>(512).fill(0);
+    channelValues[9] = 150;
+
+    expect(capturePreset(gobo, channelValues, 'now', 'Now').values).toEqual([{offset: 0, value: 200}]);
+  });
+
+  test('fits values to the nearest valid one, an offset without a channel stays as it is', () => {
+    expect(
+      fittedFixtureValues(gobo, [
+        {offset: 0, value: 90},
+        {offset: 7, value: 90}
+      ])
+    ).toEqual([
+      {offset: 0, value: 6},
+      {offset: 7, value: 90}
+    ]);
   });
 });
 

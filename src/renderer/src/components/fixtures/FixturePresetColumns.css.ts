@@ -1,12 +1,11 @@
-import {style} from '@vanilla-extract/css';
+import {createVar, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-/** takes the width left beside the channels, scrolls sideways when the presets need more */
+/** as wide as the tab, scrolls sideways when the presets need more */
 export const presetsSection = style({
   display: 'flex',
   flexDirection: 'column',
-  flex: '1 1 0',
   minWidth: 0
 });
 
@@ -18,7 +17,7 @@ export const presetColumns = style({
   paddingBottom: '6px'
 });
 
-/** a column per preset; its rows line up with the channel rows beside it */
+/** a column per preset, a row per channel */
 export const presetColumn = style({
   display: 'grid',
   gridTemplateColumns: 'auto auto auto',
@@ -50,6 +49,25 @@ export const presetValue = style({
   fontSize: '0.9em'
 });
 
+/** the channel's color bubble, if it has a color, and its name */
+export const presetChannelLabel = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  minWidth: 0
+});
+
+export const channelColorBubbleColor = createVar();
+
+export const channelColorBubble = style({
+  flexShrink: 0,
+  width: '10px',
+  height: '10px',
+  borderRadius: '50%',
+  background: channelColorBubbleColor,
+  boxShadow: `0 0 0 1px ${vars.colors.border}, 0 0 6px ${channelColorBubbleColor}`
+});
+
 export const presetChannelName = style({
   maxWidth: '120px',
   overflow: 'hidden',
@@ -58,10 +76,28 @@ export const presetChannelName = style({
 });
 
 /** room for three digits and the spin buttons */
-export const valueInput = style({
+const valueInput = style({
   width: '52px',
   boxSizing: 'border-box',
   paddingRight: '2px'
+});
+
+/** a channel the preset leaves out still takes a value (which ticks it), but looks unused until then */
+const leftOut = {opacity: 0.45, selectors: {'&:focus, &:hover': {opacity: 1}}};
+
+export const valueInputVariants = styleVariants({
+  included: [valueInput],
+  leftOut: [valueInput, leftOut]
+});
+
+/** the picker of a positions channel, wide enough for a short name */
+const valueSelect = style({
+  maxWidth: '110px'
+});
+
+export const valueSelectVariants = styleVariants({
+  included: [valueSelect],
+  leftOut: [valueSelect, leftOut]
 });
 
 export const addPreset = style({

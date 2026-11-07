@@ -91,6 +91,21 @@ describe('sceneErrors', () => {
   });
 });
 
+describe('scene values and value rules', () => {
+  test('a scene value must be one its channel stops at', () => {
+    const gobo: Fixture = {
+      id: 'gobo',
+      name: 'Gobo',
+      startAddress: 20,
+      channels: [{name: 'Wheel', offset: 0, values: {mode: 'positions', positions: [{value: 5}, {value: 200}]}}]
+    };
+    const sceneSetting = (value: number) => sceneOf({fixtures: [{fixtureId: 'gobo', values: [{offset: 0, value}]}]});
+
+    expect(sceneErrors(sceneSetting(5), [gobo])).toEqual([]);
+    expect(sceneErrors(sceneSetting(6), [gobo])).toEqual([{type: 'scene-value-invalid'}]);
+  });
+});
+
 describe('scenesAreValid', () => {
   test('valid scenes, or none at all', () => {
     expect(scenesAreValid(setupOf(undefined))).toBe(true);
