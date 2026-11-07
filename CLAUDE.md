@@ -137,8 +137,8 @@ src/
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
                              # Tabs, FaderTicks, useFaderTitles, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
-                             # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, faderTicks,
-                             # fixtureList, presets, scenes, tabs, passwordForm, activityThrottle, recentProjects)
+                             # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
+                             # presets, scenes, tabs, passwordForm, activityThrottle, recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, services.ts (composition root),
                              # impl/electron, impl/inMemory
       domain/                # types (Fader)

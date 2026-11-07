@@ -42,8 +42,8 @@ msgid "{presetName} sets a locked channel"
 msgstr "{presetName} setzt einen gesperrten Kanal"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows them beside its track, and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt sie neben seiner Bahn, und ein Preset wählt einen davon. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -193,10 +193,6 @@ msgstr "Kanal"
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Channel {channelNumber}"
 msgstr "Kanal {channelNumber}"
-
-#: src/renderer/src/components/commons/FaderTicks.tsx
-msgid "Channel {faderLabel}: {positionLabel} ({value})"
-msgstr "Kanal {faderLabel}: {positionLabel} ({value})"
 
 #: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label}"
