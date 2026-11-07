@@ -4,13 +4,18 @@ import {useActionConnectOutput, useActionDisconnectOutput} from '@/state/actionH
 import {useAppStore} from '@/state/store';
 
 import Button from './Button';
+import type {ButtonSize} from './Button.css';
 import {ConnectIcon, DisconnectIcon} from './icons';
+
+interface ConnectButtonProps {
+  size?: ButtonSize;
+}
 
 /**
  * Connect to the selected port, or Disconnect while connected; in the top bar and in the Settings, so both follow the
  * same rules. No password needed, also in Show mode.
  */
-const ConnectButton = () => {
+const ConnectButton = ({size}: ConnectButtonProps) => {
   const outputStatus = useAppStore((state) => state.outputStatus);
   const selectedPortPath = useAppStore((state) => state.selectedPortPath);
   const connect = useActionConnectOutput();
@@ -18,7 +23,7 @@ const ConnectButton = () => {
 
   if (outputStatus.type === 'connected') {
     return (
-      <Button onClick={() => void disconnect()}>
+      <Button size={size} onClick={() => void disconnect()}>
         <DisconnectIcon /> <Trans>Disconnect</Trans>
       </Button>
     );
@@ -31,7 +36,12 @@ const ConnectButton = () => {
   };
 
   return (
-    <Button variant="primary" onClick={onConnect} disabled={outputStatus.type === 'connecting' || !selectedPortPath}>
+    <Button
+      variant="primary"
+      size={size}
+      onClick={onConnect}
+      disabled={outputStatus.type === 'connecting' || !selectedPortPath}
+    >
       <ConnectIcon /> <Trans>Connect</Trans>
     </Button>
   );

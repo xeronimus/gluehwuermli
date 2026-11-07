@@ -72,3 +72,12 @@ export const buttonVariants = styleVariants({
 });
 
 export type ButtonVariant = keyof typeof buttonVariants;
+
+/** defined after the variants, so a size's padding wins over theirs */
+export const buttonSizes = styleVariants({
+  default: {},
+  /** e.g. in the top bar, so the bar doesn't grow */
+  compact: {padding: '2px 10px', fontSize: '0.9em'}
+});
+
+export type ButtonSize = keyof typeof buttonSizes;
