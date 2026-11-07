@@ -31,6 +31,35 @@ export const raisedFaderValue = (fader: Fader, value: number): number | undefine
 export const loweredFaderValue = (fader: Fader, value: number): number | undefined =>
   previousStop(faderRules(fader), value);
 
+/** a key moves by stops, not by values like react-range: by one it would often snap back to where it was */
+const STOPS_PER_KEY: ReadonlyMap<string, number> = new Map([
+  ['ArrowUp', 1],
+  ['ArrowRight', 1],
+  ['k', 1],
+  ['PageUp', 10],
+  ['ArrowDown', -1],
+  ['ArrowLeft', -1],
+  ['j', -1],
+  ['PageDown', -10]
+]);
+
+/** how many stops a key on the slider handle moves the fader (the keys react-range moves it with), negative down */
+export const faderKeyStops = (key: string): number | undefined => STOPS_PER_KEY.get(key);
+
+/** the value that many stops above the value (below for negative), at most up to the last stop; undefined if none */
+export const steppedFaderValue = (fader: Fader, value: number, stops: number): number | undefined => {
+  const step = stops > 0 ? raisedFaderValue : loweredFaderValue;
+  let reached: number | undefined;
+  for (let count = 0; count < Math.abs(stops); count++) {
+    const next = step(fader, reached ?? value);
+    if (next === undefined) {
+      break;
+    }
+    reached = next;
+  }
+  return reached;
+};
+
 export const faderRange = (fader: Fader): ValueRange => valueRange(faderRules(fader));
 
 export const faderMode = (fader: Fader): ChannelValueMode => faderRules(fader).mode;

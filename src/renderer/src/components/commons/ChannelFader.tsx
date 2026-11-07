@@ -1,3 +1,4 @@
+import {KeyboardEvent} from 'react';
 import {Direction, Range} from 'react-range';
 
 import {assignInlineVars} from '@vanilla-extract/dynamic';
@@ -7,7 +8,15 @@ import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 
 import {cappedValue, isAtCap, isFaderLocked} from '@/data/channelLocks';
 import {glowLevel, toPercent} from '@/data/channelValues';
-import {faderPositions, faderRange, loweredFaderValue, raisedFaderValue, snappedFaderValue} from '@/data/faderStops';
+import {
+  faderKeyStops,
+  faderPositions,
+  faderRange,
+  loweredFaderValue,
+  raisedFaderValue,
+  snappedFaderValue,
+  steppedFaderValue
+} from '@/data/faderStops';
 import Fader from '@/domain/Fader';
 import {selectChannelValue} from '@/state/channels/channelsSelectors';
 import {selectChannelLimit, selectLiftedChannelLimit} from '@/state/lock/lockSelectors';
@@ -33,7 +42,7 @@ import FaderTicks from './FaderTicks';
 import {LockIcon} from './icons';
 import {useFaderTitles} from './useFaderTitles';
 
-/** the slider moves by one; where it stops is up to the fader's rules (snappedFaderValue) */
+/** the slider moves by one when dragged; where it stops is up to the fader's rules (snappedFaderValue), keys go by stops */
 const SLIDER_STEP = 1;
 
 /** the track of a colored fader is filled and glows up to the value, relative to its range; an uncolored one is plain */
@@ -76,6 +85,20 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
       onChange(fader.channel, next);
     }
   };
+  // the arrow and page keys go from stop to stop like the step buttons; other keys (Tab) stay with react-range
+  const moveByKey = (event: KeyboardEvent, rangeKeyDown: (event: KeyboardEvent) => void) => {
+    const stops = faderKeyStops(event.key);
+    if (stops === undefined) {
+      rangeKeyDown(event);
+      return;
+    }
+    event.preventDefault();
+    const next = steppedFaderValue(fader, value, stops);
+    const blocked = locked || (stops > 0 && isAtCap(value, limit));
+    if (next !== undefined && !blocked) {
+      onChange(fader.channel, next);
+    }
+  };
 
   return (
     <div
@@ -106,8 +129,14 @@ const ChannelFader = ({fader, onChange}: ChannelFaderProps) => {
             {children}
           </div>
         )}
-        renderThumb={({props: {key, ...thumbProps}}) => (
-          <div key={key} {...thumbProps} className={locked ? faderThumbLocked : faderThumb} aria-label={titles.thumb}>
+        renderThumb={({props: {key, onKeyDown, ...thumbProps}}) => (
+          <div
+            key={key}
+            {...thumbProps}
+            onKeyDown={(event) => moveByKey(event, onKeyDown)}
+            className={locked ? faderThumbLocked : faderThumb}
+            aria-label={titles.thumb}
+          >
             {limit !== undefined && <LockIcon className={faderLock} />}
           </div>
         )}
