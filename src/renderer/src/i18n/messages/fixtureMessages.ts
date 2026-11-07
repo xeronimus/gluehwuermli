@@ -95,6 +95,10 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
       const preset = presetLabel(error.presetName, translate);
       return msg`The values of the preset ${preset} must be whole numbers from ${minValue} to ${maxValue} that their channels can have`;
     }
+    case 'preset-color-invalid': {
+      const preset = presetLabel(error.presetName, translate);
+      return msg`The color of the preset ${preset} must be a hex value like #ff00ff`;
+    }
     case 'shared-address-rules-differ': {
       const {otherFixtureName} = error;
       const addressList = error.addresses.join(', ');

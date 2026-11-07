@@ -6,7 +6,7 @@ import {SCENE_NAME_MAX_LENGTH} from '@shared/ipc';
 import type {SceneError} from '@shared/scenes';
 
 /**
- * what sceneErrors found, in the UI language. The editor can only cause the first three; the others come from a
+ * what sceneErrors found, in the UI language. The editor can only cause the first four; the others come from a
  * changed file or a bug, and are said in case they ever show
  */
 export function sceneErrorMessage(error: SceneError): MessageDescriptor {
@@ -17,6 +17,8 @@ export function sceneErrorMessage(error: SceneError): MessageDescriptor {
       const maxLength = SCENE_NAME_MAX_LENGTH;
       return msg`A scene name can have at most ${maxLength} characters`;
     }
+    case 'scene-color-invalid':
+      return msg`The color must be a hex value like #ff00ff`;
     case 'scene-fixtures-missing':
       return msg`Choose at least one fixture`;
     case 'scene-fixture-unknown':

@@ -12,6 +12,8 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
+- Presets and scenes can have a color (a hex value like `#ff00ff`, in the fixture editor's Presets tab and the scene
+  editor): their button shows a glowing dot in it before the name, in Show and in Setup mode
 - A right click on a fader sets its channel to the fader's lowest value: 0, or the min of a channel with value rules
 
 ## [0.2.1] - 2026-11-07

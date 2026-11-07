@@ -47,6 +47,18 @@ export const field = style({
   fontSize: '0.9em'
 });
 
+/** the name and, beside it, the color */
+export const nameFields = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '12px'
+});
+
+/** room for `#` and six hex digits, and the swatch */
+export const colorFieldWidth = style({
+  width: '100px'
+});
+
 export const nameInput = style({
   width: '240px'
 });
