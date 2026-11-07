@@ -1,4 +1,5 @@
 import {isValidValueOf} from './channelValueRules';
+import {isValidColor} from './colors';
 import {type Fixture, type FixtureSetup, SCENE_NAME_MAX_LENGTH, type Scene, type SceneFixture} from './ipc';
 import {duplicatesOf, isBlank} from './validation';
 
@@ -17,6 +18,7 @@ export const setupScenes = (setup: FixtureSetup): readonly Scene[] => setup.scen
 export type SceneError =
   | {readonly type: 'scene-name-missing'}
   | {readonly type: 'scene-name-too-long'}
+  | {readonly type: 'scene-color-invalid'}
   | {readonly type: 'scene-fixtures-missing'}
   | {readonly type: 'scene-fixture-unknown'}
   | {readonly type: 'scene-fixture-twice'}
@@ -53,6 +55,9 @@ export function sceneErrors(scene: Scene, fixtures: readonly Fixture[]): SceneEr
   }
   if (scene.name.length > SCENE_NAME_MAX_LENGTH) {
     errors.push({type: 'scene-name-too-long'});
+  }
+  if (!isValidColor(scene.color)) {
+    errors.push({type: 'scene-color-invalid'});
   }
   if (scene.fixtures.length === 0) {
     errors.push({type: 'scene-fixtures-missing'});

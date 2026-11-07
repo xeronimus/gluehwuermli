@@ -11,20 +11,22 @@ import {selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import ColorField from './ColorField';
 import {
   actions,
   checkboxLabel,
+  colorFieldWidth,
   columns,
   editorTitle,
   errorList,
   field,
-  fixtureChoices,
-  fixtureChoicesTitle,
   formColumn,
   helpColumn,
+  nameFields,
   nameInput,
   sceneEditor
 } from './SceneEditor.css';
+import SceneFixtureChoices from './SceneFixtureChoices';
 import SceneHelp from './SceneHelp';
 
 interface SceneEditorProps {
@@ -36,7 +38,7 @@ interface SceneEditorProps {
 const editTitle = ({name: sceneName}: Scene) => <Trans>Edit the scene {sceneName}</Trans>;
 
 /**
- * Names a scene and chooses its fixtures; their values are taken from the faders when it is saved, so the look is set
+ * Names a scene, gives it a color and chooses its fixtures; their values are taken from the faders when it is saved, so the look is set
  * with the faders below first. Editing keeps the stored values unless "Save current values" is checked; a newly
  * chosen fixture is always taken from its faders.
  */
@@ -46,24 +48,24 @@ const SceneEditor = ({scene, onClose}: SceneEditorProps) => {
   const addScene = useActionAddScene();
   const editScene = useActionEditScene();
   const [name, setName] = useState(scene?.name ?? '');
+  const [color, setColor] = useState(scene?.color ?? '');
   const [fixtureIds, setFixtureIds] = useState<readonly string[]>(
     () => scene?.fixtures.map(({fixtureId}) => fixtureId) ?? fixtures.map(({id}) => id)
   );
   const [recapture, setRecapture] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const errors = sceneEditErrors(fixtures, {name, fixtureIds});
+  const errors = sceneEditErrors(fixtures, {name, color, fixtureIds});
   const canSave = errors.length === 0 && !saving;
-
-  const onToggleFixture = (fixtureId: string, chosen: boolean) =>
-    setFixtureIds(chosen ? [...fixtureIds, fixtureId] : fixtureIds.filter((id) => id !== fixtureId));
 
   const onSave = async () => {
     if (!canSave) {
       return;
     }
     setSaving(true);
-    const saved = scene ? await editScene(scene, {name, fixtureIds, recapture}) : await addScene({name, fixtureIds});
+    const saved = scene
+      ? await editScene(scene, {name, color, fixtureIds, recapture})
+      : await addScene({name, color, fixtureIds});
     setSaving(false);
     if (saved) {
       onClose();
@@ -75,38 +77,37 @@ const SceneEditor = ({scene, onClose}: SceneEditorProps) => {
       <h2 className={editorTitle}>{scene ? editTitle(scene) : <Trans>New scene</Trans>}</h2>
       <div className={columns}>
         <div className={formColumn}>
-          <label className={field}>
-            <Trans>Name</Trans>
-            <input
-              className={nameInput}
-              value={name}
-              maxLength={SCENE_NAME_MAX_LENGTH}
-              autoFocus
-              onChange={(event) => setName(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  void onSave();
-                } else if (event.key === 'Escape' && !saving) {
-                  onClose();
-                }
-              }}
-            />
-          </label>
-          <fieldset className={fixtureChoices}>
-            <legend className={fixtureChoicesTitle}>
-              <Trans>Fixtures in the scene</Trans>
-            </legend>
-            {fixtures.map((fixture) => (
-              <label key={fixture.id} className={checkboxLabel}>
-                <input
-                  type="checkbox"
-                  checked={fixtureIds.includes(fixture.id)}
-                  onChange={(event) => onToggleFixture(fixture.id, event.target.checked)}
+          <div className={nameFields}>
+            <label className={field}>
+              <Trans>Name</Trans>
+              <input
+                className={nameInput}
+                value={name}
+                maxLength={SCENE_NAME_MAX_LENGTH}
+                autoFocus
+                onChange={(event) => setName(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    void onSave();
+                  } else if (event.key === 'Escape' && !saving) {
+                    onClose();
+                  }
+                }}
+              />
+            </label>
+            <label className={field}>
+              <Trans>Color</Trans>
+              <span className={colorFieldWidth}>
+                <ColorField
+                  color={color}
+                  label={t`Color of the scene`}
+                  title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
+                  onChange={setColor}
                 />
-                {fixture.name}
-              </label>
-            ))}
-          </fieldset>
+              </span>
+            </label>
+          </div>
+          <SceneFixtureChoices fixtures={fixtures} fixtureIds={fixtureIds} onChange={setFixtureIds} />
           {scene && (
             <label className={checkboxLabel}>
               <input type="checkbox" checked={recapture} onChange={(event) => setRecapture(event.target.checked)} />

@@ -7,9 +7,9 @@ import {
   sameValueRules,
   valueRulesErrors
 } from './channelValueRules';
+import {isValidColor} from './colors';
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
-  CHANNEL_COLOR_PATTERN,
   FIXTURE_DESCRIPTION_MAX_LENGTH,
   FIXTURE_HINT_MAX_LENGTH,
   FIXTURE_PRESET_NAME_MAX_LENGTH,
@@ -55,20 +55,6 @@ export const lastAddress = (fixture: Fixture): number => Math.max(fixture.startA
 export const fitsInUniverse = (fixture: Fixture): boolean =>
   fixture.startAddress >= FIRST_DMX_CHANNEL && lastAddress(fixture) <= LAST_DMX_CHANNEL;
 
-const STORED_COLOR = new RegExp(CHANNEL_COLOR_PATTERN);
-
-/** a color as typed: six hex digits, with or without the `#`, in any case */
-const TYPED_COLOR = /^#?([0-9a-f]{6})$/i;
-
-/** the color as stored (`#rrggbb`, lower case) for what the user typed, e.g. `FF00FF`; undefined if it is none */
-export function normalizedChannelColor(text: string): string | undefined {
-  const hexDigits = TYPED_COLOR.exec(text.trim())?.[1];
-  return hexDigits === undefined ? undefined : `#${hexDigits.toLowerCase()}`;
-}
-
-const hasValidColor = (channel: FixtureChannel): boolean =>
-  channel.color === undefined || STORED_COLOR.test(channel.color);
-
 /** the fixture's presets; none in a file from before presets existed */
 export const fixturePresets = (fixture: Fixture): readonly FixturePreset[] => fixture.presets ?? [];
 
@@ -96,6 +82,7 @@ export type FixtureError =
   | {readonly type: 'preset-channel-unknown'; readonly presetName: string | undefined}
   | {readonly type: 'preset-channel-twice'; readonly presetName: string | undefined}
   | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined}
+  | {readonly type: 'preset-color-invalid'; readonly presetName: string | undefined}
   | SharedAddressError;
 
 /** a shared address where the other fixture's channel has different value rules: their faders would disagree */
@@ -124,7 +111,10 @@ function valueRulesErrorsOf(fixture: Fixture): FixtureError[] {
   return VALUE_RULES_ERRORS.filter((type) => found.has(type)).map((type) => ({type}));
 }
 
-/** what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each */
+/**
+ * what is wrong with the fixture's presets: they need a name and values, on channels the fixture has, once each, and
+ * a color, if any, as stored
+ */
 function presetErrors(fixture: Fixture): FixtureError[] {
   const errors: FixtureError[] = [];
   const presets = fixturePresets(fixture);
@@ -150,6 +140,9 @@ function presetErrors(fixture: Fixture): FixtureError[] {
     }
     if (preset.values.some(({offset, value}) => !isValidValueOf(fixture, offset, value))) {
       errors.push({type: 'preset-value-invalid', presetName});
+    }
+    if (!isValidColor(preset.color)) {
+      errors.push({type: 'preset-color-invalid', presetName});
     }
   });
   return errors;
@@ -185,7 +178,7 @@ export function fixtureErrors(fixture: Fixture): FixtureError[] {
   if (fixture.channels.some((channel) => channel.lock && !isDmxValue(channel.lock.max))) {
     errors.push({type: 'lock-max-invalid'});
   }
-  if (!fixture.channels.every(hasValidColor)) {
+  if (!fixture.channels.every((channel) => isValidColor(channel.color))) {
     errors.push({type: 'color-invalid'});
   }
   errors.push(...valueRulesErrorsOf(fixture));

@@ -35,6 +35,7 @@ export function tabOfFixtureError(error: FixtureError): FixtureEditorTab {
     case 'preset-channel-unknown':
     case 'preset-channel-twice':
     case 'preset-value-invalid':
+    case 'preset-color-invalid':
       return 'presets';
   }
 }

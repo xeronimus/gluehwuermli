@@ -82,8 +82,8 @@ msgid "A position name can have at most {maxLength} characters"
 msgstr "A position name can have at most {maxLength} characters"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
-msgstr "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
+msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset, give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they are."
+msgstr "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset, give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they are."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A preset name can have at most {maxLength} characters"
@@ -276,12 +276,21 @@ msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view 
 msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Color"
 msgstr "Color"
 
-#: src/renderer/src/components/fixtures/ChannelColorField.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Color of channel {row}"
 msgstr "Color of channel {row}"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Color of preset {presetNumber}"
+msgstr "Color of preset {presetNumber}"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Color of the scene"
+msgstr "Color of the scene"
 
 #: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Connect"
@@ -497,7 +506,7 @@ msgstr "Finding out what a device does"
 msgid "Fixture editor"
 msgstr "Fixture editor"
 
-#: src/renderer/src/components/fixtures/SceneEditor.tsx
+#: src/renderer/src/components/fixtures/SceneFixtureChoices.tsx
 msgid "Fixtures in the scene"
 msgstr "Fixtures in the scene"
 
@@ -1004,6 +1013,19 @@ msgstr "The channel lock is on after every start, independent of the mode. Lift 
 msgid "The color its fader glows in, a hex value like #ff00ff; empty for none"
 msgstr "The color its fader glows in, a hex value like #ff00ff; empty for none"
 
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The color must be a hex value like #ff00ff"
+msgstr "The color must be a hex value like #ff00ff"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "The color of the dot on its button, a hex value like #ff00ff; empty for none"
+msgstr "The color of the dot on its button, a hex value like #ff00ff; empty for none"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The color of the preset {preset} must be a hex value like #ff00ff"
+msgstr "The color of the preset {preset} must be a hex value like #ff00ff"
+
 #: src/renderer/src/state/actionHooks/dataFolder.ts
 msgid "The data folder can only be opened in Setup mode"
 msgstr "The data folder can only be opened in Setup mode"
@@ -1157,8 +1179,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
-msgstr "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 msgid "Try again"
