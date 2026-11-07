@@ -26,7 +26,7 @@ export const SettingsSchema = Type.Object({
   version: Type.Literal(SETTINGS_VERSION),
   /** none yet: the next unlock sets one */
   password: Type.Optional(PasswordHashSchema),
-  /** the port the output was last connected to, connected again on start (dmx/portMemory.ts) */
+  /** the port the output was last connected to, preselected on start (dmx/portMemory.ts) */
   outputPortPath: Type.Optional(Type.String({minLength: 1})),
   /** the language chosen in the app; without it, the OS language decides */
   locale: Type.Optional(LocaleSchema),

@@ -3,6 +3,8 @@ import {msg} from '@lingui/core/macro';
 
 import type {DmxOutputStatus} from '@shared/ipc';
 
+import type {SelectedPort} from '@/data/outputStatus';
+
 /** the status in the top bar; a port error shows the raw text of serialport or the OS, it isn't translated */
 export function outputStatusMessage(status: DmxOutputStatus): MessageDescriptor {
   switch (status.type) {
@@ -25,4 +27,9 @@ export function outputStatusMessage(status: DmxOutputStatus): MessageDescriptor 
       return msg`${path}: ${message}`;
     }
   }
+}
+
+/** why the top bar shows no port next to Connect */
+export function noPortMessage(port: Exclude<SelectedPort, {type: 'selected'}>): MessageDescriptor {
+  return port.type === 'none-found' ? msg`No serial port found` : msg`No port selected`;
 }

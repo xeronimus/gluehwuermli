@@ -26,23 +26,23 @@ const UserManual = () => (
         </li>
         <li>
           <Trans>
-            Press <strong>Connect</strong>. The status in the top bar says <strong>Sending on COM3</strong> once the app
-            sends to the widget.
+            Press <strong>Connect</strong> in the top bar (or in the Settings). The status in the top bar says{' '}
+            <strong>Sending on COM3</strong> once the app sends to the widget.
           </Trans>
         </li>
       </ol>
       <p>
         <Trans>
-          The app remembers the port it was last connected to, also after a Disconnect. On the next start it connects to
-          it by itself, as long as the widget is plugged in before the app starts; otherwise it starts disconnected:
-          plug the widget in, search the serial ports again and press Connect.
+          The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next
+          start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after
+          starting the app? Search the serial ports again in the Settings, then press Connect.
         </Trans>
       </p>
       <p>
         <Trans>
           If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went
-          wrong, e.g. that another program is using it. Fix that, click the status and press Connect again: the faders
-          kept their values and are sent again as soon as the port is open.
+          wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values
+          and are sent again as soon as the port is open.
         </Trans>
       </p>
       <p>
