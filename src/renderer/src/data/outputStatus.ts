@@ -21,3 +21,17 @@ export const preferredPortPath = (
   const listedPath = [chosenPath, rememberedPath].find((path) => ports.some((port) => port.path === path));
   return listedPath ?? (ports.find((port) => port.likelyEnttecPro) ?? ports[0])?.path;
 };
+
+/** the port shown next to Connect in the top bar */
+export type SelectedPort = {type: 'selected'; path: string} | {type: 'none-selected'} | {type: 'none-found'};
+
+/** none found wins: without listed ports a path still selected from before can't be connected */
+export const selectedPortOf = (
+  ports: readonly SerialPortDescription[],
+  selectedPath: string | undefined
+): SelectedPort => {
+  if (ports.length === 0) {
+    return {type: 'none-found'};
+  }
+  return selectedPath === undefined ? {type: 'none-selected'} : {type: 'selected', path: selectedPath};
+};

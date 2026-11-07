@@ -1,4 +1,4 @@
-import {describePort, preferredPortPath} from './outputStatus';
+import {describePort, preferredPortPath, selectedPortOf} from './outputStatus';
 
 const COM1 = {path: 'COM1', likelyEnttecPro: false};
 const COM2 = {path: 'COM2', likelyEnttecPro: false};
@@ -37,4 +37,19 @@ describe('preferredPortPath', () => {
 test('describePort names manufacturer and the Enttec hint', () => {
   expect(describePort(COM3)).toBe('COM3 (FTDI) – Enttec?');
   expect(describePort(COM1)).toBe('COM1');
+});
+
+describe('selectedPortOf', () => {
+  test('the selected port', () => {
+    expect(selectedPortOf([COM1, COM3], 'COM3')).toEqual({type: 'selected', path: 'COM3'});
+  });
+
+  test('ports listed but none selected', () => {
+    expect(selectedPortOf([COM1], undefined)).toEqual({type: 'none-selected'});
+  });
+
+  test('no port listed, even with a path still selected', () => {
+    expect(selectedPortOf([], undefined)).toEqual({type: 'none-found'});
+    expect(selectedPortOf([], 'COM3')).toEqual({type: 'none-found'});
+  });
 });

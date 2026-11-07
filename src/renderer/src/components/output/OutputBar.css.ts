@@ -52,6 +52,20 @@ export const statusVariants = styleVariants({
   failed: [statusBase, {color: vars.colors.danger}]
 });
 
+/** the selected port and Connect / Disconnect */
+export const outputConnection = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px'
+});
+
+export const selectedPort = style({
+  fontFamily: vars.fonts.mono,
+  fontSize: '0.9em',
+  color: vars.colors.textSecondary,
+  whiteSpace: 'nowrap'
+});
+
 export const activeChannels = style({
   color: vars.colors.textMuted,
   fontSize: '0.9em'
