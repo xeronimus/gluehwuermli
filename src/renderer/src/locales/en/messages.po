@@ -1039,8 +1039,8 @@ msgid "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with 
 msgstr "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
-msgstr "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one."
+msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one, a right click on it sets it to its lowest value."
+msgstr "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one, a right click on it sets it to its lowest value."
 
 #: src/renderer/src/i18n/messages/projectMessages.ts
 msgid "The file can't be created: {message}"

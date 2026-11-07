@@ -192,7 +192,7 @@ const UserManual = () => (
       <p>
         <Trans>
           The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's
-          value raises it by one, a click on its name lowers it by one.
+          value raises it by one, a click on its name lowers it by one, a right click on it sets it to its lowest value.
         </Trans>
       </p>
       <p>
