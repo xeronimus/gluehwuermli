@@ -113,8 +113,8 @@ const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): Fixture
 });
 
 /**
- * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description, hint, lock or color and an
- * empty list of presets are left out.
+ * the fixture the draft describes, valid or not: check it with fixtureErrors. A blank description, hint, lock or color
+ * and an empty list of presets are left out.
  */
 export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   const description = draft.description.trim();

@@ -14,6 +14,9 @@ interface ChannelColorFieldProps {
   onChange: (color: string) => void;
 }
 
+/** the placeholder of an empty color field, as in the lock field: the column's title says that empty means none */
+const NO_COLOR = '–';
+
 /** the color as typed, with a swatch once it is a valid one */
 const ChannelColorField = ({color, row, onChange}: ChannelColorFieldProps) => {
   const {t} = useLingui();
@@ -24,7 +27,7 @@ const ChannelColorField = ({color, row, onChange}: ChannelColorFieldProps) => {
         className={colorInput}
         value={color}
         maxLength={COLOR_MAX_LENGTH}
-        placeholder={t`none`}
+        placeholder={NO_COLOR}
         aria-label={t`Color of channel ${row}`}
         onChange={(event) => onChange(event.target.value)}
       />
