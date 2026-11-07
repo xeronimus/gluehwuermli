@@ -1,12 +1,12 @@
 import {Trans, useLingui} from '@lingui/react/macro';
-import {assignInlineVars} from '@vanilla-extract/dynamic';
 
-import {normalizedChannelColor} from '@shared/fixtures';
+import {normalizedColor} from '@shared/colors';
 import {FIXTURE_PRESET_NAME_MAX_LENGTH} from '@shared/ipc';
 
 import {
   FixtureDraft,
   withNewPreset,
+  withPresetColor,
   withPresetMoved,
   withPresetName,
   withPresetValueChange,
@@ -15,14 +15,15 @@ import {
 } from '@/data/fixtureDraft';
 
 import Button from '../commons/Button';
+import ColorDot from '../commons/ColorDot';
 import MoveButtons from '../commons/MoveButtons';
 import {AddIcon, RemoveIcon} from '../commons/icons';
+import ColorField from './ColorField';
 import {
   addPreset,
-  channelColorBubble,
-  channelColorBubbleColor,
   presetChannelLabel,
   presetChannelName,
+  presetColorField,
   presetColumn,
   presetColumns,
   presetHeader,
@@ -38,9 +39,9 @@ interface FixturePresetColumnsProps {
 }
 
 /**
- * the presets of the fixture being edited, a column each: a name, and for each channel whether the preset sets it and
- * to what; entering a value ticks the channel. The channels are named, with a bubble in their color if they have one: the rows no longer stand beside the
- * channel rows of FixtureChannelRows
+ * the presets of the fixture being edited, a column each: a name and the color of its button's dot, and for each
+ * channel whether the preset sets it and to what; entering a value ticks the channel. The channels are named, with a
+ * dot in their color if they have one: the rows no longer stand beside the channel rows of FixtureChannelRows
  */
 const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
   const {t} = useLingui();
@@ -61,6 +62,14 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                   aria-label={t`Name of preset ${presetNumber}`}
                   onChange={(event) => onChange(withPresetName(draft, presetIndex, event.target.value))}
                 />
+                <span className={presetColorField}>
+                  <ColorField
+                    color={preset.color}
+                    label={t`Color of preset ${presetNumber}`}
+                    title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
+                    onChange={(color) => onChange(withPresetColor(draft, presetIndex, color))}
+                  />
+                </span>
                 <MoveButtons
                   index={presetIndex}
                   count={presetCount}
@@ -78,7 +87,7 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                 const value = preset.values[channelIndex];
                 const channelNumber = channelIndex + 1;
                 const label = channel.name || t`Channel ${channelNumber}`;
-                const color = normalizedChannelColor(channel.color);
+                const color = normalizedColor(channel.color);
                 return (
                   // the index is the identity of a channel row, as in FixtureChannelRows
                   <label key={channelIndex} className={presetValue}>
@@ -92,12 +101,7 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                       }
                     />
                     <span className={presetChannelLabel}>
-                      {color !== undefined && (
-                        <span
-                          className={channelColorBubble}
-                          style={assignInlineVars({[channelColorBubbleColor]: color})}
-                        />
-                      )}
+                      {color !== undefined && <ColorDot color={color} />}
                       <span className={presetChannelName} title={label}>
                         {label}
                       </span>

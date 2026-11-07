@@ -1,4 +1,4 @@
-import {createVar, style, styleVariants} from '@vanilla-extract/css';
+import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
@@ -49,23 +49,17 @@ export const presetValue = style({
   fontSize: '0.9em'
 });
 
-/** the channel's color bubble, if it has a color, and its name */
+/** room for `#` and six hex digits, and the swatch */
+export const presetColorField = style({
+  width: '100px'
+});
+
+/** the channel's color dot, if it has a color, and its name */
 export const presetChannelLabel = style({
   display: 'flex',
   alignItems: 'center',
   gap: '6px',
   minWidth: 0
-});
-
-export const channelColorBubbleColor = createVar();
-
-export const channelColorBubble = style({
-  flexShrink: 0,
-  width: '10px',
-  height: '10px',
-  borderRadius: '50%',
-  background: channelColorBubbleColor,
-  boxShadow: `0 0 0 1px ${vars.colors.border}, 0 0 6px ${channelColorBubbleColor}`
 });
 
 export const presetChannelName = style({

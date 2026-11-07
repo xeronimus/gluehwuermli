@@ -12,6 +12,7 @@ import {
   withChannelChange,
   withNewChannel,
   withNewPreset,
+  withPresetColor,
   withPresetMoved,
   withPresetName,
   withPresetValueChange,
@@ -281,6 +282,23 @@ describe('presets', () => {
         ]
       }
     ]);
+  });
+
+  test("a preset's color is normalized, a blank one left out, an invalid one reported", () => {
+    const colored = (color: string) => fixtureOfDraft('par', withPresetColor(draftOf(withWarm), 0, color));
+
+    expect(colored('FFAA00').presets?.[0].color).toBe('#ffaa00');
+    expect(colored(' ').presets?.[0]).not.toHaveProperty('color');
+    expect(fixtureErrors(colored('#ffaa0'))).toEqual([{type: 'preset-color-invalid', presetName: 'Warm'}]);
+  });
+
+  test('a colored preset survives the round trip through a draft', () => {
+    const colored = {
+      ...par,
+      presets: [{id: 'warm', name: 'Warm', values: [{offset: 1, value: 180}], color: '#ffaa00'}]
+    };
+
+    expect(fixtureOfDraft('par', draftOf(colored))).toEqual(colored);
   });
 
   test('leaves out unticked channels', () => {

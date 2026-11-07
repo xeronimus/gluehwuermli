@@ -82,8 +82,8 @@ msgid "A position name can have at most {maxLength} characters"
 msgstr "Ein Positionsname darf höchstens {maxLength} Zeichen haben"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or choose which channels it sets: the ones it leaves out stay as they are."
-msgstr "Ein Preset ist ein Knopf an einem Gerät, der mehrere seiner Kanäle aufs Mal setzt, z. B. «Warmweiss». Für ein neues stellst du die Fader des Geräts ein und drückst auf den Speichern-Knopf neben seinen Presets. Bearbeite das Gerät, um ein Preset umzubenennen oder auszuwählen, welche Kanäle es setzt: Die weggelassenen bleiben, wie sie sind."
+msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset, give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they are."
+msgstr "Ein Preset ist ein Knopf an einem Gerät, der mehrere seiner Kanäle aufs Mal setzt, z. B. «Warmweiss». Für ein neues stellst du die Fader des Geräts ein und drückst auf den Speichern-Knopf neben seinen Presets. Bearbeite das Gerät, um ein Preset umzubenennen, ihm eine Farbe zu geben (ein Punkt auf seinem Knopf) oder auszuwählen, welche Kanäle es setzt: Die weggelassenen bleiben, wie sie sind."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A preset name can have at most {maxLength} characters"
@@ -276,12 +276,21 @@ msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view 
 msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen</1> (ein Klick auf den Status oben in der Leiste führt dorthin; kein Passwort nötig). Ein Port, der nach einem Enttec aussieht, ist mit <2>Enttec?</2> markiert und schon ausgewählt. Erst nach dem Start der App eingesteckt? Such die Ports mit dem Aktualisieren-Knopf nochmals."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Color"
 msgstr "Farbe"
 
-#: src/renderer/src/components/fixtures/ChannelColorField.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Color of channel {row}"
 msgstr "Farbe von Kanal {row}"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+msgid "Color of preset {presetNumber}"
+msgstr "Farbe von Preset {presetNumber}"
+
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "Color of the scene"
+msgstr "Farbe der Szene"
 
 #: src/renderer/src/components/commons/ConnectButton.tsx
 msgid "Connect"
@@ -497,7 +506,7 @@ msgstr "Herausfinden, was ein Gerät macht"
 msgid "Fixture editor"
 msgstr "Geräte-Editor"
 
-#: src/renderer/src/components/fixtures/SceneEditor.tsx
+#: src/renderer/src/components/fixtures/SceneFixtureChoices.tsx
 msgid "Fixtures in the scene"
 msgstr "Geräte in der Szene"
 
@@ -1004,6 +1013,19 @@ msgstr "Die Kanalsperre ist nach jedem Start an, unabhängig vom Modus. Heb sie 
 msgid "The color its fader glows in, a hex value like #ff00ff; empty for none"
 msgstr "Die Farbe, in der sein Fader leuchtet, ein Hex-Wert wie #ff00ff; leer für keine"
 
+#: src/renderer/src/i18n/messages/sceneMessages.ts
+msgid "The color must be a hex value like #ff00ff"
+msgstr "Die Farbe muss ein Hex-Wert wie #ff00ff sein"
+
+#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+#: src/renderer/src/components/fixtures/SceneEditor.tsx
+msgid "The color of the dot on its button, a hex value like #ff00ff; empty for none"
+msgstr "Die Farbe des Punkts auf seinem Knopf, ein Hex-Wert wie #ff00ff; leer für keine"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "The color of the preset {preset} must be a hex value like #ff00ff"
+msgstr "Die Farbe des Presets {preset} muss ein Hex-Wert wie #ff00ff sein"
+
 #: src/renderer/src/state/actionHooks/dataFolder.ts
 msgid "The data folder can only be opened in Setup mode"
 msgstr "Der Datenordner lässt sich nur im Setup-Modus öffnen"
@@ -1157,8 +1179,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
-msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um, gibt ihr eine Farbe (ein Punkt auf ihrem Knopf) oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 msgid "Try again"

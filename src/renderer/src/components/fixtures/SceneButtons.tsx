@@ -10,6 +10,7 @@ import {selectChannelLimits, selectLiftedChannelLimits} from '@/state/lock/lockS
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import ColorDot from '../commons/ColorDot';
 import MoveButtons from '../commons/MoveButtons';
 import {DeleteIcon, EditIcon, LockIcon, SceneIcon} from '../commons/icons';
 import {sceneButtons, sceneEntry} from './SceneButtons.css';
@@ -66,6 +67,7 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
             }
           >
             <SceneIcon />
+            {scene.color !== undefined && <ColorDot color={scene.color} />}
             {scene.name}
             {capped && <LockIcon />}
           </Button>

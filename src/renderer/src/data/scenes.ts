@@ -1,3 +1,4 @@
+import {colorToStore} from '@shared/colors';
 import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from '@shared/ipc';
 import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
@@ -5,9 +6,14 @@ import {changingFixtures} from './fixtureList';
 import {type MoveDirection, movedWithId} from './listOrder';
 import {currentFixtureValues, fittedFixtureValues, fixtureChannelValues} from './presets';
 
-/** what the scene editor sets: the name, the fixtures it covers, and whether to store the current values again */
+/**
+ * what the scene editor sets: the name, the color of its button's dot, the fixtures it covers, and whether to store the
+ * current values again
+ */
 export interface SceneEdit {
   readonly name: string;
+  /** as typed; blank for none */
+  readonly color: string;
   readonly fixtureIds: readonly string[];
   /** false keeps the stored values of the fixtures the scene already covered; newly chosen ones are always captured */
   readonly recapture: boolean;
@@ -22,32 +28,45 @@ const capturedFixture = (fixture: Fixture, channelValues: readonly number[]): Sc
   values: currentFixtureValues(fixture, channelValues)
 });
 
+/** the scene with this name and color as stored: trimmed, normalized, a blank color left out */
+function namedScene(id: string, name: string, color: string, fixtures: SceneFixture[]): Scene {
+  const storedColor = colorToStore(color);
+  return {id, name: name.trim(), fixtures, ...(storedColor !== undefined && {color: storedColor})};
+}
+
 /** a scene of every channel of the chosen fixtures at the value it has now */
 export const captureScene = (
   fixtures: readonly Fixture[],
   channelValues: readonly number[],
   id: string,
-  {name, fixtureIds}: Omit<SceneEdit, 'recapture'>
-): Scene => ({
-  id,
-  name: name.trim(),
-  fixtures: chosenFixtures(fixtures, fixtureIds).map((fixture) => capturedFixture(fixture, channelValues))
-});
+  {name, color, fixtureIds}: Omit<SceneEdit, 'recapture'>
+): Scene =>
+  namedScene(
+    id,
+    name,
+    color,
+    chosenFixtures(fixtures, fixtureIds).map((fixture) => capturedFixture(fixture, channelValues))
+  );
 
-/** the scene after the editor: renamed, for the chosen fixtures, with the stored values kept unless recaptured */
+/**
+ * the scene after the editor: renamed, recolored, for the chosen fixtures, with the stored values kept unless
+ * recaptured
+ */
 export const editedScene = (
   scene: Scene,
   fixtures: readonly Fixture[],
   channelValues: readonly number[],
-  {name, fixtureIds, recapture}: SceneEdit
-): Scene => ({
-  ...scene,
-  name: name.trim(),
-  fixtures: chosenFixtures(fixtures, fixtureIds).map((fixture) => {
-    const stored = scene.fixtures.find(({fixtureId}) => fixtureId === fixture.id);
-    return stored && !recapture ? stored : capturedFixture(fixture, channelValues);
-  })
-});
+  {name, color, fixtureIds, recapture}: SceneEdit
+): Scene =>
+  namedScene(
+    scene.id,
+    name,
+    color,
+    chosenFixtures(fixtures, fixtureIds).map((fixture) => {
+      const stored = scene.fixtures.find(({fixtureId}) => fixtureId === fixture.id);
+      return stored && !recapture ? stored : capturedFixture(fixture, channelValues);
+    })
+  );
 
 /** the absolute channels and values the scene sets; fixtures that no longer exist are skipped */
 export const sceneChannelValues = (scene: Scene, fixtures: readonly Fixture[]): SetChannelRequest[] =>
@@ -116,8 +135,8 @@ export function withFittedScenes(setup: FixtureSetup): FixtureSetup {
 const NO_CHANNEL_VALUES: readonly number[] = [];
 
 /**
- * what keeps the scene the editor describes from being saved (no name, no fixture chosen), without reading the
- * faders: the editor shouldn't re-render on every fader move
+ * what keeps the scene the editor describes from being saved (no name, an invalid color, no fixture chosen), without
+ * reading the faders: the editor shouldn't re-render on every fader move
  */
 export const sceneEditErrors = (fixtures: readonly Fixture[], edit: Omit<SceneEdit, 'recapture'>): SceneError[] =>
   sceneErrors(captureScene(fixtures, NO_CHANNEL_VALUES, 'draft', edit), fixtures);

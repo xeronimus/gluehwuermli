@@ -211,8 +211,9 @@ const UserManual = () => (
       <p>
         <Trans>
           A preset is a button on a fixture that sets several of its channels at once, e.g. "Warm white". To make one,
-          set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset or
-          choose which channels it sets: the ones it leaves out stay as they are.
+          set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset,
+          give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they
+          are.
         </Trans>
       </p>
     </section>
@@ -232,8 +233,9 @@ const UserManual = () => (
         <Trans>
           To make one, unlock Setup mode, set the faders to the look you want, press <strong>Add scene</strong> next to{' '}
           <strong>Add fixture</strong>, name it and choose its fixtures: their current values are stored. The edit
-          button next to a scene renames it or changes its fixtures; check <strong>Save current values</strong> to store
-          what the faders show now. Deleting a fixture takes it out of every scene.
+          button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check{' '}
+          <strong>Save current values</strong> to store what the faders show now. Deleting a fixture takes it out of
+          every scene.
         </Trans>
       </p>
     </section>

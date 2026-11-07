@@ -59,7 +59,9 @@ const setupOf = (setupFixtures: Fixture[], scenes?: Scene[]): FixtureSetup => ({
 
 describe('captureScene', () => {
   test('captures every channel of the chosen fixtures at its current value, in the order of the fixture list', () => {
-    expect(captureScene(fixtures, channelValues, 'new', {name: ' Song 2 ', fixtureIds: ['smoke', 'par']})).toEqual({
+    expect(
+      captureScene(fixtures, channelValues, 'new', {name: ' Song 2 ', fixtureIds: ['smoke', 'par'], color: ''})
+    ).toEqual({
       id: 'new',
       name: 'Song 2',
       fixtures: [
@@ -81,46 +83,74 @@ describe('captureScene', () => {
       channels: [{name: 'Smoke', offset: 0, values: {mode: 'steps', min: 0, max: 200, step: 100}}]
     };
 
-    expect(captureScene([smokeInSteps], channelValues, 'now', {name: 'Now', fixtureIds: ['smoke']}).fixtures).toEqual([
-      {fixtureId: 'smoke', values: [{offset: 0, value: 100}]}
-    ]);
+    expect(
+      captureScene([smokeInSteps], channelValues, 'now', {name: 'Now', fixtureIds: ['smoke'], color: ''}).fixtures
+    ).toEqual([{fixtureId: 'smoke', values: [{offset: 0, value: 100}]}]);
   });
 
   test('leaves out the fixtures not chosen and ids that are unknown', () => {
     expect(
-      captureScene(fixtures, channelValues, 'new', {name: 'Fog', fixtureIds: ['smoke', 'laser']}).fixtures
+      captureScene(fixtures, channelValues, 'new', {name: 'Fog', fixtureIds: ['smoke', 'laser'], color: ''}).fixtures
     ).toEqual([{fixtureId: 'smoke', values: [{offset: 0, value: 90}]}]);
+  });
+});
+
+describe('scene colors', () => {
+  test('a typed color is stored normalized, a blank one left out', () => {
+    const colored = (color: string) =>
+      captureScene(fixtures, channelValues, 'new', {name: 'Fog', fixtureIds: ['smoke'], color});
+
+    expect(colored(' FF8800 ').color).toBe('#ff8800');
+    expect(colored(' ')).not.toHaveProperty('color');
+  });
+
+  test('editing sets, changes or removes the color', () => {
+    const edited = (scene: Scene, color: string) =>
+      editedScene(scene, fixtures, channelValues, {name: 'Intro', fixtureIds: ['par'], color, recapture: false});
+
+    expect(edited(intro, '#00ff00').color).toBe('#00ff00');
+    expect(edited({...intro, color: '#00ff00'}, '')).not.toHaveProperty('color');
   });
 });
 
 describe('editedScene', () => {
   test('renames and keeps the stored values', () => {
     expect(
-      editedScene(intro, fixtures, channelValues, {name: 'Opener', fixtureIds: ['par', 'smoke'], recapture: false})
+      editedScene(intro, fixtures, channelValues, {
+        name: 'Opener',
+        fixtureIds: ['par', 'smoke'],
+        color: '',
+        recapture: false
+      })
     ).toEqual({...intro, name: 'Opener'});
   });
 
   test('drops an unchecked fixture and captures a newly checked one, keeping the others', () => {
-    expect(editedScene(outro, fixtures, channelValues, {name: 'Outro', fixtureIds: ['par'], recapture: false})).toEqual(
-      {
-        ...outro,
-        fixtures: [
-          {
-            fixtureId: 'par',
-            values: [
-              {offset: 0, value: 200},
-              {offset: 1, value: 40}
-            ]
-          }
-        ]
-      }
-    );
+    expect(
+      editedScene(outro, fixtures, channelValues, {name: 'Outro', fixtureIds: ['par'], color: '', recapture: false})
+    ).toEqual({
+      ...outro,
+      fixtures: [
+        {
+          fixtureId: 'par',
+          values: [
+            {offset: 0, value: 200},
+            {offset: 1, value: 40}
+          ]
+        }
+      ]
+    });
   });
 
   test('recapture stores the current values of every chosen fixture', () => {
     expect(
-      editedScene(intro, fixtures, channelValues, {name: 'Intro', fixtureIds: ['par', 'smoke'], recapture: true})
-    ).toEqual(captureScene(fixtures, channelValues, 'intro', {name: 'Intro', fixtureIds: ['par', 'smoke']}));
+      editedScene(intro, fixtures, channelValues, {
+        name: 'Intro',
+        fixtureIds: ['par', 'smoke'],
+        color: '',
+        recapture: true
+      })
+    ).toEqual(captureScene(fixtures, channelValues, 'intro', {name: 'Intro', fixtureIds: ['par', 'smoke'], color: ''}));
   });
 });
 
@@ -233,13 +263,21 @@ describe('changingFixturesAndScenes', () => {
 
 describe('sceneEditErrors', () => {
   test('a named scene of at least one fixture can be saved', () => {
-    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['par']})).toEqual([]);
+    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['par'], color: ''})).toEqual([]);
   });
 
   test('not without a name, or without a fixture that exists', () => {
-    expect(sceneEditErrors(fixtures, {name: ' ', fixtureIds: ['par']})).toEqual([{type: 'scene-name-missing'}]);
-    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['laser']})).toEqual([
+    expect(sceneEditErrors(fixtures, {name: ' ', fixtureIds: ['par'], color: ''})).toEqual([
+      {type: 'scene-name-missing'}
+    ]);
+    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['laser'], color: ''})).toEqual([
       {type: 'scene-fixtures-missing'}
+    ]);
+  });
+
+  test('not with a color that is none', () => {
+    expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['par'], color: 'orange'})).toEqual([
+      {type: 'scene-color-invalid'}
     ]);
   });
 });

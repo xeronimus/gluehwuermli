@@ -83,6 +83,7 @@ src/
     channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
                              # scene values checked against them
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
+    colors.ts                # channel, preset and scene colors: stored form, normalizing what is typed, validity
     preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
     links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
     serialQueue.ts           # runs overlapping async tasks one after the other (saves, project switches)
