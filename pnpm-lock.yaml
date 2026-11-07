@@ -215,6 +215,9 @@ importers:
       '@vanilla-extract/css':
         specifier: ^1.21.3
         version: 1.21.3
+      '@vanilla-extract/dynamic':
+        specifier: ^2.1.5
+        version: 2.1.5
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
         version: 5.2.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(supports-color@7.2.0)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0))
@@ -1261,6 +1264,9 @@ packages:
 
   '@vanilla-extract/css@1.21.3':
     resolution: {integrity: sha512-h7wXxEowNLjhGfTHqReoSBWjAzxDADM8yUuUL/enDWXQVwy50JnY8xFNaie04XHTmrBPKJjwcwRNuTGlFIJLSA==}
+
+  '@vanilla-extract/dynamic@2.1.5':
+    resolution: {integrity: sha512-QGIFGb1qyXQkbzx6X6i3+3LMc/iv/ZMBttMBL+Wm/DetQd36KsKsFg5CtH3qy+1hCA/5w93mEIIAiL4fkM8ycw==}
 
   '@vanilla-extract/integration@8.0.11':
     resolution: {integrity: sha512-f24QLKpY6qN1AJcWxvbfP6H3BNJPkLC6La52OfRje6KNPTrlFX4nBlw10UDyPI7pwwh6zXR7IKyD/LCmWQBnpg==}
@@ -4138,6 +4144,10 @@ snapshots:
       picocolors: 1.1.1
     transitivePeerDependencies:
       - babel-plugin-macros
+
+  '@vanilla-extract/dynamic@2.1.5':
+    dependencies:
+      '@vanilla-extract/private': 1.0.9
 
   '@vanilla-extract/integration@8.0.11(supports-color@7.2.0)':
     dependencies:

@@ -61,12 +61,17 @@ export const ChannelLockSchema = Type.Object({
 });
 export type ChannelLock = Static<typeof ChannelLockSchema>;
 
+/** a channel's color as stored: `#rrggbb`, lower case (what the user types is normalized, fixtures.ts) */
+export const CHANNEL_COLOR_PATTERN = '^#[0-9a-f]{6}$';
+
 /** one channel of a fixture: its address is the fixture's start address plus `offset` */
 export const FixtureChannelSchema = Type.Object({
   name: Type.String({minLength: 1}),
   offset: Type.Integer({minimum: 0, maximum: LAST_DMX_CHANNEL - FIRST_DMX_CHANNEL}),
   /** optional, so older files load; a channel without one is never capped */
-  lock: Type.Optional(ChannelLockSchema)
+  lock: Type.Optional(ChannelLockSchema),
+  /** optional, so older files load; the color its fader glows in, a channel without one looks like a raw channel */
+  color: Type.Optional(Type.String({pattern: CHANNEL_COLOR_PATTERN}))
 });
 export type FixtureChannel = Static<typeof FixtureChannelSchema>;
 

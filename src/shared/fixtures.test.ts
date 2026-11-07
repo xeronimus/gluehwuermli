@@ -6,6 +6,7 @@ import {
   fixtureErrors,
   fixturePresets,
   lastAddress,
+  normalizedChannelColor,
   overlappingFixtures,
   parseFixtureSetup
 } from './fixtures';
@@ -137,8 +138,33 @@ describe('fixtureErrors', () => {
     expect(fixtureErrors(lockedAt(Number.NaN))).toEqual([{type: 'lock-max-invalid'}]);
   });
 
+  test('accepts a stored color, reports any other', () => {
+    const coloredAs = (color: string) => fixtureOf({channels: [{name: 'UV', offset: 0, color}]});
+
+    expect(fixtureErrors(coloredAs('#7f00ff'))).toEqual([]);
+    expect(fixtureErrors(coloredAs('#7F00FF'))).toEqual([{type: 'color-invalid'}]);
+    expect(fixtureErrors(coloredAs('7f00ff'))).toEqual([{type: 'color-invalid'}]);
+    expect(fixtureErrors(coloredAs('red'))).toEqual([{type: 'color-invalid'}]);
+  });
+
   test('reports a fixture not fitting in the universe', () => {
     expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([{type: 'past-universe-end', lastAddress: 513}]);
+  });
+});
+
+describe('normalizedChannelColor', () => {
+  test('stores six hex digits as #rrggbb in lower case, with or without the #', () => {
+    expect(normalizedChannelColor('ff00ff')).toBe('#ff00ff');
+    expect(normalizedChannelColor('#FF00FF')).toBe('#ff00ff');
+    expect(normalizedChannelColor(' #Ff00fF ')).toBe('#ff00ff');
+  });
+
+  test('is undefined for anything else', () => {
+    expect(normalizedChannelColor('#ff00f')).toBeUndefined();
+    expect(normalizedChannelColor('red')).toBeUndefined();
+    expect(normalizedChannelColor('#gg0000')).toBeUndefined();
+    expect(normalizedChannelColor('##ff00ff')).toBeUndefined();
+    expect(normalizedChannelColor('')).toBeUndefined();
   });
 });
 
@@ -212,6 +238,17 @@ describe('parseFixtureSetup', () => {
 
     expect(setup?.fixtures[0].presets).toBeUndefined();
     expect(setup && fixturePresets(setup.fixtures[0])).toEqual([]);
+  });
+
+  test('accepts a channel with a stored color, rejects one not normalized or no color at all', () => {
+    const coloredAs = (color: string) => fixtureOf({channels: [{name: 'UV', offset: 0, color}]});
+
+    expect(parseFixtureSetup({version: 1, fixtures: [coloredAs('#7f00ff')]})).toEqual({
+      version: 1,
+      fixtures: [coloredAs('#7f00ff')]
+    });
+    expect(parseFixtureSetup({version: 1, fixtures: [coloredAs('#7F00FF')]})).toBeUndefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [coloredAs('red')]})).toBeUndefined();
   });
 
   test('accepts a channel with a lock, rejects a lock without a valid maximum', () => {

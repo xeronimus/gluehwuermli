@@ -1,6 +1,7 @@
 import {
   channelValueOf,
   fadersFor,
+  glowLevel,
   isChannelChange,
   toDmxValue,
   toPercent,
@@ -13,6 +14,19 @@ describe('toDmxValue', () => {
     expect(toDmxValue(127.6)).toBe(128);
     expect(toDmxValue(-3)).toBe(0);
     expect(toDmxValue(300)).toBe(255);
+  });
+});
+
+describe('glowLevel', () => {
+  test('no glow at 0, full glow at 255, in between in proportion', () => {
+    expect(glowLevel(0)).toBe(0);
+    expect(glowLevel(255)).toBe(1);
+    expect(glowLevel(51)).toBeCloseTo(0.2);
+  });
+
+  test('stays within 0..1 for a value out of range', () => {
+    expect(glowLevel(-5)).toBe(0);
+    expect(glowLevel(300)).toBe(1);
   });
 });
 
