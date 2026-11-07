@@ -12,6 +12,7 @@ import {selectChannelLimits, selectLiftedChannelLimits} from '@/state/lock/lockS
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import ColorDot from '../commons/ColorDot';
 import {LockIcon, SavePresetIcon} from '../commons/icons';
 import {presetButtons, presetNameInput} from './FixturePresetButtons.css';
 
@@ -72,6 +73,7 @@ const FixturePresetButtons = ({fixture, canSavePreset}: FixturePresetButtonsProp
             }
           >
             {locked && <LockIcon />}
+            {preset.color !== undefined && <ColorDot color={preset.color} />}
             {preset.name}
           </Button>
         );

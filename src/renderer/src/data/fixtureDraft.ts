@@ -1,6 +1,7 @@
 import {nearestStop, valueRulesErrors} from '@shared/channelValueRules';
+import {colorToStore} from '@shared/colors';
 import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
-import {fixturePresets, normalizedChannelColor} from '@shared/fixtures';
+import {fixturePresets} from '@shared/fixtures';
 import type {Fixture, FixtureChannel, FixturePreset} from '@shared/ipc';
 
 import {
@@ -40,6 +41,8 @@ export interface FixtureChannelDraft {
 export interface FixturePresetDraft {
   readonly id: string;
   readonly name: string;
+  /** the color of its button's dot, as typed; blank for none */
+  readonly color: string;
   readonly values: readonly PresetValueDraft[];
 }
 
@@ -82,6 +85,7 @@ export const newFixtureDraft = (): FixtureDraft => ({
 const presetDraftOf = (fixture: Fixture, preset: FixturePreset): FixturePresetDraft => ({
   id: preset.id,
   name: preset.name,
+  color: preset.color ?? NO_COLOR,
   values: fixture.channels.map((channel) => {
     const presetValue = preset.values.find(({offset}) => offset === channel.offset);
     return presetValue ? {included: true, value: String(presetValue.value), entered: false} : UNSET_PRESET_VALUE;
@@ -107,8 +111,11 @@ export const draftOf = (fixture: Fixture): FixtureDraft => ({
 const replacedAt = <T>(items: readonly T[], index: number, replace: (item: T) => T): T[] =>
   items.map((item, current) => (current === index ? replace(item) : item));
 
-/** the color as stored; one that isn't a color stays as typed, which fixtureErrors reports */
-const colorOf = (text: string): string => normalizedChannelColor(text) ?? text.trim();
+/** the color as stored, none for a blank field; one that isn't a color stays as typed, which fixtureErrors reports */
+const colorOfDraft = (text: string): {color?: string} => {
+  const color = colorToStore(text);
+  return color === undefined ? {} : {color};
+};
 
 const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => {
   const values = channelValuesOfDraft(channel.values);
@@ -116,7 +123,7 @@ const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => {
     name: channel.name.trim(),
     offset: numberOf(channel.offset),
     ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}}),
-    ...(channel.color.trim() !== NO_COLOR && {color: colorOf(channel.color)}),
+    ...colorOfDraft(channel.color),
     ...(values && {values})
   };
 };
@@ -142,7 +149,8 @@ const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): Fixture
     return presetValue.included
       ? [{offset: numberOf(channel.offset), value: numberOf(shownPresetValue(channel, presetValue))}]
       : [];
-  })
+  }),
+  ...colorOfDraft(preset.color)
 });
 
 /**
@@ -202,13 +210,23 @@ export const withNewPreset = (draft: FixtureDraft, id: string): FixtureDraft => 
   ...draft,
   presets: [
     ...draft.presets,
-    {id, name: '', values: draft.channels.map(() => ({included: true, value: String(DMX_MIN_VALUE), entered: false}))}
+    {
+      id,
+      name: '',
+      color: NO_COLOR,
+      values: draft.channels.map(() => ({included: true, value: String(DMX_MIN_VALUE), entered: false}))
+    }
   ]
 });
 
 export const withPresetName = (draft: FixtureDraft, presetIndex: number, name: string): FixtureDraft => ({
   ...draft,
   presets: replacedAt(draft.presets, presetIndex, (preset) => ({...preset, name}))
+});
+
+export const withPresetColor = (draft: FixtureDraft, presetIndex: number, color: string): FixtureDraft => ({
+  ...draft,
+  presets: replacedAt(draft.presets, presetIndex, (preset) => ({...preset, color}))
 });
 
 export const withPresetValueChange = (

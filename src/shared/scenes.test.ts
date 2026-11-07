@@ -89,6 +89,12 @@ describe('sceneErrors', () => {
 
     expect(sceneErrors(scene, fixtures)).toEqual([{type: 'scene-value-invalid'}]);
   });
+
+  test('accepts a stored color, reports any other', () => {
+    expect(sceneErrors(sceneOf({color: '#ff8800'}), fixtures)).toEqual([]);
+    expect(sceneErrors(sceneOf({color: '#FF8800'}), fixtures)).toEqual([{type: 'scene-color-invalid'}]);
+    expect(sceneErrors(sceneOf({color: 'orange'}), fixtures)).toEqual([{type: 'scene-color-invalid'}]);
+  });
 });
 
 describe('scene values and value rules', () => {

@@ -14,9 +14,9 @@ import {
 
 import Button from '../commons/Button';
 import {AddIcon, RemoveIcon} from '../commons/icons';
-import ChannelColorField from './ChannelColorField';
 import ChannelPositionsList from './ChannelPositionsList';
 import ChannelValuesField from './ChannelValuesField';
+import ColorField from './ColorField';
 import {
   addChannel,
   channelAddress,
@@ -110,9 +110,9 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
                 aria-label={t`Maximum of channel ${row} while locked`}
                 onChange={(event) => onChange(withChannelChange(draft, index, {lockMax: event.target.value}))}
               />
-              <ChannelColorField
+              <ColorField
                 color={channel.color}
-                row={row}
+                label={t`Color of channel ${row}`}
                 onChange={(color) => onChange(withChannelChange(draft, index, {color}))}
               />
               <Button onClick={() => onChange(withoutChannel(draft, index))} title={t`Remove the channel`}>

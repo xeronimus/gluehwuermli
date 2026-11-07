@@ -7,7 +7,6 @@ import {
   fixtureErrors,
   fixturePresets,
   lastAddress,
-  normalizedChannelColor,
   overlappingFixtures,
   parseFixtureSetup,
   sharedAddressErrors
@@ -106,6 +105,14 @@ describe('fixtureErrors', () => {
     ]);
   });
 
+  test('accepts a stored preset color, reports any other', () => {
+    const coloredAs = (color: string) =>
+      fixtureOf({presets: [{id: 'warm', name: 'Warm', values: [{offset: 0, value: 255}], color}]});
+
+    expect(fixtureErrors(coloredAs('#ffaa00'))).toEqual([]);
+    expect(fixtureErrors(coloredAs('ffaa00'))).toEqual([{type: 'preset-color-invalid', presetName: 'Warm'}]);
+  });
+
   test('reports a preset id used twice', () => {
     const preset = {id: 'warm', name: 'Warm', values: [{offset: 0, value: 255}]};
 
@@ -173,22 +180,6 @@ describe('fixtureErrors', () => {
 
   test('reports a fixture not fitting in the universe', () => {
     expect(fixtureErrors(fixtureOf({startAddress: 511}))).toEqual([{type: 'past-universe-end', lastAddress: 513}]);
-  });
-});
-
-describe('normalizedChannelColor', () => {
-  test('stores six hex digits as #rrggbb in lower case, with or without the #', () => {
-    expect(normalizedChannelColor('ff00ff')).toBe('#ff00ff');
-    expect(normalizedChannelColor('#FF00FF')).toBe('#ff00ff');
-    expect(normalizedChannelColor(' #Ff00fF ')).toBe('#ff00ff');
-  });
-
-  test('is undefined for anything else', () => {
-    expect(normalizedChannelColor('#ff00f')).toBeUndefined();
-    expect(normalizedChannelColor('red')).toBeUndefined();
-    expect(normalizedChannelColor('#gg0000')).toBeUndefined();
-    expect(normalizedChannelColor('##ff00ff')).toBeUndefined();
-    expect(normalizedChannelColor('')).toBeUndefined();
   });
 });
 

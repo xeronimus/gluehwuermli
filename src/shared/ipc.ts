@@ -61,7 +61,7 @@ export const ChannelLockSchema = Type.Object({
 });
 export type ChannelLock = Static<typeof ChannelLockSchema>;
 
-/** a channel's color as stored: `#rrggbb`, lower case (what the user types is normalized, fixtures.ts) */
+/** a channel's, preset's or scene's color as stored: `#rrggbb`, lower case (what the user types is normalized, colors.ts) */
 export const CHANNEL_COLOR_PATTERN = '^#[0-9a-f]{6}$';
 
 const DmxValueSchema = Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE});
@@ -131,7 +131,9 @@ export type FixturePresetValue = Static<typeof FixturePresetValueSchema>;
 export const FixturePresetSchema = Type.Object({
   id: Type.String({minLength: 1}),
   name: Type.String({minLength: 1, maxLength: FIXTURE_PRESET_NAME_MAX_LENGTH}),
-  values: Type.Array(FixturePresetValueSchema, {minItems: 1})
+  values: Type.Array(FixturePresetValueSchema, {minItems: 1}),
+  /** optional, so older files load; shown as a dot on its button */
+  color: Type.Optional(Type.String({pattern: CHANNEL_COLOR_PATTERN}))
 });
 export type FixturePreset = Static<typeof FixturePresetSchema>;
 
@@ -167,7 +169,9 @@ export type SceneFixture = Static<typeof SceneFixtureSchema>;
 export const SceneSchema = Type.Object({
   id: Type.String({minLength: 1}),
   name: Type.String({minLength: 1, maxLength: SCENE_NAME_MAX_LENGTH}),
-  fixtures: Type.Array(SceneFixtureSchema, {minItems: 1})
+  fixtures: Type.Array(SceneFixtureSchema, {minItems: 1}),
+  /** optional, so older files load; shown as a dot on its button */
+  color: Type.Optional(Type.String({pattern: CHANNEL_COLOR_PATTERN}))
 });
 export type Scene = Static<typeof SceneSchema>;
 

@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- Presets and scenes can have a color (a hex value like `#ff00ff`, in the fixture editor's Presets tab and the scene
+  editor): their button shows a glowing dot in it before the name, in Show and in Setup mode
+
 ## [0.2.1] - 2026-11-07
 
 ### Added
