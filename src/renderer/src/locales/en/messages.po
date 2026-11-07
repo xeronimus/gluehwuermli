@@ -613,10 +613,6 @@ msgstr "No project open. Create or open one in the Show view or in Settings."
 msgid "No serial port found"
 msgstr "No serial port found"
 
-#: src/renderer/src/components/fixtures/ChannelColorField.tsx
-msgid "none"
-msgstr "none"
-
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Not connected"
 msgstr "Not connected"
