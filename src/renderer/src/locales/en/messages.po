@@ -33,7 +33,7 @@ msgstr "{path}: the port was closed, is the widget still plugged in?"
 msgid "{presetName} sets a locked channel"
 msgstr "{presetName} sets a locked channel"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 msgstr "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 
@@ -73,7 +73,7 @@ msgstr "A scene name can have at most {maxLength} characters"
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 msgstr "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 
@@ -203,7 +203,7 @@ msgstr "Channel locks"
 msgid "Channels"
 msgstr "Channels"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Channels ({channelCount})"
 msgstr "Channels ({channelCount})"
 
@@ -387,7 +387,7 @@ msgstr "Disconnect"
 msgid "e.g. Dimmer"
 msgstr "e.g. Dimmer"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 msgid "e.g. PAR left"
 msgstr "e.g. PAR left"
 
@@ -425,7 +425,7 @@ msgstr "Every fixture of the scene needs at least one channel"
 msgid "Every preset needs a name"
 msgstr "Every preset needs a name"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 
@@ -453,9 +453,17 @@ msgstr "Fixtures, presets and scenes can be played, not changed. Unlock Setup mo
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "General"
+msgstr "General"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 msgstr "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
+
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+msgid "Has errors"
+msgstr "Has errors"
 
 #: src/renderer/src/components/App.tsx
 msgid "Help"
@@ -469,13 +477,21 @@ msgstr "Hide the description"
 msgid "Hint"
 msgstr "Hint"
 
+#: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
+msgid "How presets work"
+msgstr "How presets work"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "How scenes work"
 msgstr "How scenes work"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "How to set up a fixture"
 msgstr "How to set up a fixture"
+
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "How to set up the channels"
+msgstr "How to set up the channels"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
@@ -497,7 +513,7 @@ msgstr "Lock"
 msgid "Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts."
 msgstr "Locked channels can be set to any value, also in Show mode, until the lock is turned on again or the app restarts."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in the device's manual. Many devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it."
 msgstr "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in the device's manual. Many devices have several modes, e.g. 3 or 7 channels: pick one and set the device to it."
 
@@ -545,7 +561,7 @@ msgstr "Move the scene {sceneName} to the left"
 msgid "Move the scene {sceneName} to the right"
 msgstr "Move the scene {sceneName} to the right"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Name"
 msgstr "Name"
@@ -591,7 +607,7 @@ msgstr "No fixtures yet: unlock Setup mode in Settings and add the devices of yo
 msgid "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
 msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 
@@ -698,7 +714,7 @@ msgstr "Preset name"
 msgid "Presets"
 msgstr "Presets"
 
-#: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
+#: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
@@ -807,7 +823,7 @@ msgstr "Set the <0>faders</0> of the fixtures below to the look you want. They s
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 
@@ -860,7 +876,7 @@ msgstr "Something went wrong"
 msgid "Source code"
 msgstr "Source code"
 
-#: src/renderer/src/components/fixtures/FixtureEditor.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 msgid "Start address"
 msgstr "Start address"
 
@@ -868,11 +884,11 @@ msgstr "Start address"
 msgid "Start channel"
 msgstr "Start channel"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
 msgstr "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 
@@ -904,7 +920,7 @@ msgstr "The data folder can only be opened in Setup mode"
 msgid "The description can have at most {maxLength} characters"
 msgstr "The description can have at most {maxLength} characters"
 
-#: src/renderer/src/components/fixtures/FixtureHelp.tsx
+#: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 msgstr "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 

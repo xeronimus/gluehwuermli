@@ -132,9 +132,10 @@ src/
                              # channels), settings/ (output port, mode and channel lock),
                              # help/ (manual, open project, data folder, repo link); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
-                             # ErrorBoundary, icons.ts)
-      data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft, fixtureFaders,
-                             # fixtureList, presets, scenes, passwordForm, activityThrottle, recentProjects)
+                             # Tabs, ErrorBoundary, icons.ts)
+      data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
+                             # fixtureEditorTabs, fixtureFaders, fixtureList, presets, scenes, tabs, passwordForm,
+                             # activityThrottle, recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, services.ts (composition root),
                              # impl/electron, impl/inMemory
       domain/                # types (Fader)

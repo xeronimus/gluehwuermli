@@ -191,6 +191,14 @@ export const withPresetValueChange = (
   }))
 });
 
+/** a value entered for the channel: the preset sets it from then on, whatever the value (0, too) */
+export const withPresetValueEntered = (
+  draft: FixtureDraft,
+  presetIndex: number,
+  channelIndex: number,
+  value: string
+): FixtureDraft => withPresetValueChange(draft, presetIndex, channelIndex, {included: true, value});
+
 export const withoutPreset = (draft: FixtureDraft, presetIndex: number): FixtureDraft => ({
   ...draft,
   presets: draft.presets.filter((_, current) => current !== presetIndex)

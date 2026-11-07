@@ -12,7 +12,8 @@ import ModeToggle, {Mode} from '../commons/ModeToggle';
 import {EditIcon, PreviewIcon} from '../commons/icons';
 import {descriptionHeader, descriptionInput, descriptionPreview, field, previewPlaceholder} from './FixtureEditor.css';
 
-const DESCRIPTION_ROWS = 6;
+/** the General tab has room for it: enough for the notes on a device without scrolling */
+const DESCRIPTION_ROWS = 16;
 
 type DescriptionMode = 'edit' | 'preview';
 

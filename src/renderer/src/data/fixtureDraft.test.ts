@@ -11,6 +11,7 @@ import {
   withPresetMoved,
   withPresetName,
   withPresetValueChange,
+  withPresetValueEntered,
   withoutChannel,
   withoutPreset
 } from './fixtureDraft';
@@ -185,6 +186,18 @@ describe('presets', () => {
     const draft = withPresetValueChange(withNewPreset(draftOf(par), 'red'), 0, 1, {included: false});
 
     expect(fixtureOfDraft('par', draft).presets?.[0].values).toEqual([{offset: 0, value: 0}]);
+  });
+
+  test('a value entered for a channel the preset leaves out ticks the channel, also a value of 0', () => {
+    const unticked = withPresetValueChange(withNewPreset(draftOf(par), 'red'), 0, 1, {included: false});
+
+    const entered = withPresetValueEntered(unticked, 0, 1, '0');
+
+    expect(entered.presets[0]?.values[1]).toEqual({included: true, value: '0'});
+    expect(fixtureOfDraft('par', entered).presets?.[0].values).toEqual([
+      {offset: 0, value: 0},
+      {offset: 1, value: 0}
+    ]);
   });
 
   test('follows a channel that is removed or gets another offset', () => {

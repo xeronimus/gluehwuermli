@@ -23,24 +23,6 @@ export const editorForm = style({
   gap: '14px'
 });
 
-/** the channels, and the preset columns beside them */
-export const channelsAndPresets = style({
-  display: 'flex',
-  alignItems: 'flex-start',
-  gap: '16px'
-});
-
-/** the title of the channels and of the presets section, the same height so their rows line up */
-export const sectionTitle = style({
-  display: 'flex',
-  alignItems: 'center',
-  height: vars.constants.editorRowHeight,
-  margin: '0 0 6px',
-  color: vars.colors.textSecondary,
-  fontSize: '0.9em',
-  fontWeight: 600
-});
-
 export const editorTitle = style({
   margin: 0,
   fontSize: '1em',
@@ -84,13 +66,13 @@ export const descriptionHeader = style({
 });
 
 /**
- * About as high as the textarea's 6 rows, so the form doesn't jump on the toggle. The fixture's background, so code
+ * About as high as the textarea's 16 rows, so the form doesn't jump on the toggle. The fixture's background, so code
  * stands out as it does on the fixture.
  */
 export const descriptionPreview = style({
   boxSizing: 'border-box',
   width: '100%',
-  minHeight: '9.2em',
+  minHeight: '23.2em',
   padding: '6px 8px',
   color: vars.colors.text,
   background: vars.colors.surface,
