@@ -33,9 +33,17 @@ msgstr "{path}: {message}"
 msgid "{path}: the port was closed, is the widget still plugged in?"
 msgstr "{path}: the port was closed, is the widget still plugged in?"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "{positionCount, plural, one {# position, listed below} other {# positions, listed below}}"
+msgstr "{positionCount, plural, one {# position, listed below} other {# positions, listed below}}"
+
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "{presetName} sets a locked channel"
 msgstr "{presetName} sets a locked channel"
+
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows them beside its track, and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows them beside its track, and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -109,6 +117,10 @@ msgstr "Add channel"
 msgid "Add fixture"
 msgstr "Add fixture"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Add position"
+msgstr "Add position"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Add preset"
 msgstr "Add preset"
@@ -156,6 +168,10 @@ msgstr "Asking whether the app is locked…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Black out on quit"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "by"
+msgstr "by"
 
 #: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
@@ -282,6 +298,10 @@ msgstr "Connecting the DMX USB Pro"
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Connecting to {path}…"
 msgstr "Connecting to {path}…"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Continuous"
+msgstr "Continuous"
 
 #: src/renderer/src/state/actionHooks/project.ts
 msgid "Could not ask the app to open the project"
@@ -517,6 +537,10 @@ msgstr "Help"
 msgid "Hide the description"
 msgstr "Hide the description"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Highest value of channel {row}"
+msgstr "Highest value of channel {row}"
+
 #: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
 msgid "Hint"
 msgstr "Hint"
@@ -564,6 +588,10 @@ msgstr "Look up the <0>channel list</0> (often called DMX chart or DMX mode) in 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Looking up the folder…"
 msgstr "Looking up the folder…"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Lowest value of channel {row}"
+msgstr "Lowest value of channel {row}"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Max while locked"
@@ -614,6 +642,10 @@ msgstr "Name"
 msgid "Name of channel {row}"
 msgstr "Name of channel {row}"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Name of position {positionNumber} of channel {row}"
+msgstr "Name of position {positionNumber} of channel {row}"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Name of preset {presetNumber}"
 msgstr "Name of preset {presetNumber}"
@@ -621,6 +653,10 @@ msgstr "Name of preset {presetNumber}"
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "Name of the new preset"
 msgstr "Name of the new preset"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Name, e.g. Star (optional)"
+msgstr "Name, e.g. Star (optional)"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "New fixture"
@@ -746,6 +782,10 @@ msgstr "Password"
 msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 msgstr "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Positions"
+msgstr "Positions"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Preset id {id} is used twice"
 msgstr "Preset id {id} is used twice"
@@ -802,6 +842,10 @@ msgstr "Remove {projectName} from the list (the file stays)"
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Remove the channel"
 msgstr "Remove the channel"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Remove the position"
+msgstr "Remove the position"
 
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Remove the preset"
@@ -927,6 +971,14 @@ msgstr "Start address"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Start channel"
 msgstr "Start channel"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Step size of channel {row}"
+msgstr "Step size of channel {row}"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Steps"
+msgstr "Steps"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
@@ -1140,13 +1192,29 @@ msgstr "Unlock Setup mode"
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Value of {label} in preset {presetNumber}"
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Value of position {positionNumber} of channel {row}"
+msgstr "Value of position {positionNumber} of channel {row}"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Values"
+msgstr "Values"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
 msgstr "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Values of channel {row}"
+msgstr "Values of channel {row}"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 msgstr "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
+msgstr "Where the fader stops: every value from min to max, in steps, or only at some positions"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "without a name"

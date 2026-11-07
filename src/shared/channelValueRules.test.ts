@@ -49,6 +49,12 @@ describe('valueRulesErrors', () => {
   ])('reports %s', (type, rules) => {
     expect(valueRulesErrors(rules)).toContain(type);
   });
+
+  test('a blank position is invalid, not a position used twice', () => {
+    expect(valueRulesErrors({mode: 'positions', positions: [{value: Number.NaN}, {value: 5}]})).toEqual([
+      'values-invalid'
+    ]);
+  });
 });
 
 describe('channelStops', () => {

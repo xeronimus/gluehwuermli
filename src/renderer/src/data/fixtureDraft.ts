@@ -1,7 +1,15 @@
-import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel} from '@shared/dmx';
+import {nearestStop, valueRulesErrors} from '@shared/channelValueRules';
+import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, isDmxChannel, isDmxValue} from '@shared/dmx';
 import {fixturePresets, normalizedChannelColor} from '@shared/fixtures';
 import type {Fixture, FixtureChannel, FixturePreset} from '@shared/ipc';
 
+import {
+  type ChannelValuesDraft,
+  channelValuesDraftOf,
+  channelValuesOfDraft,
+  newChannelValuesDraft,
+  numberOf
+} from './channelValuesDraft';
 import {type MoveDirection, moved} from './listOrder';
 
 /** a fixture as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
@@ -21,6 +29,8 @@ export interface FixtureChannelDraft {
   readonly lockMax: string;
   /** the color its fader glows in, as typed (`ff00ff`, `#FF00FF`); blank for none */
   readonly color: string;
+  /** the values its fader stops at */
+  readonly values: ChannelValuesDraft;
 }
 
 /**
@@ -37,9 +47,14 @@ export interface PresetValueDraft {
   /** whether the preset sets this channel; the others stay as they are when it is applied */
   readonly included: boolean;
   readonly value: string;
+  /**
+   * whether the value was entered in this editor: it is checked as it is. One that wasn't (stored, or a new preset's
+   * 0) is fitted to the channel's value rules, so changing them never makes the presets unsavable
+   */
+  readonly entered: boolean;
 }
 
-const UNSET_PRESET_VALUE: PresetValueDraft = {included: false, value: String(DMX_MIN_VALUE)};
+const UNSET_PRESET_VALUE: PresetValueDraft = {included: false, value: String(DMX_MIN_VALUE), entered: false};
 
 const FIRST_OFFSET = 0;
 
@@ -51,7 +66,8 @@ const channelDraftAt = (offset: number): FixtureChannelDraft => ({
   name: '',
   offset: String(offset),
   lockMax: NO_LOCK,
-  color: NO_COLOR
+  color: NO_COLOR,
+  values: newChannelValuesDraft()
 });
 
 export const newFixtureDraft = (): FixtureDraft => ({
@@ -68,7 +84,7 @@ const presetDraftOf = (fixture: Fixture, preset: FixturePreset): FixturePresetDr
   name: preset.name,
   values: fixture.channels.map((channel) => {
     const presetValue = preset.values.find(({offset}) => offset === channel.offset);
-    return presetValue ? {included: true, value: String(presetValue.value)} : UNSET_PRESET_VALUE;
+    return presetValue ? {included: true, value: String(presetValue.value), entered: false} : UNSET_PRESET_VALUE;
   })
 });
 
@@ -79,7 +95,8 @@ export const draftOf = (fixture: Fixture): FixtureDraft => ({
     name: channel.name,
     offset: String(channel.offset),
     lockMax: channel.lock ? String(channel.lock.max) : NO_LOCK,
-    color: channel.color ?? NO_COLOR
+    color: channel.color ?? NO_COLOR,
+    values: channelValuesDraftOf(channel.values)
   })),
   description: fixture.description ?? '',
   hint: fixture.hint ?? '',
@@ -90,25 +107,41 @@ export const draftOf = (fixture: Fixture): FixtureDraft => ({
 const replacedAt = <T>(items: readonly T[], index: number, replace: (item: T) => T): T[] =>
   items.map((item, current) => (current === index ? replace(item) : item));
 
-/** NaN for a blank field, which fixtureErrors reports, rather than the 0 Number('') would make of it */
-const numberOf = (text: string): number => (text.trim() === '' ? Number.NaN : Number(text));
-
 /** the color as stored; one that isn't a color stays as typed, which fixtureErrors reports */
 const colorOf = (text: string): string => normalizedChannelColor(text) ?? text.trim();
 
-const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => ({
-  name: channel.name.trim(),
-  offset: numberOf(channel.offset),
-  ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}}),
-  ...(channel.color.trim() !== NO_COLOR && {color: colorOf(channel.color)})
-});
+const channelOfDraft = (channel: FixtureChannelDraft): FixtureChannel => {
+  const values = channelValuesOfDraft(channel.values);
+  return {
+    name: channel.name.trim(),
+    offset: numberOf(channel.offset),
+    ...(channel.lockMax.trim() !== NO_LOCK && {lock: {max: numberOf(channel.lockMax)}}),
+    ...(channel.color.trim() !== NO_COLOR && {color: colorOf(channel.color)}),
+    ...(values && {values})
+  };
+};
+
+/**
+ * the preset's value for the channel as it will be saved and shown: as entered, or, if it wasn't entered in this
+ * editor, fitted to the nearest value the channel can have (once its rules are valid)
+ */
+export function shownPresetValue(channel: FixtureChannelDraft, presetValue: PresetValueDraft): string {
+  const value = numberOf(presetValue.value);
+  const rules = channelOfDraft(channel).values;
+  if (presetValue.entered || !isDmxValue(value) || !rules || valueRulesErrors(rules).length > 0) {
+    return presetValue.value;
+  }
+  return String(nearestStop(rules, value));
+}
 
 const presetOfDraft = (draft: FixtureDraft, preset: FixturePresetDraft): FixturePreset => ({
   id: preset.id,
   name: preset.name.trim(),
   values: draft.channels.flatMap((channel, index) => {
     const presetValue = preset.values[index] ?? UNSET_PRESET_VALUE;
-    return presetValue.included ? [{offset: numberOf(channel.offset), value: numberOf(presetValue.value)}] : [];
+    return presetValue.included
+      ? [{offset: numberOf(channel.offset), value: numberOf(shownPresetValue(channel, presetValue))}]
+      : [];
   })
 });
 
@@ -164,12 +197,12 @@ export const withoutChannel = (draft: FixtureDraft, index: number): FixtureDraft
   presets: draft.presets.map((preset) => ({...preset, values: preset.values.filter((_, current) => current !== index)}))
 });
 
-/** a new preset setting every channel, at the lowest value */
+/** a new preset setting every channel at its lowest value: 0, fitted to the channel's rules */
 export const withNewPreset = (draft: FixtureDraft, id: string): FixtureDraft => ({
   ...draft,
   presets: [
     ...draft.presets,
-    {id, name: '', values: draft.channels.map(() => ({included: true, value: String(DMX_MIN_VALUE)}))}
+    {id, name: '', values: draft.channels.map(() => ({included: true, value: String(DMX_MIN_VALUE), entered: false}))}
   ]
 });
 
@@ -197,7 +230,7 @@ export const withPresetValueEntered = (
   presetIndex: number,
   channelIndex: number,
   value: string
-): FixtureDraft => withPresetValueChange(draft, presetIndex, channelIndex, {included: true, value});
+): FixtureDraft => withPresetValueChange(draft, presetIndex, channelIndex, {included: true, value, entered: true});
 
 export const withoutPreset = (draft: FixtureDraft, presetIndex: number): FixtureDraft => ({
   ...draft,
