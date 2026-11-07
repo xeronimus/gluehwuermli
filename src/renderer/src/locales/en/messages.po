@@ -178,33 +178,53 @@ msgstr "Channel"
 msgid "Channel {channelNumber}"
 msgstr "Channel {channelNumber}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/FaderTicks.tsx
+msgid "Channel {faderLabel}: {positionLabel} ({value})"
+msgstr "Channel {faderLabel}: {positionLabel} ({value})"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label}"
 msgstr "Channel {label}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} -{DMX_STEP}"
 msgstr "Channel {label} -{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}"
 msgstr "Channel {label} +{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 msgstr "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is capped at {limit} by the channel lock"
 msgstr "Channel {label} is capped at {limit} by the channel lock"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value"
+msgstr "Channel {label}: next value"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, capped at {limit} by the channel lock"
+msgstr "Channel {label}: next value, capped at {limit} by the channel lock"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, not capped at {liftedLimit}: the channel lock is lifted"
+msgstr "Channel {label}: next value, not capped at {liftedLimit}: the channel lock is lifted"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: previous value"
+msgstr "Channel {label}: previous value"
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channel lock"

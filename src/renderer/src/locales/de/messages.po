@@ -178,33 +178,53 @@ msgstr "Kanal"
 msgid "Channel {channelNumber}"
 msgstr "Kanal {channelNumber}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/FaderTicks.tsx
+msgid "Channel {faderLabel}: {positionLabel} ({value})"
+msgstr "Kanal {faderLabel}: {positionLabel} ({value})"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label}"
 msgstr "Kanal {label}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} -{DMX_STEP}"
 msgstr "Kanal {label} −{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}"
 msgstr "Kanal {label} +{DMX_STEP}"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, capped at {limit} by the channel lock"
 msgstr "Kanal {label} +{DMX_STEP}, von der Kanalsperre auf {limit} begrenzt"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} +{DMX_STEP}, not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Kanal {label} +{DMX_STEP}, nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is capped at {limit} by the channel lock"
 msgstr "Kanal {label} ist von der Kanalsperre auf {limit} begrenzt"
 
-#: src/renderer/src/components/commons/ChannelFader.tsx
+#: src/renderer/src/components/commons/useFaderTitles.ts
 msgid "Channel {label} is not capped at {liftedLimit}: the channel lock is lifted"
 msgstr "Kanal {label} ist nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value"
+msgstr "Kanal {label}: nächster Wert"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, capped at {limit} by the channel lock"
+msgstr "Kanal {label}: nächster Wert, von der Kanalsperre auf {limit} begrenzt"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: next value, not capped at {liftedLimit}: the channel lock is lifted"
+msgstr "Kanal {label}: nächster Wert, nicht auf {liftedLimit} begrenzt: die Kanalsperre ist aufgehoben"
+
+#: src/renderer/src/components/commons/useFaderTitles.ts
+msgid "Channel {label}: previous value"
+msgstr "Kanal {label}: vorheriger Wert"
 
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channel lock"
