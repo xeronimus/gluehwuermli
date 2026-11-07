@@ -61,7 +61,7 @@ export const ChannelLockSchema = Type.Object({
 });
 export type ChannelLock = Static<typeof ChannelLockSchema>;
 
-/** a channel's, preset's or scene's color as stored: `#rrggbb`, lower case (what the user types is normalized, colors.ts) */
+/** a channel's, preset's or scene's color as stored: `#rrggbb`, lower case (typed ones are normalized, colors.ts) */
 export const CHANNEL_COLOR_PATTERN = '^#[0-9a-f]{6}$';
 
 const DmxValueSchema = Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE});

@@ -38,9 +38,9 @@ interface SceneEditorProps {
 const editTitle = ({name: sceneName}: Scene) => <Trans>Edit the scene {sceneName}</Trans>;
 
 /**
- * Names a scene, gives it a color and chooses its fixtures; their values are taken from the faders when it is saved, so the look is set
- * with the faders below first. Editing keeps the stored values unless "Save current values" is checked; a newly
- * chosen fixture is always taken from its faders.
+ * Names a scene, gives it a color and chooses its fixtures; their values are taken from the faders when it is saved,
+ * so the look is set with the faders below first. Editing keeps the stored values unless "Save current values" is
+ * checked; a newly chosen fixture is always taken from its faders.
  */
 const SceneEditor = ({scene, onClose}: SceneEditorProps) => {
   const {t, i18n} = useLingui();

@@ -135,8 +135,8 @@ export function withFittedScenes(setup: FixtureSetup): FixtureSetup {
 const NO_CHANNEL_VALUES: readonly number[] = [];
 
 /**
- * what keeps the scene the editor describes from being saved (no name, an invalid color, no fixture chosen), without reading the
- * faders: the editor shouldn't re-render on every fader move
+ * what keeps the scene the editor describes from being saved (no name, an invalid color, no fixture chosen), without
+ * reading the faders: the editor shouldn't re-render on every fader move
  */
 export const sceneEditErrors = (fixtures: readonly Fixture[], edit: Omit<SceneEdit, 'recapture'>): SceneError[] =>
   sceneErrors(captureScene(fixtures, NO_CHANNEL_VALUES, 'draft', edit), fixtures);
