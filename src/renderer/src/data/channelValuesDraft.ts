@@ -19,8 +19,6 @@ export interface ChannelValuesDraft {
 
 export type PositionsDisplay = 'fader' | 'buttons';
 
-export const POSITIONS_DISPLAYS: readonly PositionsDisplay[] = ['fader', 'buttons'];
-
 export interface PositionDraft {
   readonly value: string;
   /** blank for none: the position is shown by its value */
