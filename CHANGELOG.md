@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-08
+
 ### Added
 
 - A color can be picked with the color picker: a click on the swatch beside a color field (channels, presets,
@@ -150,7 +152,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.1.2...v0.2.0
