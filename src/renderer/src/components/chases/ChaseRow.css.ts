@@ -57,3 +57,11 @@ export const rowRepeat = style({
   fontFamily: vars.fonts.mono,
   color: vars.colors.textSecondary
 });
+
+/** Setup mode's buttons at the end of the row, after the repeat */
+export const rowActions = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2px',
+  flexShrink: 0
+});

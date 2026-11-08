@@ -133,9 +133,14 @@ msgstr "Add a <0>channel</0> for every entry of the device's channel list you wa
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Add channel"
 msgstr "Add channel"
+
+#: src/renderer/src/components/chases/ChaseList.tsx
+msgid "Add chase"
+msgstr "Add chase"
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 #: src/renderer/src/components/fixtures/NoFixturesHint.tsx
@@ -153,6 +158,10 @@ msgstr "Add preset"
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Add scene"
 msgstr "Add scene"
+
+#: src/renderer/src/components/chases/ChaseEditor.tsx
+msgid "Add step"
+msgstr "Add step"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Address"
@@ -202,6 +211,7 @@ msgstr "Buttons"
 msgid "by"
 msgstr "by"
 
+#: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
@@ -215,6 +225,7 @@ msgstr "Cancel"
 msgid "Change password"
 msgstr "Change password"
 
+#: src/renderer/src/components/chases/ChaseStepValueRow.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Channel"
 msgstr "Channel"
@@ -296,6 +307,10 @@ msgstr "Channels ({channelCount})"
 msgid "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
 msgstr "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
 
+#: src/renderer/src/components/chases/ChaseEditor.tsx
+msgid "Chase editor"
+msgstr "Chase editor"
+
 #: src/renderer/src/components/chases/ChaseList.tsx
 msgid "Chases"
 msgstr "Chases"
@@ -366,6 +381,10 @@ msgid "Could not connect to {path}"
 msgstr "Could not connect to {path}"
 
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not delete the chase {chaseName}"
+msgstr "Could not delete the chase {chaseName}"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not delete the fixture {fixtureName}"
 msgstr "Could not delete the fixture {fixtureName}"
 
@@ -396,6 +415,10 @@ msgstr "Could not list the serial ports"
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not lock"
 msgstr "Could not lock"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not move the chase {chaseName}"
+msgstr "Could not move the chase {chaseName}"
 
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not move the fixture {fixtureName}"
@@ -440,6 +463,10 @@ msgstr "Could not remove the project from the list"
 #: src/renderer/src/state/actionHooks/playChase.ts
 msgid "Could not resume the chase"
 msgstr "Could not resume the chase"
+
+#: src/renderer/src/state/actionHooks/saveFixtures.ts
+msgid "Could not save the chase {chaseName}"
+msgstr "Could not save the chase {chaseName}"
 
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the fixture {fixtureName}"
@@ -489,6 +516,18 @@ msgstr "Data folder"
 msgid "Delete {fixtureName}"
 msgstr "Delete {fixtureName}"
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Delete step {stepNumberShown}"
+msgstr "Delete step {stepNumberShown}"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Delete the chase {chaseName}"
+msgstr "Delete the chase {chaseName}"
+
+#: src/renderer/src/components/chases/ChaseList.tsx
+msgid "Delete the chase {chaseName}?"
+msgstr "Delete the chase {chaseName}?"
+
 #: src/renderer/src/components/fixtures/FixtureView.tsx
 msgid "Delete the fixture {fixtureName}?"
 msgstr "Delete the fixture {fixtureName}?"
@@ -513,6 +552,10 @@ msgstr "Discard the fixture or scene you are editing, and open the other project
 msgid "Disconnect"
 msgstr "Disconnect"
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Duplicate step {stepNumberShown}"
+msgstr "Duplicate step {stepNumberShown}"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "e.g. Dimmer"
 msgstr "e.g. Dimmer"
@@ -533,6 +576,11 @@ msgstr "Edit"
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Edit {fixtureName}"
 msgstr "Edit {fixtureName}"
+
+#: src/renderer/src/components/chases/ChaseEditor.tsx
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Edit the chase {chaseName}"
+msgstr "Edit the chase {chaseName}"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
@@ -622,6 +670,10 @@ msgstr "Highest value of channel {row}"
 #: src/renderer/src/components/fixtures/FixtureNotesFields.tsx
 msgid "Hint"
 msgstr "Hint"
+
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Hold"
+msgstr "Hold"
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "How presets work"
@@ -727,6 +779,22 @@ msgstr "Move preset {presetNumber} to the left"
 msgid "Move preset {presetNumber} to the right"
 msgstr "Move preset {presetNumber} to the right"
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Move step {stepNumberShown} down"
+msgstr "Move step {stepNumberShown} down"
+
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Move step {stepNumberShown} up"
+msgstr "Move step {stepNumberShown} up"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Move the chase {chaseName} down"
+msgstr "Move the chase {chaseName} down"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Move the chase {chaseName} up"
+msgstr "Move the chase {chaseName} up"
+
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Move the scene {sceneName} to the left"
 msgstr "Move the scene {sceneName} to the left"
@@ -735,6 +803,7 @@ msgstr "Move the scene {sceneName} to the left"
 msgid "Move the scene {sceneName} to the right"
 msgstr "Move the scene {sceneName} to the right"
 
+#: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Name"
@@ -759,6 +828,10 @@ msgstr "Name of the new preset"
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Name, e.g. Star (optional)"
 msgstr "Name, e.g. Star (optional)"
+
+#: src/renderer/src/components/chases/ChaseEditor.tsx
+msgid "New chase"
+msgstr "New chase"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "New fixture"
@@ -819,6 +892,10 @@ msgstr "Not connected"
 msgid "Nothing to preview"
 msgstr "Nothing to preview"
 
+#: src/renderer/src/components/chases/ChaseRepeatField.tsx
+msgid "Number of passes"
+msgstr "Number of passes"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Offset"
 msgstr "Offset"
@@ -834,6 +911,10 @@ msgstr "Offset of channel {row}"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Offsets must be whole numbers from 0"
 msgstr "Offsets must be whole numbers from 0"
+
+#: src/renderer/src/components/chases/ChaseRepeatField.tsx
+msgid "Once"
+msgstr "Once"
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Open in Explorer"
@@ -957,6 +1038,10 @@ msgstr "Recent projects"
 msgid "Remove {projectName} from the list (the file stays)"
 msgstr "Remove {projectName} from the list (the file stays)"
 
+#: src/renderer/src/components/chases/ChaseStepValueRow.tsx
+msgid "Remove channel {channelNumber}"
+msgstr "Remove channel {channelNumber}"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Remove the channel"
 msgstr "Remove the channel"
@@ -968,6 +1053,10 @@ msgstr "Remove the position"
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Remove the preset"
 msgstr "Remove the preset"
+
+#: src/renderer/src/components/chases/ChaseRepeatField.tsx
+msgid "Repeat"
+msgstr "Repeat"
 
 #: src/renderer/src/components/commons/PasswordForm.tsx
 msgid "Repeat it"
@@ -982,6 +1071,11 @@ msgstr "Repeat the new password"
 msgid "Resume the chase {chaseName}"
 msgstr "Resume the chase {chaseName}"
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "s"
+msgstr "s"
+
+#: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
@@ -1114,6 +1208,10 @@ msgstr "step {stepNumber} / {stepCount}"
 msgid "Step {stepNumber}: holds {seconds} s"
 msgstr "Step {stepNumber}: holds {seconds} s"
 
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "Step {stepNumberShown}"
+msgstr "Step {stepNumberShown}"
+
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
 msgstr "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
@@ -1126,6 +1224,7 @@ msgstr "Step size of channel {row}"
 msgid "Step values must be whole numbers from {minValue} to {maxValue}"
 msgstr "Step values must be whole numbers from {minValue} to {maxValue}"
 
+#: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Steps"
 msgstr "Steps"
@@ -1347,6 +1446,10 @@ msgstr "The values of a channel must be whole numbers from {minValue} to {maxVal
 msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue} that their channels can have"
 msgstr "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue} that their channels can have"
 
+#: src/renderer/src/components/chases/ChaseRepeatField.tsx
+msgid "times"
+msgstr "times"
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
@@ -1379,9 +1482,17 @@ msgstr "Unlock and create"
 msgid "Unlock Setup mode"
 msgstr "Unlock Setup mode"
 
+#: src/renderer/src/components/chases/ChaseRepeatField.tsx
+msgid "Until stopped"
+msgstr "Until stopped"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Value of {label} in preset {presetNumber}"
+
+#: src/renderer/src/components/chases/ChaseStepValueRow.tsx
+msgid "Value of channel {channelNumber}"
+msgstr "Value of channel {channelNumber}"
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Value of position {positionNumber} of channel {row}"
