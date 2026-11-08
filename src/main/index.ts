@@ -121,7 +121,7 @@ function startApp(): void {
   void app.whenReady().then(async () => {
     // the project's channel locks apply before anything can be connected, so the output is capped from its first packet
     await projectSession.start(projectPathFromArgv(process.argv, process.cwd()));
-    registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory);
+    registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory, services.chasePlayer);
     registerProjectIpc(projectSession, projectIpcHandlers(projectSession));
     registerAppIpc(
       dataFolder,
@@ -151,6 +151,8 @@ function startApp(): void {
    * blackout setting, quitting leaves the rig as it is (doc/dmx-latency-and-stack.md)
    */
   const shutDownOutput = async () => {
+    // before anything awaits: no step goes out after the blackout, or while the port closes
+    services.chasePlayer.stop();
     const {blackoutOnQuit} = await services.settings.load();
     await services.dmxEngine.dispose({blackout: blackoutOnQuit === true});
   };

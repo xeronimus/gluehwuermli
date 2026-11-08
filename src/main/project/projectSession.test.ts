@@ -1,5 +1,5 @@
 import {type ChannelLimits, emptyFixtureSetup, fixtureSetupOf} from '@shared/fixtures';
-import type {Fixture, FixtureSetup, ProjectError, ProjectStatus} from '@shared/ipc';
+import type {Chase, Fixture, FixtureSetup, ProjectError, ProjectStatus} from '@shared/ipc';
 
 import type {SettingsStore} from '@/settings/SettingsStore';
 import {appSettingsFactory} from '@/settings/appSettings';
@@ -22,6 +22,16 @@ const laserBox: Fixture = {
   ]
 };
 
+const chaseOf = (id: string, value: number): Chase => ({
+  id,
+  name: id,
+  repeat: {type: 'forever'},
+  steps: [{id: 'step', holdMs: 500, values: [{channel: 1, value}]}]
+});
+const chorus = chaseOf('chorus', 255);
+const intro = chaseOf('intro', 100);
+const withChases = (setup: FixtureSetup, chases: Chase[]): FixtureSetup => ({...setup, chases});
+
 /** what the engine was told, in order */
 type EngineCall = {type: 'blackout'} | {type: 'limits'; limits: ChannelLimits};
 
@@ -29,6 +39,9 @@ let files: Map<string, FixtureSetup | ProjectError>;
 let failingWrite: boolean;
 let storedSettings: Settings | undefined;
 let engineCalls: EngineCall[];
+let runningChaseId: string | undefined;
+/** how many engine calls came before each chase stop */
+let chaseStops: number[];
 let setupMode: boolean;
 let chosenPath: string | undefined;
 let existingFiles: Set<string>;
@@ -66,6 +79,16 @@ const createSession = () =>
       blackout: () => engineCalls.push({type: 'blackout'}),
       setChannelLimits: (limits) => engineCalls.push({type: 'limits', limits})
     },
+    chasePlayer: {
+      status: () =>
+        runningChaseId === undefined
+          ? {type: 'idle'}
+          : {type: 'running', chaseId: runningChaseId, stepIndex: 0, passIndex: 0},
+      stop: () => {
+        runningChaseId = undefined;
+        chaseStops.push(engineCalls.length);
+      }
+    },
     settings: appSettingsFactory(settingsStore),
     isSetupMode: () => setupMode,
     dialogs: {chooseNewProjectPath: async () => chosenPath, chooseProjectToOpen: async () => chosenPath},
@@ -81,6 +104,8 @@ beforeEach(() => {
   failingWrite = false;
   storedSettings = undefined;
   engineCalls = [];
+  runningChaseId = undefined;
+  chaseStops = [];
   setupMode = false;
   chosenPath = undefined;
   existingFiles = new Set([WALDFEST, FASNACHT]);
@@ -136,6 +161,7 @@ describe('opening', () => {
     session = createSession();
     await session.start(undefined);
     engineCalls = [];
+    chaseStops = [];
   });
 
   test('another project blacks out first, then applies its limits, and tells the listeners', async () => {
@@ -151,6 +177,25 @@ describe('opening', () => {
     expect(engineCalls).toEqual([{type: 'blackout'}, {type: 'limits', limits: new Map()}]);
     expect(changes).toEqual([openStatus(FASNACHT, emptyFixtureSetup())]);
     expect(storedSettings?.recentProjectPaths).toEqual([FASNACHT, WALDFEST]);
+  });
+
+  test('another project stops the running chase before the blackout', async () => {
+    runningChaseId = 'chorus';
+    chosenPath = FASNACHT;
+
+    await session.openWithDialog();
+
+    expect(runningChaseId).toBeUndefined();
+    expect(chaseStops).toEqual([0]);
+  });
+
+  test('a file that fails keeps the chase running', async () => {
+    runningChaseId = 'chorus';
+    chosenPath = 'F:\\Gone.glp';
+
+    await session.openWithDialog();
+
+    expect(runningChaseId).toBe('chorus');
   });
 
   test('is allowed in Show mode', async () => {
@@ -275,6 +320,45 @@ describe('saving', () => {
     await expect(session.saveFixtures(FASNACHT, fixtureSetupOf([laserBox]))).rejects.toThrow('EPERM');
     expect(session.status()).toEqual(openStatus(FASNACHT, emptyFixtureSetup()));
     expect(engineCalls).toEqual([]);
+  });
+});
+
+describe('saving while a chase runs', () => {
+  const setup = withChases(emptyFixtureSetup(), [chorus, intro]);
+
+  beforeEach(async () => {
+    files.set(FASNACHT, setup);
+    await session.start(FASNACHT);
+    setupMode = true;
+    runningChaseId = 'chorus';
+  });
+
+  test('saving the running chase changed stops it', async () => {
+    await session.saveFixtures(FASNACHT, withChases(setup, [chaseOf('chorus', 10), intro]));
+
+    expect(runningChaseId).toBeUndefined();
+  });
+
+  test('deleting the running chase stops it', async () => {
+    await session.saveFixtures(FASNACHT, withChases(setup, [intro]));
+
+    expect(runningChaseId).toBeUndefined();
+  });
+
+  test("saving another chase, a fixture or a new order doesn't", async () => {
+    await session.saveFixtures(FASNACHT, withChases(setup, [chorus, chaseOf('intro', 1)]));
+    await session.saveFixtures(FASNACHT, withChases(fixtureSetupOf([laserBox]), [chorus, intro]));
+    await session.saveFixtures(FASNACHT, withChases(setup, [intro, chorus]));
+
+    expect(runningChaseId).toBe('chorus');
+  });
+
+  test('a failed save keeps it running', async () => {
+    failingWrite = true;
+
+    await expect(session.saveFixtures(FASNACHT, withChases(setup, [intro]))).rejects.toThrow('EPERM');
+
+    expect(runningChaseId).toBe('chorus');
   });
 });
 

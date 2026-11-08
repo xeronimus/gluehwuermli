@@ -5,6 +5,8 @@ export const SIMULATED_PORT_PATH = 'SIMULATED';
 /** what an InMemoryConnector lets a test (or a session without a widget) inspect and break */
 export interface InMemoryConnector extends DmxPortConnector {
   readonly writtenPackets: readonly Uint8Array[];
+  /** when each of `writtenPackets` was written (`Date.now()`, so fake timers control it) */
+  readonly writeTimesMs: readonly number[];
   /** the paths opened and not closed yet */
   readonly openPaths: readonly string[];
   failNextOpen: (error: Error) => void;
@@ -18,6 +20,7 @@ export interface InMemoryConnector extends DmxPortConnector {
  */
 export function inMemoryConnectorFactory(): InMemoryConnector {
   const writtenPackets: Uint8Array[] = [];
+  const writeTimesMs: number[] = [];
   const openPaths: string[] = [];
   const unexpectedCloseListeners: (() => void)[] = [];
   let nextOpenError: Error | undefined;
@@ -41,6 +44,7 @@ export function inMemoryConnectorFactory(): InMemoryConnector {
           throw error;
         }
         writtenPackets.push(packet);
+        writeTimesMs.push(Date.now());
       },
       close: async () => release(path),
       onUnexpectedClose: (listener) => {
@@ -51,6 +55,7 @@ export function inMemoryConnectorFactory(): InMemoryConnector {
 
   return {
     writtenPackets,
+    writeTimesMs,
     openPaths,
     listPorts: async () => [{path: SIMULATED_PORT_PATH, manufacturer: 'Glühwürmli', likelyEnttecPro: true}],
     open: async (path) => {
