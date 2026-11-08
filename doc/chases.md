@@ -88,7 +88,7 @@ order.
 │ ▶  Chorus flash            ● ○ ○ ○        step 1 / 4 · pass 3 / 8   ⏸   ■    │   running: highlighted
 └──────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ▶  Laser intro             ○ ○ ○ ○ ○ ○                          ∞            │   disabled while another runs
+│ ▶  Laser intro             ○ ○ ○ ○ ○ ○                          ∞            │   dimmed while another runs
 └──────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ ▶  Slow colors             ○ ○ ○                                1×           │
@@ -209,7 +209,7 @@ refers to a fixture, so a fixture change never makes a chase invalid.
 
 ## Also part of the change
 
-- The Help view's manual has a section on chases (what a chase is, hold vs. pause, what stops a chase and what
+- The Help view's manual has a tab on chases (what a chase is, hold vs. pause, what stops a chase and what
   doesn't, faders staying live, the values staying after a stop)
 - German texts for everything new, a line under `Added` in `CHANGELOG.md`
 
