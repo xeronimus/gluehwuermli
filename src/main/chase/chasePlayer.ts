@@ -6,6 +6,7 @@ import {type StepPosition, chasePosition, lastPosition, stepsBetween} from './ch
 
 export interface ChasePlayerLog {
   info: (...message: unknown[]) => void;
+  warn: (...message: unknown[]) => void;
 }
 
 /** what the player is doing; step and pass are counted from 0 */
@@ -20,7 +21,10 @@ export type ChasePlayerStatus = ChaseStatus;
 export interface ChasePlayer {
   /** step 1, first pass; a chase already running or paused is stopped first, its values stay */
   start: (chase: Chase) => void;
-  /** keeps the step and its values; nothing while no chase runs */
+  /**
+   * keeps the step the clock is at (one due since the last tick is played first) and its values; nothing while no
+   * chase runs
+   */
   pause: () => void;
   /** the same step with the hold that was left, without sending its values again; nothing unless paused */
   resume: () => void;
@@ -66,10 +70,22 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
   const statusListeners = new Set<(status: ChasePlayerStatus) => void>();
   const valuesListeners = new Set<(values: readonly SetChannelRequest[]) => void>();
 
+  /**
+   * a listener that throws (a push to a window going away) only loses its own work: the player still moves on, rather
+   * than playing the same steps again on every tick
+   */
+  const notify = <Payload>(listeners: ReadonlySet<(payload: Payload) => void>, payload: Payload) =>
+    listeners.forEach((listener) => {
+      try {
+        listener(payload);
+      } catch (error) {
+        log.warn('a chase player listener failed', error);
+      }
+    });
+
   const setState = (next: PlayerState) => {
     state = next;
-    const status = statusOf(next);
-    statusListeners.forEach((listener) => listener(status));
+    notify(statusListeners, statusOf(next));
   };
 
   const applyStep = (chase: Chase, stepIndex: number, applied: Set<number>) => {
@@ -84,8 +100,10 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     if (applied.size === 0) {
       return;
     }
-    const values = Array.from(applied, (channel) => ({channel, value: engine.channelValue(channel)}));
-    valuesListeners.forEach((listener) => listener(values));
+    notify(
+      valuesListeners,
+      Array.from(applied, (channel) => ({channel, value: engine.channelValue(channel)}))
+    );
   };
 
   /**
@@ -133,6 +151,8 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
       setState({type: 'running', chase, startedAtMs: now(), position: FIRST_STEP});
     },
     pause: () => {
+      // a step whose time came since the last tick plays first: the paused step is the one the clock is at
+      advance();
       if (state.type !== 'running') {
         return;
       }

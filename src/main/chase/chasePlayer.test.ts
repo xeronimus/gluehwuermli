@@ -243,6 +243,37 @@ describe('pause and resume', () => {
     expect(channelValueIn(lastPacket(), LASER)).toBe(40);
   });
 
+  test('pause after a step came due, before the tick saw it, plays that step first and keeps it', async () => {
+    player.start(alternationOf({type: 'forever'}));
+    await nextTick();
+    // step 2 is due now; the clock moves on without a tick running
+    vi.setSystemTime(Date.now() + HOLD_MS);
+
+    player.pause();
+    expect(player.status()).toMatchObject({type: 'paused', stepIndex: 1, passIndex: 0});
+    expect(appliedValues.at(-1)).toContainEqual({channel: STROBE, value: 255});
+    await nextTick();
+    expect(channelValueIn(lastPacket(), STROBE)).toBe(255);
+
+    // step 2 was due a tick before the pause: that tick counts, the rest of its hold follows the resume
+    player.resume();
+    await advance(HOLD_MS - 2 * TICK_MS);
+    expect(player.status()).toMatchObject({type: 'running', stepIndex: 1});
+    await advance(2 * TICK_MS);
+    expect(player.status()).toMatchObject({type: 'running', stepIndex: 0, passIndex: 1});
+  });
+
+  test('pause after the last hold of a chase played once finishes it', async () => {
+    player.start(alternationOf({type: 'once'}));
+    await nextTick();
+    vi.setSystemTime(Date.now() + 2 * HOLD_MS);
+
+    player.pause();
+
+    expect(player.status()).toEqual({type: 'idle'});
+    expect(appliedValues.at(-1)).toContainEqual({channel: STROBE, value: 255});
+  });
+
   test('pause and resume do nothing without a chase', () => {
     player.pause();
     player.resume();
@@ -329,6 +360,25 @@ describe('the values a step set', () => {
     player.start(alternationOf({type: 'forever'}));
 
     expect(appliedValues[0]).toContainEqual({channel: LASER, value: 0});
+  });
+
+  test('a listener that throws neither fails the start nor keeps the player from moving on', async () => {
+    player.onValuesApplied(() => {
+      throw new Error('Object has been destroyed');
+    });
+    player.onStatusChanged(() => {
+      throw new Error('Object has been destroyed');
+    });
+
+    expect(() => player.start(alternationOf({type: 'forever'}))).not.toThrow();
+    expect(player.status()).toMatchObject({type: 'running', stepIndex: 0});
+    await untilSecondStep();
+    await advance(10 * TICK_MS);
+
+    expect(player.status()).toMatchObject({type: 'running', stepIndex: 1});
+    // each step reported once to the listeners that work: the second step isn't played again on every tick
+    expect(appliedValues).toHaveLength(2);
+    expect(stepStatuses()).toHaveLength(2);
   });
 
   test('pause, resume and stop report none', async () => {
