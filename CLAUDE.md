@@ -17,8 +17,8 @@ port is remembered and preselected on start, the app always starts disconnected;
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
 In Setup mode chases are added, edited (name, repeat, steps with their hold and
-channel values), deleted and put in order. Planned: filling chase steps from the current values, scenes and presets,
-fades.
+channel values, filled from the current values of checked fixtures, a scene or a preset, merged into the step),
+deleted and put in order. Planned: fades.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -154,7 +154,7 @@ src/
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
-                             # presets, scenes, chaseRows, chaseDraft, chaseList, tabs, passwordForm, activityThrottle,
+                             # presets, scenes, chaseRows, chaseDraft, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
                              # recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
                              # (composition root), impl/electron, impl/inMemory
