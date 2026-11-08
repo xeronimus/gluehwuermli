@@ -66,8 +66,8 @@ msgid "A channel's step size must be a whole number from 1"
 msgstr "A channel's step size must be a whole number from 1"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
-msgid "A chase can be played from 2 to {maxRepeat} times"
-msgstr "A chase can be played from 2 to {maxRepeat} times"
+msgid "A chase can be played from {minRepeat} to {maxRepeat} times"
+msgstr "A chase can be played from {minRepeat} to {maxRepeat} times"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "A chase can have at most {maxSteps} steps"

@@ -3,10 +3,15 @@ import Value from 'typebox/value';
 
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, DMX_UNIVERSE_SIZE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from './dmx';
 
+/** a channel's address, 1–512 */
+const DmxChannelSchema = Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL});
+
+const DmxValueSchema = Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE});
+
 /** the payloads crossing the IpcChannels (ipcChannels.ts): the main process checks what it receives against them */
 export const SetChannelRequestSchema = Type.Object({
-  channel: Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL}),
-  value: Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE})
+  channel: DmxChannelSchema,
+  value: DmxValueSchema
 });
 export type SetChannelRequest = Static<typeof SetChannelRequestSchema>;
 
@@ -63,8 +68,6 @@ export type ChannelLock = Static<typeof ChannelLockSchema>;
 
 /** a channel's, preset's or scene's color as stored: `#rrggbb`, lower case (typed ones are normalized, colors.ts) */
 export const CHANNEL_COLOR_PATTERN = '^#[0-9a-f]{6}$';
-
-const DmxValueSchema = Type.Integer({minimum: DMX_MIN_VALUE, maximum: DMX_MAX_VALUE});
 
 /** short enough to sit beside a fader's track */
 export const CHANNEL_POSITION_NAME_MAX_LENGTH = 20;
@@ -189,20 +192,19 @@ export const CHASE_HOLD_MIN_MS = 50;
 /** an hour */
 export const CHASE_HOLD_MAX_MS = 3_600_000;
 
+/** the fewest passes of a chase repeating a number of times: one pass is `once` */
+export const CHASE_REPEAT_MIN = 2;
+
 /** the most passes of a chase that doesn't loop until stopped */
 export const CHASE_REPEAT_MAX = 99;
 
 export const CHASE_STEPS_MAX = 100;
 
-/** a channel's address, 1–512 */
-const DmxChannelSchema = Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL});
-
 /** the value a chase step sets on an absolute channel; not checked against a fixture's value rules on that address */
-export const ChaseStepValueSchema = Type.Object({
+const ChaseStepValueSchema = Type.Object({
   channel: DmxChannelSchema,
   value: DmxValueSchema
 });
-export type ChaseStepValue = Static<typeof ChaseStepValueSchema>;
 
 /** what a chase sets at once, and how long it stays before the next step */
 export const ChaseStepSchema = Type.Object({
@@ -216,7 +218,10 @@ export type ChaseStep = Static<typeof ChaseStepSchema>;
 /** what happens after the last step: end, play the steps `count` times in total, or loop until stopped */
 export const ChaseRepeatSchema = Type.Union([
   Type.Object({type: Type.Literal('once')}),
-  Type.Object({type: Type.Literal('times'), count: Type.Integer({minimum: 2, maximum: CHASE_REPEAT_MAX})}),
+  Type.Object({
+    type: Type.Literal('times'),
+    count: Type.Integer({minimum: CHASE_REPEAT_MIN, maximum: CHASE_REPEAT_MAX})
+  }),
   Type.Object({type: Type.Literal('forever')})
 ]);
 export type ChaseRepeat = Static<typeof ChaseRepeatSchema>;

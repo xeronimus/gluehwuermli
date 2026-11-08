@@ -4,6 +4,7 @@ import {
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
   CHASE_REPEAT_MAX,
+  CHASE_REPEAT_MIN,
   CHASE_STEPS_MAX,
   type Chase,
   type ChaseRepeat,
@@ -24,9 +25,6 @@ const NO_CHASES: readonly Chase[] = [];
 
 /** the setup's chases; none in a file from before chases existed */
 export const setupChases = (setup: FixtureSetup): readonly Chase[] => setup.chases ?? NO_CHASES;
-
-/** the fewest passes of a chase repeating a number of times: one pass is `once` */
-const CHASE_REPEAT_MIN = 2;
 
 /** what keeps a chase from being saved, as a code (said in the UI language by the renderer) */
 export type ChaseError =
