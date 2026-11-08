@@ -102,6 +102,9 @@ src/
                              # also in Show mode)
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
                              # app:change-password, app:user-activity, pushes app:lock-changed
+    ipc/registerChaseIpc.ts  # chase:get-status/start/pause/resume/stop (chaseIpcHandlers: start takes an id, plays the
+                             # chase saved in the open project; allowed in Show mode), pushes chase:status-changed and
+                             # dmx:channels-changed (the values a step set, after the caps)
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     project/                 # ADR 4: projectSession (the open project: start, create, open, recent, save; blackout and
                              # channel limits on a switch), ProjectFileStore + impl/file (never touches a file it can't
@@ -147,10 +150,10 @@ src/
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
                              # presets, scenes, tabs, passwordForm, activityThrottle, recentProjects)
-        service/             # DmxService, ProjectService, AppService, LockService, services.ts (composition root),
-                             # impl/electron, impl/inMemory
+        service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
+                             # (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
-      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, actionHooks/
+      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, chase/, actionHooks/
 ```
 
 ## Key Architecture Patterns

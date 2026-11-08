@@ -8,6 +8,7 @@ import mascot from '@assets/gluehwuermli_mascot.png';
 
 import {leadsToShowView} from '@/data/showViewTriggers';
 import envConfig from '@/envConfig';
+import {useChaseSubscription} from '@/state/actionHooks/chaseSubscription';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
 import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
@@ -65,6 +66,8 @@ const App = () => {
   useOutputStatusSubscription();
   // the open project, and a .glp double-clicked while the app runs, whichever view is open
   useProjectSubscription();
+  // a chase plays whichever view is open, and its steps move the faders of every view
+  useChaseSubscription();
   // every fader of every view: a drag whose mouseup got lost must not keep sending values
   useReleaseStuckDrags();
 

@@ -1,13 +1,16 @@
 import type AppService from './AppService';
+import type ChaseService from './ChaseService';
 import type DmxService from './DmxService';
 import type LockService from './LockService';
 import logger from './Logger';
 import type ProjectService from './ProjectService';
 import {electronAppServiceFactory} from './impl/electron/electronAppServiceFactory';
+import {electronChaseServiceFactory} from './impl/electron/electronChaseServiceFactory';
 import {electronDmxServiceFactory} from './impl/electron/electronDmxServiceFactory';
 import {electronLockServiceFactory} from './impl/electron/electronLockServiceFactory';
 import {electronProjectServiceFactory} from './impl/electron/electronProjectServiceFactory';
 import {inMemoryAppServiceFactory} from './impl/inMemory/inMemoryAppServiceFactory';
+import {inMemoryChaseServiceFactory} from './impl/inMemory/inMemoryChaseServiceFactory';
 import {inMemoryDmxServiceFactory} from './impl/inMemory/inMemoryDmxServiceFactory';
 import {inMemoryLockServiceFactory} from './impl/inMemory/inMemoryLockServiceFactory';
 import {inMemoryProjectServiceFactory} from './impl/inMemory/inMemoryProjectServiceFactory';
@@ -37,3 +40,7 @@ export const appService: AppService = preloadBridge
 export const lockService: LockService = preloadBridge
   ? electronLockServiceFactory(preloadBridge)
   : inMemoryLockServiceFactory();
+
+export const chaseService: ChaseService = preloadBridge
+  ? electronChaseServiceFactory(preloadBridge)
+  : inMemoryChaseServiceFactory();

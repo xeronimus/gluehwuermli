@@ -1,6 +1,14 @@
 import {IpcRendererEvent, contextBridge, ipcRenderer} from 'electron';
 
-import type {DmxOutputStatus, LockStatus, ProjectPathRequest, ProjectStatus} from '@shared/ipc';
+import type {
+  ChannelsChanged,
+  ChaseStatus,
+  DmxOutputStatus,
+  LockStatus,
+  ProjectPathRequest,
+  ProjectStatus,
+  StartChaseRequest
+} from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 import {PRELOAD_BRIDGE_GLOBAL, PreloadBridge} from '@shared/preloadBridge';
 
@@ -19,6 +27,13 @@ const preloadBridge: PreloadBridge = {
     ipcRenderer.on(IpcChannel.STATUS_CHANGED, handler);
     return () => {
       ipcRenderer.removeListener(IpcChannel.STATUS_CHANGED, handler);
+    };
+  },
+  onChannelsChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, change: ChannelsChanged) => listener(change);
+    ipcRenderer.on(IpcChannel.CHANNELS_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.CHANNELS_CHANGED, handler);
     };
   },
   getProjectStatus: () => ipcRenderer.invoke(IpcChannel.GET_PROJECT_STATUS),
@@ -48,6 +63,21 @@ const preloadBridge: PreloadBridge = {
   setLocale: (locale) => ipcRenderer.invoke(IpcChannel.SET_LOCALE, {locale}),
   getBlackoutOnQuit: () => ipcRenderer.invoke(IpcChannel.GET_BLACKOUT_ON_QUIT),
   setBlackoutOnQuit: (enabled) => ipcRenderer.invoke(IpcChannel.SET_BLACKOUT_ON_QUIT, {enabled}),
+  getChaseStatus: () => ipcRenderer.invoke(IpcChannel.GET_CHASE_STATUS),
+  startChase: (chaseId) => {
+    const request: StartChaseRequest = {chaseId};
+    return ipcRenderer.invoke(IpcChannel.START_CHASE, request);
+  },
+  pauseChase: () => ipcRenderer.invoke(IpcChannel.PAUSE_CHASE),
+  resumeChase: () => ipcRenderer.invoke(IpcChannel.RESUME_CHASE),
+  stopChase: () => ipcRenderer.invoke(IpcChannel.STOP_CHASE),
+  onChaseStatusChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, status: ChaseStatus) => listener(status);
+    ipcRenderer.on(IpcChannel.CHASE_STATUS_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.CHASE_STATUS_CHANGED, handler);
+    };
+  },
   getLockStatus: () => ipcRenderer.invoke(IpcChannel.GET_LOCK_STATUS),
   unlock: (password) => ipcRenderer.invoke(IpcChannel.UNLOCK, {password}),
   lock: () => ipcRenderer.invoke(IpcChannel.LOCK),

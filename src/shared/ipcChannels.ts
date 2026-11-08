@@ -31,6 +31,12 @@ export const IpcChannel = {
   SET_LOCALE: 'app:set-locale',
   GET_BLACKOUT_ON_QUIT: 'app:get-blackout-on-quit',
   SET_BLACKOUT_ON_QUIT: 'app:set-blackout-on-quit',
+  GET_CHASE_STATUS: 'chase:get-status',
+  /** start, pause, resume and stop are allowed in Show mode too; start replaces a chase already running */
+  START_CHASE: 'chase:start',
+  PAUSE_CHASE: 'chase:pause',
+  RESUME_CHASE: 'chase:resume',
+  STOP_CHASE: 'chase:stop',
   GET_LOCK_STATUS: 'app:get-lock-status',
   UNLOCK: 'app:unlock',
   LOCK: 'app:lock',
@@ -41,6 +47,10 @@ export const IpcChannel = {
   USER_ACTIVITY: 'app:user-activity',
   /** main -> renderer, whenever the output status changes */
   STATUS_CHANGED: 'dmx:status-changed',
+  /** main -> renderer, on every step of a chase and on start, pause, resume, stop and finish */
+  CHASE_STATUS_CHANGED: 'chase:status-changed',
+  /** main -> renderer, the values a chase step set (after the caps), one message per step */
+  CHANNELS_CHANGED: 'dmx:channels-changed',
   /** main -> renderer, whenever the mode or the channel lock changes */
   LOCK_CHANGED: 'app:lock-changed',
   /** main -> renderer, whenever another project was opened (the output was blacked out) */
