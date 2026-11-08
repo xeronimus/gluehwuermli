@@ -8,7 +8,8 @@ Accepted
 
 ## Context
 
-Glühwürmli is a desktop app that drives DMX fixtures through an Enttec DMX USB Pro, a virtual COM port. It needs
+Glühwürmli is a desktop app that drives DMX fixtures through an Enttec DMX USB Pro, a virtual COM port (later
+also a Eurolite USB-DMX512 PRO, the same protocol). It needs
 serial port access, timing that keeps running while the window is in the background, and a UI built with the stack
 known from my-life (TypeScript, React, Vite, Vanilla Extract, Zustand).
 

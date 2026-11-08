@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The Enttec DMX USB Pro keeps sending the last universe on its own DMX clock; the app only sends a packet when a
+The Enttec DMX USB Pro (like the Eurolite USB-DMX512 PRO, the same protocol) keeps sending the last universe on its own DMX clock; the app only sends a packet when a
 channel changes. But the Pro has no per-channel command, every packet is a full universe (label 6). A full DMX frame
 takes ~22.7 ms on the wire, so sending more often than that is pointless.
 
