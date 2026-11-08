@@ -22,6 +22,11 @@ interface TabsProps<Id extends string> {
   onSelect: (id: Id) => void;
   /** a button after the last tab that adds one (not a tab itself, so outside the tab list); none without */
   addTab?: AddTab;
+  /**
+   * only the active panel's content is rendered, the hidden ones stay empty: for many panels whose state lives outside
+   * them (a draft), where keeping all mounted would re-render all on every change. Off by default
+   */
+  unmountHiddenPanels?: boolean;
   ref?: Ref<TabsHandle<Id>>;
 }
 
@@ -38,9 +43,17 @@ interface AddTab {
 
 /**
  * Tabs as the WAI-ARIA pattern has them: the arrow keys, Home and End switch tabs. Every panel stays mounted, the
- * inactive ones hidden, so what is typed or folded in one survives switching to another.
+ * inactive ones hidden, so what is typed or folded in one survives switching to another (unless `unmountHiddenPanels`).
  */
-const Tabs = <Id extends string>({label, tabs, activeId, onSelect, addTab, ref}: TabsProps<Id>) => {
+const Tabs = <Id extends string>({
+  label,
+  tabs,
+  activeId,
+  onSelect,
+  addTab,
+  unmountHiddenPanels = false,
+  ref
+}: TabsProps<Id>) => {
   const idPrefix = useId();
   const tabButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const addButton = useRef<HTMLButtonElement>(null);
@@ -114,7 +127,7 @@ const Tabs = <Id extends string>({label, tabs, activeId, onSelect, addTab, ref}:
           hidden={tab.id !== activeId}
           className={tabPanel}
         >
-          {tab.panel}
+          {(tab.id === activeId || !unmountHiddenPanels) && tab.panel}
         </div>
       ))}
     </div>

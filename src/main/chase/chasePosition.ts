@@ -1,4 +1,5 @@
-import type {Chase, ChaseRepeat} from '@shared/ipc';
+import {passCount} from '@shared/chases';
+import type {Chase} from '@shared/ipc';
 
 /** a step of a chase and the pass it is in, both counted from 0 */
 export interface StepPosition {
@@ -10,18 +11,6 @@ export interface StepPosition {
 export type ChasePosition = ({readonly type: 'playing'} & StepPosition) | {readonly type: 'finished'};
 
 const FINISHED: ChasePosition = {type: 'finished'};
-
-/** how many passes the chase plays; infinite for one that loops until stopped */
-export const passCount = (repeat: ChaseRepeat): number => {
-  switch (repeat.type) {
-    case 'once':
-      return 1;
-    case 'times':
-      return repeat.count;
-    case 'forever':
-      return Number.POSITIVE_INFINITY;
-  }
-};
 
 /** one run through all steps, in milliseconds */
 export const passDurationMs = (chase: Chase): number => chase.steps.reduce((sum, {holdMs}) => sum + holdMs, 0);

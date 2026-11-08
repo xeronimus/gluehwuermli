@@ -61,7 +61,7 @@ const ChaseRow = ({chase, rowState, onControl, actions}: ChaseRowProps) => {
       return undefined;
     }
     const {passNumber, passCount} = position;
-    return passCount === undefined ? t`pass ${passNumber}` : t`pass ${passNumber} / ${passCount}`;
+    return Number.isFinite(passCount) ? t`pass ${passNumber} / ${passCount}` : t`pass ${passNumber}`;
   };
 
   return (

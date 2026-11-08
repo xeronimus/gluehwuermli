@@ -4,7 +4,7 @@ import {channelAddress} from '@shared/fixtures';
 import {CHASE_REPEAT_MIN, type Chase, type ChaseRepeat, type ChaseStep, type Fixture} from '@shared/ipc';
 
 import {numberOf} from './channelValuesDraft';
-import {holdSeconds} from './chaseRows';
+import {holdMsOf, holdSeconds} from './chaseHold';
 import {type MoveDirection, moved} from './listOrder';
 
 /** a chase as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
@@ -31,7 +31,6 @@ export interface ChaseStepValueDraft {
   readonly value: string;
 }
 
-const MS_PER_SECOND = 1000;
 /** the hold of the first step added; later ones take the hold of the step before them */
 const FIRST_STEP_HOLD_MS = 1000;
 
@@ -58,9 +57,6 @@ export const chaseDraftOf = (chase: Chase): ChaseDraft => ({
   repeatCount: chase.repeat.type === 'times' ? String(chase.repeat.count) : String(CHASE_REPEAT_MIN),
   steps: chase.steps.map(stepDraftOf)
 });
-
-/** the hold typed in seconds as stored, in whole milliseconds; NaN for a blank field, which the validation reports */
-export const holdMsOf = (holdText: string): number => Math.round(numberOf(holdText) * MS_PER_SECOND);
 
 function repeatOf({repeatType, repeatCount}: ChaseDraft): ChaseRepeat {
   switch (repeatType) {
