@@ -2,7 +2,7 @@ import {colorToStore} from '@shared/colors';
 import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from '@shared/ipc';
 import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
-import {changingFixtures} from './fixtureList';
+import {changingFixtures, withFixture} from './fixtureList';
 import {type MoveDirection, movedWithId} from './listOrder';
 import {currentFixtureValues, fittedFixtureValues, fixtureChannelValues} from './presets';
 
@@ -172,3 +172,17 @@ export const changingFixturesAndScenes =
   (change: (fixtures: readonly Fixture[]) => Fixture[]) =>
   (setup: FixtureSetup): FixtureSetup =>
     withFittedScenes(changingFixtures(change)(setup));
+
+/**
+ * the setup with the fixture saved from the editor: added, or replacing the one with its id. Its scenes' values follow
+ * its channels to their new offsets first (`offsetChanges`: stored offset to new, empty for a new fixture), then the
+ * scenes are fitted to the changed fixture
+ */
+export const withSavedFixture = (
+  setup: FixtureSetup,
+  fixture: Fixture,
+  offsetChanges: ReadonlyMap<number, number>
+): FixtureSetup =>
+  changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture))(
+    withSceneOffsetsChanged(setup, fixture.id, offsetChanges)
+  );

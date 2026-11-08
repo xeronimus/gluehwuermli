@@ -3,7 +3,7 @@ import {msg} from '@lingui/core/macro';
 import type {Fixture, Scene} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
-import {changingFixtures, withFixture, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
+import {changingFixtures, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
 import type {MoveDirection} from '@/data/listOrder';
 import {capturePreset, withPreset} from '@/data/presets';
 import {
@@ -11,9 +11,9 @@ import {
   captureScene,
   changingFixturesAndScenes,
   editedScene,
+  withSavedFixture,
   withScene,
   withSceneMoved,
-  withSceneOffsetsChanged,
   withoutScene
 } from '@/data/scenes';
 import logger from '@/data/service/Logger';
@@ -54,10 +54,7 @@ const couldNotMoveScene = ({name: sceneName}: Scene) => msg`Could not move the s
 export function useActionSaveFixture() {
   return (fixture: Fixture, offsetChanges: ReadonlyMap<number, number>) =>
     storeFixtures(
-      (setup) =>
-        changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture))(
-          withSceneOffsetsChanged(setup, fixture.id, offsetChanges)
-        ),
+      (setup) => withSavedFixture(setup, fixture, offsetChanges),
       `saving the fixture ${fixture.name}`,
       couldNotSaveFixture(fixture)
     );
