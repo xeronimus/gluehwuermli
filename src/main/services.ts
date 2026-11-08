@@ -1,3 +1,4 @@
+import {type ChasePlayer, chasePlayerFactory} from './chase/chasePlayer';
 import type {MainConfig} from './config';
 import type {DmxPortConnector} from './dmx/DmxPortConnector';
 import {DmxEngine, dmxEngineFactory} from './dmx/dmxEngine';
@@ -30,6 +31,7 @@ const WRONG_PASSWORD_DELAY_MS = 1000;
 export interface MainServices {
   dmxPortConnector: DmxPortConnector;
   dmxEngine: DmxEngine;
+  chasePlayer: ChasePlayer;
   windowStateStore: WindowStateStore;
   settings: AppSettings;
   appLock: AppLock;
@@ -53,6 +55,8 @@ export function createMainServices(
 ): MainServices {
   const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory();
   const dmxEngine = dmxEngineFactory({connector: dmxPortConnector, refreshIntervalMs: DMX_REFRESH_INTERVAL_MS, log});
+  // monotonic: a clock change on the PC (summer time, NTP) mustn't make a step wait or skip
+  const chasePlayer = chasePlayerFactory({engine: dmxEngine, now: () => performance.now(), log});
 
   const windowStateStore = fileWindowStateStoreFactory({filePath: windowStateFilePath, log});
 
@@ -72,6 +76,7 @@ export function createMainServices(
   const projectSession = projectSessionFactory({
     store: fileProjectFileStoreFactory(),
     engine: dmxEngine,
+    chasePlayer,
     settings,
     isSetupMode: appLock.isSetupMode,
     dialogs: electronProjectDialogsFactory(projectFolder),
@@ -79,5 +84,5 @@ export function createMainServices(
     log
   });
 
-  return {dmxPortConnector, dmxEngine, windowStateStore, settings, appLock, portMemory, projectSession};
+  return {dmxPortConnector, dmxEngine, chasePlayer, windowStateStore, settings, appLock, portMemory, projectSession};
 }

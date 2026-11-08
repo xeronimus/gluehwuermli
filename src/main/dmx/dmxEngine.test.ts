@@ -72,6 +72,20 @@ test('setting a channel to the value it already has sends nothing', async () => 
   expect(connector.writtenPackets).toHaveLength(1);
 });
 
+test("a tick listener that throws doesn't stop the tick: the others run and the universe goes out", async () => {
+  await engine.connect(SIMULATED_PORT_PATH);
+  await nextTick();
+  engine.onTick(() => {
+    throw new Error('listener failed');
+  });
+  engine.onTick(() => engine.setChannel(1, 42));
+
+  await nextTick();
+
+  expect(connector.writtenPackets).toHaveLength(2);
+  expect(channelValueIn(connector.writtenPackets[1], 1)).toBe(42);
+});
+
 test('ignores invalid channels and values', async () => {
   await engine.connect(SIMULATED_PORT_PATH);
   await nextTick();

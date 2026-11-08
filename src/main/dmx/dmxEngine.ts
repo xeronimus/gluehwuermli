@@ -15,6 +15,7 @@ export interface DmxEngineLog {
 /**
  * Owns the universe and the port. Channel changes only touch the buffer; a timer sends the whole universe at most
  * once per refresh interval, and only if it changed, so any number of fader moves between two ticks cost one packet.
+ * The same tick drives the chase player (`onTick`).
  * Runs in the main process, which Chromium never throttles (ADR 2).
  */
 export interface DmxEngine {
@@ -43,6 +44,12 @@ export interface DmxEngine {
 
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
+
+  /**
+   * called on every refresh tick, connected or not, right before the universe is sent: what a listener sets there
+   * (a chase's next step) goes out with this tick. Returns the function that removes the listener again
+   */
+  onTick: (listener: () => void) => () => void;
 
   /**
    * on quit: stops the timer, waits for a packet still being written, sends an all-zero universe first with `blackout`
@@ -75,6 +82,7 @@ export const describeActiveChannels = (universe: Uint8Array): string => {
 export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineDependencies): DmxEngine {
   const universe = new Uint8Array(DMX_UNIVERSE_SIZE);
   const statusListeners = new Set<(status: DmxOutputStatus) => void>();
+  const tickListeners = new Set<() => void>();
   let currentStatus: DmxOutputStatus = {type: 'disconnected'};
   let connection: DmxConnection | undefined;
   let universeChanged = false;
@@ -180,7 +188,19 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     await closeConnection();
   };
 
-  const refreshTimer = setInterval(() => void sendUniverseIfChanged(), refreshIntervalMs);
+  /** a listener that throws only loses its own work: the universe still goes out with this tick */
+  const tick = () => {
+    tickListeners.forEach((listener) => {
+      try {
+        listener();
+      } catch (error) {
+        log.warn('a tick listener failed', error);
+      }
+    });
+    void sendUniverseIfChanged();
+  };
+
+  const refreshTimer = setInterval(tick, refreshIntervalMs);
 
   // a second connect or a disconnect waits until the port being opened is tracked, so it can be closed; otherwise a
   // double click opens the same COM port twice ("Access denied") and another port would stay open untracked
@@ -239,6 +259,10 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     onStatusChanged: (listener) => {
       statusListeners.add(listener);
       return () => statusListeners.delete(listener);
+    },
+    onTick: (listener) => {
+      tickListeners.add(listener);
+      return () => tickListeners.delete(listener);
     },
     dispose: async (options = {}) => {
       clearInterval(refreshTimer);
