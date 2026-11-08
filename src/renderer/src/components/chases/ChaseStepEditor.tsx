@@ -10,18 +10,18 @@ import {
   type ChaseStepDraft,
   isSortedByChannel,
   withNewStepValue,
-  withStepDuplicated,
   withStepHold,
   withStepMoved,
-  withStepValuesSorted,
-  withoutStep
+  withStepValuesSorted
 } from '@/data/chaseDraft';
+import {withStepValuesTaken} from '@/data/chaseStepFill';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 
 import Button from '../commons/Button';
 import MoveButtons from '../commons/MoveButtons';
-import {AddIcon, DeleteIcon, DuplicateIcon} from '../commons/icons';
-import {errorList, holdField, holdInput, stepEditor, stepHeader, stepNumber, stepValues} from './ChaseEditor.css';
+import {DeleteIcon, DuplicateIcon} from '../commons/icons';
+import {errorList, holdField, holdInput, stepEditor, stepHeader, stepValues} from './ChaseEditor.css';
+import ChaseStepFill from './ChaseStepFill';
 import ChaseStepValueRow from './ChaseStepValueRow';
 
 const MS_PER_SECOND = 1000;
@@ -36,10 +36,13 @@ interface ChaseStepEditorProps {
   /** what is wrong with this step */
   errors: readonly ChaseError[];
   onChange: (change: (draft: ChaseDraft) => ChaseDraft) => void;
+  /** the tabs pick the step shown after these */
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
-/** one step of the chase: its hold, the channels it sets, moving, duplicating and deleting it */
-const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditorProps) => {
+/** one step of the chase, the panel of its tab: its hold, the channels it sets, moving, duplicating and deleting it */
+const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onDelete}: ChaseStepEditorProps) => {
   const {t, i18n} = useLingui();
   const stepNumberShown = index + 1;
   // where the focus went when a channel field was left: sorting may move that element in the list (this row's value
@@ -64,9 +67,8 @@ const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditor
   };
 
   return (
-    <li className={stepEditor} aria-label={t`Step ${stepNumberShown}`}>
+    <div className={stepEditor}>
       <div className={stepHeader}>
-        <span className={stepNumber}>{stepNumberShown}</span>
         <label className={holdField}>
           <Trans>Hold</Trans>
           <input
@@ -86,22 +88,17 @@ const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditor
         <MoveButtons
           index={index}
           count={count}
-          orientation="vertical"
+          orientation="horizontal"
           onMove={(direction) => onChange((draft) => withStepMoved(draft, index, direction))}
-          titles={{earlier: t`Move step ${stepNumberShown} up`, later: t`Move step ${stepNumberShown} down`}}
+          titles={{
+            earlier: t`Move step ${stepNumberShown} to the left`,
+            later: t`Move step ${stepNumberShown} to the right`
+          }}
         />
-        <Button
-          variant="icon"
-          onClick={() => onChange((draft) => withStepDuplicated(draft, index, crypto.randomUUID()))}
-          title={t`Duplicate step ${stepNumberShown}`}
-        >
+        <Button variant="icon" onClick={onDuplicate} title={t`Duplicate step ${stepNumberShown}`}>
           <DuplicateIcon />
         </Button>
-        <Button
-          variant="icon"
-          onClick={() => onChange((draft) => withoutStep(draft, index))}
-          title={t`Delete step ${stepNumberShown}`}
-        >
+        <Button variant="icon" onClick={onDelete} title={t`Delete step ${stepNumberShown}`}>
           <DeleteIcon />
         </Button>
       </div>
@@ -118,12 +115,10 @@ const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditor
           />
         ))}
       </ul>
-      <span>
-        <Button size="compact" onClick={() => onChange((draft) => withNewStepValue(draft, index, crypto.randomUUID()))}>
-          <AddIcon />
-          <Trans>Add channel</Trans>
-        </Button>
-      </span>
+      <ChaseStepFill
+        onAddChannel={() => onChange((draft) => withNewStepValue(draft, index, crypto.randomUUID()))}
+        onTake={(values) => onChange((draft) => withStepValuesTaken(draft, index, values, () => crypto.randomUUID()))}
+      />
       {errors.length > 0 && (
         <ul className={errorList}>
           {errors.map((error) => (
@@ -131,7 +126,7 @@ const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditor
           ))}
         </ul>
       )}
-    </li>
+    </div>
   );
 };
 

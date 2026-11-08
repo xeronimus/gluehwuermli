@@ -10,10 +10,18 @@ export const tabs = style({
   gap: '14px'
 });
 
-export const tabList = style({
+/** the tab list and the add button after it, on one line */
+export const tabHeader = style({
   display: 'flex',
+  flexWrap: 'wrap',
   gap: '4px',
   borderBottom: `1px solid ${vars.colors.border}`
+});
+
+export const tabList = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '4px'
 });
 
 const tabBase = style({
@@ -41,6 +49,18 @@ export const tabVariants = styleVariants({
   active: [tabBase, {color: vars.colors.text, borderBottomColor: vars.colors.primary, cursor: 'default'}],
   inactive: [tabBase, {color: vars.colors.textSecondary, selectors: {'&:hover': {color: vars.colors.text}}}]
 });
+
+/** looks like an inactive tab */
+export const tabAdd = style([
+  tabBase,
+  {
+    color: vars.colors.textSecondary,
+    selectors: {
+      '&:hover:not(:disabled)': {color: vars.colors.text},
+      '&:disabled': {color: vars.colors.textMuted, cursor: 'default'}
+    }
+  }
+]);
 
 export const tabWarning = style({
   display: 'inline-flex',
