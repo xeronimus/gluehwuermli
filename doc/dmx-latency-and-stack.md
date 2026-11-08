@@ -8,7 +8,10 @@ Enttec DMX USB Pro from a 0–255 fader, and is Electron still the way to build 
 Yes. The DMX protocol itself is slower than every piece of the web stack, so the stack doesn't add latency you can
 notice. And Electron is still the right choice for this app.
 
-## The Enttec DMX USB Pro
+## The Enttec DMX USB Pro (and the Eurolite USB-DMX512 PRO)
+
+The Eurolite USB-DMX512 PRO, supported since 0.2.1, speaks the same protocol: everything below holds for both, except
+the baud rate.
 
 - The widget shows up as a virtual COM port (FTDI chip, USB ids `0403:6001`, see `src/main/dmx/portDetection.ts`).
 - It generates the DMX signal **on its own clock** and keeps sending the last universe it received. The app only
@@ -23,7 +26,9 @@ notice. And Electron is still the right choice for this app.
   So the app keeps a 512-byte buffer as the single source of truth, changes bytes in it and sends all of it
   (`src/main/dmx/enttecProPacket.ts`).
 
-- The baud rate is ignored by the virtual COM port, USB full speed is what counts.
+- The baud rate is ignored by the Pro's virtual COM port, USB full speed is what counts. The Eurolite interface
+  expects 250000 baud, 8 data bits, no parity, 2 stop bits; the app opens every port that way
+  (`src/main/dmx/impl/serialport/serialPortConnectorFactory.ts`).
 
 ## Where the latency comes from
 

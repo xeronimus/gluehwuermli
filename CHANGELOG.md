@@ -20,7 +20,15 @@ change bumps the minor version and everything else the patch version.
   with a dot in its color if it has one; steps can be moved, duplicated and deleted. Saving or deleting the running
   chase stops it (#74). The steps are tabs, numbered, with Add step after the last one. A step can be filled from the
   current values of the checked fixtures, from a scene or from a preset; each merges into the step (a channel it sets
-  takes the new value, a new one is added, the others stay), and only the channels and values are stored (#75)
+  takes the new value, a new one is added, the others stay), and only the channels and values are stored (#75). The
+  Help view's manual explains chases: hold vs. pause, what stops a chase and what doesn't, the faders staying live and
+  the values staying after a stop (#76)
+
+### Changed
+
+- The Help view's manual shows one topic at a time, a tab each with a short label, instead of one long page with a
+  contents list (#76)
+- The text in the Help view can be selected and copied (#76)
 
 ## [0.2.4] - 2026-11-08
 

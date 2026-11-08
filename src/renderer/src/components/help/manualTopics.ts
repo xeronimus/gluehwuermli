@@ -1,18 +1,19 @@
 import {msg} from '@lingui/core/macro';
 
-/** the manual's topics in order: their headings, and the table of contents next to them */
+/** the manual's topics in order: a short label for its tab, and the title its panel starts with */
 export const MANUAL_TOPICS = [
-  {id: 'connecting', title: msg`Connecting the DMX interface`},
-  {id: 'modes', title: msg`Show mode and Setup mode`},
-  {id: 'channel-locks', title: msg`Channel locks`},
-  {id: 'projects', title: msg`Projects`},
-  {id: 'fixtures', title: msg`Setting up a fixture`},
-  {id: 'presets', title: msg`Presets`},
-  {id: 'scenes', title: msg`Scenes`},
-  {id: 'finding-out', title: msg`Finding out what a device does`}
+  {id: 'connecting', tabLabel: msg`Connecting`, title: msg`Connecting the DMX interface`},
+  {id: 'modes', tabLabel: msg`Modes`, title: msg`Show mode and Setup mode`},
+  {id: 'channel-locks', tabLabel: msg`Channel locks`, title: msg`Channel locks`},
+  {id: 'projects', tabLabel: msg`Projects`, title: msg`Projects`},
+  {id: 'fixtures', tabLabel: msg`Fixtures`, title: msg`Setting up a fixture`},
+  {id: 'presets', tabLabel: msg`Presets`, title: msg`Presets`},
+  {id: 'scenes', tabLabel: msg`Scenes`, title: msg`Scenes`},
+  {id: 'chases', tabLabel: msg`Chases`, title: msg`Chases`},
+  {id: 'finding-out', tabLabel: msg`Exploring`, title: msg`Finding out what a device does`}
 ] as const;
 
 export type ManualTopicId = (typeof MANUAL_TOPICS)[number]['id'];
 
-/** the element id of a topic's section, prefixed so it can't clash with another view's */
-export const topicElementId = (id: ManualTopicId): string => `manual-${id}`;
+/** the topic shown when the Help view opens */
+export const FIRST_MANUAL_TOPIC: ManualTopicId = 'connecting';
