@@ -114,6 +114,7 @@ msgid "Add channel"
 msgstr "Add channel"
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "Add fixture"
 msgstr "Add fixture"
 
@@ -716,11 +717,11 @@ msgstr "New scene"
 msgid "Next channels"
 msgstr "Next channels"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
-msgid "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
-msgstr "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
+msgid "No fixtures yet: add the devices of your rig, to control them by name."
+msgstr "No fixtures yet: add the devices of your rig, to control them by name."
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 msgstr "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 

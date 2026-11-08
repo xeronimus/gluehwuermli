@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {Trans, useLingui} from '@lingui/react/macro';
+import {useLingui} from '@lingui/react/macro';
 
 import type {Fixture, Scene} from '@shared/ipc';
 
@@ -14,7 +14,8 @@ import Button from '../commons/Button';
 import {AddFixtureIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
-import {errorMessage, fixtureGroups, fixtureView, footer, message, warnings} from './FixtureView.css';
+import {addFixture, errorMessage, fixtureGroups, fixtureView, warnings} from './FixtureView.css';
+import NoFixturesHint from './NoFixturesHint';
 import SceneButtons from './SceneButtons';
 import SceneEditor from './SceneEditor';
 
@@ -77,6 +78,7 @@ const FixtureView = () => {
 
   // the scene editor works with the setup as it is: editing or deleting fixtures and scenes waits until it closes
   const editingScene = editing.type === 'adding-scene' || editing.type === 'editing-scene';
+  const onAddFixture = () => setEditing({type: 'adding'});
 
   return (
     <div className={fixtureView}>
@@ -108,17 +110,7 @@ const FixtureView = () => {
       )}
 
       {fixtures.length === 0 && (
-        <span className={message}>
-          {/* in Setup mode the Add fixture button is right below, there is nothing to unlock */}
-          {setupMode ? (
-            <Trans>No fixtures yet: add the devices of your rig with Add fixture below, to control them by name.</Trans>
-          ) : (
-            <Trans>
-              No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to
-              control them by name.
-            </Trans>
-          )}
-        </span>
+        <NoFixturesHint onAdd={setupMode ? onAddFixture : undefined} addDisabled={editingScene} />
       )}
 
       <div className={fixtureGroups}>
@@ -140,16 +132,15 @@ const FixtureView = () => {
             }
           />
         ))}
+        {/* after the last fixture, at its top: where the new one will be */}
+        {setupMode && fixtures.length > 0 && (
+          <span className={addFixture}>
+            <Button onClick={onAddFixture} disabled={editingScene} title={t`Add fixture`}>
+              <AddFixtureIcon />
+            </Button>
+          </span>
+        )}
       </div>
-
-      {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
-      {setupMode && editing.type === 'none' && (
-        <div className={footer}>
-          <Button onClick={() => setEditing({type: 'adding'})}>
-            <AddFixtureIcon /> <Trans>Add fixture</Trans>
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
