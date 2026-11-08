@@ -1,6 +1,6 @@
 {
   "name": "gluehwuermli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "description": "Desktop app sending DMX through an Enttec DMX USB Pro",
   "author": "Sergio Trentini",
