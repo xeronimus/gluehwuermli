@@ -1,4 +1,4 @@
-import type {Chase} from '@shared/ipc';
+import type {Chase, ChaseStatus, SetChannelRequest} from '@shared/ipc';
 
 import type {DmxEngine} from '@/dmx/dmxEngine';
 
@@ -9,14 +9,7 @@ export interface ChasePlayerLog {
 }
 
 /** what the player is doing; step and pass are counted from 0 */
-export type ChasePlayerStatus =
-  | {readonly type: 'idle'}
-  | {
-      readonly type: 'running' | 'paused';
-      readonly chaseId: string;
-      readonly stepIndex: number;
-      readonly passIndex: number;
-    };
+export type ChasePlayerStatus = ChaseStatus;
 
 /**
  * Plays one chase at a time in main, next to the engine (ADR 2, doc/chases.md): a hidden window or a busy renderer
@@ -36,10 +29,15 @@ export interface ChasePlayer {
   status: () => ChasePlayerStatus;
   /** on start, each new step, pause, resume, stop and finish; returns the function that removes the listener */
   onStatusChanged: (listener: (status: ChasePlayerStatus) => void) => () => void;
+  /**
+   * the values the steps of a start or a tick set, after the caps, each channel once; called before the status that
+   * goes with them. Returns the function that removes the listener
+   */
+  onValuesApplied: (listener: (values: readonly SetChannelRequest[]) => void) => () => void;
 }
 
 export interface ChasePlayerDependencies {
-  engine: Pick<DmxEngine, 'setChannel' | 'onTick'>;
+  engine: Pick<DmxEngine, 'setChannel' | 'channelValue' | 'onTick'>;
   /** a monotonic clock in milliseconds */
   now: () => number;
   log: ChasePlayerLog;
@@ -66,6 +64,7 @@ const statusOf = (state: PlayerState): ChasePlayerStatus =>
 export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies): ChasePlayer {
   let state: PlayerState = IDLE;
   const statusListeners = new Set<(status: ChasePlayerStatus) => void>();
+  const valuesListeners = new Set<(values: readonly SetChannelRequest[]) => void>();
 
   const setState = (next: PlayerState) => {
     state = next;
@@ -73,8 +72,20 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     statusListeners.forEach((listener) => listener(status));
   };
 
-  const applyStep = (chase: Chase, stepIndex: number) => {
-    chase.steps[stepIndex]?.values.forEach(({channel, value}) => engine.setChannel(channel, value));
+  const applyStep = (chase: Chase, stepIndex: number, applied: Set<number>) => {
+    chase.steps[stepIndex]?.values.forEach(({channel, value}) => {
+      engine.setChannel(channel, value);
+      applied.add(channel);
+    });
+  };
+
+  /** what the universe holds now, so a capped channel is reported at its cap, not at the step's value */
+  const reportApplied = (applied: ReadonlySet<number>) => {
+    if (applied.size === 0) {
+      return;
+    }
+    const values = Array.from(applied, (channel) => ({channel, value: engine.channelValue(channel)}));
+    valuesListeners.forEach((listener) => listener(values));
   };
 
   /**
@@ -84,10 +95,12 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
   const applyStepsUpTo = (chase: Chase, from: StepPosition, to: StepPosition) => {
     const stepCount = chase.steps.length;
     const lastStepNumber = to.passIndex * stepCount + to.stepIndex;
-    const applied = Math.min(stepsBetween(chase, from, to), stepCount);
-    for (let stepNumber = lastStepNumber - applied + 1; stepNumber <= lastStepNumber; stepNumber++) {
-      applyStep(chase, stepNumber % stepCount);
+    const stepsToApply = Math.min(stepsBetween(chase, from, to), stepCount);
+    const applied = new Set<number>();
+    for (let stepNumber = lastStepNumber - stepsToApply + 1; stepNumber <= lastStepNumber; stepNumber++) {
+      applyStep(chase, stepNumber % stepCount, applied);
     }
+    reportApplied(applied);
   };
 
   const advance = () => {
@@ -113,7 +126,9 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
 
   return {
     start: (chase) => {
-      applyStep(chase, FIRST_STEP.stepIndex);
+      const applied = new Set<number>();
+      applyStep(chase, FIRST_STEP.stepIndex, applied);
+      reportApplied(applied);
       log.info(`started the chase ${chase.name}`);
       setState({type: 'running', chase, startedAtMs: now(), position: FIRST_STEP});
     },
@@ -140,6 +155,10 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     onStatusChanged: (listener) => {
       statusListeners.add(listener);
       return () => statusListeners.delete(listener);
+    },
+    onValuesApplied: (listener) => {
+      valuesListeners.add(listener);
+      return () => valuesListeners.delete(listener);
     }
   };
 }

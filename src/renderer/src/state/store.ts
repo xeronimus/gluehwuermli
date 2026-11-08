@@ -6,6 +6,8 @@ import {StoreApi} from 'zustand/vanilla';
 import envConfig from '../envConfig';
 import {ChannelsActions, getChannelsActions} from './channels/ChannelsActions';
 import {ChannelsState, getDefaultChannelsState} from './channels/ChannelsState';
+import {ChaseActions, getChaseActions} from './chase/ChaseActions';
+import {ChaseState, getDefaultChaseState} from './chase/ChaseState';
 import {DataFolderActions, getDataFolderActions} from './dataFolder/DataFolderActions';
 import {DataFolderState, getDefaultDataFolderState} from './dataFolder/DataFolderState';
 import {FixturesActions, getFixturesActions} from './fixtures/FixturesActions';
@@ -15,9 +17,10 @@ import {LockState, getDefaultLockState} from './lock/LockState';
 import {OutputActions, getOutputActions} from './output/OutputActions';
 import {OutputState, getDefaultOutputState} from './output/OutputState';
 
-export interface AppState extends ChannelsState, OutputState, FixturesState, DataFolderState, LockState {}
+export interface AppState extends ChannelsState, OutputState, FixturesState, DataFolderState, LockState, ChaseState {}
 
-export interface AppActions extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions, LockActions {}
+export interface AppActions
+  extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions, LockActions, ChaseActions {}
 
 export interface AppStore extends AppState, AppActions {}
 
@@ -27,7 +30,8 @@ const innerUseAppStore = combine(
     ...getDefaultOutputState(),
     ...getDefaultFixturesState(),
     ...getDefaultDataFolderState(),
-    ...getDefaultLockState()
+    ...getDefaultLockState(),
+    ...getDefaultChaseState()
   },
 
   (set) => ({
@@ -35,7 +39,8 @@ const innerUseAppStore = combine(
     ...getOutputActions(set),
     ...getFixturesActions(set),
     ...getDataFolderActions(set),
-    ...getLockActions(set)
+    ...getLockActions(set),
+    ...getChaseActions(set)
   })
 );
 
