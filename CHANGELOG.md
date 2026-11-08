@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- A color can be picked with the color picker: a click on the swatch beside a color field (channels, presets,
+  scenes) opens it; typing the code still works (#61)
+
 ### Fixed
 
 - A fader no longer sticks to the mouse pointer after the button was released outside the window or the window lost
