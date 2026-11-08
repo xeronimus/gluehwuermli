@@ -188,8 +188,15 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     await closeConnection();
   };
 
+  /** a listener that throws only loses its own work: the universe still goes out with this tick */
   const tick = () => {
-    tickListeners.forEach((listener) => listener());
+    tickListeners.forEach((listener) => {
+      try {
+        listener();
+      } catch (error) {
+        log.warn('a tick listener failed', error);
+      }
+    });
     void sendUniverseIfChanged();
   };
 
