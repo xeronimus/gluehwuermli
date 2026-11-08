@@ -20,6 +20,7 @@ import ShowView from './ShowView';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
 import {ChannelsIcon, FixturesIcon, HelpIcon, SettingsIcon} from './commons/icons';
+import {useReleaseStuckDrags} from './commons/useReleaseStuckDrags';
 import FaderBank from './faders/FaderBank';
 import HelpView from './help/HelpView';
 import OutputBar from './output/OutputBar';
@@ -61,6 +62,8 @@ const App = () => {
   useOutputStatusSubscription();
   // the open project, and a .glp double-clicked while the app runs, whichever view is open
   useProjectSubscription();
+  // every fader of every view: a drag whose mouseup got lost must not keep sending values
+  useReleaseStuckDrags();
 
   const loadPorts = useActionLoadPorts();
   // the ports are external state: list them once on start, not only when Settings opens (loadPorts is a new function
