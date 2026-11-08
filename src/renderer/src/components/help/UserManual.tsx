@@ -70,8 +70,8 @@ const UserManual = () => (
           The app always starts in <strong>Show mode</strong>: the fixtures, their presets and the scenes can be played,
           but not changed, and the Channels view is off. Anything else needs <strong>Setup mode</strong>: in the{' '}
           <strong>Settings</strong> view, press <strong>Unlock Setup mode</strong> and type the password. The first
-          time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar
-          says so.
+          time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while
+          Setup mode is open, the top bar says so.
         </Trans>
       </p>
       <p>

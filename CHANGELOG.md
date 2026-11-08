@@ -25,6 +25,7 @@ change bumps the minor version and everything else the patch version.
 - The window title separates the project and the app name with a plain hyphen
 - Add scene is an icon button right after the scenes, Add fixture one right after the last fixture, instead of both
   below the fixtures; without fixtures, Add fixture follows the hint
+- Unlocking Setup mode, creating a project and opening one switch to the Show view
 - The language is switched in the Settings view instead of the top bar
 
 ### Fixed
