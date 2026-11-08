@@ -3,6 +3,7 @@ import type {MessageDescriptor} from '@lingui/core';
 import type {Fixture} from '@shared/ipc';
 
 import {activateLocale, i18n} from '../i18n';
+import {chaseErrorMessage} from './chaseMessages';
 import {fixtureErrorMessage, overlapMessage} from './fixtureMessages';
 import {outputStatusMessage} from './outputMessages';
 import {passwordFormErrorMessage} from './passwordMessages';
@@ -90,6 +91,19 @@ describe('scene errors in English', () => {
   });
 });
 
+describe('chase errors in English', () => {
+  beforeAll(() => activateLocale('en'));
+
+  test('state the limits, the hold in seconds', () => {
+    expect(translate(chaseErrorMessage({type: 'chase-step-hold-invalid'}))).toBe(
+      'A step holds from 0.05 seconds to 60 minutes'
+    );
+    expect(translate(chaseErrorMessage({type: 'chase-repeat-invalid'}))).toBe(
+      'A chase can be played from 2 to 99 times'
+    );
+  });
+});
+
 describe('in German', () => {
   beforeAll(() => activateLocale('de'));
 
@@ -100,6 +114,10 @@ describe('in German', () => {
     );
     expect(translate(sceneErrorMessage({type: 'scene-name-too-long'}))).toBe(
       'Ein Szenen-Name darf höchstens 40 Zeichen haben'
+    );
+    expect(translate(chaseErrorMessage({type: 'chase-steps-too-many'}))).toBe('Ein Chase hat höchstens 100 Schritte');
+    expect(translate(chaseErrorMessage({type: 'chase-step-hold-invalid'}))).toBe(
+      'Ein Schritt hält 0,05 Sekunden bis 60 Minuten'
     );
   });
 

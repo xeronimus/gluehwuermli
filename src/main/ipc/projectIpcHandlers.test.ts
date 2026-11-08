@@ -45,6 +45,16 @@ test('a valid save reaches the session with its project', async () => {
 test.each([
   ['no project', {setup: emptyFixtureSetup()}],
   ['an invalid setup', {projectPath: 'D:\\Waldfest.glp', setup: {version: 1, fixtures: 'none'}}],
+  [
+    'an invalid chase',
+    {
+      projectPath: 'D:\\Waldfest.glp',
+      setup: {
+        ...emptyFixtureSetup(),
+        chases: [{id: 'chorus', name: '  ', repeat: {type: 'once'}, steps: [{id: 'one', holdMs: 500, values: []}]}]
+      }
+    }
+  ],
   ['nothing', undefined]
 ])('a save with %s is refused', async (_description, payload) => {
   await expect(handlers.saveFixtures(payload)).rejects.toThrow('invalid fixture setup');
