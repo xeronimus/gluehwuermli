@@ -238,9 +238,9 @@ const UserManual = () => (
       </p>
       <p>
         <Trans>
-          To make one, unlock Setup mode, set the faders to the look you want, press <strong>Add scene</strong> next to{' '}
-          <strong>Add fixture</strong>, name it and choose its fixtures: their current values are stored. The edit
-          button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check{' '}
+          To make one, unlock Setup mode, set the faders to the look you want, press the <strong>Add scene</strong>{' '}
+          button after the scenes, name it and choose its fixtures: their current values are stored. The edit button
+          next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check{' '}
           <strong>Save current values</strong> to store what the faders show now. Deleting a fixture takes it out of
           every scene.
         </Trans>

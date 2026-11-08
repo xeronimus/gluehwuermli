@@ -125,7 +125,7 @@ msgstr "Position hinzufügen"
 msgid "Add preset"
 msgstr "Preset hinzufügen"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Add scene"
 msgstr "Szene hinzufügen"
 
@@ -1239,8 +1239,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
-msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um, gibt ihr eine Farbe (ein Punkt auf ihrem Knopf) oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst den Knopf <0>Szene hinzufügen</0> nach den Szenen, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um, gibt ihr eine Farbe (ein Punkt auf ihrem Knopf) oder ändert ihre Geräte; mit <1>Aktuelle Werte speichern</1> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 msgid "Try again"
