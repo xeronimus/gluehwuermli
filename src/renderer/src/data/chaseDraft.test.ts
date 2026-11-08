@@ -8,14 +8,17 @@ import {
   chaseOfDraft,
   fixtureChannelsAt,
   holdMsOf,
+  isSortedByChannel,
   newChaseDraft,
   nextFreeChannel,
+  sortedByChannel,
   withNewStep,
   withNewStepValue,
   withStepDuplicated,
   withStepHold,
   withStepMoved,
   withStepValueChange,
+  withStepValuesSorted,
   withoutStep,
   withoutStepValue
 } from './chaseDraft';
@@ -96,27 +99,59 @@ test('edits, adds and removes a step value one by one', () => {
 
   const changed = withStepValueChange(draft, 1, 1, {value: '128'});
   expect(changed.steps[1]?.values).toEqual([
-    {channel: '1', value: '0'},
-    {channel: '20', value: '128'}
+    {id: '0', channel: '1', value: '0'},
+    {id: '1', channel: '20', value: '128'}
   ]);
-  expect(withoutStepValue(draft, 1, 0).steps[1]?.values).toEqual([{channel: '20', value: '200'}]);
-  expect(withNewStepValue(draft, 1).steps[1]?.values.at(-1)).toEqual({channel: '21', value: '0'});
-  expect(withNewStepValue(withNewStep(newChaseDraft(), 'a'), 0).steps[0]?.values).toEqual([{channel: '1', value: '0'}]);
+  expect(withoutStepValue(draft, 1, 0).steps[1]?.values).toEqual([{id: '1', channel: '20', value: '200'}]);
+  expect(withNewStepValue(draft, 1, 'new').steps[1]?.values.at(-1)).toEqual({id: 'new', channel: '21', value: '0'});
+  expect(withNewStepValue(withNewStep(newChaseDraft(), 'a'), 0, 'new').steps[0]?.values).toEqual([
+    {id: 'new', channel: '1', value: '0'}
+  ]);
+});
+
+const channelsOf = (draft: ChaseDraft, stepIndex: number) =>
+  draft.steps[stepIndex]?.values.map(({id, channel}) => `${id}:${channel}`);
+
+test('a typed channel stays in its row until the rows are sorted', () => {
+  const draft = withStepValueChange(chaseDraftOf(chorus), 1, 0, {channel: '30'});
+
+  expect(channelsOf(draft, 1)).toEqual(['0:30', '1:20']);
+  expect(isSortedByChannel(draft.steps[1]?.values ?? [])).toBe(false);
+  expect(channelsOf(withStepValuesSorted(draft, 1), 1)).toEqual(['1:20', '0:30']);
+  expect(channelsOf(withStepValuesSorted(draft, 1), 0)).toEqual(['0:1']);
+  expect(isSortedByChannel(chaseDraftOf(chorus).steps[1]?.values ?? [])).toBe(true);
+});
+
+test('a channel added at the end of the universe is sorted in', () => {
+  const draft = withStepValueChange(chaseDraftOf(chorus), 1, 1, {channel: '512'});
+
+  expect(channelsOf(withNewStepValue(draft, 1, 'new'), 1)).toEqual(['0:1', 'new:2', '1:512']);
+});
+
+test('a channel that is not a number sorts after the others, in its place among them', () => {
+  expect(
+    sortedByChannel([
+      {id: 'a', channel: '', value: '0'},
+      {id: 'b', channel: '9', value: '0'},
+      {id: 'c', channel: 'x', value: '0'},
+      {id: 'd', channel: '2', value: '0'}
+    ]).map(({id}) => id)
+  ).toEqual(['d', 'b', 'a', 'c']);
 });
 
 test('a channel added by hand follows the highest one, or takes the lowest free one at the end of the universe', () => {
   expect(nextFreeChannel([])).toBe(1);
   expect(
     nextFreeChannel([
-      {channel: '7', value: '0'},
-      {channel: '3', value: '0'}
+      {id: 'a', channel: '7', value: '0'},
+      {id: 'b', channel: '3', value: '0'}
     ])
   ).toBe(8);
-  expect(nextFreeChannel([{channel: 'x', value: '0'}])).toBe(1);
+  expect(nextFreeChannel([{id: 'a', channel: 'x', value: '0'}])).toBe(1);
   expect(
     nextFreeChannel([
-      {channel: '1', value: '0'},
-      {channel: '512', value: '0'}
+      {id: 'a', channel: '1', value: '0'},
+      {id: 'b', channel: '512', value: '0'}
     ])
   ).toBe(2);
 });

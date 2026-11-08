@@ -1,3 +1,5 @@
+import {useLayoutEffect, useRef} from 'react';
+
 import {Trans, useLingui} from '@lingui/react/macro';
 
 import type {ChaseError} from '@shared/chases';
@@ -6,10 +8,12 @@ import {CHASE_HOLD_MAX_MS, CHASE_HOLD_MIN_MS} from '@shared/ipc';
 import {
   type ChaseDraft,
   type ChaseStepDraft,
+  isSortedByChannel,
   withNewStepValue,
   withStepDuplicated,
   withStepHold,
   withStepMoved,
+  withStepValuesSorted,
   withoutStep
 } from '@/data/chaseDraft';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
@@ -38,6 +42,26 @@ interface ChaseStepEditorProps {
 const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditorProps) => {
   const {t, i18n} = useLingui();
   const stepNumberShown = index + 1;
+  // where the focus went when a channel field was left: sorting may move that element in the list (this row's value
+  // field, reached with Tab), and a moved element loses its focus in the browser
+  const focusAfterSort = useRef<HTMLElement | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    const target = focusAfterSort.current;
+    focusAfterSort.current = undefined;
+    if (target?.isConnected && document.activeElement !== target) {
+      target.focus();
+    }
+  });
+
+  // a channel is sorted in once it is left, not while it is typed
+  const onChannelLeft = (nextFocus: EventTarget | null) => {
+    if (isSortedByChannel(step.values)) {
+      return;
+    }
+    focusAfterSort.current = nextFocus instanceof HTMLElement ? nextFocus : undefined;
+    onChange((draft) => withStepValuesSorted(draft, index));
+  };
 
   return (
     <li className={stepEditor} aria-label={t`Step ${stepNumberShown}`}>
@@ -83,18 +107,19 @@ const ChaseStepEditor = ({step, index, count, errors, onChange}: ChaseStepEditor
       </div>
       <ul className={stepValues}>
         {step.values.map((value, valueIndex) => (
-          // by place: the rows aren't reordered, and a removed row's inputs show the next row's values
+          // by id: the rows are sorted by channel when one is left, and each row moves with its fields
           <ChaseStepValueRow
-            key={valueIndex}
+            key={value.id}
             value={value}
             stepIndex={index}
             valueIndex={valueIndex}
             onChange={onChange}
+            onChannelLeft={onChannelLeft}
           />
         ))}
       </ul>
       <span>
-        <Button size="compact" onClick={() => onChange((draft) => withNewStepValue(draft, index))}>
+        <Button size="compact" onClick={() => onChange((draft) => withNewStepValue(draft, index, crypto.randomUUID()))}>
           <AddIcon />
           <Trans>Add channel</Trans>
         </Button>

@@ -16,7 +16,8 @@ change bumps the minor version and everything else the patch version.
   its hold on hover) and its repeat (`1×`, `8×` or `∞`); Start, Pause, Resume and Stop play them in Show and Setup
   mode, one at a time, Start of another chase replaces the running one (#73). In Setup mode chases are added, edited,
   deleted and moved up and down; the chase editor sets the name, the repeat (once, N times, until stopped) and the
-  steps, each with its hold in seconds and the channels it sets, labelled with the fixture channels on them; steps
+  steps, each with its hold in seconds and the channels it sets, sorted by channel and labelled with the fixture
+  channels on them; steps
   can be moved, duplicated and deleted. Saving or deleting the running chase stops it (#74)
 
 ## [0.2.4] - 2026-11-08

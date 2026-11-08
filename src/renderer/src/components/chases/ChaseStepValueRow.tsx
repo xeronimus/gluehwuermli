@@ -21,18 +21,20 @@ interface ChaseStepValueRowProps {
   stepIndex: number;
   valueIndex: number;
   onChange: (change: (draft: ChaseDraft) => ChaseDraft) => void;
+  /** the channel field lost its focus to `nextFocus` (null when it went nowhere): the step sorts its rows */
+  onChannelLeft: (nextFocus: EventTarget | null) => void;
 }
 
 /**
  * one channel a step sets: `channel → value`, both typed, and the fixture channels on that address as a label (all of
  * them where fixtures share it); the label isn't stored, the step knows the address only
  */
-const ChaseStepValueRow = ({value, stepIndex, valueIndex, onChange}: ChaseStepValueRowProps) => {
+const ChaseStepValueRow = ({value, stepIndex, valueIndex, onChange, onChannelLeft}: ChaseStepValueRowProps) => {
   const {t} = useLingui();
   const fixtures = useAppStore(selectFixtures);
   const labels = fixtureChannelsAt(fixtures, value.channel);
   const channelNumber = value.channel;
-  const change = (changed: Partial<ChaseStepValueDraft>) =>
+  const change = (changed: Partial<Omit<ChaseStepValueDraft, 'id'>>) =>
     onChange((draft) => withStepValueChange(draft, stepIndex, valueIndex, changed));
 
   return (
@@ -45,6 +47,7 @@ const ChaseStepValueRow = ({value, stepIndex, valueIndex, onChange}: ChaseStepVa
         value={value.channel}
         aria-label={t`Channel`}
         onChange={(event) => change({channel: event.target.value})}
+        onBlur={(event) => onChannelLeft(event.relatedTarget)}
       />
       <span className={valueArrow}>→</span>
       <input
