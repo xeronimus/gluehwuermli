@@ -4,12 +4,14 @@ import type {Fixture} from '@shared/ipc';
 import {newChannelValuesDraft, withValueMode} from './channelValuesDraft';
 import {
   type FixtureDraft,
+  channelOffsetChanges,
   draftChannelAddress,
   draftOf,
   fixtureOfDraft,
   newFixtureDraft,
   shownPresetValue,
   withChannelChange,
+  withChannelMoved,
   withNewChannel,
   withNewPreset,
   withPresetColor,
@@ -71,40 +73,51 @@ test('a blank or non-numeric field is invalid, not 0', () => {
 test('a new channel goes after the highest offset, or to 0 when there is none', () => {
   const withGap = withChannelChange(draftOf(par), 1, {offset: '4'});
 
-  expect(withNewChannel(withGap).channels[2]).toEqual({name: '', offset: '5', lockMax: '', color: '', values: noRules});
-  expect(withNewChannel(withoutChannel(newFixtureDraft(), 0)).channels).toEqual([
-    {name: '', offset: '0', lockMax: '', color: '', values: noRules}
+  expect(withNewChannel(withGap, 'new').channels[2]).toEqual({
+    id: 'new',
+    name: '',
+    offset: '5',
+    lockMax: '',
+    color: '',
+    values: noRules
+  });
+  expect(withNewChannel(withoutChannel(newFixtureDraft('first'), 0), 'new').channels).toEqual([
+    {id: 'new', name: '', offset: '0', lockMax: '', color: '', values: noRules}
   ]);
 });
 
 test('removes the channel at the index', () => {
   expect(withoutChannel(draftOf(par), 0).channels).toEqual([
-    {name: 'Green', offset: '1', lockMax: '', color: '', values: noRules}
+    {id: 'stored-1', storedOffset: 1, name: 'Green', offset: '1', lockMax: '', color: '', values: noRules}
   ]);
 });
 
 test('a channel lands on the start address plus its offset', () => {
   const draft = draftOf(par);
 
-  expect(draftChannelAddress(draft, {name: 'Red', offset: '0', lockMax: '', color: '', values: noRules})).toBe(10);
-  expect(draftChannelAddress(draft, {name: 'Blue', offset: '2', lockMax: '', color: '', values: noRules})).toBe(12);
+  expect(
+    draftChannelAddress(draft, {id: 'red', name: 'Red', offset: '0', lockMax: '', color: '', values: noRules})
+  ).toBe(10);
+  expect(
+    draftChannelAddress(draft, {id: 'blue', name: 'Blue', offset: '2', lockMax: '', color: '', values: noRules})
+  ).toBe(12);
 });
 
 test('no address while a field is blank or invalid, or past the universe', () => {
   expect(
     draftChannelAddress(
       {...draftOf(par), startAddress: ''},
-      {name: 'Red', offset: '0', lockMax: '', color: '', values: noRules}
+      {id: 'red', name: 'Red', offset: '0', lockMax: '', color: '', values: noRules}
     )
   ).toBeUndefined();
   expect(
-    draftChannelAddress(draftOf(par), {name: 'Red', offset: '', lockMax: '', color: '', values: noRules})
+    draftChannelAddress(draftOf(par), {id: 'red', name: 'Red', offset: '', lockMax: '', color: '', values: noRules})
   ).toBeUndefined();
   expect(
-    draftChannelAddress(draftOf(par), {name: 'Red', offset: '-1', lockMax: '', color: '', values: noRules})
+    draftChannelAddress(draftOf(par), {id: 'red', name: 'Red', offset: '-1', lockMax: '', color: '', values: noRules})
   ).toBeUndefined();
   expect(
-    draftChannelAddress(draftOf(par), {name: 'Red', offset: '503', lockMax: '', color: '', values: noRules})
+    draftChannelAddress(draftOf(par), {id: 'red', name: 'Red', offset: '503', lockMax: '', color: '', values: noRules})
   ).toBeUndefined();
 });
 
@@ -118,7 +131,15 @@ describe('channel locks', () => {
   };
 
   test('a fixture with a locked channel survives the round trip through a draft', () => {
-    expect(draftOf(laser).channels[1]).toEqual({name: 'Laser', offset: '1', lockMax: '0', color: '', values: noRules});
+    expect(draftOf(laser).channels[1]).toEqual({
+      id: 'stored-1',
+      storedOffset: 1,
+      name: 'Laser',
+      offset: '1',
+      lockMax: '0',
+      color: '',
+      values: noRules
+    });
     expect(fixtureOfDraft('par', draftOf(laser))).toEqual(laser);
   });
 
@@ -145,7 +166,15 @@ describe('channel colors', () => {
   const uv = {...par, channels: [{name: 'UV', offset: 0, color: '#7f00ff'}]};
 
   test('a fixture with a colored channel survives the round trip through a draft', () => {
-    expect(draftOf(uv).channels[0]).toEqual({name: 'UV', offset: '0', lockMax: '', color: '#7f00ff', values: noRules});
+    expect(draftOf(uv).channels[0]).toEqual({
+      id: 'stored-0',
+      storedOffset: 0,
+      name: 'UV',
+      offset: '0',
+      lockMax: '',
+      color: '#7f00ff',
+      values: noRules
+    });
     expect(fixtureOfDraft('par', draftOf(uv))).toEqual(uv);
   });
 
@@ -331,7 +360,7 @@ describe('presets', () => {
   });
 
   test('a new channel is not part of the existing presets', () => {
-    expect(withNewChannel(draftOf(withWarm)).presets[0].values[2]).toEqual({
+    expect(withNewChannel(draftOf(withWarm), 'new').presets[0].values[2]).toEqual({
       included: false,
       value: '0',
       entered: false
@@ -353,5 +382,93 @@ describe('presets', () => {
 
     expect(fixtureOfDraft('par', moved).presets).toEqual([cold, ...withWarm.presets]);
     expect(withPresetMoved(draftOf(withBoth), 1, 'later')).toEqual(draftOf(withBoth));
+  });
+});
+
+describe('moving channels', () => {
+  const blue = {name: 'Blue', offset: 2, color: '#0000ff', lock: {max: 100}};
+  const rgb = {
+    ...par,
+    channels: [...par.channels, blue],
+    presets: [
+      {
+        id: 'warm',
+        name: 'Warm',
+        values: [
+          {offset: 0, value: 255},
+          {offset: 2, value: 30}
+        ]
+      }
+    ]
+  };
+
+  test('changes the order of the channels only: offsets, rules and preset values stay with the channel', () => {
+    const moved = fixtureOfDraft('par', withChannelMoved(draftOf(rgb), 2, 'earlier'));
+
+    expect(moved.channels).toEqual([par.channels[0], blue, par.channels[1]]);
+    expect(moved.presets).toEqual([
+      {
+        id: 'warm',
+        name: 'Warm',
+        values: [
+          {offset: 0, value: 255},
+          {offset: 2, value: 30}
+        ]
+      }
+    ]);
+    expect(fixtureErrors(moved)).toEqual([]);
+  });
+
+  test('moves the preset values in the draft with their row', () => {
+    const moved = withChannelMoved(draftOf(rgb), 0, 'later');
+
+    expect(moved.channels.map(({name}) => name)).toEqual(['Green', 'Red', 'Blue']);
+    expect(moved.presets[0].values.map(({included, value}) => [included, value])).toEqual([
+      [false, '0'],
+      [true, '255'],
+      [true, '30']
+    ]);
+  });
+
+  test('a half-typed offset moves as typed', () => {
+    const moved = withChannelMoved(withChannelChange(draftOf(rgb), 1, {offset: ''}), 1, 'later');
+
+    expect(moved.channels.map(({offset}) => offset)).toEqual(['0', '2', '']);
+  });
+
+  test('nothing moves past either end', () => {
+    expect(withChannelMoved(draftOf(rgb), 0, 'earlier')).toEqual(draftOf(rgb));
+    expect(withChannelMoved(draftOf(rgb), 2, 'later')).toEqual(draftOf(rgb));
+  });
+});
+
+describe('channelOffsetChanges', () => {
+  test('maps every saved channel to its offset, moved or not', () => {
+    expect(channelOffsetChanges(withChannelMoved(draftOf(par), 0, 'later'))).toEqual(
+      new Map([
+        [1, 1],
+        [0, 0]
+      ])
+    );
+  });
+
+  test('follows a typed offset, leaves out removed, new and half-typed channels', () => {
+    const typed = withChannelChange(draftOf(par), 1, {offset: '4'});
+    expect(channelOffsetChanges(typed)).toEqual(
+      new Map([
+        [0, 0],
+        [1, 4]
+      ])
+    );
+    expect(channelOffsetChanges(withNewChannel(withoutChannel(draftOf(par), 0), 'new'))).toEqual(new Map([[1, 1]]));
+    expect(channelOffsetChanges(withChannelChange(draftOf(par), 0, {offset: ''}))).toEqual(new Map([[1, 1]]));
+    expect(channelOffsetChanges(newFixtureDraft('first'))).toEqual(new Map());
+  });
+
+  test('the row ids and stored offsets are not part of the saved fixture', () => {
+    expect(fixtureOfDraft('par', withNewChannel(draftOf(par), 'new')).channels).toEqual([
+      ...par.channels,
+      {name: '', offset: 2}
+    ]);
   });
 });

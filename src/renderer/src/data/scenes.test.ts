@@ -1,6 +1,7 @@
 import {DMX_UNIVERSE_SIZE} from '@shared/dmx';
 import type {Fixture, FixtureSetup, Scene} from '@shared/ipc';
 
+import {channelOffsetChanges, draftOf, fixtureOfDraft, withChannelChange, withChannelMoved} from './fixtureDraft';
 import {withoutFixture} from './fixtureList';
 import {
   captureScene,
@@ -11,6 +12,7 @@ import {
   withFittedScenes,
   withScene,
   withSceneMoved,
+  withSceneOffsetsChanged,
   withoutScene
 } from './scenes';
 
@@ -258,6 +260,96 @@ describe('changingFixturesAndScenes', () => {
     expect(change(setupOf(fixtures, [intro, outro]))).toEqual(
       setupOf([par], [{...intro, fixtures: [intro.fixtures[0]]}])
     );
+  });
+});
+
+describe('withSceneOffsetsChanged', () => {
+  test('moves the values of the fixture all at once, so a swap keeps them on their channels', () => {
+    const swapped = new Map([
+      [0, 1],
+      [1, 0]
+    ]);
+
+    expect(withSceneOffsetsChanged(setupOf(fixtures, [intro, outro]), 'par', swapped).scenes).toEqual([
+      {
+        ...intro,
+        fixtures: [
+          {
+            fixtureId: 'par',
+            values: [
+              {offset: 1, value: 255},
+              {offset: 0, value: 0}
+            ]
+          },
+          intro.fixtures[1]
+        ]
+      },
+      outro
+    ]);
+  });
+
+  test('drops the values of removed channels and leaves other fixtures and a setup without scenes alone', () => {
+    expect(withSceneOffsetsChanged(setupOf(fixtures, [intro]), 'par', new Map([[1, 1]])).scenes).toEqual([
+      {...intro, fixtures: [{fixtureId: 'par', values: [{offset: 1, value: 0}]}, intro.fixtures[1]]}
+    ]);
+    expect(withSceneOffsetsChanged(setupOf(fixtures), 'par', new Map())).toEqual(setupOf(fixtures));
+  });
+
+  test('a channel with a new offset and rules gets its value fitted after the move', () => {
+    const blueAtFour: Fixture = {
+      ...par,
+      channels: [par.channels[0], {name: 'Blue', offset: 4, values: {mode: 'continuous', min: 50, max: 255}}]
+    };
+    const setup = withSceneOffsetsChanged(
+      setupOf([blueAtFour, smoke], [intro]),
+      'par',
+      new Map([
+        [0, 0],
+        [1, 4]
+      ])
+    );
+
+    expect(withFittedScenes(setup).scenes?.[0].fixtures[0].values).toEqual([
+      {offset: 0, value: 255},
+      {offset: 4, value: 50}
+    ]);
+  });
+});
+
+describe('a fixture saved from the editor', () => {
+  /** what the save does: the scenes follow the channels, then the fixture is replaced and the scenes fitted */
+  const saved = (setup: FixtureSetup, draft: ReturnType<typeof draftOf>): FixtureSetup => {
+    const fixture = fixtureOfDraft('par', draft);
+    return changingFixturesAndScenes((current) => current.map((other) => (other.id === 'par' ? fixture : other)))(
+      withSceneOffsetsChanged(setup, 'par', channelOffsetChanges(draft))
+    );
+  };
+  const namedValues = (setup: FixtureSetup) => {
+    const fixture = setup.fixtures[0];
+    return sceneChannelValues(setup.scenes?.[0] ?? intro, setup.fixtures)
+      .filter(({channel}) => channel < smoke.startAddress)
+      .map(({channel, value}) => [
+        fixture.channels.find(({offset}) => fixture.startAddress + offset === channel)?.name,
+        value
+      ]);
+  };
+  const withPreset: Fixture = {...par, presets: [{id: 'warm', name: 'Warm', values: [{offset: 1, value: 40}]}]};
+  const setup = setupOf([withPreset, smoke], [intro]);
+
+  test('a moved channel is set by its presets and scenes as before', () => {
+    const after = saved(setup, withChannelMoved(draftOf(withPreset), 1, 'earlier'));
+
+    expect(after.fixtures[0].channels.map(({name}) => name)).toEqual(['Blue', 'Red']);
+    expect(after.fixtures[0].presets).toEqual(withPreset.presets);
+    expect(after).toEqual({...setup, fixtures: [after.fixtures[0], smoke]});
+    expect(namedValues(after)).toEqual(namedValues(setup));
+  });
+
+  test('a channel with a typed offset is still set by its scenes', () => {
+    const after = saved(setup, withChannelChange(draftOf(withPreset), 1, {offset: '3'}));
+
+    expect(namedValues(after)).toEqual(namedValues(setup));
+    expect(after.fixtures[0].presets).toEqual([{id: 'warm', name: 'Warm', values: [{offset: 3, value: 40}]}]);
   });
 });
 

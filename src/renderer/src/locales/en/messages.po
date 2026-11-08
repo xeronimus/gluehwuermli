@@ -626,6 +626,14 @@ msgstr "Move {fixtureName} to the left"
 msgid "Move {fixtureName} to the right"
 msgstr "Move {fixtureName} to the right"
 
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Move channel {row} down"
+msgstr "Move channel {row} down"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Move channel {row} up"
+msgstr "Move channel {row} up"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Move preset {presetNumber} to the left"
 msgstr "Move preset {presetNumber} to the left"
@@ -1017,6 +1025,10 @@ msgstr "The app remembers the port it was last connected to, also after a Discon
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 msgstr "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
+msgstr "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
@@ -1095,8 +1107,8 @@ msgid "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file yo
 msgstr "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
-msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
+msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
+msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The highest value while the channel lock is on; empty for no lock"

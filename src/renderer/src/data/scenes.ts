@@ -141,6 +141,32 @@ const NO_CHANNEL_VALUES: readonly number[] = [];
 export const sceneEditErrors = (fixtures: readonly Fixture[], edit: Omit<SceneEdit, 'recapture'>): SceneError[] =>
   sceneErrors(captureScene(fixtures, NO_CHANNEL_VALUES, 'draft', edit), fixtures);
 
+/**
+ * the scenes' values of the fixture moved to its channels' new offsets (`changes`: old offset to new), all at once, so
+ * two channels swapping offsets keep their values. A value at an offset not in `changes` belongs to a removed channel
+ * and is dropped; withFittedScenes then removes what is left empty. Other fixtures stay as they are
+ */
+export function withSceneOffsetsChanged(
+  setup: FixtureSetup,
+  fixtureId: string,
+  changes: ReadonlyMap<number, number>
+): FixtureSetup {
+  if (!setup.scenes) {
+    return setup;
+  }
+  const changedFixture = (sceneFixture: SceneFixture): SceneFixture =>
+    sceneFixture.fixtureId !== fixtureId
+      ? sceneFixture
+      : {
+          ...sceneFixture,
+          values: sceneFixture.values.flatMap(({offset, value}) => {
+            const newOffset = changes.get(offset);
+            return newOffset === undefined ? [] : [{offset: newOffset, value}];
+          })
+        };
+  return {...setup, scenes: setup.scenes.map((scene) => ({...scene, fixtures: scene.fixtures.map(changedFixture)}))};
+}
+
 /** a change of the fixture list, with the scenes fitted to it in the same save: main refuses scenes that don't fit */
 export const changingFixturesAndScenes =
   (change: (fixtures: readonly Fixture[]) => Fixture[]) =>

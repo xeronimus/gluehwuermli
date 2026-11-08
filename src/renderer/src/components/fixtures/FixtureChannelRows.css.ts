@@ -10,7 +10,7 @@ export const channelsSection = style({
 
 export const channelRows = style({
   display: 'grid',
-  gridTemplateColumns: '200px auto 64px auto auto 110px auto',
+  gridTemplateColumns: '200px auto 64px auto auto 110px auto auto',
   // a channel's positions list is taller than a row
   gridAutoRows: `minmax(${vars.constants.editorRowHeight}, auto)`,
   gap: '6px 8px',
@@ -42,6 +42,11 @@ export const channelAddress = style({
   justifySelf: 'center',
   fontFamily: vars.fonts.mono,
   color: vars.colors.textSecondary
+});
+
+export const moveButtons = style({
+  display: 'flex',
+  gap: '2px'
 });
 
 export const addChannel = style({
