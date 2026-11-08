@@ -25,6 +25,12 @@ const FixtureChannelHelp = ({initiallyOpen}: FixtureChannelHelpProps) => (
           on purpose, e.g. two PARs moving together, or by mistake.
         </Trans>
       </li>
+      <li>
+        <Trans>
+          The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and
+          address stay as they are, and its presets and scenes keep setting it.
+        </Trans>
+      </li>
     </ol>
     <p>
       <Trans>

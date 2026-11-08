@@ -14,6 +14,17 @@ change bumps the minor version and everything else the patch version.
 
 - An **Emergency off** button in the top bar sets all 512 channels to 0 at once, in Show and Setup mode, with or
   without a project; fixtures, scenes and presets stay as they are (#63)
+- Channels can be moved up and down in the fixture editor, which changes the order of the fixture's faders; their
+  addresses stay the same, and presets and scenes keep setting the same channels (#64)
+
+### Changed
+
+- The fixture editor's Channels tab shows the fixture's start address above the channels
+- The window title separates the project and the app name with a plain hyphen
+
+### Fixed
+
+- A scene keeps setting the same channel after the channel's offset is changed in the fixture editor (#64)
 
 ### Removed
 

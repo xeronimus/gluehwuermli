@@ -2,9 +2,12 @@ import {style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-/** a row of its own below the channel, indented to the channel's values column and marked as belonging to it */
+/**
+ * a row of its own below the channel, under the mode dropdown of the channel's values column (the 4th of
+ * FixtureChannelRows: name, offset, address, values) and marked as belonging to it
+ */
 export const positionsList = style({
-  gridColumn: '2 / -1',
+  gridColumn: '4 / -1',
   display: 'flex',
   flexDirection: 'column',
   gap: '6px',

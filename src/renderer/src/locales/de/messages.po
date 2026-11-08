@@ -280,7 +280,7 @@ msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen<
 msgid "Color"
 msgstr "Farbe"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Color of channel {row}"
 msgstr "Farbe von Kanal {row}"
 
@@ -452,7 +452,7 @@ msgstr "Das Gerät oder die Szene, die du gerade bearbeitest, verwerfen und das 
 msgid "Disconnect"
 msgstr "Trennen"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "e.g. Dimmer"
 msgstr "z. B. Dimmer"
 
@@ -602,13 +602,21 @@ msgstr "Suche den Ordner…"
 msgid "Lowest value of channel {row}"
 msgstr "Tiefster Wert von Kanal {row}"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Max"
+msgstr "Max"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Max while locked"
 msgstr "Max. bei Sperre"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Maximum of channel {row} while locked"
 msgstr "Maximum von Kanal {row} bei Sperre"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Min"
+msgstr "Min"
 
 #: src/renderer/src/components/project/RecentProjectList.tsx
 msgid "missing"
@@ -625,6 +633,14 @@ msgstr "{fixtureName} nach links verschieben"
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Move {fixtureName} to the right"
 msgstr "{fixtureName} nach rechts verschieben"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
+msgid "Move channel {row} down"
+msgstr "Kanal {row} nach unten verschieben"
+
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
+msgid "Move channel {row} up"
+msgstr "Kanal {row} nach oben verschieben"
 
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Move preset {presetNumber} to the left"
@@ -647,7 +663,7 @@ msgstr "Szene {sceneName} nach rechts verschieben"
 msgid "Name"
 msgstr "Name"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Name of channel {row}"
 msgstr "Name von Kanal {row}"
 
@@ -734,7 +750,7 @@ msgstr "Offset"
 msgid "Offset {offset} is used by more than one channel"
 msgstr "Offset {offset} wird von mehr als einem Kanal benutzt"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Offset of channel {row}"
 msgstr "Offset von Kanal {row}"
 
@@ -852,7 +868,7 @@ msgstr "Zuletzt geöffnet"
 msgid "Remove {projectName} from the list (the file stays)"
 msgstr "{projectName} aus der Liste entfernen (die Datei bleibt)"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Remove the channel"
 msgstr "Kanal entfernen"
 
@@ -985,6 +1001,10 @@ msgstr "Quellcode"
 msgid "Start address"
 msgstr "Startadresse"
 
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Start address <0>{startAddress}</0>"
+msgstr "Startadresse <0>{startAddress}</0>"
+
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Start channel"
 msgstr "Startkanal"
@@ -1016,6 +1036,10 @@ msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nac
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 msgstr "Hier liegen die eigenen Einstellungen der App als JSON-Dateien: der Passwort-Hash, der Ausgabe-Port, die Sprache, die zuletzt geöffneten Projekte und die Fensterposition. Die Geräte und Szenen sind in den Projektdateien."
+
+#: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
+msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
+msgstr "Die Pfeile verschieben einen Kanal nach oben oder unten: Die Fader des Geräts erscheinen in der Reihenfolge dieser Liste. Sein Offset und seine Adresse bleiben, wie sie sind, und seine Presets und Szenen setzen ihn weiterhin."
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
@@ -1095,8 +1119,12 @@ msgid "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file yo
 msgstr "Die Geräte und Szenen einer Anlage sind in einem <0>Projekt</0>: einer .glp-Datei, die du ablegst, wo du willst, in den Dokumenten, auf dem Desktop oder auf einem USB-Stick. Mach ein Projekt pro Lokal oder Show. Jede Änderung an einem Gerät oder einer Szene wird sofort in die Datei gespeichert; einen Speichern-Knopf gibt es nicht."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets in the fixture editor."
-msgstr "Die Geräte erscheinen in der Reihenfolge, in der sie hinzugefügt wurden. Um sie so anzuordnen, wie du deine Anlage bedienst, nimm im Setup-Modus die Pfeile neben dem Namen eines Geräts: Sie verschieben es um einen Platz nach links oder rechts. Die Szenen-Knöpfe haben dieselben Pfeile, ebenso die Presets im Geräte-Editor."
+msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
+msgstr "Die Geräte erscheinen in der Reihenfolge, in der sie hinzugefügt wurden. Um sie so anzuordnen, wie du deine Anlage bedienst, nimm im Setup-Modus die Pfeile neben dem Namen eines Geräts: Sie verschieben es um einen Platz nach links oder rechts. Die Szenen-Knöpfe haben dieselben Pfeile, ebenso die Presets und die Kanäle im Geräte-Editor. Einen Kanal zu verschieben ändert nur, wo sein Fader erscheint, nicht seine Adresse."
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "The highest value of the fader; empty for {highestValue}"
+msgstr "Der höchste Wert des Faders; leer für {highestValue}"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The highest value while the channel lock is on; empty for no lock"
@@ -1109,6 +1137,10 @@ msgstr "Der Hinweis darf höchstens {maxLength} Zeichen haben"
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
 msgstr "Die Sperre gilt nur für das, was die App sendet. Ein Laser kann trotzdem angehen: über seine Infrarot-Fernbedienung (Laser, Auto, Sound), die Programme in seinem eigenen Menü oder von selbst, wenn kein DMX-Signal ankommt. Wo er sich nicht hoch genug montieren lässt, deck die Laseröffnung ab, versorg die Fernbedienung und lass das Menü des Geräts auf DMX."
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "The lowest value of the fader; empty for {lowestValue}"
+msgstr "Der tiefste Wert des Faders; leer für {lowestValue}"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"
@@ -1226,7 +1258,7 @@ msgstr "Wert von {label} in Preset {presetNumber}"
 msgid "Value of position {positionNumber} of channel {row}"
 msgstr "Wert von Position {positionNumber} von Kanal {row}"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Values"
 msgstr "Werte"
 
@@ -1242,7 +1274,7 @@ msgstr "Werte von Kanal {row}"
 msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von Häkchen die schon gespeicherten Werte nicht: Nur ein neu angehaktes Gerät wird mit dem gespeichert, was seine Fader jetzt zeigen. <0>Aktuelle Werte speichern</0> speichert für jedes angehakte Gerät, was die Fader jetzt zeigen, und ersetzt die gespeicherten Werte. Um den Look einer Szene zu ändern, drückst du die Szene, passt die Fader an und speicherst sie mit «Aktuelle Werte speichern»."
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
 msgstr "Wo der Fader anhält: bei jedem Wert von Min. bis Max., in Stufen oder nur bei einigen Positionen"
 

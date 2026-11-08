@@ -24,6 +24,13 @@ export interface FixtureDraft {
 }
 
 export interface FixtureChannelDraft {
+  /** the row's identity while it is edited, so a moved row keeps its focus */
+  readonly id: string;
+  /**
+   * the offset the channel has in the saved fixture, undefined for a channel added in this editor: the scenes, which
+   * live outside the draft, follow the channel when its offset is changed
+   */
+  readonly storedOffset?: number;
   readonly name: string;
   readonly offset: string;
   /** the channel's cap while the channel lock is on; blank for none */
@@ -36,7 +43,7 @@ export interface FixtureChannelDraft {
 
 /**
  * a preset as edited: one entry per channel of the draft, at the same index, so a preset follows when a channel is
- * removed or its offset changes
+ * removed, moved or its offset changes
  */
 export interface FixturePresetDraft {
   readonly id: string;
@@ -65,7 +72,8 @@ const NO_LOCK = '';
 
 const NO_COLOR = '';
 
-const channelDraftAt = (offset: number): FixtureChannelDraft => ({
+const channelDraftAt = (id: string, offset: number): FixtureChannelDraft => ({
+  id,
   name: '',
   offset: String(offset),
   lockMax: NO_LOCK,
@@ -73,10 +81,11 @@ const channelDraftAt = (offset: number): FixtureChannelDraft => ({
   values: newChannelValuesDraft()
 });
 
-export const newFixtureDraft = (): FixtureDraft => ({
+/** `channelId` is the id of its first channel */
+export const newFixtureDraft = (channelId: string): FixtureDraft => ({
   name: '',
   startAddress: String(FIRST_DMX_CHANNEL),
-  channels: [channelDraftAt(FIRST_OFFSET)],
+  channels: [channelDraftAt(channelId, FIRST_OFFSET)],
   description: '',
   hint: '',
   presets: []
@@ -92,10 +101,15 @@ const presetDraftOf = (fixture: Fixture, preset: FixturePreset): FixturePresetDr
   })
 });
 
+/** the id of a saved channel's row: offsets are unique within a saved fixture, new rows get a random id */
+const storedChannelId = (offset: number): string => `stored-${offset}`;
+
 export const draftOf = (fixture: Fixture): FixtureDraft => ({
   name: fixture.name,
   startAddress: String(fixture.startAddress),
   channels: fixture.channels.map((channel) => ({
+    id: storedChannelId(channel.offset),
+    storedOffset: channel.offset,
     name: channel.name,
     offset: String(channel.offset),
     lockMax: channel.lock ? String(channel.lock.max) : NO_LOCK,
@@ -172,6 +186,12 @@ export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   };
 }
 
+/** the start address typed, or undefined while it isn't a DMX channel */
+export function draftStartAddress(draft: FixtureDraft): number | undefined {
+  const startAddress = numberOf(draft.startAddress);
+  return isDmxChannel(startAddress) ? startAddress : undefined;
+}
+
 /** the DMX address the channel lands on, or undefined while the start address or the offset can't give a valid one */
 export function draftChannelAddress(draft: FixtureDraft, channel: FixtureChannelDraft): number | undefined {
   const offset = numberOf(channel.offset);
@@ -179,13 +199,13 @@ export function draftChannelAddress(draft: FixtureDraft, channel: FixtureChannel
   return offset >= 0 && isDmxChannel(address) ? address : undefined;
 }
 
-/** a new channel after the highest offset typed so far */
-export function withNewChannel(draft: FixtureDraft): FixtureDraft {
+/** a new channel after the highest offset typed so far, its row identified by `id` */
+export function withNewChannel(draft: FixtureDraft, id: string): FixtureDraft {
   const offsets = draft.channels.map((channel) => numberOf(channel.offset)).filter(Number.isInteger);
   const nextOffset = offsets.length > 0 ? Math.max(...offsets) + 1 : FIRST_OFFSET;
   return {
     ...draft,
-    channels: [...draft.channels, channelDraftAt(nextOffset)],
+    channels: [...draft.channels, channelDraftAt(id, nextOffset)],
     presets: draft.presets.map((preset) => ({...preset, values: [...preset.values, UNSET_PRESET_VALUE]}))
   };
 }
@@ -204,6 +224,28 @@ export const withoutChannel = (draft: FixtureDraft, index: number): FixtureDraft
   channels: draft.channels.filter((_, current) => current !== index),
   presets: draft.presets.map((preset) => ({...preset, values: preset.values.filter((_, current) => current !== index)}))
 });
+
+/**
+ * the channel one place earlier or later in the list: the order of its row and its fader. Its offset stays, so it
+ * keeps its address; its preset values move with it
+ */
+export const withChannelMoved = (draft: FixtureDraft, index: number, direction: MoveDirection): FixtureDraft => ({
+  ...draft,
+  channels: moved(draft.channels, index, direction),
+  presets: draft.presets.map((preset) => ({...preset, values: moved(preset.values, index, direction)}))
+});
+
+/**
+ * stored offset to offset as typed, for every saved channel still in the draft with a whole-number offset: how the
+ * scenes follow the channels when the draft is saved. A removed channel is not in the map
+ */
+export const channelOffsetChanges = (draft: FixtureDraft): ReadonlyMap<number, number> =>
+  new Map(
+    draft.channels.flatMap(({storedOffset, offset}) => {
+      const newOffset = numberOf(offset);
+      return storedOffset !== undefined && Number.isInteger(newOffset) ? [[storedOffset, newOffset] as const] : [];
+    })
+  );
 
 /** a new preset setting every channel at its lowest value: 0, fitted to the channel's rules */
 export const withNewPreset = (draft: FixtureDraft, id: string): FixtureDraft => ({
