@@ -26,7 +26,8 @@ interface SceneButtonsProps {
 
 /**
  * A button per scene, setting the channels of its fixtures at once. In Setup mode each comes with move, edit and delete
- * buttons, and the Add scene button follows the last scene. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
+ * buttons, and the Add scene button follows the last scene. A scene touching a channel above its cap stays playable
+ * (the channel goes up to its cap) and shows the lock.
  */
 const SceneButtons = ({onEdit, onAdd, actionsDisabled}: SceneButtonsProps) => {
   const {t} = useLingui();

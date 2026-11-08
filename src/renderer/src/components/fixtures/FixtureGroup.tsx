@@ -47,7 +47,8 @@ interface FixtureGroupProps {
 
 /**
  * The fixture's name and addresses, a fader per channel on its absolute DMX channel (a button per position for a
- * positions channel set to buttons), its preset buttons and its hint below them. The description is reference material, hidden until opened with the button next to the hint.
+ * positions channel set to buttons), its preset buttons and its hint below them. The description is reference
+ * material, hidden until opened with the button next to the hint.
  */
 const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
   const {t} = useLingui();
