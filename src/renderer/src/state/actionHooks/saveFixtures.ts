@@ -1,8 +1,9 @@
 import {msg} from '@lingui/core/macro';
 
-import type {Fixture, Scene} from '@shared/ipc';
+import type {Chase, Fixture, Scene} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
+import {withChase, withChaseMoved, withoutChase} from '@/data/chaseList';
 import {changingFixtures, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
 import type {MoveDirection} from '@/data/listOrder';
 import {capturePreset, withPreset} from '@/data/presets';
@@ -46,6 +47,9 @@ const couldNotSaveScene = (sceneName: string) => msg`Could not save the scene ${
 const couldNotDeleteScene = ({name: sceneName}: Scene) => msg`Could not delete the scene ${sceneName}`;
 const couldNotMoveFixture = ({name: fixtureName}: Fixture) => msg`Could not move the fixture ${fixtureName}`;
 const couldNotMoveScene = ({name: sceneName}: Scene) => msg`Could not move the scene ${sceneName}`;
+const couldNotSaveChase = ({name: chaseName}: Chase) => msg`Could not save the chase ${chaseName}`;
+const couldNotDeleteChase = ({name: chaseName}: Chase) => msg`Could not delete the chase ${chaseName}`;
+const couldNotMoveChase = ({name: chaseName}: Chase) => msg`Could not move the chase ${chaseName}`;
 
 /**
  * adds the fixture, or replaces the one with its id; the scenes follow its channels to their new offsets
@@ -132,5 +136,31 @@ export function useActionDeleteScene() {
       (setup) => withoutScene(setup, scene.id),
       `deleting the scene ${scene.name}`,
       couldNotDeleteScene(scene)
+    );
+}
+
+/** adds the chase, or replaces the one with its id; main stops it first if it is the one playing */
+export function useActionSaveChase() {
+  return (chase: Chase) =>
+    storeFixtures((setup) => withChase(setup, chase), `saving the chase ${chase.name}`, couldNotSaveChase(chase));
+}
+
+/** main stops it first if it is the one playing */
+export function useActionDeleteChase() {
+  return (chase: Chase) =>
+    storeFixtures(
+      (setup) => withoutChase(setup, chase.id),
+      `deleting the chase ${chase.name}`,
+      couldNotDeleteChase(chase)
+    );
+}
+
+/** one row up or down in the chase list; a playing chase plays on */
+export function useActionMoveChase() {
+  return (chase: Chase, direction: MoveDirection) =>
+    storeFixtures(
+      (setup) => withChaseMoved(setup, chase.id, direction),
+      `moving the chase ${chase.name}`,
+      couldNotMoveChase(chase)
     );
 }

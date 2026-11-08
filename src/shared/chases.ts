@@ -47,7 +47,8 @@ const isValidRepeat = (repeat: ChaseRepeat): boolean =>
 const isValidHold = (holdMs: number): boolean =>
   Number.isInteger(holdMs) && holdMs >= CHASE_HOLD_MIN_MS && holdMs <= CHASE_HOLD_MAX_MS;
 
-function stepErrors(step: ChaseStep): ChaseError[] {
+/** what is wrong with one step, each problem once; the editor shows them at the step */
+export function chaseStepErrors(step: ChaseStep): ChaseError[] {
   const errors: ChaseError[] = [];
   const channels = step.values.map(({channel}) => channel);
   if (!isValidHold(step.holdMs)) {
@@ -68,8 +69,11 @@ function stepErrors(step: ChaseStep): ChaseError[] {
   return errors;
 }
 
-/** what keeps the chase from being saved, each problem once; empty when it is valid */
-export function chaseErrors(chase: Chase): ChaseError[] {
+const firstOfEachType = (errors: readonly ChaseError[]): ChaseError[] =>
+  errors.filter((error, index) => errors.findIndex(({type}) => type === error.type) === index);
+
+/** what is wrong with the chase apart from its steps' own problems (chaseStepErrors) */
+export function chaseOwnErrors(chase: Chase): ChaseError[] {
   const errors: ChaseError[] = [];
   if (isBlank(chase.name)) {
     errors.push({type: 'chase-name-missing'});
@@ -89,9 +93,12 @@ export function chaseErrors(chase: Chase): ChaseError[] {
   if (duplicatesOf(chase.steps.map(({id}) => id)).length > 0) {
     errors.push({type: 'chase-step-id-twice'});
   }
-  errors.push(...chase.steps.flatMap(stepErrors));
-  return errors.filter((error, index) => errors.findIndex(({type}) => type === error.type) === index);
+  return errors;
 }
+
+/** what keeps the chase from being saved, each problem once; empty when it is valid */
+export const chaseErrors = (chase: Chase): ChaseError[] =>
+  firstOfEachType([...chaseOwnErrors(chase), ...chase.steps.flatMap(chaseStepErrors)]);
 
 /** true when every chase is valid and no two share an id */
 export function chasesAreValid(setup: FixtureSetup): boolean {
