@@ -84,7 +84,8 @@ src/
     projects.ts              # project files: parseProjectFile (too-new before invalid), the .glp extension, projectNameOf
     scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
     chases.ts                # chase validation (ChaseError codes), checked by parseFixtureSetup; per absolute
-                             # channel, independent of the fixtures
+                             # channel, independent of the fixtures; passCount (main's player and the chase rows)
+    time.ts                  # MS_PER_SECOND, MS_PER_MINUTE
     channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
                              # scene values checked against them
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
@@ -154,7 +155,7 @@ src/
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
-                             # presets, scenes, chaseRows, chaseDraft, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
+                             # presets, scenes, chaseRows, chaseDraft, chaseHold, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
                              # recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
                              # (composition root), impl/electron, impl/inMemory
