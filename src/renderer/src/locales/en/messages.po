@@ -41,7 +41,7 @@ msgstr "{presetName} sets a locked channel"
 msgid "{stepCount} steps"
 msgstr "{stepCount} steps"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 
@@ -81,15 +81,23 @@ msgstr "A chase can have at most {maxSteps} steps"
 msgid "A chase name can have at most {maxLength} characters"
 msgstr "A chase name can have at most {maxLength} characters"
 
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "A chase plays <0>steps</0> one after the other, e.g. a laser and a strobe taking turns. Each step sets some channels and <1>holds</1> for its time, then the next one follows. After the last step, the chase ends, plays again or loops until stopped, as its repeat says: <2>1×</2>, <3>8×</3> or <4>∞</4> at the end of its row. The chases are listed below the fixtures, one row each."
+msgstr "A chase plays <0>steps</0> one after the other, e.g. a laser and a strobe taking turns. Each step sets some channels and <1>holds</1> for its time, then the next one follows. After the last step, the chase ends, plays again or loops until stopped, as its repeat says: <2>1×</2>, <3>8×</3> or <4>∞</4> at the end of its row. The chases are listed below the fixtures, one row each."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "A chase stops by itself on Emergency off (before the blackout), when another project is opened or created, when the app is closed, and when the playing chase is changed or deleted in Setup mode. It keeps playing when Setup mode is locked, when the channel lock is turned on or off, and while the interface is disconnected: its steps go out again once it is connected."
+msgstr "A chase stops by itself on Emergency off (before the blackout), when another project is opened or created, when the app is closed, and when the playing chase is changed or deleted in Setup mode. It keeps playing when Setup mode is locked, when the channel lock is turned on or off, and while the interface is disconnected: its steps go out again once it is connected."
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
 msgstr "A color must be a hex value like #ff00ff"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
 msgstr "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
 msgstr "A fixture's channel can have a <0>Max while locked</0> (in the fixture editor): while the channel lock is on, the channel never goes above it, whichever fader, preset, scene or view sets it. A laser gets 0, a macro channel running the device's own programs e.g. 50. Its faders show a lock and stop at the maximum (at 0 they are greyed out), and a preset that would set it higher is disabled. A scene that would set it higher stays playable, so a look of the whole rig still works: the channel only goes up to its maximum, and the scene's button shows a lock."
 
@@ -97,7 +105,7 @@ msgstr "A fixture's channel can have a <0>Max while locked</0> (in the fixture e
 msgid "A position name can have at most {maxLength} characters"
 msgstr "A position name can have at most {maxLength} characters"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/PresetsTopic.tsx
 msgid "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset, give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they are."
 msgstr "A preset is a button on a fixture that sets several of its channels at once, e.g. \"Warm white\". To make one, set the fixture's faders and press the save button next to its presets. Edit the fixture to rename a preset, give it a color (a dot on its button) or choose which channels it sets: the ones it leaves out stay as they are."
 
@@ -109,7 +117,7 @@ msgstr "A preset name can have at most {maxLength} characters"
 msgid "A project is a .glp file with the fixtures and scenes of one rig, e.g. one per venue or show. Keep it wherever you like: in Documents, on the Desktop or on a USB stick. Every change is saved to the file right away. The app opens the last project again on its next start, and a double-click on a .glp file opens it."
 msgstr "A project is a .glp file with the fixtures and scenes of one rig, e.g. one per venue or show. Keep it wherever you like: in Documents, on the Desktop or on a USB stick. Every change is saved to the file right away. The app opens the last project again on its next start, and a double-click on a .glp file opens it."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ScenesTopic.tsx
 msgid "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
 msgstr "A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. \"Intro\" or \"Blackout\". The fixtures a scene leaves out stay as they are, so scenes can be layered: a colour scene for the PARs while the smoke machine keeps running."
 
@@ -121,11 +129,15 @@ msgstr "A scene name can have at most {maxLength} characters"
 msgid "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
 msgstr "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
 
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "A step only sets the channels it names; all others stay as they are. The faders stay live while a chase plays: a channel moved by hand keeps its value until a step sets it again. After Stop, and when a chase ends, the channels keep the values the last step left; press <0>Emergency off</0> to black out. The channel lock caps a chase's values like a fader's."
+msgstr "A step only sets the channels it names; all others stay as they are. The faders stay live while a chase plays: a channel moved by hand keeps its value until a step sets it again. After Stop, and when a chase ends, the channels keep the values the last step left; press <0>Emergency off</0> to black out. The channel lock caps a chase's values like a fader's."
+
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "A step sets a channel twice"
 msgstr "A step sets a channel twice"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 msgstr "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 
@@ -167,7 +179,7 @@ msgstr "Add step"
 msgid "Address"
 msgstr "Address"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
 msgstr "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
 
@@ -313,6 +325,7 @@ msgid "Chase editor"
 msgstr "Chase editor"
 
 #: src/renderer/src/components/chases/ChaseList.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Chases"
 msgstr "Chases"
 
@@ -320,7 +333,7 @@ msgstr "Chases"
 msgid "Choose at least one fixture"
 msgstr "Choose at least one fixture"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like one of the two (both use the same USB chip) is marked with a <2>▸</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like one of the two (both use the same USB chip) is marked with a <2>▸</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 
@@ -346,20 +359,16 @@ msgid "Connect"
 msgstr "Connect"
 
 #: src/renderer/src/components/help/manualTopics.ts
+msgid "Connecting"
+msgstr "Connecting"
+
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Connecting the DMX interface"
 msgstr "Connecting the DMX interface"
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Connecting to {path}…"
 msgstr "Connecting to {path}…"
-
-#: src/renderer/src/components/help/ManualToc.tsx
-msgid "Contents"
-msgstr "Contents"
-
-#: src/renderer/src/components/help/ManualToc.tsx
-msgid "Contents of the manual"
-msgstr "Contents of the manual"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Continuous"
@@ -616,6 +625,10 @@ msgstr "Every step needs at least one channel"
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 
+#: src/renderer/src/components/help/manualTopics.ts
+msgid "Exploring"
+msgstr "Exploring"
+
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Fader"
 msgstr "Fader"
@@ -627,6 +640,10 @@ msgstr "Finding out what a device does"
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Fixture editor"
 msgstr "Fixture editor"
+
+#: src/renderer/src/components/help/manualTopics.ts
+msgid "Fixtures"
+msgstr "Fixtures"
 
 #: src/renderer/src/components/fixtures/SceneFixtureChoices.tsx
 msgid "Fixtures in the scene"
@@ -644,7 +661,7 @@ msgstr "Fixtures, presets and scenes can be changed, and the Channels view is op
 msgid "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
 msgstr "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ModesTopic.tsx
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 
@@ -696,7 +713,7 @@ msgstr "How to set up a fixture"
 msgid "How to set up the channels"
 msgstr "How to set up the channels"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 msgstr "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 
@@ -736,6 +753,10 @@ msgstr "Looking up the folder…"
 msgid "Lowest value of channel {row}"
 msgstr "Lowest value of channel {row}"
 
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "Manual"
+msgstr "Manual"
+
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Max"
 msgstr "Max"
@@ -759,6 +780,10 @@ msgstr "missing"
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Mode"
 msgstr "Mode"
+
+#: src/renderer/src/components/help/manualTopics.ts
+msgid "Modes"
+msgstr "Modes"
 
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Move {fixtureName} to the left"
@@ -863,7 +888,7 @@ msgstr "No fixtures yet: add the devices of your rig, to control them by name."
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 msgstr "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FindingOutTopic.tsx
 msgid "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
 msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode only) has a fader for every DMX channel, 16 at a time. Jump to the device's address, move one channel after the other and watch what it does. The fixtures and the channels show the same values: a fader moved in one view has moved in the other, too."
 
@@ -941,7 +966,7 @@ msgstr "Open the Settings to lock it"
 msgid "Open the Settings to turn it on"
 msgstr "Open the Settings to turn it on"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ProjectsTopic.tsx
 msgid "Opening another project sets all channels to 0 first, then applies the new project's channel locks. A fixture or scene being edited is dropped, the app asks first. A file that is no valid project, or one saved by a newer version of the app, is not opened and left exactly as it is. To back up a project or take it to another computer, copy the file; its path is shown in the Help view."
 msgstr "Opening another project sets all channels to 0 first, then applies the new project's channel locks. A fixture or scene being edited is dropped, the app asks first. A file that is no valid project, or one saved by a newer version of the app, is not opened and left exactly as it is. To back up a project or take it to another computer, copy the file; its path is shown in the Help view."
 
@@ -949,11 +974,11 @@ msgstr "Opening another project sets all channels to 0 first, then applies the n
 msgid "Opening the project…"
 msgstr "Opening the project…"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
 msgstr "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min before smoke\") and a <1>description</1> for anything else: the DMX mode, DIP switches, where it hangs. The description is Markdown (lists, tables, links to web pages that open in your browser), with a preview in the editor."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "Optionally, a channel's <0>color</0> as a hex value, e.g. ff0000 for red or #7f00ff for UV, or picked with a click on the swatch beside the field: its fader is filled with it and glows the brighter the higher the value, so the red channel is found at a glance."
 msgstr "Optionally, a channel's <0>color</0> as a hex value, e.g. ff0000 for red or #7f00ff for UV, or picked with a click on the swatch beside the field: its fader is filled with it and glows the brighter the higher the value, so the red channel is found at a glance."
 
@@ -982,7 +1007,7 @@ msgstr "Pause the chase {chaseName}"
 msgid "Pick a color"
 msgstr "Pick a color"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 
@@ -1006,7 +1031,7 @@ msgstr "Presets"
 msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
 msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
 
@@ -1132,7 +1157,7 @@ msgstr "Set password and unlock"
 msgid "Set the <0>faders</0> of the fixtures below to the look you want. They stay usable while this form is open; pressing a preset or another scene helps, too."
 msgstr "Set the <0>faders</0> of the fixtures below to the look you want. They stay usable while this form is open; pressing a preset or another scene helps, too."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches)."
 
@@ -1157,7 +1182,7 @@ msgstr "Settings"
 msgid "Setup mode"
 msgstr "Setup mode"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ModesTopic.tsx
 msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
 msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
 
@@ -1266,11 +1291,11 @@ msgstr "The <0>Address</0> column shows where each channel lands. Fixtures shari
 msgid "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ModesTopic.tsx
 msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
 msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
 msgstr "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
 
@@ -1282,7 +1307,7 @@ msgstr "The app's own settings are stored here as JSON files: the password hash,
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
 msgstr "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 
@@ -1327,7 +1352,7 @@ msgstr "The description can have at most {maxLength} characters"
 msgid "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 msgstr "The description is <0>Markdown</0>: <1>**bold**</1>, lists starting with <2>-</2>, tables, and links like <3>[manual](https://…)</3>, which open in your browser. Only links to web pages (<4>http://</4> or <5>https://</5>) can be clicked, any other shows as text. <6>Preview</6> shows how it will look."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one, a right click on it sets it to its lowest value."
 msgstr "The editor explains each step in its own help. Fixtures sharing addresses get a warning. A click on a fader's value raises it by one, a click on its name lowers it by one, a right click on it sets it to its lowest value."
 
@@ -1367,11 +1392,11 @@ msgstr "The fixture needs at least one channel"
 msgid "The fixtures and scenes are stored in this file. Copy it to back up the project or to take it to another computer."
 msgstr "The fixtures and scenes are stored in this file. Copy it to back up the project or to take it to another computer."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ProjectsTopic.tsx
 msgid "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
 msgstr "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file you keep wherever you like, in Documents, on the Desktop or on a USB stick. Keep one project per venue or show. Every change to a fixture or scene is saved to the file right away; there is no Save button."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 
@@ -1387,7 +1412,7 @@ msgstr "The highest value while the channel lock is on; empty for no lock"
 msgid "The hint can have at most {maxLength} characters"
 msgstr "The hint can have at most {maxLength} characters"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
 msgstr "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
 
@@ -1422,6 +1447,10 @@ msgstr "The password unlocks Setup mode and lifts the channel lock. Changing it 
 #: src/renderer/src/i18n/messages/passwordMessages.ts
 msgid "The passwords don't match"
 msgstr "The passwords don't match"
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "The play button of a row starts its chase at the first step, in Show and in Setup mode. One chase plays at a time: starting another one stops the one playing. Its row is highlighted, the current step filled, and the pass is counted. <0>Pause</0> keeps the current step. The hold is part of the chase, the pause is pressed live: a paused chase doesn't count down its hold, and <1>Resume</1> continues the step with the time that was left. <2>Stop</2> ends the chase. The app always starts with no chase playing."
+msgstr "The play button of a row starts its chase at the first step, in Show and in Setup mode. One chase plays at a time: starting another one stops the one playing. Its row is highlighted, the current step filled, and the pass is counted. <0>Pause</0> keeps the current step. The hold is part of the chase, the pause is pressed live: a paused chase doesn't count down its hold, and <1>Resume</1> continues the step with the time that was left. <2>Stop</2> ends the chase. The app always starts with no chase playing."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The preset {preset} needs at least one channel"
@@ -1475,11 +1504,15 @@ msgstr "The values of the preset {preset} must be whole numbers from {minValue} 
 msgid "times"
 msgstr "times"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ModesTopic.tsx
 msgid "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Hold</1> in seconds and the channels it sets (channel → value, labelled with the fixture channels on that address). <2>Add channel</2> adds one by hand. <3>Take current values</3> (of the fixtures you check), <4>Take from scene…</4> and <5>Take from preset…</5> merge those values into the step: a channel the step already sets takes the new value, the others are added. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+msgstr "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Hold</1> in seconds and the channels it sets (channel → value, labelled with the fixture channels on that address). <2>Add channel</2> adds one by hand. <3>Take current values</3> (of the fixtures you check), <4>Take from scene…</4> and <5>Take from preset…</5> merge those values into the step: a channel the step already sets takes the new value, the others are added. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+
+#: src/renderer/src/components/help/topics/ScenesTopic.tsx
 msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
 msgstr "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
 
@@ -1547,7 +1580,7 @@ msgstr "Where the fader stops: every value from min to max, in steps, or only at
 msgid "without a name"
 msgstr "without a name"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/topics/ProjectsTopic.tsx
 msgid "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
 msgstr "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
 

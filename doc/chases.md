@@ -1,6 +1,6 @@
 # Chases
 
-Status: **draft**.
+Status: **built** (#69: #70 to #76). The Help view's manual explains chases to the operator.
 
 ## What a chase is
 
@@ -60,7 +60,8 @@ singer is talking"). A paused chase doesn't count down its hold.
 - **Finished**: a chase that doesn't repeat ends after the last step's hold, like a stop. Its row goes back to normal,
   nothing marks it as done.
 - **Stops by itself on**: Emergency off (before the blackout, so no step comes after it), opening or creating another
-  project, quitting the app, saving or deleting the running chase in Setup mode (editing another chase doesn't).
+  project, quitting the app, saving a change to the running chase or deleting it in Setup mode (editing another chase
+  doesn't).
 - **Doesn't stop on**: switching between Show and Setup mode, the idle timer locking the app, turning the channel lock
   on or off, the DMX port disconnecting or failing (the chase keeps writing to the universe; it goes out once the port
   is back).
@@ -73,7 +74,9 @@ delays or stops a step. The renderer only sends start, pause, resume and stop wi
 as it is saved in the open project, not a copy the renderer sends.
 
 Timing is checked on the engine's 23 ms tick, so a step starts at most one tick late. Each step's time counts from
-when it should have started, not from when the tick saw it, so the lateness doesn't add up over a long loop.
+when it should have started, not from when the tick saw it, so the lateness doesn't add up over a long loop. A tick that
+stalls past several steps writes all of them into the same packet, in order (at most one pass), so the channels end as
+if every step had played.
 
 ## Show mode
 
@@ -97,8 +100,9 @@ Each row shows:
 - the name
 - Start (when not running), Pause / Resume and Stop (when running or paused)
 - the steps as small boxes, the current one filled, each showing its hold time on hover. The boxes get narrower to fit
-  the row; below a minimum width the row only shows `step 12 / 100`
-- the repeat: `1×`, `8×` or `∞`, and while running the current pass (`pass 3 / 8`)
+  the row; below a minimum width (4 px) the row only shows `step 12 / 100` while the chase plays, `100 steps` otherwise
+- the repeat: `1×`, `8×` or `∞`, and while running or paused the current pass (`pass 3 / 8`, `pass 3` for `∞`; none for
+  a chase played once)
 
 The running or paused row is highlighted (paused distinguishable from running); the others look dimmed, their Start
 still replaces the running chase.
@@ -111,33 +115,40 @@ shortcuts.
 
 ## Setup mode
 
-Each row also has **Edit**, **Delete** (asks first), **Move up** and **Move down**, like the fixtures. An **Add chase**
-button sits below the list.
+Each row also has **Move up** and **Move down**, **Edit** and **Delete** (asks first), like the fixtures; they are
+disabled while the chase editor is open. An **Add chase** button sits below the list, shown in Setup mode even when the
+project has no chases yet; the editor opens below it.
 
 ### The chase editor
 
 - **Name** (required, at most 40 characters like a scene's). No color: a chase row is told apart by its name and its
   steps
 - **Repeat**: Once · N times (N ≥ 2, N passes in total: "3 times" plays the steps three times) · Until stopped
-- **Steps**, in order, each with:
+- **Steps**, in order, one tab each, numbered and marked when something is wrong with the step (its problems on
+  hover), with **Add step** after the last tab. Each step's panel has:
   - its own **hold time**, in seconds with two decimals: at least 0.05 s (about two engine ticks), at most 3600 s
   - its **values**: a list of `channel → value`, shown with the fixture and channel name on that address if there is
-    one, all of them where fixtures share an address (only as a label: it isn't stored), editable and removable one
-    by one
+    one, all of them where fixtures share an address, each after a dot in the channel's color if it has one (only as
+    a label: it isn't stored), editable and removable one by one. The list is sorted by channel once a channel field
+    is left, not while it is typed
   - buttons to fill it. Each one **merges** into the step: a channel the step already sets takes the new value, a new
     channel is added, the others stay. Taking several scenes or presets builds a step up:
+    - **Add channel**: a single channel by hand
     - **Take current values**: pick fixtures with checkboxes, all channels of the checked ones are taken with the
       values they have now
-    - **Take from scene**: the scene's values, turned into absolute channels at the time of taking
-    - **Take from preset**: the preset's values on its fixture's addresses
-    - add a single channel by hand
-  - move up / move down, duplicate, delete
-- **Add step** appends an empty step with the hold of the step before it (1 s for the first one); Duplicate copies a
-  step with its values.
+    - **Take from scene…**: a choice list of the scenes; the scene's values, turned into absolute channels at the time
+      of taking
+    - **Take from preset…**: a choice list of the presets, grouped by fixture; the preset's values on its fixture's
+      addresses
+  - move left / move right (the tab's place), duplicate (the copy's tab is shown), delete (the next tab is shown)
+- **Add step** appends an empty step with the hold of the last step (1 s for the first one) and shows its tab; at most
+  100 steps. Duplicate copies a step with its hold and values right after it.
 - A step needs at least one channel; a chase at least one step.
 
 Saving follows the other editors: the whole project is written to its file first and only then shown; a failed save
-keeps the editor open with the error.
+keeps the editor open with the error. Enter in the name field saves, Escape cancels. Saving a change to the running chase
+or deleting it stops it; main compares the chase as saved before and after, so saving it unchanged, saving a fixture or
+reordering the chases lets it play on.
 
 ## Data
 
@@ -194,11 +205,12 @@ refers to a fixture, so a fixture change never makes a chase invalid.
   - stop, Emergency off and a project switch end it, and no step is applied after them
 - Engine: a step's values leave in one packet; a locked channel stays at its cap whatever the step says
 - A recorded run on the `inMemory` port: the frames' timestamps against the expected step times, each within one tick
-- On the rig: a two-step laser/strobe alternation at 0.5 s looks even and doesn't drift over a few minutes
+- On the rig: a two-step laser/strobe alternation at 0.5 s looks even and doesn't drift over a few minutes (#76)
 
 ## Also part of the change
 
-- The Help view's manual gets a section on chases (hold vs. pause, what stops a chase, faders staying live)
+- The Help view's manual has a section on chases (what a chase is, hold vs. pause, what stops a chase and what
+  doesn't, faders staying live, the values staying after a stop)
 - German texts for everything new, a line under `Added` in `CHANGELOG.md`
 
 ## Not in this feature
