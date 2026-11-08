@@ -22,3 +22,8 @@ export const chaseRows = style({
 export const errorMessage = style({
   color: vars.colors.danger
 });
+
+/** below the last row, where the new one will be */
+export const addChase = style({
+  alignSelf: 'flex-start'
+});

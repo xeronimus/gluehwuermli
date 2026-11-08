@@ -35,7 +35,7 @@ export interface FixtureGroupActions {
   /** where the fixture is in the Show view, of `count` fixtures */
   index: number;
   count: number;
-  /** while a scene is being edited: the scene editor works with the fixtures as they are */
+  /** while a scene or chase is being edited: the scene editor works with the fixtures as they are */
   disabled: boolean;
 }
 
