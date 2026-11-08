@@ -1,4 +1,4 @@
-import type {Chase, ChaseRepeat, ChaseStep} from '@shared/ipc';
+import type {Chase, ChaseRepeat, ChaseStep, SetChannelRequest} from '@shared/ipc';
 
 import {type DmxEngine, dmxEngineFactory} from '@/dmx/dmxEngine';
 import {emergencyOffFactory} from '@/dmx/emergencyOff';
@@ -46,6 +46,7 @@ let connector: InMemoryConnector;
 let engine: DmxEngine;
 let player: ChasePlayer;
 let statuses: ChasePlayerStatus[];
+let appliedValues: (readonly SetChannelRequest[])[];
 
 const lastPacket = () => connector.writtenPackets.at(-1);
 const advance = (ms: number) => vi.advanceTimersByTimeAsync(ms);
@@ -61,6 +62,8 @@ beforeEach(async () => {
   player = chasePlayerFactory({engine, now: () => Date.now(), log: silentLog});
   statuses = [];
   player.onStatusChanged((status) => statuses.push(status));
+  appliedValues = [];
+  player.onValuesApplied((values) => appliedValues.push(values));
   await engine.connect(SIMULATED_PORT_PATH);
   await nextTick();
 });
@@ -281,6 +284,82 @@ describe('stop', () => {
     expect(player.status()).toEqual({type: 'idle'});
     expect(isAllZero(lastPacket())).toBe(true);
   });
+});
+
+describe('the values a step set', () => {
+  test('are reported once per step, before the status that goes with it', async () => {
+    const events: string[] = [];
+    player.onValuesApplied(() => events.push('values'));
+    player.onStatusChanged((status) => events.push(status.type));
+
+    player.start(alternationOf({type: 'forever'}));
+    await nextTick();
+    expect(appliedValues).toEqual([
+      [
+        {channel: LASER, value: 255},
+        {channel: STROBE, value: 0},
+        {channel: DIMMER, value: 200}
+      ]
+    ]);
+
+    await untilSecondStep();
+    expect(appliedValues).toHaveLength(2);
+    expect(appliedValues[1]).toEqual([
+      {channel: LASER, value: 0},
+      {channel: STROBE, value: 255}
+    ]);
+    expect(events).toEqual(['values', 'running', 'values', 'running']);
+  });
+
+  test('a stalled tick reports each channel once, with the value it ends at', async () => {
+    player.start(alternationOf({type: 'forever'}));
+    appliedValues.length = 0;
+    // a whole pass and a step later, as one tick would see it after a stall
+    vi.setSystemTime(Date.now() + 3 * HOLD_MS);
+    await nextTick();
+
+    expect(appliedValues).toHaveLength(1);
+    expect(appliedValues[0]).toHaveLength(3);
+    expect(appliedValues[0]).toEqual(expect.arrayContaining([{channel: STROBE, value: 255}]));
+  });
+
+  test('are reported at their cap', async () => {
+    engine.setChannelLimits(new Map([[LASER, 0]]));
+
+    player.start(alternationOf({type: 'forever'}));
+
+    expect(appliedValues[0]).toContainEqual({channel: LASER, value: 0});
+  });
+
+  test('pause, resume and stop report none', async () => {
+    player.start(alternationOf({type: 'forever'}));
+    appliedValues.length = 0;
+
+    player.pause();
+    player.resume();
+    player.stop();
+    await nextTick();
+
+    expect(appliedValues).toEqual([]);
+  });
+});
+
+test('a channel set by hand keeps its value until a step sets it again', async () => {
+  const laserOnly: Chase = {
+    id: 'laser',
+    name: 'Laser',
+    repeat: {type: 'forever'},
+    steps: [stepOf('on', [{channel: LASER, value: 255}]), stepOf('dimmer', [{channel: DIMMER, value: 50}])]
+  };
+  player.start(laserOnly);
+  await nextTick();
+
+  engine.setChannel(LASER, 30);
+  await untilSecondStep();
+  expect(channelValueIn(lastPacket(), LASER)).toBe(30);
+
+  await untilSecondStep();
+  expect(channelValueIn(lastPacket(), LASER)).toBe(255);
 });
 
 describe('channel lock', () => {

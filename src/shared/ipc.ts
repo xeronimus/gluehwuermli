@@ -238,6 +238,34 @@ export const ChaseSchema = Type.Object({
 });
 export type Chase = Static<typeof ChaseSchema>;
 
+/** starting a chase names it by id: main plays the chase as saved in the open project, not a copy from the renderer */
+export const StartChaseRequestSchema = Type.Object({
+  chaseId: Type.String({minLength: 1})
+});
+export type StartChaseRequest = Static<typeof StartChaseRequestSchema>;
+
+/**
+ * what the chase player in main does: no chase, or the one running or paused with its step and pass, both counted from
+ * 0. Pushed over CHASE_STATUS_CHANGED on every step and on start, pause, resume, stop and finish, not on every tick
+ */
+export const ChaseStatusSchema = Type.Union([
+  Type.Object({type: Type.Literal('idle')}),
+  Type.Object({
+    type: Type.Union([Type.Literal('running'), Type.Literal('paused')]),
+    chaseId: Type.String({minLength: 1}),
+    stepIndex: Type.Integer({minimum: 0}),
+    passIndex: Type.Integer({minimum: 0})
+  })
+]);
+export type ChaseStatus = Static<typeof ChaseStatusSchema>;
+
+/**
+ * channel values main changed on its own (a chase step), after the caps: pushed over CHANNELS_CHANGED so the faders
+ * show what goes out. The same shape as a SetChannelValuesRequest, the other way round
+ */
+export const ChannelsChangedSchema = SetChannelValuesRequestSchema;
+export type ChannelsChanged = Static<typeof ChannelsChangedSchema>;
+
 /**
  * the version of a project file, so a later format change can migrate an older file instead of dropping it; a file
  * with a higher one is refused, never overwritten
@@ -433,3 +461,12 @@ export const parseProjectPathRequest = (payload: unknown): ProjectPathRequest | 
 
 export const parseSaveFixturesRequest = (payload: unknown): SaveFixturesRequest | undefined =>
   Value.Check(SaveFixturesRequestSchema, payload) ? payload : undefined;
+
+export const parseStartChaseRequest = (payload: unknown): StartChaseRequest | undefined =>
+  Value.Check(StartChaseRequestSchema, payload) ? payload : undefined;
+
+export const parseChaseStatus = (payload: unknown): ChaseStatus | undefined =>
+  Value.Check(ChaseStatusSchema, payload) ? payload : undefined;
+
+export const parseChannelsChanged = (payload: unknown): ChannelsChanged | undefined =>
+  Value.Check(ChannelsChangedSchema, payload) ? payload : undefined;
