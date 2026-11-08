@@ -43,6 +43,8 @@ export async function playChase(
 ): Promise<void> {
   try {
     actions.setChaseError(undefined);
+    // no guard against a newer push (unlike followChases): the reply and the pushes share one ordered IPC link, and
+    // main sends the reply before its next tick can push
     actions.setChaseStatus(await sendControl(service, control, chaseId));
   } catch (error) {
     logger.error(`chase ${control} failed`, error);
