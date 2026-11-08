@@ -1,8 +1,12 @@
+import {isDeepStrictEqual} from 'node:util';
+
+import {setupChases} from '@shared/chases';
 import {channelLimits, emptyFixtureSetup} from '@shared/fixtures';
 import type {FixtureSetup, ProjectOpenResult, ProjectStatus, RecentProject} from '@shared/ipc';
 import {withProjectFileExtension} from '@shared/projects';
 import {createSerialQueue} from '@shared/serialQueue';
 
+import type {ChasePlayer} from '@/chase/chasePlayer';
 import type {DmxEngine} from '@/dmx/dmxEngine';
 import type {AppSettings} from '@/settings/appSettings';
 
@@ -39,7 +43,10 @@ export interface ProjectSession {
   listRecent: () => Promise<RecentProject[]>;
   /** rejects if the settings can't be stored */
   removeRecent: (path: string) => Promise<void>;
-  /** rejects in Show mode, without an open project, for another project's setup and if the file can't be written */
+  /**
+   * rejects in Show mode, without an open project, for another project's setup and if the file can't be written. A
+   * stored change to the running chase, or its deletion, stops it; a change to anything else doesn't
+   */
   saveFixtures: (projectPath: string, setup: FixtureSetup) => Promise<void>;
   /** another project was opened; returns the function that removes the listener again */
   onChanged: (listener: (status: ProjectStatus) => void) => () => void;
@@ -50,6 +57,8 @@ export interface ProjectSession {
 export interface ProjectSessionDependencies {
   store: ProjectFileStore;
   engine: Pick<DmxEngine, 'blackout' | 'setChannelLimits'>;
+  /** the running chase belongs to the open project: a switch stops it */
+  chasePlayer: Pick<ChasePlayer, 'status' | 'stop'>;
   settings: Pick<AppSettings, 'load' | 'update'>;
   isSetupMode: () => boolean;
   dialogs: ProjectDialogs;
@@ -64,6 +73,7 @@ const messageOf = (error: unknown): string => (error instanceof Error ? error.me
 export function projectSessionFactory({
   store,
   engine,
+  chasePlayer,
   settings,
   isSetupMode,
   dialogs,
@@ -88,8 +98,9 @@ export function projectSessionFactory({
     }
   };
 
-  /** blackout and the new limits in one synchronous step: no tick can send between them */
+  /** stop, blackout and the new limits in one synchronous step: no tick can send or play a step between them */
   const switchTo = (path: string, setup: FixtureSetup) => {
+    chasePlayer.stop();
     engine.blackout();
     engine.setChannelLimits(channelLimits(setup.fixtures));
     currentStatus = {type: 'open', project: {path, setup}};
@@ -175,10 +186,29 @@ export function projectSessionFactory({
       if (!isSamePath(path, projectPath)) {
         throw new Error(`the fixtures belong to ${projectPath}, not to the open project ${path}`);
       }
+      const savedBefore = currentStatus.project.setup;
       await store.write(path, setup);
       currentStatus = {type: 'open', project: {path, setup}};
       engine.setChannelLimits(channelLimits(setup.fixtures));
+      stopChaseIfChanged(savedBefore, setup);
     });
+
+  /**
+   * the player plays the chase as it was saved: one edited or deleted stops, rather than playing on with steps that
+   * aren't stored any more. Main only gets the whole setup, so an unchanged chase (a fixture saved, chases reordered)
+   * plays on
+   */
+  const stopChaseIfChanged = (before: FixtureSetup, after: FixtureSetup) => {
+    const status = chasePlayer.status();
+    if (status.type === 'idle') {
+      return;
+    }
+    const chaseIn = (setup: FixtureSetup) => setupChases(setup).find(({id}) => id === status.chaseId);
+    const saved = chaseIn(after);
+    if (saved === undefined || !isDeepStrictEqual(saved, chaseIn(before))) {
+      chasePlayer.stop();
+    }
+  };
 
   return {
     start,

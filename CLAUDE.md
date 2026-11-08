@@ -116,8 +116,13 @@ src/
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation away from the app page or new window, only http(s) links
                              # open in the browser
+    chase/                   # chasePosition (pure: step and pass of a chase at a given time), chasePlayer (one chase at
+                             # a time on the engine's tick: start, pause, resume, stop; stopped by Emergency off, a
+                             # project switch, quitting, saving or deleting the running chase)
     dmx/
-      dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3)
+      dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3);
+                             # onTick runs the chase player right before the universe is sent
+      emergencyOff.ts        # stops the chase, then blacks out
       enttecProPacket.ts     # label 6 framing
       DmxPortConnector.ts    # port interface; impl/serialport (real), impl/inMemory (tests, simulated)
       portDetection.ts       # FTDI ids of the Pro
