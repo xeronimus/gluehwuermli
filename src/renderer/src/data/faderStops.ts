@@ -71,3 +71,20 @@ export const faderPositions = (fader: Fader): readonly ChannelPosition[] =>
   fader.values?.mode === 'positions'
     ? [...fader.values.positions].sort((first, second) => first.value - second.value)
     : NO_POSITIONS;
+
+/** a positions channel set to buttons in the fixture editor: the Show view has a button per position, not a fader */
+export const showsAsButtons = (fader: Fader): boolean =>
+  fader.values?.mode === 'positions' && fader.values.display === 'buttons';
+
+export interface PositionButton {
+  readonly value: number;
+  /** the position's name, or its value without one */
+  readonly label: string;
+}
+
+/**
+ * the buttons of a channel shown as buttons, one per position, the highest value on top like on the fader; none for
+ * the other channels
+ */
+export const positionButtons = (fader: Fader): PositionButton[] =>
+  [...faderPositions(fader)].reverse().map(({value, name}) => ({value, label: name ?? String(value)}));

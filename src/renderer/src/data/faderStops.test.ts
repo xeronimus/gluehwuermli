@@ -6,7 +6,9 @@ import {
   faderPositions,
   faderRange,
   loweredFaderValue,
+  positionButtons,
   raisedFaderValue,
+  showsAsButtons,
   snappedFaderValue,
   steppedFaderValue
 } from './faderStops';
@@ -61,4 +63,20 @@ test('a positions fader lists its positions lowest first, the others none', () =
   expect(faderPositions(gobo).map(({value}) => value)).toEqual([5, 6, 200]);
   expect(faderPositions(strobe)).toEqual([]);
   expect(faderRange(gobo)).toEqual({min: 5, max: 200});
+});
+
+test('only a positions channel set to buttons shows as buttons', () => {
+  expect(showsAsButtons(raw)).toBe(false);
+  expect(showsAsButtons(strobe)).toBe(false);
+  expect(showsAsButtons(gobo)).toBe(false);
+  expect(showsAsButtons({...gobo, values: {mode: 'positions', positions: [], display: 'buttons'}})).toBe(true);
+});
+
+test('the buttons go from the highest value on top to the lowest, named or by value; other channels have none', () => {
+  expect(positionButtons(gobo)).toEqual([
+    {value: 200, label: 'Star'},
+    {value: 6, label: 'Open'},
+    {value: 5, label: '5'}
+  ]);
+  expect(positionButtons(strobe)).toEqual([]);
 });
