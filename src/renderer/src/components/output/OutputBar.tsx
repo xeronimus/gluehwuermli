@@ -1,16 +1,16 @@
 import {ReactNode} from 'react';
 
-import {Plural, useLingui} from '@lingui/react/macro';
+import {useLingui} from '@lingui/react/macro';
 
 import fireflyLogo from '@assets/favicon/favicon-96x96.png';
 
 import {outputStatusMessage} from '@/i18n/messages/outputMessages';
-import {selectActiveChannelCount} from '@/state/channels/channelsSelectors';
 import {useAppStore} from '@/state/store';
 
+import EmergencyOffButton from './EmergencyOffButton';
 import LocaleSwitch from './LocaleSwitch';
 import LockIndicator from './LockIndicator';
-import {activeChannels, appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
+import {appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 import OutputConnection from './OutputConnection';
 
 interface OutputBarProps {
@@ -21,14 +21,13 @@ interface OutputBarProps {
 }
 
 /**
- * the view switch, what is unlocked, the status of the DMX output and Connect / Disconnect; the port is chosen in the
- * Settings view
+ * the view switch, what is unlocked, the status of the DMX output, Connect / Disconnect and Emergency off; the port is
+ * chosen in the Settings view
  */
 const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const {t, i18n} = useLingui();
   const outputStatus = useAppStore((state) => state.outputStatus);
   const error = useAppStore((state) => state.outputError);
-  const activeChannelCount = useAppStore(selectActiveChannelCount);
 
   return (
     <header className={outputBar}>
@@ -46,9 +45,7 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       </button>
       <OutputConnection />
       {error && <span className={outputError}>{i18n._(error)}</span>}
-      <span className={activeChannels}>
-        <Plural value={activeChannelCount} one="# channel above 0" other="# channels above 0" />
-      </span>
+      <EmergencyOffButton />
       <LocaleSwitch />
     </header>
   );

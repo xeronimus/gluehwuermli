@@ -66,11 +66,6 @@ export const selectedPort = style({
   whiteSpace: 'nowrap'
 });
 
-export const activeChannels = style({
-  color: vars.colors.textMuted,
-  fontSize: '0.9em'
-});
-
 export const outputError = style({
   color: vars.colors.danger
 });

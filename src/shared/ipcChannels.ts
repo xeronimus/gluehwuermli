@@ -8,6 +8,8 @@ export const IpcChannel = {
   SET_CHANNEL: 'dmx:set-channel',
   /** renderer -> main, fire-and-forget: several channels in one message, e.g. a preset */
   SET_CHANNEL_VALUES: 'dmx:set-channel-values',
+  /** renderer -> main, fire-and-forget, no payload: Emergency off, every channel to 0; allowed in Show mode too */
+  BLACKOUT: 'dmx:blackout',
   /** renderer -> main, request/response (ipcRenderer.invoke) */
   LIST_PORTS: 'dmx:list-ports',
   CONNECT: 'dmx:connect',

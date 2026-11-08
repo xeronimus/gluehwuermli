@@ -6,6 +6,8 @@ export default interface DmxService {
   setChannel: (channel: number, value: number) => void;
   /** fire-and-forget, one message for all of them */
   setChannelValues: (values: readonly SetChannelRequest[]) => void;
+  /** fire-and-forget: every channel to 0 (Emergency off) */
+  blackout: () => void;
   listPorts: () => Promise<readonly SerialPortDescription[]>;
   connect: (path: string) => Promise<DmxOutputStatus>;
   disconnect: () => Promise<DmxOutputStatus>;

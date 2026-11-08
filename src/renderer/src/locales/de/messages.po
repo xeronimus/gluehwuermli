@@ -13,10 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/renderer/src/components/output/OutputBar.tsx
-msgid "{activeChannelCount, plural, one {# channel above 0} other {# channels above 0}}"
-msgstr "{activeChannelCount, plural, one {# Kanal über 0} other {# Kanäle über 0}}"
-
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
@@ -40,6 +36,10 @@ msgstr "{positionCount, plural, one {# Position, unten aufgelistet} other {# Pos
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "{presetName} sets a locked channel"
 msgstr "{presetName} setzt einen gesperrten Kanal"
+
+#: src/renderer/src/components/help/UserManual.tsx
+msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
+msgstr "<0>Not-Aus</0> rechts in der oberen Leiste setzt alle 512 Kanäle auf einen Schlag auf 0, im Show-Modus und im Setup-Modus, mit oder ohne Projekt. Die Geräte, Presets und Szenen bleiben, wie sie sind; die Fader zeigen 0."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
@@ -134,8 +134,8 @@ msgid "Address"
 msgstr "Adresse"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out. With <1>Black out on quit</1> on (in the Output section), closing the app sets all channels to 0 first."
-msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Widget die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Zieh die Fader vor dem Trennen herunter, wenn es dunkel werden soll. Mit <1>Blackout beim Beenden</1> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
+msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
+msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Widget die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -477,6 +477,10 @@ msgstr "{fixtureName} bearbeiten"
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Edit the scene {sceneName}"
 msgstr "Szene {sceneName} bearbeiten"
+
+#: src/renderer/src/components/output/EmergencyOffButton.tsx
+msgid "Emergency off"
+msgstr "Not-Aus"
 
 #: src/renderer/src/components/project/ProjectSection.tsx
 msgid "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
@@ -903,6 +907,10 @@ msgstr "Serielle Ports nochmals suchen"
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Sending on {path}"
 msgstr "Sendet auf {path}"
+
+#: src/renderer/src/components/output/EmergencyOffButton.tsx
+msgid "Set all 512 channels to 0 now"
+msgstr "Alle 512 Kanäle sofort auf 0 setzen"
 
 #: src/renderer/src/components/project/ProjectButtons.tsx
 msgid "Set password and create"

@@ -18,6 +18,7 @@ export function inMemoryDmxServiceFactory(): DmxService {
   return {
     setChannel: () => {},
     setChannelValues: () => {},
+    blackout: () => {},
     listPorts: async () => [{path: SIMULATED_PORT_PATH, likelyEnttecPro: true}],
     connect: async (path) => setStatus({type: 'connected', path}),
     disconnect: async () => setStatus({type: 'disconnected'}),
