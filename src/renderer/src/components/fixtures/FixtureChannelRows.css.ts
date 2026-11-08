@@ -18,6 +18,17 @@ export const channelsSection = style({
   padding: `${ROW_BORDER_ROOM} ${ROW_BORDER_ROOM} 6px`
 });
 
+export const startAddressLine = style({
+  marginBottom: '8px',
+  color: vars.colors.textSecondary,
+  fontSize: '0.9em'
+});
+
+/** like the addresses in the rows below */
+export const startAddressValue = style({
+  fontFamily: vars.fonts.mono
+});
+
 export const channelRows = style({
   display: 'grid',
   gridTemplateColumns: '200px auto 64px auto auto 110px auto',

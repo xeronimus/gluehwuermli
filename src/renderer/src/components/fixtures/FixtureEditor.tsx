@@ -28,11 +28,7 @@ interface FixtureEditorProps {
   onClose: () => void;
 }
 
-const editTitle = ({name: fixtureName, startAddress}: Fixture) => (
-  <>
-    [{startAddress}] <Trans>Edit {fixtureName}</Trans>
-  </>
-);
+const editTitle = ({name: fixtureName}: Fixture) => <Trans>Edit {fixtureName}</Trans>;
 
 /**
  * edits a copy of the fixture, in three tabs on one draft; nothing changes until it is saved, and it can't be saved
