@@ -13,7 +13,13 @@ export interface ChannelValuesDraft {
   readonly max: string;
   readonly step: string;
   readonly positions: readonly PositionDraft[];
+  /** how a positions channel is shown in the Show view: as a fader or as a button per position */
+  readonly display: PositionsDisplay;
 }
+
+export type PositionsDisplay = 'fader' | 'buttons';
+
+export const POSITIONS_DISPLAYS: readonly PositionsDisplay[] = ['fader', 'buttons'];
 
 export interface PositionDraft {
   readonly value: string;
@@ -34,7 +40,8 @@ export const newChannelValuesDraft = (): ChannelValuesDraft => ({
   min: '',
   max: '',
   step: '',
-  positions: []
+  positions: [],
+  display: 'fader'
 });
 
 /** NaN for a blank field, which the validation reports, rather than the 0 Number('') would make of it */
@@ -69,7 +76,8 @@ export function channelValuesDraftOf(values: ChannelValues | undefined): Channel
       return {
         ...draft,
         mode: 'positions',
-        positions: values.positions.map(({value, name}) => ({value: String(value), name: name ?? ''}))
+        positions: values.positions.map(({value, name}) => ({value: String(value), name: name ?? ''})),
+        display: values.display ?? 'fader'
       };
   }
 }
@@ -79,9 +87,16 @@ const positionOf = ({value, name}: PositionDraft): ChannelPosition => {
   return {value: numberOf(value), ...(trimmed && {name: trimmed})};
 };
 
+/** lowest value first; a blank one (NaN, reported by the validation) last */
+const byValue = (first: ChannelPosition, second: ChannelPosition): number =>
+  Number.isNaN(first.value) || Number.isNaN(second.value)
+    ? Number(Number.isNaN(first.value)) - Number(Number.isNaN(second.value))
+    : first.value - second.value;
+
 /**
  * the rules the draft describes, valid or not (fixtureErrors checks them); none for every value from 0 to 255, so a
- * fixture without rules is stored as before
+ * fixture without rules is stored as before. Positions are stored lowest value first, whatever order they were added
+ * in; only buttons are stored for the display, a fader is stored as before
  */
 export function channelValuesOfDraft(draft: ChannelValuesDraft): ChannelValues | undefined {
   const min = boundOf(draft.min, DMX_MIN_VALUE);
@@ -92,7 +107,11 @@ export function channelValuesOfDraft(draft: ChannelValuesDraft): ChannelValues |
     case 'steps':
       return {mode: 'steps', min, max, step: numberOf(draft.step)};
     case 'positions':
-      return {mode: 'positions', positions: draft.positions.map(positionOf)};
+      return {
+        mode: 'positions',
+        positions: draft.positions.map(positionOf).sort(byValue),
+        ...(draft.display === 'buttons' && {display: 'buttons' as const})
+      };
   }
 }
 

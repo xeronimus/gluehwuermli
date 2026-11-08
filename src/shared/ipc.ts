@@ -89,7 +89,12 @@ export const ChannelValuesSchema = Type.Union([
     max: DmxValueSchema,
     step: Type.Integer({minimum: 1, maximum: DMX_MAX_VALUE})
   }),
-  Type.Object({mode: Type.Literal('positions'), positions: Type.Array(ChannelPositionSchema)})
+  Type.Object({
+    mode: Type.Literal('positions'),
+    positions: Type.Array(ChannelPositionSchema),
+    /** optional, so older files load; without it the channel is a fader, with it a button per position */
+    display: Type.Optional(Type.Literal('buttons'))
+  })
 ]);
 export type ChannelValues = Static<typeof ChannelValuesSchema>;
 

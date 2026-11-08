@@ -29,6 +29,9 @@ export const isFaderLocked = (limit: number | undefined): boolean => limit === D
 /** the channel lock lets the fader go no higher */
 export const isAtCap = (value: number, limit: number | undefined): boolean => limit !== undefined && value >= limit;
 
+/** whether the cap lets the channel go to the value, e.g. a position button; main would cap anything above it */
+export const isWithinCap = (value: number, limit: number | undefined): boolean => limit === undefined || value <= limit;
+
 export const clampedChannelValues = (
   values: readonly SetChannelRequest[],
   limits: ChannelLimits

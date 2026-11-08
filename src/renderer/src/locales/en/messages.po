@@ -42,8 +42,8 @@ msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -168,6 +168,10 @@ msgstr "Asking whether the app is locked…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Black out on quit"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Buttons"
+msgstr "Buttons"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "by"
@@ -502,6 +506,10 @@ msgstr "Every preset needs a name"
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Fader"
+msgstr "Fader"
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Finding out what a device does"
 msgstr "Finding out what a device does"
@@ -573,6 +581,10 @@ msgstr "How to set up the channels"
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 msgstr "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "In the Show view: a fader, or a button per position"
+msgstr "In the Show view: a fader, or a button per position"
 
 #: src/renderer/src/components/settings/LanguageSection.tsx
 msgid "Language"

@@ -16,6 +16,8 @@ change bumps the minor version and everything else the patch version.
   without a project; fixtures, scenes and presets stay as they are (#63)
 - Channels can be moved up and down in the fixture editor, which changes the order of the fixture's faders; their
   addresses stay the same, and presets and scenes keep setting the same channels (#64)
+- A channel with positions can be shown as buttons instead of a fader (Fader / Buttons next to Add position): one
+  button per position, the one of the current value lit; positions above the channel lock's cap are disabled (#65)
 
 ### Changed
 
