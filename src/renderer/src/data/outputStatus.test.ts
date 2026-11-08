@@ -34,8 +34,8 @@ describe('preferredPortPath', () => {
   });
 });
 
-test('describePort names manufacturer and the Enttec hint', () => {
-  expect(describePort(COM3)).toBe('COM3 (FTDI) – Enttec?');
+test('describePort names the manufacturer and marks a likely DMX interface first', () => {
+  expect(describePort(COM3)).toBe('▸ COM3 (FTDI)');
   expect(describePort(COM1)).toBe('COM1');
 });
 

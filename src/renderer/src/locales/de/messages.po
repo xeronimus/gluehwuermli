@@ -42,8 +42,8 @@ msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to
 msgstr "<0>Not-Aus</0> rechts in der oberen Leiste setzt alle 512 Kanäle auf einen Schlag auf 0, im Show-Modus und im Setup-Modus, mit oder ohne Projekt. Die Geräte, Presets und Szenen bleiben, wie sie sind; die Fader zeigen 0."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Mit <4>Knöpfe</4> neben «Position hinzufügen» hat die Ansicht Show statt des Faders einen Knopf pro Position, der höchste Wert zuoberst. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -114,6 +114,7 @@ msgid "Add channel"
 msgstr "Kanal hinzufügen"
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "Add fixture"
 msgstr "Gerät hinzufügen"
 
@@ -125,7 +126,7 @@ msgstr "Position hinzufügen"
 msgid "Add preset"
 msgstr "Preset hinzufügen"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Add scene"
 msgstr "Szene hinzufügen"
 
@@ -134,8 +135,8 @@ msgid "Address"
 msgstr "Adresse"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
-msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Widget die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
+msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
+msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Interface die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -168,6 +169,10 @@ msgstr "Frage nach, ob die App gesperrt ist…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Blackout beim Beenden"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Buttons"
+msgstr "Knöpfe"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "by"
@@ -251,7 +256,7 @@ msgstr "Kanalsperre aufgehoben"
 msgid "Channel lock on"
 msgstr "Kanalsperre an"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Channel locks"
 msgstr "Kanalsperren"
 
@@ -272,8 +277,8 @@ msgid "Choose at least one fixture"
 msgstr "Wähl mindestens ein Gerät"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
-msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen</1> (ein Klick auf den Status oben in der Leiste führt dorthin; kein Passwort nötig). Ein Port, der nach einem Enttec aussieht, ist mit <2>Enttec?</2> markiert und schon ausgewählt. Erst nach dem Start der App eingesteckt? Such die Ports mit dem Aktualisieren-Knopf nochmals."
+msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like one of the two (both use the same USB chip) is marked with a <2>▸</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
+msgstr "Wähl den Port im Abschnitt <0>Ausgang</0> der Ansicht <1>Einstellungen</1> (ein Klick auf den Status oben in der Leiste führt dorthin; kein Passwort nötig). Ein Port, der nach einem der beiden aussieht (beide haben denselben USB-Chip), ist mit einem <2>▸</2> markiert und schon ausgewählt. Erst nach dem Start der App eingesteckt? Such die Ports mit dem Aktualisieren-Knopf nochmals."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
@@ -296,13 +301,21 @@ msgstr "Farbe der Szene"
 msgid "Connect"
 msgstr "Verbinden"
 
-#: src/renderer/src/components/help/UserManual.tsx
-msgid "Connecting the DMX USB Pro"
-msgstr "Den DMX USB Pro anschliessen"
+#: src/renderer/src/components/help/manualTopics.ts
+msgid "Connecting the DMX interface"
+msgstr "Das DMX-Interface anschliessen"
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Connecting to {path}…"
 msgstr "Verbinde mit {path}…"
+
+#: src/renderer/src/components/help/ManualToc.tsx
+msgid "Contents"
+msgstr "Inhalt"
+
+#: src/renderer/src/components/help/ManualToc.tsx
+msgid "Contents of the manual"
+msgstr "Inhalt der Anleitung"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Continuous"
@@ -502,7 +515,11 @@ msgstr "Jedes Preset braucht einen Namen"
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Beispiel: ein RGB-PAR im 3-Kanal-Modus auf Adresse 10: Rot Offset 0 (10), Grün Offset 1 (11), Blau Offset 2 (12)."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Fader"
+msgstr "Fader"
+
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Finding out what a device does"
 msgstr "Herausfinden, was ein Gerät macht"
 
@@ -571,8 +588,12 @@ msgid "How to set up the channels"
 msgstr "So richtest du die Kanäle ein"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
-msgstr "Lässt sich der Port nicht öffnen oder wird das Widget während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
+msgid "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgstr "Lässt sich der Port nicht öffnen oder wird das Interface während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "In the Show view: a fader, or a button per position"
+msgstr "In der Ansicht Show: ein Fader oder ein Knopf pro Position"
 
 #: src/renderer/src/components/settings/LanguageSection.tsx
 msgid "Language"
@@ -704,11 +725,11 @@ msgstr "Neue Szene"
 msgid "Next channels"
 msgstr "Nächste Kanäle"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
-msgid "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
-msgstr "Noch keine Geräte: Füg die Geräte deiner Anlage unten mit Gerät hinzufügen ein, um sie beim Namen zu steuern."
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
+msgid "No fixtures yet: add the devices of your rig, to control them by name."
+msgstr "Noch keine Geräte: Füg die Geräte deiner Anlage ein, um sie beim Namen zu steuern."
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 msgstr "Noch keine Geräte: Entsperr den Setup-Modus in den Einstellungen und füg die Geräte deiner Anlage mit Gerät hinzufügen ein, um sie beim Namen zu steuern."
 
@@ -812,8 +833,8 @@ msgid "Pick a color"
 msgstr "Farbe auswählen"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
-msgstr "Steck den Enttec DMX USB Pro ein und schliess deine Geräte an seinen DMX-Ausgang an. Windows zeigt ihn als seriellen Port an (zum Beispiel COM3)."
+msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+msgstr "Steck das DMX-Interface ein, einen Enttec DMX USB Pro oder ein Eurolite USB-DMX512 PRO, und schliess deine Geräte an seinen DMX-Ausgang an. Windows zeigt es als seriellen Port an (zum Beispiel COM3)."
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Positions"
@@ -827,7 +848,7 @@ msgstr "Die Preset-ID {id} kommt zweimal vor"
 msgid "Preset name"
 msgstr "Preset-Name"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Presets"
 msgstr "Presets"
 
@@ -836,8 +857,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
-msgstr "Drück oben in der Leiste (oder in den Einstellungen) auf <0>Verbinden</0>. Sobald die App ans Widget sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
+msgstr "Drück oben in der Leiste (oder in den Einstellungen) auf <0>Verbinden</0>. Sobald die App ans Interface sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -860,7 +881,7 @@ msgstr "Projekt"
 msgid "Project file"
 msgstr "Projektdatei"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Projects"
 msgstr "Projekte"
 
@@ -916,7 +937,7 @@ msgid "Scene values must be whole numbers from {minValue} to {maxValue} that the
 msgstr "Szenenwerte müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Scenes"
 msgstr "Szenen"
 
@@ -956,7 +977,7 @@ msgstr "Setz die <0>Startadresse</0> auf die DMX-Adresse, die am Gerät eingeste
 msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 msgstr "Setzt alle Kanäle auf 0, bevor die App den Port schliesst. Sonst sendet das Widget die letzten Werte weiter, auch wenn die App zu ist."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Setting up a fixture"
 msgstr "Ein Gerät einrichten"
 
@@ -981,7 +1002,7 @@ msgstr "Show"
 msgid "Show mode"
 msgstr "Show-Modus"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Show mode and Setup mode"
 msgstr "Show-Modus und Setup-Modus"
 
@@ -1030,12 +1051,12 @@ msgid "The <0>hint</0> is shown below the faders, for what you need while playin
 msgstr "Der <0>Hinweis</0> steht unter den Fadern, für das, was du beim Spielen brauchst, z. B. «2 Min. vor dem Nebel aufwärmen». Die <1>Beschreibung</1> ist für alles andere Wissenswerte über das Gerät: den DMX-Modus, die DIP-Schalter, wo es hängt, wem es gehört. Sie bleibt versteckt, bis du sie beim Gerät aufklappst."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
-msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte, ihre Presets und die Szenen lassen sich spielen, aber nicht ändern, und die Ansicht Kanäle ist aus. Für alles andere braucht es den <1>Setup-Modus</1>: Drück in der Ansicht <2>Einstellungen</2> auf <3>Setup-Modus entsperren</3> und gib das Passwort ein. Beim ersten Mal gibt es noch keines: Das, das du (zweimal) eingibst, wird zum Passwort. Solange der Setup-Modus offen ist, zeigt die Leiste oben das an."
+msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
+msgstr "Die App startet immer im <0>Show-Modus</0>: Die Geräte, ihre Presets und die Szenen lassen sich spielen, aber nicht ändern, und die Ansicht Kanäle ist aus. Für alles andere braucht es den <1>Setup-Modus</1>: Drück in der Ansicht <2>Einstellungen</2> auf <3>Setup-Modus entsperren</3> und gib das Passwort ein. Beim ersten Mal gibt es noch keines: Das, das du (zweimal) eingibst, wird zum Passwort. Danach wechselt die App in die Ansicht Show; solange der Setup-Modus offen ist, zeigt die Leiste oben das an."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
-msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nach einem Trennen, und wählt ihn beim nächsten Start wieder aus. Sie startet immer ohne Verbindung, damit nichts gesendet wird, bevor du auf Verbinden drückst. Erst nach dem Start der App eingesteckt? Such die seriellen Ports in den Einstellungen nochmals und drück dann auf Verbinden."
+msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
+msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nach einem Trennen, und wählt ihn beim nächsten Start wieder aus. Sie startet immer ohne Verbindung, damit nichts gesendet wird, bevor du auf Verbinden drückst. Das Interface erst nach dem Start der App eingesteckt? Such die seriellen Ports in den Einstellungen nochmals und drück dann auf Verbinden."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
@@ -1207,8 +1228,8 @@ msgid "The scene sets a channel twice"
 msgstr "Die Szene setzt einen Kanal zweimal"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
-msgid "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
-msgstr "Der serielle Port des Enttec DMX USB Pro. Die App startet immer ohne Verbindung: Drück hier oder oben in der Leiste auf Verbinden."
+msgid "The serial port of the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO; ▸ marks one that looks like it. The app always starts disconnected: press Connect here or in the top bar."
+msgstr "Der serielle Port des DMX-Interfaces, eines Enttec DMX USB Pro oder eines Eurolite USB-DMX512 PRO; ▸ markiert einen, der danach aussieht. Die App startet immer ohne Verbindung: Drück hier oder oben in der Leiste auf Verbinden."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
@@ -1227,8 +1248,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
-msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst auf <0>Szene hinzufügen</0> neben <1>Gerät hinzufügen</1>, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um, gibt ihr eine Farbe (ein Punkt auf ihrem Knopf) oder ändert ihre Geräte; mit <2>Aktuelle Werte speichern</2> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "Für eine neue entsperrst du den Setup-Modus, stellst die Fader auf den gewünschten Look, drückst den Knopf <0>Szene hinzufügen</0> nach den Szenen, gibst ihr einen Namen und wählst ihre Geräte: Ihre aktuellen Werte werden gespeichert. Der Bearbeiten-Knopf neben einer Szene benennt sie um, gibt ihr eine Farbe (ein Punkt auf ihrem Knopf) oder ändert ihre Geräte; mit <1>Aktuelle Werte speichern</1> speicherst du, was die Fader jetzt zeigen. Wird ein Gerät gelöscht, fällt es aus jeder Szene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 msgid "Try again"

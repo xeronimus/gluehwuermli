@@ -6,6 +6,7 @@ import {useLingui} from '@lingui/react/macro';
 
 import mascot from '@assets/gluehwuermli_mascot.png';
 
+import {leadsToShowView} from '@/data/showViewTriggers';
 import envConfig from '@/envConfig';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
@@ -53,6 +54,8 @@ const App = () => {
   const {i18n} = useLingui();
   const [view, setView] = useState<View>('fixtures');
   const setupMode = useAppStore(selectIsSetupMode);
+  const projectSwitches = useAppStore((state) => state.projectSwitches);
+  const [seenTriggers, setSeenTriggers] = useState({setupMode, projectSwitches});
   const contentClass = view === 'fixtures' && setupMode ? contentVariants.inSetupMode : contentVariants.default;
 
   // here, not in a view: the mode applies to every view, and the main process's idle timer to the whole window
@@ -75,6 +78,15 @@ const App = () => {
   // locking while on the channels falls back to the fixtures (set during render, React re-renders right away)
   if (view === 'channels' && !setupMode) {
     setView('fixtures');
+  }
+
+  // unlocking Setup mode (in Settings) or creating or opening a project goes on to the Show view (also set during render)
+  if (seenTriggers.setupMode !== setupMode || seenTriggers.projectSwitches !== projectSwitches) {
+    const triggers = {setupMode, projectSwitches};
+    setSeenTriggers(triggers);
+    if (leadsToShowView(seenTriggers, triggers)) {
+      setView('fixtures');
+    }
   }
 
   return (

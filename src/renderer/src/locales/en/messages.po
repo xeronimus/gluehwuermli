@@ -42,8 +42,8 @@ msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. Only the fixture's faders follow these, the Channels view sends any value."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -114,6 +114,7 @@ msgid "Add channel"
 msgstr "Add channel"
 
 #: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "Add fixture"
 msgstr "Add fixture"
 
@@ -125,7 +126,7 @@ msgstr "Add position"
 msgid "Add preset"
 msgstr "Add preset"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/SceneButtons.tsx
 msgid "Add scene"
 msgstr "Add scene"
 
@@ -134,8 +135,8 @@ msgid "Address"
 msgstr "Address"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
-msgstr "After <0>Disconnect</0>, and after closing the app, the widget keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
+msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
+msgstr "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -168,6 +169,10 @@ msgstr "Asking whether the app is locked…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Black out on quit"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Buttons"
+msgstr "Buttons"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "by"
@@ -251,7 +256,7 @@ msgstr "Channel lock lifted"
 msgid "Channel lock on"
 msgstr "Channel lock on"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Channel locks"
 msgstr "Channel locks"
 
@@ -272,8 +277,8 @@ msgid "Choose at least one fixture"
 msgstr "Choose at least one fixture"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
-msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like an Enttec is marked <2>Enttec?</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
+msgid "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like one of the two (both use the same USB chip) is marked with a <2>▸</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
+msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view (a click on the status in the top bar leads there; no password needed). A port that looks like one of the two (both use the same USB chip) is marked with a <2>▸</2> and chosen for you. Plugged it in after starting the app? Search the ports again with the refresh button."
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
@@ -296,13 +301,21 @@ msgstr "Color of the scene"
 msgid "Connect"
 msgstr "Connect"
 
-#: src/renderer/src/components/help/UserManual.tsx
-msgid "Connecting the DMX USB Pro"
-msgstr "Connecting the DMX USB Pro"
+#: src/renderer/src/components/help/manualTopics.ts
+msgid "Connecting the DMX interface"
+msgstr "Connecting the DMX interface"
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Connecting to {path}…"
 msgstr "Connecting to {path}…"
+
+#: src/renderer/src/components/help/ManualToc.tsx
+msgid "Contents"
+msgstr "Contents"
+
+#: src/renderer/src/components/help/ManualToc.tsx
+msgid "Contents of the manual"
+msgstr "Contents of the manual"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Continuous"
@@ -502,7 +515,11 @@ msgstr "Every preset needs a name"
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 msgstr "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Fader"
+msgstr "Fader"
+
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Finding out what a device does"
 msgstr "Finding out what a device does"
 
@@ -571,8 +588,12 @@ msgid "How to set up the channels"
 msgstr "How to set up the channels"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
-msgstr "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgid "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+msgstr "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "In the Show view: a fader, or a button per position"
+msgstr "In the Show view: a fader, or a button per position"
 
 #: src/renderer/src/components/settings/LanguageSection.tsx
 msgid "Language"
@@ -704,11 +725,11 @@ msgstr "New scene"
 msgid "Next channels"
 msgstr "Next channels"
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
-msgid "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
-msgstr "No fixtures yet: add the devices of your rig with Add fixture below, to control them by name."
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
+msgid "No fixtures yet: add the devices of your rig, to control them by name."
+msgstr "No fixtures yet: add the devices of your rig, to control them by name."
 
-#: src/renderer/src/components/fixtures/FixtureView.tsx
+#: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 msgstr "No fixtures yet: unlock Setup mode in Settings and add the devices of your rig with Add fixture, to control them by name."
 
@@ -812,8 +833,8 @@ msgid "Pick a color"
 msgstr "Pick a color"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
-msgstr "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Positions"
@@ -827,7 +848,7 @@ msgstr "Preset id {id} is used twice"
 msgid "Preset name"
 msgstr "Preset name"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Presets"
 msgstr "Presets"
 
@@ -836,8 +857,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
-msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the widget."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
+msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -860,7 +881,7 @@ msgstr "Project"
 msgid "Project file"
 msgstr "Project file"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Projects"
 msgstr "Projects"
 
@@ -916,7 +937,7 @@ msgid "Scene values must be whole numbers from {minValue} to {maxValue} that the
 msgstr "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
 
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Scenes"
 msgstr "Scenes"
 
@@ -956,7 +977,7 @@ msgstr "Set the <0>start address</0> to the DMX address set on the device (its d
 msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 msgstr "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Setting up a fixture"
 msgstr "Setting up a fixture"
 
@@ -981,7 +1002,7 @@ msgstr "Show"
 msgid "Show mode"
 msgstr "Show mode"
 
-#: src/renderer/src/components/help/UserManual.tsx
+#: src/renderer/src/components/help/manualTopics.ts
 msgid "Show mode and Setup mode"
 msgstr "Show mode and Setup mode"
 
@@ -1030,12 +1051,12 @@ msgid "The <0>hint</0> is shown below the faders, for what you need while playin
 msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
-msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. While Setup mode is open, the top bar says so."
+msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
+msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
-msgstr "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after starting the app? Search the serial ports again in the Settings, then press Connect."
+msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
+msgstr "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
@@ -1207,8 +1228,8 @@ msgid "The scene sets a channel twice"
 msgstr "The scene sets a channel twice"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
-msgid "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
-msgstr "The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the top bar."
+msgid "The serial port of the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO; ▸ marks one that looks like it. The app always starts disconnected: press Connect here or in the top bar."
+msgstr "The serial port of the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO; ▸ marks one that looks like it. The app always starts disconnected: press Connect here or in the top bar."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
@@ -1227,8 +1248,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
-msgstr "To make one, unlock Setup mode, set the faders to the look you want, press <0>Add scene</0> next to <1>Add fixture</1>, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <2>Save current values</2> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
+msgstr "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
 
 #: src/renderer/src/components/commons/ErrorBoundary.tsx
 msgid "Try again"

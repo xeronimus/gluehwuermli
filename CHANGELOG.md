@@ -16,11 +16,19 @@ change bumps the minor version and everything else the patch version.
   without a project; fixtures, scenes and presets stay as they are (#63)
 - Channels can be moved up and down in the fixture editor, which changes the order of the fixture's faders; their
   addresses stay the same, and presets and scenes keep setting the same channels (#64)
+- A channel with positions can be shown as buttons instead of a fader (Fader / Buttons next to Add position): one
+  button per position, the one of the current value lit; positions above the channel lock's cap are disabled (#65)
 
 ### Changed
 
 - The fixture editor's Channels tab shows the fixture's start address above the channels
 - The window title separates the project and the app name with a plain hyphen
+- Add scene is an icon button right after the scenes, Add fixture one right after the last fixture, instead of both
+  below the fixtures; without fixtures, Add fixture follows the hint
+- Unlocking Setup mode, creating a project and opening one switch to the Show view
+- The Help view has a table of contents left of the manual; the manual and the Output section name both the Enttec
+  DMX USB Pro and the Eurolite USB-DMX512 PRO
+- A port that looks like a DMX interface is marked with a ▸ in front instead of "Enttec?" after it
 - The language is switched in the Settings view instead of the top bar
 
 ### Fixed

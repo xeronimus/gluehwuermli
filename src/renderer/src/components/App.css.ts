@@ -14,7 +14,7 @@ export const app = style({
   fontFamily: vars.fonts.body
 });
 
-/** a column, so a view can grow to the full height (FixtureView keeps its Add button at the bottom) */
+/** a column, so a view can grow to the full height */
 const contentBase = style({
   flex: 1,
   display: 'flex',
