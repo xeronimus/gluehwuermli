@@ -1,3 +1,4 @@
+import {passCount} from '@shared/chases';
 import type {Chase, ChaseRepeat, ChaseStatus} from '@shared/ipc';
 
 /**
@@ -10,8 +11,8 @@ export interface ChasePosition {
   readonly stepNumber: number;
   readonly stepCount: number;
   readonly passNumber: number;
-  /** undefined for a chase that loops until stopped */
-  readonly passCount: number | undefined;
+  /** Infinity for a chase that loops until stopped */
+  readonly passCount: number;
 }
 
 /**
@@ -26,22 +27,10 @@ export type ChaseRowState =
 
 export type ChaseControl = 'start' | 'pause' | 'resume' | 'stop';
 
-/** how many passes the chase plays; undefined when it loops until stopped */
-export function passCountOf(repeat: ChaseRepeat): number | undefined {
-  switch (repeat.type) {
-    case 'once':
-      return 1;
-    case 'times':
-      return repeat.count;
-    case 'forever':
-      return undefined;
-  }
-}
-
 /** the repeat as the row shows it: `1×`, `8×` or `∞`, the same in every language */
 export function repeatLabel(repeat: ChaseRepeat): string {
-  const passCount = passCountOf(repeat);
-  return passCount === undefined ? '∞' : `${passCount}×`;
+  const passes = passCount(repeat);
+  return Number.isFinite(passes) ? `${passes}×` : '∞';
 }
 
 /** the row of this chase while the player has that status; a status of a chase the project doesn't list dims no row */
@@ -59,7 +48,7 @@ export function chaseRowState(chase: Chase, status: ChaseStatus, chases: readonl
       stepNumber: status.stepIndex + 1,
       stepCount: chase.steps.length,
       passNumber: status.passIndex + 1,
-      passCount: passCountOf(chase.repeat)
+      passCount: passCount(chase.repeat)
     }
   };
 }
@@ -83,9 +72,3 @@ export const STEP_BOX_GAP_PX = 2;
 /** whether the step boxes fit into this width, each at least the minimum width */
 export const stepBoxesFit = (stepCount: number, availableWidthPx: number): boolean =>
   stepCount * STEP_BOX_MIN_WIDTH_PX + (stepCount - 1) * STEP_BOX_GAP_PX <= availableWidthPx;
-
-const MS_PER_SECOND = 1000;
-const HOLD_DECIMALS = 2;
-
-/** a step's hold in seconds with two decimals, as the editor shows it: 500 → `0.50` */
-export const holdSeconds = (holdMs: number): string => (holdMs / MS_PER_SECOND).toFixed(HOLD_DECIMALS);

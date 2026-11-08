@@ -1,3 +1,5 @@
+import {MS_PER_MINUTE} from '@shared/time';
+
 import {type ChasePlayer, chasePlayerFactory} from './chase/chasePlayer';
 import type {MainConfig} from './config';
 import type {DmxPortConnector} from './dmx/DmxPortConnector';
@@ -23,7 +25,7 @@ import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateSto
 const DMX_REFRESH_INTERVAL_MS = 23;
 
 /** Setup mode locks itself after this long without input, so it isn't left open at an event */
-const IDLE_LOCK_TIMEOUT_MS = 10 * 60 * 1000;
+const IDLE_LOCK_TIMEOUT_MS = 10 * MS_PER_MINUTE;
 
 /** after a wrong password: hardly noticeable for a typo, slows down guessing */
 const WRONG_PASSWORD_DELAY_MS = 1000;

@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useLayoutEffect, useRef} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
@@ -36,6 +36,16 @@ interface ChaseStepTabsProps {
 const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseStepTabsProps) => {
   const {t, i18n} = useLingui();
   const tabs = useRef<TabsHandle<string>>(null);
+  // the tab to focus once it is rendered: a duplicate's tab only exists after the change
+  const focusAfterRender = useRef<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    const stepId = focusAfterRender.current;
+    focusAfterRender.current = undefined;
+    if (stepId !== undefined) {
+      tabs.current?.focus(stepId);
+    }
+  });
 
   const tabOf = (step: ChaseStepDraft, index: number): Tab<string> => {
     const errors = stepErrors[index] ?? [];
@@ -52,6 +62,8 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseSt
           onChange={onChange}
           onDuplicate={() => {
             const copyId = crypto.randomUUID();
+            // the Duplicate button is hidden with its panel when the copy is shown: the focus goes to the copy's tab
+            focusAfterRender.current = copyId;
             onChange((draft) => withStepDuplicated(draft, index, copyId));
             onSelect(copyId);
           }}
@@ -81,6 +93,8 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseSt
       tabs={steps.map(tabOf)}
       activeId={shownId}
       onSelect={onSelect}
+      // a panel per step, up to 100, all from the editor's draft: only the shown one is rendered
+      unmountHiddenPanels
       addTab={{
         label: (
           <>

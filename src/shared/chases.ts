@@ -26,6 +26,18 @@ const NO_CHASES: readonly Chase[] = [];
 /** the setup's chases; none in a file from before chases existed */
 export const setupChases = (setup: FixtureSetup): readonly Chase[] => setup.chases ?? NO_CHASES;
 
+/** how many passes the chase plays; Infinity for one that loops until stopped */
+export function passCount(repeat: ChaseRepeat): number {
+  switch (repeat.type) {
+    case 'once':
+      return 1;
+    case 'times':
+      return repeat.count;
+    case 'forever':
+      return Number.POSITIVE_INFINITY;
+  }
+}
+
 /** what keeps a chase from being saved, as a code (said in the UI language by the renderer) */
 export type ChaseError =
   | {readonly type: 'chase-name-missing'}

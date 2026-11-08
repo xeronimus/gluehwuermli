@@ -7,7 +7,6 @@ import {
   chaseEditErrors,
   chaseOfDraft,
   fixtureChannelsAt,
-  holdMsOf,
   isSortedByChannel,
   newChaseDraft,
   nextFreeChannel,
@@ -54,13 +53,8 @@ test('a chase survives the round trip through a draft', () => {
   expect(chaseOfDraft('chorus', chaseDraftOf(forever))).toEqual(forever);
 });
 
-test('shows a hold in seconds with two decimals and stores it in milliseconds', () => {
+test('shows a hold in seconds with two decimals', () => {
   expect(chaseDraftOf(chorus).steps.map(({hold}) => hold)).toEqual(['0.50', '1.25']);
-  expect(holdMsOf('0.05')).toBe(50);
-  expect(holdMsOf('3600')).toBe(3_600_000);
-  expect(holdMsOf('1.1')).toBe(1100);
-  expect(holdMsOf(' 2 ')).toBe(2000);
-  expect(holdMsOf('')).toBeNaN();
 });
 
 test('trims the name, and keeps the typed count while another repeat is chosen', () => {
