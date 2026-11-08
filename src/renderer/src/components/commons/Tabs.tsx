@@ -1,4 +1,4 @@
-import {KeyboardEvent, ReactNode, useId, useRef} from 'react';
+import {KeyboardEvent, ReactNode, Ref, useId, useImperativeHandle, useRef} from 'react';
 
 import {tabAfterKey} from '@/data/tabs';
 
@@ -22,6 +22,12 @@ interface TabsProps<Id extends string> {
   onSelect: (id: Id) => void;
   /** a button after the last tab that adds one (not a tab itself, so outside the tab list); none without */
   addTab?: AddTab;
+  ref?: Ref<TabsHandle<Id>>;
+}
+
+export interface TabsHandle<Id extends string> {
+  /** focuses the tab with this id, or the add button for none (e.g. when the focused tab's content goes away) */
+  focus: (id: Id | undefined) => void;
 }
 
 interface AddTab {
@@ -34,9 +40,20 @@ interface AddTab {
  * Tabs as the WAI-ARIA pattern has them: the arrow keys, Home and End switch tabs. Every panel stays mounted, the
  * inactive ones hidden, so what is typed or folded in one survives switching to another.
  */
-const Tabs = <Id extends string>({label, tabs, activeId, onSelect, addTab}: TabsProps<Id>) => {
+const Tabs = <Id extends string>({label, tabs, activeId, onSelect, addTab, ref}: TabsProps<Id>) => {
   const idPrefix = useId();
   const tabButtons = useRef<(HTMLButtonElement | null)[]>([]);
+  const addButton = useRef<HTMLButtonElement>(null);
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: (id) => {
+        const index = tabs.findIndex((tab) => tab.id === id);
+        (index === -1 ? addButton.current : tabButtons.current[index])?.focus();
+      }
+    }),
+    [tabs]
+  );
   const tabIdOf = (id: Id) => `${idPrefix}-tab-${id}`;
   const panelIdOf = (id: Id) => `${idPrefix}-panel-${id}`;
 
@@ -83,7 +100,7 @@ const Tabs = <Id extends string>({label, tabs, activeId, onSelect, addTab}: Tabs
           })}
         </div>
         {addTab && (
-          <button type="button" className={tabAdd} onClick={addTab.onAdd} disabled={addTab.disabled}>
+          <button ref={addButton} type="button" className={tabAdd} onClick={addTab.onAdd} disabled={addTab.disabled}>
             {addTab.label}
           </button>
         )}

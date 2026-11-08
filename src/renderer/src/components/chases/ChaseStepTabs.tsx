@@ -1,3 +1,5 @@
+import {useRef} from 'react';
+
 import {Trans, useLingui} from '@lingui/react/macro';
 
 import type {ChaseError} from '@shared/chases';
@@ -13,7 +15,7 @@ import {
 } from '@/data/chaseDraft';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 
-import Tabs, {type Tab} from '../commons/Tabs';
+import Tabs, {type Tab, type TabsHandle} from '../commons/Tabs';
 import {AddIcon} from '../commons/icons';
 import ChaseStepEditor from './ChaseStepEditor';
 
@@ -33,6 +35,7 @@ interface ChaseStepTabsProps {
  */
 const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseStepTabsProps) => {
   const {t, i18n} = useLingui();
+  const tabs = useRef<TabsHandle<string>>(null);
 
   const tabOf = (step: ChaseStepDraft, index: number): Tab<string> => {
     const errors = stepErrors[index] ?? [];
@@ -53,7 +56,11 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseSt
             onSelect(copyId);
           }}
           onDelete={() => {
-            onSelect(stepIdAfterRemoval(steps, index));
+            const nextId = stepIdAfterRemoval(steps, index);
+            // the delete button goes away with the step: the focus moves on to the tab shown next (Add step for none),
+            // while that tab still is where it was
+            tabs.current?.focus(nextId);
+            onSelect(nextId);
             onChange((draft) => withoutStep(draft, index));
           }}
         />
@@ -69,6 +76,7 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseSt
 
   return (
     <Tabs
+      ref={tabs}
       label={t`Steps`}
       tabs={steps.map(tabOf)}
       activeId={shownId}
