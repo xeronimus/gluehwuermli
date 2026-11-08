@@ -30,14 +30,18 @@ export {
   IconChevronRight as NextIcon,
   IconFolderOpen as OpenProjectIcon,
   IconKey as PasswordIcon,
+  IconPlayerPause as PauseChaseIcon,
   IconEye as PreviewIcon,
   IconFile as ProjectIcon,
   IconChevronLeft as PreviousIcon,
+  IconPlayerPlay as ResumeChaseIcon,
+  IconPlayerPlay as StartChaseIcon,
   IconX as RemoveIcon,
   IconRefresh as RefreshPortsIcon,
   IconDeviceFloppy as SavePresetIcon,
   IconStack as SceneIcon,
   IconSettings as SettingsIcon,
+  IconPlayerStop as StopChaseIcon,
   IconLockOpen as UnlockIcon,
   IconAlertTriangle as WarningIcon
 } from '@tabler/icons-react';

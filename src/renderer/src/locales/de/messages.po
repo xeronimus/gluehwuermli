@@ -37,6 +37,10 @@ msgstr "{positionCount, plural, one {# Position, unten aufgelistet} other {# Pos
 msgid "{presetName} sets a locked channel"
 msgstr "{presetName} setzt einen gesperrten Kanal"
 
+#: src/renderer/src/components/chases/ChaseSteps.tsx
+msgid "{stepCount} steps"
+msgstr "{stepCount} Schritte"
+
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 msgstr "<0>Not-Aus</0> rechts in der oberen Leiste setzt alle 512 Kanäle auf einen Schlag auf 0, im Show-Modus und im Setup-Modus, mit oder ohne Projekt. Die Geräte, Presets und Szenen bleiben, wie sie sind; die Fader zeigen 0."
@@ -292,6 +296,10 @@ msgstr "Kanäle ({channelCount})"
 msgid "Channels with a \"Max while locked\" (e.g. a laser) never go above it, whichever fader or preset sets them."
 msgstr "Kanäle mit einem «Max. bei Sperre» (z. B. ein Laser) gehen nie darüber, egal welcher Fader oder welches Preset sie setzt."
 
+#: src/renderer/src/components/chases/ChaseList.tsx
+msgid "Chases"
+msgstr "Chases"
+
 #: src/renderer/src/i18n/messages/sceneMessages.ts
 msgid "Choose at least one fixture"
 msgstr "Wähl mindestens ein Gerät"
@@ -409,6 +417,10 @@ msgstr "Der Ordner konnte nicht geöffnet werden"
 msgid "Could not open the folder: {message}"
 msgstr "Der Ordner konnte nicht geöffnet werden: {message}"
 
+#: src/renderer/src/state/actionHooks/playChase.ts
+msgid "Could not pause the chase"
+msgstr "Der Chase konnte nicht pausiert werden"
+
 #: src/renderer/src/state/actionHooks/outputStatusSubscription.ts
 msgid "Could not read the output status"
 msgstr "Der Status des Ausgangs konnte nicht gelesen werden"
@@ -425,6 +437,10 @@ msgstr "Es konnte nicht gelesen werden, ob die App gesperrt ist"
 msgid "Could not remove the project from the list"
 msgstr "Das Projekt konnte nicht aus der Liste entfernt werden"
 
+#: src/renderer/src/state/actionHooks/playChase.ts
+msgid "Could not resume the chase"
+msgstr "Der Chase konnte nicht fortgesetzt werden"
+
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the fixture {fixtureName}"
 msgstr "Das Gerät {fixtureName} konnte nicht gespeichert werden"
@@ -436,6 +452,14 @@ msgstr "Das Preset {presetName} von {fixtureName} konnte nicht gespeichert werde
 #: src/renderer/src/state/actionHooks/saveFixtures.ts
 msgid "Could not save the scene {sceneName}"
 msgstr "Die Szene {sceneName} konnte nicht gespeichert werden"
+
+#: src/renderer/src/state/actionHooks/playChase.ts
+msgid "Could not start the chase"
+msgstr "Der Chase konnte nicht gestartet werden"
+
+#: src/renderer/src/state/actionHooks/playChase.ts
+msgid "Could not stop the chase"
+msgstr "Der Chase konnte nicht gestoppt werden"
 
 #: src/renderer/src/state/actionHooks/blackoutOnQuit.ts
 msgid "Could not store whether the app blacks out on quit"
@@ -851,10 +875,22 @@ msgstr "Wenn du willst, die <0>Farbe</0> eines Kanals als Hex-Wert, z. B. ff0000
 msgid "Output"
 msgstr "Ausgang"
 
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "pass {passNumber}"
+msgstr "Durchgang {passNumber}"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "pass {passNumber} / {passCount}"
+msgstr "Durchgang {passNumber} / {passCount}"
+
 #: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Password"
 msgstr "Passwort"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Pause the chase {chaseName}"
+msgstr "Chase {chaseName} pausieren"
 
 #: src/renderer/src/components/fixtures/ColorField.tsx
 msgid "Pick a color"
@@ -941,6 +977,10 @@ msgstr "Nochmals eingeben"
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Repeat the new password"
 msgstr "Neues Passwort nochmals eingeben"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Resume the chase {chaseName}"
+msgstr "Chase {chaseName} fortsetzen"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
@@ -1062,6 +1102,18 @@ msgstr "Startadresse <0>{startAddress}</0>"
 msgid "Start channel"
 msgstr "Startkanal"
 
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Start the chase {chaseName}"
+msgstr "Chase {chaseName} starten"
+
+#: src/renderer/src/components/chases/ChaseSteps.tsx
+msgid "step {stepNumber} / {stepCount}"
+msgstr "Schritt {stepNumber} / {stepCount}"
+
+#: src/renderer/src/components/chases/ChaseSteps.tsx
+msgid "Step {stepNumber}: holds {seconds} s"
+msgstr "Schritt {stepNumber}: hält {seconds} s"
+
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
 msgstr "Die Kanäle eines Schritts müssen ganze Zahlen von {firstChannel} bis {lastChannel} sein"
@@ -1077,6 +1129,10 @@ msgstr "Die Werte eines Schritts müssen ganze Zahlen von {minValue} bis {maxVal
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Steps"
 msgstr "Stufen"
+
+#: src/renderer/src/components/chases/ChaseRow.tsx
+msgid "Stop the chase {chaseName}"
+msgstr "Chase {chaseName} stoppen"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."

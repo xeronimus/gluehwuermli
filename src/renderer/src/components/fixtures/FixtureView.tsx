@@ -10,6 +10,7 @@ import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSe
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
+import ChaseList from '../chases/ChaseList';
 import Button from '../commons/Button';
 import {AddFixtureIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
@@ -29,8 +30,8 @@ type Editing =
 const NOT_EDITING: Editing = {type: 'none'};
 
 /**
- * the open project's scene buttons and one control group per fixture; adding, editing, moving and deleting both in
- * Setup mode
+ * the open project's scene buttons, one control group per fixture and the chase rows below them; adding, editing,
+ * moving and deleting scenes and fixtures in Setup mode
  */
 const FixtureView = () => {
   const {t, i18n} = useLingui();
@@ -141,6 +142,8 @@ const FixtureView = () => {
           </span>
         )}
       </div>
+
+      <ChaseList />
     </div>
   );
 };
