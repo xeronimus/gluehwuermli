@@ -3,7 +3,7 @@ import {msg} from '@lingui/core/macro';
 import type {Fixture, Scene} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
-import {changingFixtures, withFixture, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
+import {changingFixtures, withFixtureMoved, withoutFixture} from '@/data/fixtureList';
 import type {MoveDirection} from '@/data/listOrder';
 import {capturePreset, withPreset} from '@/data/presets';
 import {
@@ -11,6 +11,7 @@ import {
   captureScene,
   changingFixturesAndScenes,
   editedScene,
+  withSavedFixture,
   withScene,
   withSceneMoved,
   withoutScene
@@ -46,11 +47,14 @@ const couldNotDeleteScene = ({name: sceneName}: Scene) => msg`Could not delete t
 const couldNotMoveFixture = ({name: fixtureName}: Fixture) => msg`Could not move the fixture ${fixtureName}`;
 const couldNotMoveScene = ({name: sceneName}: Scene) => msg`Could not move the scene ${sceneName}`;
 
-/** adds the fixture, or replaces the one with its id */
+/**
+ * adds the fixture, or replaces the one with its id; the scenes follow its channels to their new offsets
+ * (`offsetChanges`: stored offset to new, empty for a new fixture)
+ */
 export function useActionSaveFixture() {
-  return (fixture: Fixture) =>
+  return (fixture: Fixture, offsetChanges: ReadonlyMap<number, number>) =>
     storeFixtures(
-      changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture)),
+      (setup) => withSavedFixture(setup, fixture, offsetChanges),
       `saving the fixture ${fixture.name}`,
       couldNotSaveFixture(fixture)
     );

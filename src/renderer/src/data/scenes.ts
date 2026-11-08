@@ -2,7 +2,7 @@ import {colorToStore} from '@shared/colors';
 import type {Fixture, FixtureSetup, Scene, SceneFixture, SetChannelRequest} from '@shared/ipc';
 import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 
-import {changingFixtures} from './fixtureList';
+import {changingFixtures, withFixture} from './fixtureList';
 import {type MoveDirection, movedWithId} from './listOrder';
 import {currentFixtureValues, fittedFixtureValues, fixtureChannelValues} from './presets';
 
@@ -141,8 +141,48 @@ const NO_CHANNEL_VALUES: readonly number[] = [];
 export const sceneEditErrors = (fixtures: readonly Fixture[], edit: Omit<SceneEdit, 'recapture'>): SceneError[] =>
   sceneErrors(captureScene(fixtures, NO_CHANNEL_VALUES, 'draft', edit), fixtures);
 
+/**
+ * the scenes' values of the fixture moved to its channels' new offsets (`changes`: old offset to new), all at once, so
+ * two channels swapping offsets keep their values. A value at an offset not in `changes` belongs to a removed channel
+ * and is dropped; withFittedScenes then removes what is left empty. Other fixtures stay as they are
+ */
+export function withSceneOffsetsChanged(
+  setup: FixtureSetup,
+  fixtureId: string,
+  changes: ReadonlyMap<number, number>
+): FixtureSetup {
+  if (!setup.scenes) {
+    return setup;
+  }
+  const changedFixture = (sceneFixture: SceneFixture): SceneFixture =>
+    sceneFixture.fixtureId !== fixtureId
+      ? sceneFixture
+      : {
+          ...sceneFixture,
+          values: sceneFixture.values.flatMap(({offset, value}) => {
+            const newOffset = changes.get(offset);
+            return newOffset === undefined ? [] : [{offset: newOffset, value}];
+          })
+        };
+  return {...setup, scenes: setup.scenes.map((scene) => ({...scene, fixtures: scene.fixtures.map(changedFixture)}))};
+}
+
 /** a change of the fixture list, with the scenes fitted to it in the same save: main refuses scenes that don't fit */
 export const changingFixturesAndScenes =
   (change: (fixtures: readonly Fixture[]) => Fixture[]) =>
   (setup: FixtureSetup): FixtureSetup =>
     withFittedScenes(changingFixtures(change)(setup));
+
+/**
+ * the setup with the fixture saved from the editor: added, or replacing the one with its id. Its scenes' values follow
+ * its channels to their new offsets first (`offsetChanges`: stored offset to new, empty for a new fixture), then the
+ * scenes are fitted to the changed fixture
+ */
+export const withSavedFixture = (
+  setup: FixtureSetup,
+  fixture: Fixture,
+  offsetChanges: ReadonlyMap<number, number>
+): FixtureSetup =>
+  changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture))(
+    withSceneOffsetsChanged(setup, fixture.id, offsetChanges)
+  );
