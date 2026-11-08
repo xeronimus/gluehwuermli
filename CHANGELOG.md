@@ -17,6 +17,11 @@ change bumps the minor version and everything else the patch version.
 - Channels can be moved up and down in the fixture editor, which changes the order of the fixture's faders; their
   addresses stay the same, and presets and scenes keep setting the same channels (#64)
 
+### Changed
+
+- The fixture editor's title shows the fixture's start address
+- The window title separates the project and the app name with a plain hyphen
+
 ### Fixed
 
 - A scene keeps setting the same channel after the channel's offset is changed in the fixture editor (#64)
