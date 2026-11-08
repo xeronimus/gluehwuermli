@@ -1001,6 +1001,10 @@ msgstr "Quellcode"
 msgid "Start address"
 msgstr "Startadresse"
 
+#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+msgid "Start address <0>{startAddress}</0>"
+msgstr "Startadresse <0>{startAddress}</0>"
+
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Start channel"
 msgstr "Startkanal"

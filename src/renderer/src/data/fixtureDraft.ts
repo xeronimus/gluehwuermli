@@ -186,6 +186,12 @@ export function fixtureOfDraft(id: string, draft: FixtureDraft): Fixture {
   };
 }
 
+/** the start address typed, or undefined while it isn't a DMX channel */
+export function draftStartAddress(draft: FixtureDraft): number | undefined {
+  const startAddress = numberOf(draft.startAddress);
+  return isDmxChannel(startAddress) ? startAddress : undefined;
+}
+
 /** the DMX address the channel lands on, or undefined while the start address or the offset can't give a valid one */
 export function draftChannelAddress(draft: FixtureDraft, channel: FixtureChannelDraft): number | undefined {
   const offset = numberOf(channel.offset);

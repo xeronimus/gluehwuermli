@@ -19,7 +19,7 @@ change bumps the minor version and everything else the patch version.
 
 ### Changed
 
-- The fixture editor's title shows the fixture's start address
+- The fixture editor's Channels tab shows the fixture's start address above the channels
 - The window title separates the project and the app name with a plain hyphen
 
 ### Fixed

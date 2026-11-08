@@ -7,6 +7,7 @@ import {
   channelOffsetChanges,
   draftChannelAddress,
   draftOf,
+  draftStartAddress,
   fixtureOfDraft,
   newFixtureDraft,
   shownPresetValue,
@@ -119,6 +120,13 @@ test('no address while a field is blank or invalid, or past the universe', () =>
   expect(
     draftChannelAddress(draftOf(par), {id: 'red', name: 'Red', offset: '503', lockMax: '', color: '', values: noRules})
   ).toBeUndefined();
+});
+
+test('the start address while it is a DMX channel', () => {
+  expect(draftStartAddress(draftOf(par))).toBe(10);
+  expect(draftStartAddress({...draftOf(par), startAddress: ''})).toBeUndefined();
+  expect(draftStartAddress({...draftOf(par), startAddress: '0'})).toBeUndefined();
+  expect(draftStartAddress({...draftOf(par), startAddress: '513'})).toBeUndefined();
 });
 
 describe('channel locks', () => {

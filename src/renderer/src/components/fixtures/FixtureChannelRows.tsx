@@ -2,14 +2,25 @@ import {useState} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import {FixtureDraft, withChannelMoved, withNewChannel} from '@/data/fixtureDraft';
+import {FixtureDraft, draftStartAddress, withChannelMoved, withNewChannel} from '@/data/fixtureDraft';
 import type {MoveDirection} from '@/data/listOrder';
 
 import Button from '../commons/Button';
 import {AddIcon} from '../commons/icons';
 import {ChannelValuesHeader} from './ChannelValuesField';
 import FixtureChannelRow from './FixtureChannelRow';
-import {type ChannelRowGlow, addChannel, channelRows, channelsSection, columnHeader} from './FixtureChannelRows.css';
+import {
+  type ChannelRowGlow,
+  addChannel,
+  channelRows,
+  channelsSection,
+  columnHeader,
+  startAddressLine,
+  startAddressValue
+} from './FixtureChannelRows.css';
+
+/** shown while the start address typed isn't a DMX channel */
+const NO_START_ADDRESS = '–';
 
 /** the channel moved last, and how many moves so far: each move starts its glow again, the same row's too */
 interface LastMove {
@@ -44,8 +55,14 @@ const FixtureChannelRows = ({draft, onChange}: FixtureChannelRowsProps) => {
     setLastMove((previous) => ({channelId, count: (previous?.count ?? 0) + 1}));
     onChange(withChannelMoved(draft, index, direction));
   };
+  const startAddress = draftStartAddress(draft) ?? NO_START_ADDRESS;
   return (
     <div className={channelsSection}>
+      <span className={startAddressLine}>
+        <Trans>
+          Start address <span className={startAddressValue}>{startAddress}</span>
+        </Trans>
+      </span>
       <div className={channelRows}>
         <span className={columnHeader}>
           <Trans>Channel</Trans>
