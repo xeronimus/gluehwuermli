@@ -1,7 +1,8 @@
 <#
 .SYNOPSIS
-  Sends DMX through an Enttec DMX USB Pro to a range of channels, without any other software.
-  Follows the Enttec DMX USB Pro API v1.44 (doc/devices/enttec_dmx_usb_pro/70304_DMX_USB_PRO_API.pdf).
+  Sends DMX through an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO to a range of channels, without any other
+  software. Follows the Enttec DMX USB Pro API v1.44 (doc/devices/enttec_dmx_usb_pro/70304_DMX_USB_PRO_API.pdf), which
+  the Eurolite interface speaks, too.
 
 .EXAMPLE
   ./scripts/dmxRangeTest.ps1 -Port COM4 -From 20 -To 37
@@ -149,7 +150,7 @@ try {
     "break $($parameters[2]) x 10.67 us, MAB $($parameters[3]) x 10.67 us, $rate packets/s"
     if ($parameters[1] -eq 3) { 'WARNING: RDM sniffer firmware only monitors, it may not send DMX - reflash with DMX firmware' }
   } else {
-    "WARNING: no answer from a DMX USB Pro on $Port - sending anyway"
+    "WARNING: no answer from a DMX interface on $Port - sending anyway"
   }
 
   $universe = New-Object byte[] 512

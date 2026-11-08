@@ -16,8 +16,9 @@ export const sideColumn = style({
   width: '440px'
 });
 
-/** a box like the fixture help, the manual next to it is plain text */
+/** a box like the fixture help, the manual next to it is plain text; selectable like the manual, e.g. to copy a path */
 export const sideSection = style({
+  userSelect: 'text',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',

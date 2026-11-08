@@ -12,7 +12,7 @@ export const describePort = (port: SerialPortDescription): string => {
 
 /**
  * The port to preselect, the first one still there of: the port chosen by hand, the port connected to last time;
- * otherwise the first that looks like an Enttec Pro, otherwise the first port. A port only preselected earlier is not a
+ * otherwise the first that looks like a DMX interface, otherwise the first port. A port only preselected earlier is not a
  * choice, so a widget plugged in after the app started wins over it.
  */
 export const preferredPortPath = (

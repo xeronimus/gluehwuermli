@@ -69,8 +69,8 @@ doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   architecture/decisions/    # ADRs (.adr-dir)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
-scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through a DMX USB Pro (-Port, -From, -To;
-                             # -Chase, -Alternate, -Sweep), follows doc/devices/enttec_dmx_usb_pro/
+scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through either interface (-Port,
+                             # -From, -To; -Chase, -Alternate, -Sweep), follows doc/devices/enttec_dmx_usb_pro/
 lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
@@ -149,7 +149,7 @@ src/
                              # Add chase, and the chase editor below the rows), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
-                             # help/ (contents, manual, open project, data folder, repo link); ShowView.tsx picks the start view
+                             # help/ (the manual as tabs, one topics/ component each, open project, data folder, repo link); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,

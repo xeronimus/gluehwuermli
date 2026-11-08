@@ -11,7 +11,7 @@ import PortSelect from './PortSelect';
 import {message, portControls, settingsSection} from './SettingsView.css';
 
 /**
- * the serial port of the DMX USB Pro: choosing it, connecting and disconnecting (also in the top bar, but the port
+ * the serial port of the DMX interface: choosing it, connecting and disconnecting (also in the top bar, but the port
  * select is locked while connected, so changing the port works without leaving the Settings), and whether quitting
  * blacks out the rig; no password needed, also in Show mode
  */

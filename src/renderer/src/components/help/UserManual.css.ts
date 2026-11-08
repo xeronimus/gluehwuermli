@@ -2,16 +2,22 @@ import {globalStyle, style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
+/** wide enough for all tab labels on one line */
 export const manual = style({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '20px',
-  maxWidth: '640px',
+  width: '800px',
+  maxWidth: '100%',
   color: vars.colors.textSecondary,
   lineHeight: 1.5
 });
 
-export const manualSection = style({});
+/**
+ * narrower than the tabs, so a line of text stays easy to read; selectable, unlike the rest of the app (global.css.ts),
+ * so a passage can be copied
+ */
+export const manualSection = style({
+  maxWidth: '640px',
+  userSelect: 'text'
+});
 
 globalStyle(`${manualSection} h2`, {
   margin: '0 0 6px',
