@@ -1,0 +1,207 @@
+# Chases
+
+Status: **draft**.
+
+## What a chase is
+
+A chase is a named sequence of **steps** that the app plays one after the other. Each step sets the values of some DMX
+channels and then **holds** for its time before the next step starts. When the last step's hold is over, the chase is
+finished, unless it repeats.
+
+Typical uses: a laser and a strobe taking turns, a slow color change over several PARs, a "chorus" look that flips
+between two states eight times and then ends.
+
+Fades between steps are not part of this feature. A step's values are sent at once.
+
+The UI calls it **Chase** in English and German, the term console users know (QLC+, ChamSys, grandMA's chaser). A
+"macro" on those consoles is a recorded series of commands, not a sequence of lighting states.
+
+## Terms
+
+| Term   | Meaning                                                                                                   |
+| ------ | --------------------------------------------------------------------------------------------------------- |
+| Step   | A set of `(channel, value)` pairs, absolute DMX addresses 1–512, plus a hold time                         |
+| Hold   | How long a step stays before the chase moves to the next step. Part of the chase, set while editing       |
+| Pause  | An operator action while the chase plays: the clock stops, the current step stays. Not the same as a hold |
+| Stop   | An operator action (or Emergency off, a project switch): the chase is no longer running, the values stay  |
+| Repeat | What happens after the last step: end (play once), play N times, or loop until stopped                    |
+| Pass   | One run through all steps                                                                                 |
+
+**Hold vs. pause:** the hold is designed into the chase ("step 2 lasts 0.5 s"), the pause is pressed live ("wait, the
+singer is talking"). A paused chase doesn't count down its hold.
+
+## Behavior
+
+### Values
+
+- A step only sets the channels it names. **Every other channel stays as it is**: the previous step's values, a fader
+  the operator moved, a scene. There is no release to a "before the chase" state.
+- A step stores **values per absolute channel**. It knows nothing about fixtures, offsets, presets or scenes once it is
+  saved. Moving, editing or deleting a fixture doesn't change a chase.
+- Because of that, a step's values are **not checked against the channel value rules** (range, steps, positions) of a
+  fixture on that address: a chase may send 37 to a channel whose fader only stops at 0, 64 and 128.
+- **Locked channels stay capped**: a chase's values go through `DmxEngine.setChannel` like a fader's, so a channel
+  under the channel lock (ADR 3) never gets more than its cap, whatever the step says. Lifting the lock mid-step
+  doesn't raise the value (as with faders today): the channel gets the step's value the next time a step sets it.
+
+### Running
+
+- **One chase at a time.** While a chase runs or is paused, the other rows look dimmed, but their Start still works:
+  it stops the running chase and starts the new one in the same tick, with no gap.
+- **Faders stay live** while a chase runs. A value set by hand stays until a step sets that channel again; then the
+  step wins.
+- Applying a step writes all its values into the universe in one go, so they leave in the same packet (ADR 2).
+- **Start** always starts at step 1, first pass.
+- **Pause** keeps the current step and the values. **Resume** continues the same step with the hold time that was
+  left (paused 0.3 s into a 1 s step: 0.7 s more). It doesn't send the step's values again: a fader moved during the
+  pause keeps its value until the next step sets that channel.
+- **Stop** ends the chase; the values stay as they are. A stopped chase can be started again (from step 1), or another
+  chase can be started.
+- **Finished**: a chase that doesn't repeat ends after the last step's hold, like a stop. Its row goes back to normal,
+  nothing marks it as done.
+- **Stops by itself on**: Emergency off (before the blackout, so no step comes after it), opening or creating another
+  project, quitting the app, saving or deleting the running chase in Setup mode (editing another chase doesn't).
+- **Doesn't stop on**: switching between Show and Setup mode, the idle timer locking the app, turning the channel lock
+  on or off, the DMX port disconnecting or failing (the chase keeps writing to the universe; it goes out once the port
+  is back).
+- The app always starts with no chase running.
+
+### Where it runs
+
+The player runs in **main**, next to the `DmxEngine` (ADR 2): a hidden window, a render error or a busy renderer never
+delays or stops a step. The renderer only sends start, pause, resume and stop with the chase's id; main plays the chase
+as it is saved in the open project, not a copy the renderer sends.
+
+Timing is checked on the engine's 23 ms tick, so a step starts at most one tick late. Each step's time counts from
+when it should have started, not from when the tick saw it, so the lateness doesn't add up over a long loop.
+
+## Show mode
+
+Chases are listed in the Show view below the fixture groups, one row per chase, full width and low, in their saved
+order.
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ▶  Chorus flash            ● ○ ○ ○        step 1 / 4 · pass 3 / 8   ⏸   ■    │   running: highlighted
+└──────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ▶  Laser intro             ○ ○ ○ ○ ○ ○                          ∞            │   disabled while another runs
+└──────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ▶  Slow colors             ○ ○ ○                                1×           │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+Each row shows:
+
+- the name
+- Start (when not running), Pause / Resume and Stop (when running or paused)
+- the steps as small boxes, the current one filled, each showing its hold time on hover. The boxes get narrower to fit
+  the row; below a minimum width the row only shows `step 12 / 100`
+- the repeat: `1×`, `8×` or `∞`, and while running the current pass (`pass 3 / 8`)
+
+The running or paused row is highlighted (paused distinguishable from running); the others look dimmed, their Start
+still replaces the running chase.
+
+Show mode can start, pause, resume and stop chases. It can't change them.
+
+Only the chase rows show that a chase runs: nothing in the top bar or the window title, even when the rows are scrolled
+out of view below the fixtures. Chases are started, paused and stopped with the mouse only, there are no keyboard
+shortcuts.
+
+## Setup mode
+
+Each row also has **Edit**, **Delete** (asks first), **Move up** and **Move down**, like the fixtures. An **Add chase**
+button sits below the list.
+
+### The chase editor
+
+- **Name** (required, at most 40 characters like a scene's). No color: a chase row is told apart by its name and its
+  steps
+- **Repeat**: Once · N times (N ≥ 2, N passes in total: "3 times" plays the steps three times) · Until stopped
+- **Steps**, in order, each with:
+  - its own **hold time**, in seconds with two decimals: at least 0.05 s (about two engine ticks), at most 3600 s
+  - its **values**: a list of `channel → value`, shown with the fixture and channel name on that address if there is
+    one, all of them where fixtures share an address (only as a label: it isn't stored), editable and removable one
+    by one
+  - buttons to fill it. Each one **merges** into the step: a channel the step already sets takes the new value, a new
+    channel is added, the others stay. Taking several scenes or presets builds a step up:
+    - **Take current values**: pick fixtures with checkboxes, all channels of the checked ones are taken with the
+      values they have now
+    - **Take from scene**: the scene's values, turned into absolute channels at the time of taking
+    - **Take from preset**: the preset's values on its fixture's addresses
+    - add a single channel by hand
+  - move up / move down, duplicate, delete
+- **Add step** appends an empty step with the hold of the step before it (1 s for the first one); Duplicate copies a
+  step with its values.
+- A step needs at least one channel; a chase at least one step.
+
+Saving follows the other editors: the whole project is written to its file first and only then shown; a failed save
+keeps the editor open with the error.
+
+## Data
+
+Stored in the project's `.glp`, as an optional `chases` list next to `fixtures` and `scenes`, so older files load
+unchanged. There are no users with project files yet, so `PROJECT_VERSION` stays at 1.
+
+```ts
+const ChaseStepSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  /** how long the step stays before the next one, in milliseconds */
+  holdMs: Type.Integer({minimum: CHASE_HOLD_MIN_MS, maximum: CHASE_HOLD_MAX_MS}),
+  values: Type.Array(Type.Object({channel: DmxChannelSchema, value: DmxValueSchema}), {minItems: 1})
+});
+
+const ChaseSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  name: Type.String({minLength: 1, maxLength: CHASE_NAME_MAX_LENGTH}),
+  repeat: Type.Union([
+    Type.Object({type: Type.Literal('once')}),
+    Type.Object({type: Type.Literal('times'), count: Type.Integer({minimum: 2, maximum: CHASE_REPEAT_MAX})}),
+    Type.Object({type: Type.Literal('forever')})
+  ]),
+  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX})
+});
+```
+
+Limits: `CHASE_NAME_MAX_LENGTH` 40, `CHASE_HOLD_MIN_MS` 50, `CHASE_HOLD_MAX_MS` 3 600 000, `CHASE_REPEAT_MAX` 99,
+`CHASE_STEPS_MAX` 100. The number of chases in a project isn't limited.
+
+Validation (`shared/chases.ts`, codes like `SceneError`): name missing or too long, no steps, a step without values, a
+channel twice in one step, a channel or value out of range, a hold out of range, too many steps, a repeat count out
+of range, ids twice. Unlike scenes, nothing
+refers to a fixture, so a fixture change never makes a chase invalid.
+
+## IPC and status
+
+- `chase:get-status`: the renderer asks once on load, then follows the pushes
+- `chase:start` (id), `chase:pause`, `chase:resume`, `chase:stop`: `invoke`, allowed in Show and Setup mode
+- `chase:status-changed` pushed by main: `idle`, or `running` / `paused` with the chase id, step index and pass. Sent
+  on every step change, not on every tick
+- `dmx:channels-changed` pushed by main: the values a step set (after the caps), so the faders, fixture and raw, show
+  what goes out. Today the renderer is the only one changing values and updates its store itself; a chase is the
+  first change coming from main. One message per step, not per tick
+- Saving chases goes through the project save like fixtures and scenes, refused in Show mode
+
+## Tests (what shows it's right)
+
+- The player is a pure function of the chase and an injected clock: which step and pass at a given time. Tested with
+  fake timers:
+  - a once-chase plays every step once and ends after the last hold
+  - an N-times chase plays exactly N × steps steps
+  - a forever chase is still running after many passes, its steps not drifting
+  - pause stops the clock, resume continues the same step
+  - stop, Emergency off and a project switch end it, and no step is applied after them
+- Engine: a step's values leave in one packet; a locked channel stays at its cap whatever the step says
+- A recorded run on the `inMemory` port: the frames' timestamps against the expected step times, each within one tick
+- On the rig: a two-step laser/strobe alternation at 0.5 s looks even and doesn't drift over a few minutes
+
+## Also part of the change
+
+- The Help view's manual gets a section on chases (hold vs. pause, what stops a chase, faders staying live)
+- German texts for everything new, a line under `Added` in `CHANGELOG.md`
+
+## Not in this feature
+
+Fades between steps, BPM / tap tempo, several chases at once, a manual "go" step that waits for a button press,
+keyboard shortcuts, a running chase shown in the top bar or the window title, starting a chase on app start.
