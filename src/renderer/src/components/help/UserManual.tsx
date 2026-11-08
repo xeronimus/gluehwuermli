@@ -1,41 +1,47 @@
-import {Trans} from '@lingui/react/macro';
+import {Trans, useLingui} from '@lingui/react/macro';
 
 import {manual, manualSection} from './UserManual.css';
+import {MANUAL_TOPICS, type ManualTopicId, topicElementId} from './manualTopics';
 
-/** how to use the app, from plugging in the widget to presets; one section per task */
+/** a topic's heading, with the title of its entry in the table of contents */
+const TopicHeading = ({id}: {id: ManualTopicId}) => {
+  const {i18n} = useLingui();
+  const topic = MANUAL_TOPICS.find((candidate) => candidate.id === id);
+  return <h2>{topic && i18n._(topic.title)}</h2>;
+};
+
+/** how to use the app, from plugging in the DMX interface to finding out what a device does; one section per topic */
 const UserManual = () => (
   <article className={manual}>
-    <section className={manualSection}>
-      <h2>
-        <Trans>Connecting the DMX USB Pro</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('connecting')}>
+      <TopicHeading id="connecting" />
       <ol>
         <li>
           <Trans>
-            Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial
-            port (COM3, for example).
+            Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to
+            its DMX output. Windows shows it as a serial port (COM3, for example).
           </Trans>
         </li>
         <li>
           <Trans>
             Choose the port in the <strong>Output</strong> section of the <strong>Settings</strong> view (a click on the
-            status in the top bar leads there; no password needed). A port that looks like an Enttec is marked{' '}
-            <strong>Enttec?</strong> and chosen for you. Plugged it in after starting the app? Search the ports again
-            with the refresh button.
+            status in the top bar leads there; no password needed). A port that looks like one of the two (both use the
+            same USB chip) is marked with a <strong>▸</strong> and chosen for you. Plugged it in after starting the app?
+            Search the ports again with the refresh button.
           </Trans>
         </li>
         <li>
           <Trans>
             Press <strong>Connect</strong> in the top bar (or in the Settings). The status in the top bar says{' '}
-            <strong>Sending on COM3</strong> once the app sends to the widget.
+            <strong>Sending on COM3</strong> once the app sends to the interface.
           </Trans>
         </li>
       </ol>
       <p>
         <Trans>
           The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next
-          start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the widget in after
-          starting the app? Search the serial ports again in the Settings, then press Connect.
+          start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in
+          after starting the app? Search the serial ports again in the Settings, then press Connect.
         </Trans>
       </p>
       <p>
@@ -46,25 +52,23 @@ const UserManual = () => (
       </p>
       <p>
         <Trans>
-          If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went
-          wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values
-          and are sent again as soon as the port is open.
+          If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what
+          went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their
+          values and are sent again as soon as the port is open.
         </Trans>
       </p>
       <p>
         <Trans>
-          After <strong>Disconnect</strong>, and after closing the app, the widget keeps sending the last values for as
-          long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before
+          After <strong>Disconnect</strong>, and after closing the app, the interface keeps sending the last values for
+          as long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before
           disconnecting to black out. With <strong>Black out on quit</strong> on (in the Output section), closing the
           app sets all channels to 0 first.
         </Trans>
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Show mode and Setup mode</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('modes')}>
+      <TopicHeading id="modes" />
       <p>
         <Trans>
           The app always starts in <strong>Show mode</strong>: the fixtures, their presets and the scenes can be played,
@@ -96,10 +100,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Channel locks</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('channel-locks')}>
+      <TopicHeading id="channel-locks" />
       <p>
         <Trans>
           A fixture's channel can have a <strong>Max while locked</strong> (in the fixture editor): while the channel
@@ -128,10 +130,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Projects</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('projects')}>
+      <TopicHeading id="projects" />
       <p>
         <Trans>
           The fixtures and scenes of a rig live in a <strong>project</strong>: a .glp file you keep wherever you like,
@@ -158,10 +158,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Setting up a fixture</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('fixtures')}>
+      <TopicHeading id="fixtures" />
       <p>
         <Trans>
           A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press{' '}
@@ -211,10 +209,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Presets</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('presets')}>
+      <TopicHeading id="presets" />
       <p>
         <Trans>
           A preset is a button on a fixture that sets several of its channels at once, e.g. "Warm white". To make one,
@@ -225,10 +221,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Scenes</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('scenes')}>
+      <TopicHeading id="scenes" />
       <p>
         <Trans>
           A scene is a button above the fixtures that sets the channels of several fixtures at once, e.g. "Intro" or
@@ -247,10 +241,8 @@ const UserManual = () => (
       </p>
     </section>
 
-    <section className={manualSection}>
-      <h2>
-        <Trans>Finding out what a device does</Trans>
-      </h2>
+    <section className={manualSection} id={topicElementId('finding-out')}>
+      <TopicHeading id="finding-out" />
       <p>
         <Trans>
           No manual, or not sure it is right? The <strong>Channels</strong> view (Setup mode only) has a fader for every

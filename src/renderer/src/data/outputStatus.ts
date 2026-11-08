@@ -1,10 +1,13 @@
 import type {RememberedPort, SerialPortDescription} from '@shared/ipc';
 
-/** a port in the select; nothing to translate: the path, the manufacturer and a product name */
+/** marks a port that looks like a DMX interface (the Enttec's and the Eurolite's USB chip): a hint, not a promise */
+export const LIKELY_DMX_INTERFACE_MARK = '▸';
+
+/** a port in the select; nothing to translate: the mark, the path and the manufacturer */
 export const describePort = (port: SerialPortDescription): string => {
+  const mark = port.likelyEnttecPro ? `${LIKELY_DMX_INTERFACE_MARK} ` : '';
   const manufacturer = port.manufacturer ? ` (${port.manufacturer})` : '';
-  const enttecHint = port.likelyEnttecPro ? ' – Enttec?' : '';
-  return `${port.path}${manufacturer}${enttecHint}`;
+  return `${mark}${port.path}${manufacturer}`;
 };
 
 /**
