@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-11-08
+
 ### Added
 
 - An **Emergency off** button in the top bar sets all 512 channels to 0 at once, in Show and Setup mode, with or
@@ -181,7 +183,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.0...v0.2.1
