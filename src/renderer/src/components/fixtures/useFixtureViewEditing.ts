@@ -16,12 +16,16 @@ export type FixtureViewEditing =
 
 export const NOT_EDITING: FixtureViewEditing = {type: 'none'};
 
+const isChaseEditor = ({type}: FixtureViewEditing) => type === 'adding-chase' || type === 'editing-chase';
+
 /**
  * which editor the fixture view shows. Locking (the Lock button, being idle) drops an unsaved edit, and the store
- * knows while one is open: a double-clicked .glp asks before it drops the draft
+ * knows while one is open: a double-clicked .glp asks before it drops the draft. Opening the chase editor clears an
+ * earlier failed save: the editor shows `fixturesError` next to its Save, as its own
  */
 export function useFixtureViewEditing(setupMode: boolean) {
   const setHasOpenDraft = useAppStore((state) => state.setHasOpenDraft);
+  const setFixturesError = useAppStore((state) => state.setFixturesError);
   const [editing, setEditing] = useState<FixtureViewEditing>(NOT_EDITING);
   const hasOpenDraft = editing.type !== 'none';
 
@@ -36,5 +40,12 @@ export function useFixtureViewEditing(setupMode: boolean) {
     return () => setHasOpenDraft(false);
   }, [hasOpenDraft, setHasOpenDraft]);
 
-  return [editing, setEditing] as const;
+  const openEditing = (next: FixtureViewEditing) => {
+    if (isChaseEditor(next)) {
+      setFixturesError(undefined);
+    }
+    setEditing(next);
+  };
+
+  return [editing, openEditing] as const;
 }

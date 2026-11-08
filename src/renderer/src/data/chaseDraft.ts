@@ -31,8 +31,6 @@ export interface ChaseStepValueDraft {
   readonly value: string;
 }
 
-export const CHASE_REPEAT_TYPES: readonly ChaseRepeat['type'][] = ['once', 'times', 'forever'];
-
 const MS_PER_SECOND = 1000;
 /** the hold of the first step added; later ones take the hold of the step before them */
 const FIRST_STEP_HOLD_MS = 1000;
