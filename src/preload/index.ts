@@ -8,6 +8,7 @@ import {PRELOAD_BRIDGE_GLOBAL, PreloadBridge} from '@shared/preloadBridge';
 const preloadBridge: PreloadBridge = {
   setChannel: (channel, value) => ipcRenderer.send(IpcChannel.SET_CHANNEL, {channel, value}),
   setChannelValues: (values) => ipcRenderer.send(IpcChannel.SET_CHANNEL_VALUES, {values}),
+  blackout: () => ipcRenderer.send(IpcChannel.BLACKOUT),
   listPorts: () => ipcRenderer.invoke(IpcChannel.LIST_PORTS),
   connect: (path) => ipcRenderer.invoke(IpcChannel.CONNECT, {path}),
   disconnect: () => ipcRenderer.invoke(IpcChannel.DISCONNECT),

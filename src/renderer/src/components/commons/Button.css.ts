@@ -53,6 +53,21 @@ export const buttonVariants = styleVariants({
       }
     }
   ],
+  /** an action that must be found at once, e.g. Emergency off */
+  danger: [
+    buttonBase,
+    {
+      color: vars.colors.onPrimary,
+      fontWeight: 600,
+      background: vars.colors.danger,
+      borderColor: vars.colors.danger,
+      selectors: {
+        '&:hover:not(:disabled), &:focus-visible:not(:disabled)': {
+          borderColor: vars.colors.text
+        }
+      }
+    }
+  ],
   /** just the icon, for small secondary actions */
   icon: [
     buttonBase,

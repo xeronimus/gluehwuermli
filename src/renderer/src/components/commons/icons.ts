@@ -14,6 +14,7 @@ export {
   IconTrash as DeleteIcon,
   IconPlugConnectedX as DisconnectIcon,
   IconPencil as EditIcon,
+  IconBulbOff as EmergencyOffIcon,
   IconFileOff as MissingProjectIcon,
   IconExternalLink as ExternalLinkIcon,
   IconChevronDown as ExpandIcon,

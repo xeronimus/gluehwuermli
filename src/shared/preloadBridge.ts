@@ -23,6 +23,8 @@ export const PRELOAD_BRIDGE_GLOBAL = 'gluehwuermli';
 export interface PreloadBridge {
   setChannel: (channel: number, value: number) => void;
   setChannelValues: (values: readonly SetChannelRequest[]) => void;
+  /** fire-and-forget: every channel to 0, sent on the next tick */
+  blackout: () => void;
   listPorts: () => Promise<readonly SerialPortDescription[]>;
   connect: (path: string) => Promise<DmxOutputStatus>;
   disconnect: () => Promise<DmxOutputStatus>;

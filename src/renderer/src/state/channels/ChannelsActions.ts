@@ -15,7 +15,7 @@ export interface ChannelsActions {
   setChannelValue: (channel: number, value: number) => void;
   /** several channels in one update, e.g. a preset */
   setChannelValues: (values: readonly SetChannelRequest[]) => void;
-  /** every fader to 0, as the main process blacked out the output; sends nothing */
+  /** every fader to 0, as the main process blacked out the output (Emergency off, another project); sends nothing */
   clearChannelValues: () => void;
   /** moves the fader bank; only changes what is shown, sends nothing */
   setBankStart: (start: number) => void;
