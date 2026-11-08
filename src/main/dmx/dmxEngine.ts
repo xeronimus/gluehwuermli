@@ -25,8 +25,8 @@ export interface DmxEngine {
   setChannelLimits: (limits: ChannelLimits) => void;
 
   /**
-   * all channels to 0, sent with the next tick (another project was opened: its fixtures may sit on other addresses).
-   * Unlike the blackout of dispose, the output keeps running
+   * all channels to 0, sent with the next tick (Emergency off, or another project was opened: its fixtures may sit on
+   * other addresses). Unlike the blackout of dispose, the output keeps running
    */
   blackout: () => void;
 

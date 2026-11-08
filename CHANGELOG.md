@@ -10,6 +10,15 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- An **Emergency off** button in the top bar sets all 512 channels to 0 at once, in Show and Setup mode, with or
+  without a project; fixtures, scenes and presets stay as they are (#63)
+
+### Removed
+
+- The "N channels above 0" counter in the top bar, to make room for Emergency off (#63)
+
 ## [0.2.3] - 2026-11-08
 
 ### Added
