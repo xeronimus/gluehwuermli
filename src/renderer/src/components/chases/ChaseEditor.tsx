@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import {CHASE_NAME_MAX_LENGTH, CHASE_STEPS_MAX, type Chase} from '@shared/ipc';
+import {CHASE_NAME_MAX_LENGTH, type Chase} from '@shared/ipc';
 
 import {
   type ChaseDraft,
@@ -11,17 +11,16 @@ import {
   chaseEditErrors,
   chaseOfDraft,
   newChaseDraft,
-  withNewStep
+  shownStepId
 } from '@/data/chaseDraft';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 import {useActionSaveChase} from '@/state/actionHooks/saveFixtures';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {AddIcon} from '../commons/icons';
 import {actions, chaseEditor, editorTitle, errorList, field, nameInput, steps} from './ChaseEditor.css';
 import ChaseRepeatField from './ChaseRepeatField';
-import ChaseStepEditor from './ChaseStepEditor';
+import ChaseStepTabs from './ChaseStepTabs';
 
 interface ChaseEditorProps {
   /** undefined to add a new chase */
@@ -32,7 +31,7 @@ interface ChaseEditorProps {
 const editTitle = ({name: chaseName}: Chase) => <Trans>Edit the chase {chaseName}</Trans>;
 
 /**
- * Names a chase, sets its repeat and its steps: each with its hold and the channels it sets, typed by hand. Saving
+ * Names a chase, sets its repeat and its steps, one tab each: its hold and the channels it sets. Saving
  * stores the project first and closes only then; a failed save keeps the editor open with the error.
  */
 const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
@@ -41,6 +40,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
   const saveError = useAppStore((state) => state.fixturesError);
   const [draft, setDraft] = useState<ChaseDraft>(() => (chase ? chaseDraftOf(chase) : newChaseDraft()));
   const [saving, setSaving] = useState(false);
+  const [chosenStepId, setChosenStepId] = useState<string | undefined>(undefined);
 
   const errors = chaseEditErrors(draft);
   const canSave = canSaveChase(errors) && !saving;
@@ -78,27 +78,15 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
         />
       </label>
       <ChaseRepeatField draft={draft} onChange={setDraft} />
-      <ol className={steps} aria-label={t`Steps`}>
-        {draft.steps.map((step, index) => (
-          <ChaseStepEditor
-            key={step.id}
-            step={step}
-            index={index}
-            count={draft.steps.length}
-            errors={errors.steps[index] ?? []}
-            onChange={setDraft}
-          />
-        ))}
-      </ol>
-      <span>
-        <Button
-          onClick={() => setDraft((current) => withNewStep(current, crypto.randomUUID()))}
-          disabled={draft.steps.length >= CHASE_STEPS_MAX}
-        >
-          <AddIcon />
-          <Trans>Add step</Trans>
-        </Button>
-      </span>
+      <div className={steps}>
+        <ChaseStepTabs
+          steps={draft.steps}
+          stepErrors={errors.steps}
+          shownId={shownStepId(draft.steps, chosenStepId)}
+          onSelect={setChosenStepId}
+          onChange={setDraft}
+        />
+      </div>
       {errors.chase.length > 0 && (
         <ul className={errorList}>
           {errors.chase.map((error) => (

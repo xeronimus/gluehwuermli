@@ -11,7 +11,9 @@ import {
   isSortedByChannel,
   newChaseDraft,
   nextFreeChannel,
+  shownStepId,
   sortedByChannel,
+  stepIdAfterRemoval,
   withNewStep,
   withNewStepValue,
   withStepDuplicated,
@@ -184,23 +186,40 @@ test('reports a hold, a repeat count and a step value out of range, at the step 
   ]);
 });
 
-test('labels an address with every fixture channel on it', () => {
+test('labels an address with every fixture channel on it, with its color there', () => {
   const par: Fixture = {
     id: 'par',
     name: 'PAR',
     startAddress: 10,
     channels: [
       {name: 'Red', offset: 0},
-      {name: 'Green', offset: 1}
+      {name: 'Green', offset: 1, color: '#00ff00'}
     ]
   };
   const wash: Fixture = {id: 'wash', name: 'Wash', startAddress: 11, channels: [{name: 'Dimmer', offset: 0}]};
 
   expect(fixtureChannelsAt([par, wash], '11')).toEqual([
-    {fixtureName: 'PAR', channelName: 'Green'},
+    {fixtureName: 'PAR', channelName: 'Green', color: '#00ff00'},
     {fixtureName: 'Wash', channelName: 'Dimmer'}
   ]);
   expect(fixtureChannelsAt([par, wash], '10')).toEqual([{fixtureName: 'PAR', channelName: 'Red'}]);
   expect(fixtureChannelsAt([par, wash], '1')).toEqual([]);
   expect(fixtureChannelsAt([par, wash], '')).toEqual([]);
+});
+
+describe('the step tab shown', () => {
+  const steps = chaseDraftOf(chorus).steps;
+
+  test('the chosen step while it exists, else the first, none without steps', () => {
+    expect(shownStepId(steps, 'strobe')).toBe('strobe');
+    expect(shownStepId(steps, 'gone')).toBe('laser');
+    expect(shownStepId(steps, undefined)).toBe('laser');
+    expect(shownStepId([], 'laser')).toBeUndefined();
+  });
+
+  test('after a delete: the step after it, the one before it at the end, none for the last step left', () => {
+    expect(stepIdAfterRemoval(steps, 0)).toBe('strobe');
+    expect(stepIdAfterRemoval(steps, 1)).toBe('laser');
+    expect(stepIdAfterRemoval(steps.slice(0, 1), 0)).toBeUndefined();
+  });
 });

@@ -13,8 +13,9 @@ import {selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import ColorDot from '../commons/ColorDot';
 import {RemoveIcon} from '../commons/icons';
-import {channelInput, stepValue, valueArrow, valueInput, valueLabel} from './ChaseEditor.css';
+import {channelInput, stepValue, valueArrow, valueInput, valueLabel, valueLabelPart} from './ChaseEditor.css';
 
 interface ChaseStepValueRowProps {
   value: ChaseStepValueDraft;
@@ -27,7 +28,8 @@ interface ChaseStepValueRowProps {
 
 /**
  * one channel a step sets: `channel → value`, both typed, and the fixture channels on that address as a label (all of
- * them where fixtures share it); the label isn't stored, the step knows the address only
+ * them where fixtures share it, each after a dot in its color there if it has one); the label isn't stored, the step
+ * knows the address only
  */
 const ChaseStepValueRow = ({value, stepIndex, valueIndex, onChange, onChannelLeft}: ChaseStepValueRowProps) => {
   const {t} = useLingui();
@@ -60,7 +62,14 @@ const ChaseStepValueRow = ({value, stepIndex, valueIndex, onChange, onChannelLef
         onChange={(event) => change({value: event.target.value})}
       />
       <span className={valueLabel}>
-        {labels.map(({fixtureName, channelName}) => `${fixtureName} · ${channelName}`).join(', ')}
+        {labels.map(({fixtureName, channelName, color}, labelIndex) => (
+          // a fixture may have two channels of the same name, so the index tells them apart
+          <span key={labelIndex} className={valueLabelPart}>
+            {color !== undefined && <ColorDot color={color} />}
+            {`${fixtureName} · ${channelName}`}
+            {labelIndex < labels.length - 1 && ','}
+          </span>
+        ))}
       </span>
       <Button
         variant="icon"

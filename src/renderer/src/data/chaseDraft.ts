@@ -208,6 +208,8 @@ export const withNewStepValue = (draft: ChaseDraft, stepIndex: number, id: strin
 export interface FixtureChannelLabel {
   readonly fixtureName: string;
   readonly channelName: string;
+  /** the channel's color in that fixture, as stored; none for a channel without one */
+  readonly color?: string;
 }
 
 /**
@@ -219,6 +221,18 @@ export const fixtureChannelsAt = (fixtures: readonly Fixture[], channelText: str
   return fixtures.flatMap((fixture) =>
     fixture.channels
       .filter((channel) => channelAddress(fixture, channel) === address)
-      .map((channel) => ({fixtureName: fixture.name, channelName: channel.name}))
+      .map((channel) => ({
+        fixtureName: fixture.name,
+        channelName: channel.name,
+        ...(channel.color !== undefined && {color: channel.color})
+      }))
   );
 };
+
+/** the step whose tab is shown: the chosen one while it exists, else the first; none for a chase without steps */
+export const shownStepId = (steps: readonly ChaseStepDraft[], chosenId: string | undefined): string | undefined =>
+  steps.some(({id}) => id === chosenId) ? chosenId : steps[0]?.id;
+
+/** the step shown once the one at `stepIndex` is deleted: the one after it, the one before it at the end */
+export const stepIdAfterRemoval = (steps: readonly ChaseStepDraft[], stepIndex: number): string | undefined =>
+  (steps[stepIndex + 1] ?? steps[stepIndex - 1])?.id;
