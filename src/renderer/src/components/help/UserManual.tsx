@@ -40,6 +40,12 @@ const UserManual = () => (
       </p>
       <p>
         <Trans>
+          <strong>Emergency off</strong> at the right of the top bar sets all 512 channels to 0 at once, in Show and in
+          Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0.
+        </Trans>
+      </p>
+      <p>
+        <Trans>
           If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went
           wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values
           and are sent again as soon as the port is open.
@@ -48,9 +54,9 @@ const UserManual = () => (
       <p>
         <Trans>
           After <strong>Disconnect</strong>, and after closing the app, the widget keeps sending the last values for as
-          long as it has USB power: the lights stay as they are. Pull the faders down before disconnecting to black out.
-          With <strong>Black out on quit</strong> on (in the Output section), closing the app sets all channels to 0
-          first.
+          long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before
+          disconnecting to black out. With <strong>Black out on quit</strong> on (in the Output section), closing the
+          app sets all channels to 0 first.
         </Trans>
       </p>
     </section>

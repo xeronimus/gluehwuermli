@@ -32,6 +32,9 @@ export function registerDmxIpc(engine: DmxEngine, connector: DmxPortConnector, p
     request.values.forEach(({channel, value}) => engine.setChannel(channel, value));
   });
 
+  // no payload to check, whatever comes along is ignored; not tied to the mode, an emergency off always works
+  ipcMain.on(IpcChannel.BLACKOUT, () => engine.blackout());
+
   ipcMain.handle(IpcChannel.LIST_PORTS, () => connector.listPorts());
 
   ipcMain.handle(IpcChannel.CONNECT, (_event, payload: unknown) => {

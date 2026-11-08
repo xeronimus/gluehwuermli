@@ -6,6 +6,7 @@ import type DmxService from '@/data/service/DmxService';
 export const electronDmxServiceFactory = (bridge: PreloadBridge): DmxService => ({
   setChannel: (channel, value) => bridge.setChannel(channel, value),
   setChannelValues: (values) => bridge.setChannelValues(values),
+  blackout: () => bridge.blackout(),
   listPorts: () => bridge.listPorts(),
   connect: (path) => bridge.connect(path),
   disconnect: () => bridge.disconnect(),
