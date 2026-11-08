@@ -1,5 +1,7 @@
 import type {
   BlackoutOnQuit,
+  ChannelsChanged,
+  ChaseStatus,
   ChosenLocale,
   DataFolder,
   DmxOutputStatus,
@@ -33,6 +35,8 @@ export interface PreloadBridge {
   getRememberedPort: () => Promise<RememberedPort>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
+  /** the values main set on its own (a chase step), after the caps; returns the function that removes the listener */
+  onChannelsChanged: (listener: (change: ChannelsChanged) => void) => () => void;
   getProjectStatus: () => Promise<ProjectStatus>;
   /** rejects in Show mode or when the new file can't be written */
   createProject: () => Promise<ProjectOpenResult>;
@@ -59,6 +63,17 @@ export interface PreloadBridge {
   getBlackoutOnQuit: () => Promise<BlackoutOnQuit>;
   /** allowed in Show mode too; rejects if it can't be stored */
   setBlackoutOnQuit: (enabled: boolean) => Promise<void>;
+  getChaseStatus: () => Promise<ChaseStatus>;
+  /** plays the chase with this id as saved in the open project; rejects for an unknown id or without a project */
+  startChase: (chaseId: string) => Promise<ChaseStatus>;
+  /** nothing unless a chase runs */
+  pauseChase: () => Promise<ChaseStatus>;
+  /** nothing unless a chase is paused */
+  resumeChase: () => Promise<ChaseStatus>;
+  /** the values stay; nothing while no chase runs */
+  stopChase: () => Promise<ChaseStatus>;
+  /** returns the function that removes the listener again */
+  onChaseStatusChanged: (listener: (status: ChaseStatus) => void) => () => void;
   getLockStatus: () => Promise<LockStatus>;
   /** Setup mode; with no password stored yet, stores this one and unlocks */
   unlock: (password: string) => Promise<PasswordResult>;

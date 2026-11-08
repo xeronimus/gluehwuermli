@@ -5,9 +5,11 @@ import {pathToFileURL} from 'node:url';
 import appIcon from '../assets/favicon/android-chrome-512x512.png?asset';
 import {loadMainConfig} from './config';
 import {blackoutOnQuitIpcHandlers} from './ipc/blackoutOnQuitIpcHandlers';
+import {chaseIpcHandlers} from './ipc/chaseIpcHandlers';
 import {localeIpcHandlers} from './ipc/localeIpcHandlers';
 import {projectIpcHandlers} from './ipc/projectIpcHandlers';
 import {registerAppIpc} from './ipc/registerAppIpc';
+import {registerChaseIpc} from './ipc/registerChaseIpc';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerLockIpc} from './ipc/registerLockIpc';
 import {registerProjectIpc} from './ipc/registerProjectIpc';
@@ -130,6 +132,7 @@ function startApp(): void {
       blackoutOnQuitIpcHandlers(services.settings)
     );
     registerLockIpc(services.appLock);
+    registerChaseIpc(services.chasePlayer, chaseIpcHandlers(services.chasePlayer, projectSession));
     void openMainWindow();
 
     // macOS: re-create the window when the dock icon is clicked and none is open

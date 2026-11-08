@@ -413,6 +413,10 @@ msgstr "Der Ordner konnte nicht geöffnet werden: {message}"
 msgid "Could not read the output status"
 msgstr "Der Status des Ausgangs konnte nicht gelesen werden"
 
+#: src/renderer/src/state/actionHooks/chaseSubscription.ts
+msgid "Could not read whether a chase is playing"
+msgstr "Es konnte nicht gelesen werden, ob ein Chase läuft"
+
 #: src/renderer/src/state/actionHooks/lockSubscription.ts
 msgid "Could not read whether the app is locked"
 msgstr "Es konnte nicht gelesen werden, ob die App gesperrt ist"

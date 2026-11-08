@@ -1,8 +1,11 @@
 import {
+  parseChannelsChanged,
+  parseChaseStatus,
   parseConnectRequest,
   parseLiftChannelLockRequest,
   parseSetChannelRequest,
   parseSetChannelValuesRequest,
+  parseStartChaseRequest,
   parseUnlockRequest
 } from './ipc';
 
@@ -82,5 +85,46 @@ describe('parseLiftChannelLockRequest', () => {
     expect(parseLiftChannelLockRequest({password: 'abc'})).toBeUndefined();
     expect(parseLiftChannelLockRequest({password: 1234})).toBeUndefined();
     expect(parseLiftChannelLockRequest(null)).toBeUndefined();
+  });
+});
+
+describe('parseStartChaseRequest', () => {
+  test('accepts an id', () => {
+    expect(parseStartChaseRequest({chaseId: 'chorus'})).toEqual({chaseId: 'chorus'});
+  });
+
+  test.each([{chaseId: ''}, {chaseId: 3}, {}, null, 'chorus'])('rejects %j', (payload) => {
+    expect(parseStartChaseRequest(payload)).toBeUndefined();
+  });
+});
+
+describe('parseChaseStatus', () => {
+  test.each([
+    {type: 'idle'},
+    {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 0},
+    {type: 'paused', chaseId: 'chorus', stepIndex: 3, passIndex: 7}
+  ])('accepts %j', (payload) => {
+    expect(parseChaseStatus(payload)).toEqual(payload);
+  });
+
+  test.each([
+    {type: 'running', chaseId: 'chorus', stepIndex: -1, passIndex: 0},
+    {type: 'paused', chaseId: '', stepIndex: 0, passIndex: 0},
+    {type: 'running', chaseId: 'chorus'},
+    {type: 'finished'},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseChaseStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseChannelsChanged', () => {
+  test('accepts the values of a step', () => {
+    const change = {values: [{channel: 29, value: 255}]};
+    expect(parseChannelsChanged(change)).toEqual(change);
+  });
+
+  test.each([{values: []}, {values: [{channel: 513, value: 0}]}, {}, null])('rejects %j', (payload) => {
+    expect(parseChannelsChanged(payload)).toBeUndefined();
   });
 });

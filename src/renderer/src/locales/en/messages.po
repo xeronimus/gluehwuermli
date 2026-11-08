@@ -413,6 +413,10 @@ msgstr "Could not open the folder: {message}"
 msgid "Could not read the output status"
 msgstr "Could not read the output status"
 
+#: src/renderer/src/state/actionHooks/chaseSubscription.ts
+msgid "Could not read whether a chase is playing"
+msgstr "Could not read whether a chase is playing"
+
 #: src/renderer/src/state/actionHooks/lockSubscription.ts
 msgid "Could not read whether the app is locked"
 msgstr "Could not read whether the app is locked"
