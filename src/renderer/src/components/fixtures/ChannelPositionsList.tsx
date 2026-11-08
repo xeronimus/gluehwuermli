@@ -5,11 +5,24 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE} from '@shared/dmx';
 import {CHANNEL_POSITION_NAME_MAX_LENGTH} from '@shared/ipc';
 
-import {type ChannelValuesDraft, withNewPosition, withPositionChange, withoutPosition} from '@/data/channelValuesDraft';
+import {
+  type ChannelValuesDraft,
+  type PositionsDisplay,
+  withNewPosition,
+  withPositionChange,
+  withoutPosition
+} from '@/data/channelValuesDraft';
 
 import Button from '../commons/Button';
+import ModeToggle, {type Mode} from '../commons/ModeToggle';
 import {AddIcon, RemoveIcon} from '../commons/icons';
-import {positionNameInput, positionRows, positionValueInput, positionsList} from './ChannelPositionsList.css';
+import {
+  positionActions,
+  positionNameInput,
+  positionRows,
+  positionValueInput,
+  positionsList
+} from './ChannelPositionsList.css';
 
 interface ChannelPositionsListProps {
   values: ChannelValuesDraft;
@@ -17,9 +30,16 @@ interface ChannelPositionsListProps {
   onChange: (values: ChannelValuesDraft) => void;
 }
 
-/** the positions of a positions channel, below its row in the channels: a value and an optional name each */
+/**
+ * the positions of a positions channel, below its row in the channels: a value and an optional name each; and whether
+ * the Show view has a fader for them or a button per position
+ */
 const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps) => {
   const {t} = useLingui();
+  const displays: readonly Mode<PositionsDisplay>[] = [
+    {id: 'fader', label: t`Fader`},
+    {id: 'buttons', label: t`Buttons`}
+  ];
   return (
     <div className={positionsList}>
       <div className={positionRows}>
@@ -52,10 +72,17 @@ const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps
           );
         })}
       </div>
-      <span>
+      <span className={positionActions}>
         <Button onClick={() => onChange(withNewPosition(values))}>
           <AddIcon /> <Trans>Add position</Trans>
         </Button>
+        <span title={t`In the Show view: a fader, or a button per position`}>
+          <ModeToggle
+            modes={displays}
+            activeId={values.display}
+            onSelect={(display) => onChange({...values, display})}
+          />
+        </span>
       </span>
     </div>
   );

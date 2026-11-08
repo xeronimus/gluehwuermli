@@ -4,6 +4,7 @@ import {useLingui} from '@lingui/react/macro';
 
 import type {Fixture} from '@shared/ipc';
 
+import {showsAsButtons} from '@/data/faderStops';
 import {addressRangeOf, fixtureFaders} from '@/data/fixtureFaders';
 import type {MoveDirection} from '@/data/listOrder';
 import {useActionSetChannelValue} from '@/state/actionHooks/setChannelValue';
@@ -13,6 +14,7 @@ import ChannelFader from '../commons/ChannelFader';
 import MarkdownText from '../commons/MarkdownText';
 import MoveButtons from '../commons/MoveButtons';
 import {CollapseIcon, DeleteIcon, EditIcon, ExpandIcon, FixtureIcon} from '../commons/icons';
+import ChannelPositionButtons from './ChannelPositionButtons';
 import {
   fixtureGroup,
   groupAddresses,
@@ -44,8 +46,8 @@ interface FixtureGroupProps {
 }
 
 /**
- * The fixture's name and addresses, a fader per channel on its absolute DMX channel, its preset buttons and its hint
- * below them. The description is reference material, hidden until opened with the button next to the hint.
+ * The fixture's name and addresses, a fader per channel on its absolute DMX channel (a button per position for a
+ * positions channel set to buttons), its preset buttons and its hint below them. The description is reference material, hidden until opened with the button next to the hint.
  */
 const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
   const {t} = useLingui();
@@ -85,9 +87,13 @@ const FixtureGroup = ({fixture, actions}: FixtureGroupProps) => {
         )}
       </header>
       <div className={groupFaders}>
-        {fixtureFaders(fixture).map((fader) => (
-          <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
-        ))}
+        {fixtureFaders(fixture).map((fader) =>
+          showsAsButtons(fader) ? (
+            <ChannelPositionButtons key={fader.channel} fader={fader} onChange={setChannelValue} />
+          ) : (
+            <ChannelFader key={fader.channel} fader={fader} onChange={setChannelValue} />
+          )
+        )}
       </div>
       <FixturePresetButtons fixture={fixture} canSavePreset={actions !== undefined} />
       {(fixture.hint || fixture.description) && (

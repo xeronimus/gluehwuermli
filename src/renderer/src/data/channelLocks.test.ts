@@ -8,6 +8,7 @@ import {
   isAtCap,
   isChannelLockOn,
   isFaderLocked,
+  isWithinCap,
   liftedLimits,
   presetExceedsLimits,
   sceneExceedsLimits
@@ -134,4 +135,11 @@ describe('isFaderLocked and isAtCap', () => {
     expect(isAtCap(0, 0)).toBe(true);
     expect(isAtCap(255, undefined)).toBe(false);
   });
+});
+
+test('a value up to the cap is within it, one above is not; without a cap every value is', () => {
+  expect(isWithinCap(50, 50)).toBe(true);
+  expect(isWithinCap(51, 50)).toBe(false);
+  expect(isWithinCap(0, 0)).toBe(true);
+  expect(isWithinCap(255, undefined)).toBe(true);
 });

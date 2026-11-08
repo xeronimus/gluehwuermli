@@ -34,3 +34,10 @@ export const positionNameInput = style({
   width: '100%',
   boxSizing: 'border-box'
 });
+
+/** Add position, and the toggle between a fader and buttons right next to it */
+export const positionActions = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px'
+});
