@@ -176,9 +176,9 @@ const UserManual = () => (
         </li>
         <li>
           <Trans>
-            Optionally, a channel's <strong>color</strong> as a hex value, e.g. ff0000 for red or #7f00ff for UV: its
-            fader is filled with it and glows the brighter the higher the value, so the red channel is found at a
-            glance.
+            Optionally, a channel's <strong>color</strong> as a hex value, e.g. ff0000 for red or #7f00ff for UV, or
+            picked with a click on the swatch beside the field: its fader is filled with it and glows the brighter the
+            higher the value, so the red channel is found at a glance.
           </Trans>
         </li>
         <li>

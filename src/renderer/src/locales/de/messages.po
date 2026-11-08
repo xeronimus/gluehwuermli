@@ -771,8 +771,8 @@ msgid "Optionally, a <0>hint</0> shown below the faders (e.g. \"warm up 2 min be
 msgstr "Wenn du willst, einen <0>Hinweis</0> unter den Fadern (z. B. «2 Min. vor dem Nebel aufwärmen») und eine <1>Beschreibung</1> für alles andere: den DMX-Modus, die DIP-Schalter, wo es hängt. Die Beschreibung ist Markdown (Listen, Tabellen, Links auf Webseiten, die sich in deinem Browser öffnen), mit einer Vorschau im Editor."
 
 #: src/renderer/src/components/help/UserManual.tsx
-msgid "Optionally, a channel's <0>color</0> as a hex value, e.g. ff0000 for red or #7f00ff for UV: its fader is filled with it and glows the brighter the higher the value, so the red channel is found at a glance."
-msgstr "Wenn du willst, die <0>Farbe</0> eines Kanals als Hex-Wert, z. B. ff0000 für Rot oder #7f00ff für UV: Sein Fader ist damit gefüllt und leuchtet umso heller, je höher der Wert ist, so findest du den roten Kanal auf einen Blick."
+msgid "Optionally, a channel's <0>color</0> as a hex value, e.g. ff0000 for red or #7f00ff for UV, or picked with a click on the swatch beside the field: its fader is filled with it and glows the brighter the higher the value, so the red channel is found at a glance."
+msgstr "Wenn du willst, die <0>Farbe</0> eines Kanals als Hex-Wert, z. B. ff0000 für Rot oder #7f00ff für UV, oder ausgewählt mit einem Klick auf das Farbfeld daneben: Sein Fader ist damit gefüllt und leuchtet umso heller, je höher der Wert ist, so findest du den roten Kanal auf einen Blick."
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Output"
@@ -782,6 +782,10 @@ msgstr "Ausgang"
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Password"
 msgstr "Passwort"
+
+#: src/renderer/src/components/fixtures/ColorField.tsx
+msgid "Pick a color"
+msgstr "Farbe auswählen"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Plug in the Enttec DMX USB Pro and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
