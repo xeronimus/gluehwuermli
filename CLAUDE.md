@@ -14,7 +14,7 @@ of 16 raw 0–255 faders that moves across channels 1–512, port selection and 
 port is remembered and preselected on start, the app always starts disconnected; Connect / Disconnect in the top bar). The app starts in
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
-lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the top bar.
+lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
 Planned: fades and chases.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
@@ -130,10 +130,10 @@ src/
       i18n/                  # i18n.ts (locales, pickLocale, activateLocale); messages/: the codes of data/, shared/ and
                              # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
-      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status), fixtures/
+      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status, Emergency off), fixtures/
                              # (fixture groups and editor, scene buttons and editor), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
-                             # channels), settings/ (output port, mode and channel lock),
+                             # channels), settings/ (output port, language, mode and channel lock),
                              # help/ (manual, open project, data folder, repo link); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
                              # Tabs, FaderTicks, useFaderTitles, ErrorBoundary, icons.ts)
