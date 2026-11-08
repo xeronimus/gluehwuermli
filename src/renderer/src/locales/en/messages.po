@@ -280,7 +280,7 @@ msgstr "Choose the port in the <0>Output</0> section of the <1>Settings</1> view
 msgid "Color"
 msgstr "Color"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Color of channel {row}"
 msgstr "Color of channel {row}"
 
@@ -452,7 +452,7 @@ msgstr "Discard the fixture or scene you are editing, and open the other project
 msgid "Disconnect"
 msgstr "Disconnect"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "e.g. Dimmer"
 msgstr "e.g. Dimmer"
 
@@ -602,13 +602,21 @@ msgstr "Looking up the folder…"
 msgid "Lowest value of channel {row}"
 msgstr "Lowest value of channel {row}"
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Max"
+msgstr "Max"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Max while locked"
 msgstr "Max while locked"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Maximum of channel {row} while locked"
 msgstr "Maximum of channel {row} while locked"
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "Min"
+msgstr "Min"
 
 #: src/renderer/src/components/project/RecentProjectList.tsx
 msgid "missing"
@@ -626,11 +634,11 @@ msgstr "Move {fixtureName} to the left"
 msgid "Move {fixtureName} to the right"
 msgstr "Move {fixtureName} to the right"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Move channel {row} down"
 msgstr "Move channel {row} down"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Move channel {row} up"
 msgstr "Move channel {row} up"
 
@@ -655,7 +663,7 @@ msgstr "Move the scene {sceneName} to the right"
 msgid "Name"
 msgstr "Name"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Name of channel {row}"
 msgstr "Name of channel {row}"
 
@@ -742,7 +750,7 @@ msgstr "Offset"
 msgid "Offset {offset} is used by more than one channel"
 msgstr "Offset {offset} is used by more than one channel"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Offset of channel {row}"
 msgstr "Offset of channel {row}"
 
@@ -860,7 +868,7 @@ msgstr "Recent projects"
 msgid "Remove {projectName} from the list (the file stays)"
 msgstr "Remove {projectName} from the list (the file stays)"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/FixtureChannelRow.tsx
 msgid "Remove the channel"
 msgstr "Remove the channel"
 
@@ -1110,6 +1118,10 @@ msgstr "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file y
 msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "The highest value of the fader; empty for {highestValue}"
+msgstr "The highest value of the fader; empty for {highestValue}"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The highest value while the channel lock is on; empty for no lock"
 msgstr "The highest value while the channel lock is on; empty for no lock"
@@ -1121,6 +1133,10 @@ msgstr "The hint can have at most {maxLength} characters"
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
 msgstr "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
+
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
+msgid "The lowest value of the fader; empty for {lowestValue}"
+msgstr "The lowest value of the fader; empty for {lowestValue}"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"
@@ -1238,7 +1254,7 @@ msgstr "Value of {label} in preset {presetNumber}"
 msgid "Value of position {positionNumber} of channel {row}"
 msgstr "Value of position {positionNumber} of channel {row}"
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Values"
 msgstr "Values"
 
@@ -1254,7 +1270,7 @@ msgstr "Values of channel {row}"
 msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 msgstr "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 
-#: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
+#: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
 msgstr "Where the fader stops: every value from min to max, in steps, or only at some positions"
 

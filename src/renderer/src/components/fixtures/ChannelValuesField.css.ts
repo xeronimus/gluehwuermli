@@ -23,3 +23,6 @@ export const rangeSeparator = style({
   fontSize: '0.9em',
   whiteSpace: 'nowrap'
 });
+
+/** takes the separator's room in the header without showing it */
+export const hiddenSeparator = style([rangeSeparator, {visibility: 'hidden'}]);
