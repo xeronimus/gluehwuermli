@@ -65,6 +65,18 @@ msgstr "Das Min. eines Kanals darf nicht über seinem Max. liegen"
 msgid "A channel's step size must be a whole number from 1"
 msgstr "Die Schrittweite eines Kanals muss eine ganze Zahl ab 1 sein"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase can be played from {minRepeat} to {maxRepeat} times"
+msgstr "Ein Chase lässt sich {minRepeat}- bis {maxRepeat}-mal spielen"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase can have at most {maxSteps} steps"
+msgstr "Ein Chase hat höchstens {maxSteps} Schritte"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase name can have at most {maxLength} characters"
+msgstr "Ein Chase-Name darf höchstens {maxLength} Zeichen haben"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
 msgstr "Eine Farbe muss ein Hex-Wert wie #ff00ff sein"
@@ -100,6 +112,14 @@ msgstr "Eine Szene ist ein Knopf über den Geräten, der die Kanäle mehrerer Ge
 #: src/renderer/src/i18n/messages/sceneMessages.ts
 msgid "A scene name can have at most {maxLength} characters"
 msgstr "Ein Szenen-Name darf höchstens {maxLength} Zeichen haben"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
+msgstr "Ein Schritt hält {minSeconds, number} Sekunden bis {maxMinutes} Minuten"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A step sets a channel twice"
+msgstr "Ein Schritt setzt einen Kanal zweimal"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
@@ -510,6 +530,10 @@ msgstr "Jedes Gerät der Szene braucht mindestens einen Kanal"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every preset needs a name"
 msgstr "Jedes Preset braucht einen Namen"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Every step needs at least one channel"
+msgstr "Jeder Schritt braucht mindestens einen Kanal"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
@@ -1034,9 +1058,17 @@ msgstr "Startadresse <0>{startAddress}</0>"
 msgid "Start channel"
 msgstr "Startkanal"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
+msgstr "Die Kanäle eines Schritts müssen ganze Zahlen von {firstChannel} bis {lastChannel} sein"
+
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Step size of channel {row}"
 msgstr "Schrittweite von Kanal {row}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Step values must be whole numbers from {minValue} to {maxValue}"
+msgstr "Die Werte eines Schritts müssen ganze Zahlen von {minValue} bis {maxValue} sein"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Steps"
@@ -1069,6 +1101,18 @@ msgstr "Die Pfeile verschieben einen Kanal nach oben oder unten: Die Fader des G
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "Die Kanalsperre ist nach jedem Start an, unabhängig vom Modus. Heb sie in der Ansicht <0>Einstellungen</0> auf, z. B. für eine Show, bei der der Laser hoch genug hängt: im Show-Modus mit dem Passwort, im Setup-Modus mit einer Bestätigung. Sie bleibt dann aufgehoben, auch im Show-Modus und nach Sperren, bis <1>Kanalsperre einschalten</1> oder zu einem Neustart; die Leiste oben zeigt solange <2>Kanalsperre aufgehoben</2>. Wieder eingeschaltet, fallen die gesperrten Kanäle sofort auf ihr Maximum."
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase has a step twice"
+msgstr "Der Chase hat einen Schritt zweimal"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase needs a name"
+msgstr "Der Chase braucht einen Namen"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase needs at least one step"
+msgstr "Der Chase braucht mindestens einen Schritt"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The color its fader glows in, a hex value like #ff00ff; empty for none"
