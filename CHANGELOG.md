@@ -10,6 +10,12 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- **Chases**: a project's chases are listed below the fixtures, one row each with its steps (the current one filled,
+  its hold on hover) and its repeat (`1×`, `8×` or `∞`); Start, Pause, Resume and Stop play them in Show and Setup
+  mode, one at a time, Start of another chase replaces the running one (#73)
+
 ## [0.2.4] - 2026-11-08
 
 ### Added

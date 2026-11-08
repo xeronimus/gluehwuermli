@@ -9,13 +9,14 @@ the last one reopens on start, a double-click on a `.glp` opens it, ADR 4), fixt
 and named channels, each with an optional color its fader fills and glows in and optional value rules: a range, steps
 or named positions its fader stops at) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
 (named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
-fixture groups), a bank
+fixture groups), chases (steps of absolute channel values played one after the other by main; a row each below the
+fixture groups, started, paused, resumed and stopped there), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
 port is remembered and preselected on start, the app always starts disconnected; Connect / Disconnect in the top bar). The app starts in
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
-Planned: fades and chases.
+Planned: adding and editing chases, fades.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -141,7 +142,8 @@ src/
                              # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status, Emergency off), fixtures/
-                             # (fixture groups and editor, scene buttons and editor), project/ (start view without a
+                             # (fixture groups and editor, scene buttons and editor), chases/ (a row per chase below the fixtures: Start, Pause /
+                             # Resume, Stop, the step boxes, the repeat and pass), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
                              # help/ (contents, manual, open project, data folder, repo link); ShowView.tsx picks the start view
@@ -149,7 +151,7 @@ src/
                              # Tabs, FaderTicks, useFaderTitles, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
-                             # presets, scenes, tabs, passwordForm, activityThrottle, recentProjects)
+                             # presets, scenes, chaseRows, tabs, passwordForm, activityThrottle, recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
                              # (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
