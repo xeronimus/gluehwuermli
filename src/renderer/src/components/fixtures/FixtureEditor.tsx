@@ -5,7 +5,7 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {fixtureErrors, overlappingFixtures, sharedAddressErrors} from '@shared/fixtures';
 import type {Fixture} from '@shared/ipc';
 
-import {draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
+import {channelOffsetChanges, draftOf, fixtureOfDraft, newFixtureDraft} from '@/data/fixtureDraft';
 import {type FixtureEditorTab, tabsWithErrors} from '@/data/fixtureEditorTabs';
 import {useActionSaveFixture} from '@/state/actionHooks/saveFixtures';
 
@@ -38,7 +38,7 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
   const {t} = useLingui();
   const saveFixture = useActionSaveFixture();
   const [id] = useState(() => fixture?.id ?? crypto.randomUUID());
-  const [draft, setDraft] = useState(() => (fixture ? draftOf(fixture) : newFixtureDraft()));
+  const [draft, setDraft] = useState(() => (fixture ? draftOf(fixture) : newFixtureDraft(crypto.randomUUID())));
   const [activeTab, setActiveTab] = useState<FixtureEditorTab>('general');
   const [saving, setSaving] = useState(false);
 
@@ -97,7 +97,7 @@ const FixtureEditor = ({fixture, fixtures, onClose}: FixtureEditorProps) => {
 
   const onSave = async () => {
     setSaving(true);
-    const saved = await saveFixture(candidate);
+    const saved = await saveFixture(candidate, channelOffsetChanges(draft));
     setSaving(false);
     if (saved) {
       onClose();

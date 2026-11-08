@@ -13,6 +13,7 @@ import {
   editedScene,
   withScene,
   withSceneMoved,
+  withSceneOffsetsChanged,
   withoutScene
 } from '@/data/scenes';
 import logger from '@/data/service/Logger';
@@ -46,11 +47,17 @@ const couldNotDeleteScene = ({name: sceneName}: Scene) => msg`Could not delete t
 const couldNotMoveFixture = ({name: fixtureName}: Fixture) => msg`Could not move the fixture ${fixtureName}`;
 const couldNotMoveScene = ({name: sceneName}: Scene) => msg`Could not move the scene ${sceneName}`;
 
-/** adds the fixture, or replaces the one with its id */
+/**
+ * adds the fixture, or replaces the one with its id; the scenes follow its channels to their new offsets
+ * (`offsetChanges`: stored offset to new, empty for a new fixture)
+ */
 export function useActionSaveFixture() {
-  return (fixture: Fixture) =>
+  return (fixture: Fixture, offsetChanges: ReadonlyMap<number, number>) =>
     storeFixtures(
-      changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture)),
+      (setup) =>
+        changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture))(
+          withSceneOffsetsChanged(setup, fixture.id, offsetChanges)
+        ),
       `saving the fixture ${fixture.name}`,
       couldNotSaveFixture(fixture)
     );
