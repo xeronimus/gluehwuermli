@@ -574,6 +574,10 @@ msgstr "So richtest du die Kanäle ein"
 msgid "If the port can't be opened, or the widget is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 msgstr "Lässt sich der Port nicht öffnen oder wird das Widget während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
 
+#: src/renderer/src/components/settings/LanguageSection.tsx
+msgid "Language"
+msgstr "Sprache"
+
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Lift channel lock"
 msgstr "Kanalsperre aufheben"

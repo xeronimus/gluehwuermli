@@ -5,6 +5,7 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import {useAppStore} from '@/state/store';
 
 import ChannelLockSection from './ChannelLockSection';
+import LanguageSection from './LanguageSection';
 import ModeSection from './ModeSection';
 import OutputSection from './OutputSection';
 import PasswordSection from './PasswordSection';
@@ -16,7 +17,7 @@ interface SettingsViewProps {
 }
 
 /**
- * Two columns: the open project and the output port; the two locks, the mode (changing the rig) and the channel lock
+ * Two columns: the open project, the output port and the language; the two locks, the mode (changing the rig) and the channel lock
  * (e.g. the laser), each with its own controls, and changing the password in Setup mode. The port doesn't wait for the
  * lock status, it needs no password.
  */
@@ -30,6 +31,7 @@ const SettingsView = ({projectSection}: SettingsViewProps) => {
       <div className={settingsColumn}>
         {projectSection(settingsSection)}
         <OutputSection />
+        <LanguageSection />
       </div>
       <div className={settingsColumn}>
         {error && <span className={errorMessage}>{i18n._(error)}</span>}

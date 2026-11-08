@@ -8,7 +8,6 @@ import {outputStatusMessage} from '@/i18n/messages/outputMessages';
 import {useAppStore} from '@/state/store';
 
 import EmergencyOffButton from './EmergencyOffButton';
-import LocaleSwitch from './LocaleSwitch';
 import LockIndicator from './LockIndicator';
 import {appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
 import OutputConnection from './OutputConnection';
@@ -46,7 +45,6 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
       <OutputConnection />
       {error && <span className={outputError}>{i18n._(error)}</span>}
       <EmergencyOffButton />
-      <LocaleSwitch />
     </header>
   );
 };
