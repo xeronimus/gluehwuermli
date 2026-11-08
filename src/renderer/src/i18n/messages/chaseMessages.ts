@@ -8,6 +8,7 @@ import {
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
   CHASE_REPEAT_MAX,
+  CHASE_REPEAT_MIN,
   CHASE_STEPS_MAX
 } from '@shared/ipc';
 
@@ -24,8 +25,9 @@ export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
       return msg`A chase name can have at most ${maxLength} characters`;
     }
     case 'chase-repeat-invalid': {
+      const minRepeat = CHASE_REPEAT_MIN;
       const maxRepeat = CHASE_REPEAT_MAX;
-      return msg`A chase can be played from 2 to ${maxRepeat} times`;
+      return msg`A chase can be played from ${minRepeat} to ${maxRepeat} times`;
     }
     case 'chase-steps-missing':
       return msg`The chase needs at least one step`;

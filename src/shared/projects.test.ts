@@ -38,7 +38,12 @@ describe('parseProjectFile', () => {
     ['a chase without steps', {id: 'chorus', name: 'Chorus', repeat: {type: 'once'}, steps: []}],
     [
       'a chase step holding too short',
-      {id: 'chorus', name: 'Chorus', repeat: {type: 'once'}, steps: [{id: 'one', holdMs: 10, values: []}]}
+      {
+        id: 'chorus',
+        name: 'Chorus',
+        repeat: {type: 'once'},
+        steps: [{id: 'one', holdMs: 10, values: [{channel: 1, value: 255}]}]
+      }
     ],
     [
       'a chase setting a channel twice in one step',
