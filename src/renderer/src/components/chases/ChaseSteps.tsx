@@ -6,8 +6,8 @@ import type {ChaseStep} from '@shared/ipc';
 
 import {holdSeconds, stepBoxesFit} from '@/data/chaseRows';
 
+import {useElementWidth} from '../commons/useElementWidth';
 import {chaseSteps, stepBox, stepCountText} from './ChaseSteps.css';
-import {useElementWidth} from './useElementWidth';
 
 interface ChaseStepsProps {
   steps: readonly ChaseStep[];
