@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Fixed
+
+- A fader no longer sticks to the mouse pointer after the button was released outside the window or the window lost
+  focus while dragging (#59)
+
 ## [0.2.2] - 2026-11-07
 
 ### Added
