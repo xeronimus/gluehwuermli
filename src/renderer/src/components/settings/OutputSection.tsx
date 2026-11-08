@@ -29,8 +29,8 @@ const OutputSection = () => {
       </h2>
       <p className={message}>
         <Trans>
-          The serial port of the Enttec DMX USB Pro. The app always starts disconnected: press Connect here or in the
-          top bar.
+          The serial port of the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO; ▸ marks one that
+          looks like it. The app always starts disconnected: press Connect here or in the top bar.
         </Trans>
       </p>
       <div className={portControls}>

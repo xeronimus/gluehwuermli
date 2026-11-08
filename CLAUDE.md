@@ -134,7 +134,7 @@ src/
                              # (fixture groups and editor, scene buttons and editor), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
-                             # help/ (manual, open project, data folder, repo link); ShowView.tsx picks the start view
+                             # help/ (contents, manual, open project, data folder, repo link); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
                              # Tabs, FaderTicks, useFaderTitles, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,

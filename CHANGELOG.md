@@ -26,6 +26,9 @@ change bumps the minor version and everything else the patch version.
 - Add scene is an icon button right after the scenes, Add fixture one right after the last fixture, instead of both
   below the fixtures; without fixtures, Add fixture follows the hint
 - Unlocking Setup mode, creating a project and opening one switch to the Show view
+- The Help view has a table of contents left of the manual; the manual and the Output section name both the Enttec
+  DMX USB Pro and the Eurolite USB-DMX512 PRO
+- A port that looks like a DMX interface is marked with a ▸ in front instead of "Enttec?" after it
 - The language is switched in the Settings view instead of the top bar
 
 ### Fixed
