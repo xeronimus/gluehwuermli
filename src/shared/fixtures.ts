@@ -7,6 +7,7 @@ import {
   sameValueRules,
   valueRulesErrors
 } from './channelValueRules';
+import {chasesAreValid} from './chases';
 import {isValidColor} from './colors';
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
 import {
@@ -258,7 +259,7 @@ export function channelLimits(fixtures: readonly Fixture[]): ChannelLimits {
 const hasUniqueIds = (fixtures: readonly Fixture[]) => new Set(fixtures.map(({id}) => id)).size === fixtures.length;
 
 /**
- * the payload if it is a setup the app can work with (schema, unique ids, every fixture and every scene valid, no
+ * the payload if it is a setup the app can work with (schema, unique ids, every fixture, scene and chase valid, no
  * shared address with different value rules), otherwise undefined
  */
 export const parseFixtureSetup = (payload: unknown): FixtureSetup | undefined =>
@@ -266,6 +267,7 @@ export const parseFixtureSetup = (payload: unknown): FixtureSetup | undefined =>
   hasUniqueIds(payload.fixtures) &&
   payload.fixtures.every((fixture) => fixtureErrors(fixture).length === 0) &&
   addressRuleConflicts(payload.fixtures).length === 0 &&
-  scenesAreValid(payload)
+  scenesAreValid(payload) &&
+  chasesAreValid(payload)
     ? payload
     : undefined;

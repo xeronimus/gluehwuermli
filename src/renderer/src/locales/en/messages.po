@@ -65,6 +65,18 @@ msgstr "A channel's min can't be above its max"
 msgid "A channel's step size must be a whole number from 1"
 msgstr "A channel's step size must be a whole number from 1"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase can be played from 2 to {maxRepeat} times"
+msgstr "A chase can be played from 2 to {maxRepeat} times"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase can have at most {maxSteps} steps"
+msgstr "A chase can have at most {maxSteps} steps"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A chase name can have at most {maxLength} characters"
+msgstr "A chase name can have at most {maxLength} characters"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
 msgstr "A color must be a hex value like #ff00ff"
@@ -100,6 +112,14 @@ msgstr "A scene is a button above the fixtures that sets the channels of several
 #: src/renderer/src/i18n/messages/sceneMessages.ts
 msgid "A scene name can have at most {maxLength} characters"
 msgstr "A scene name can have at most {maxLength} characters"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
+msgstr "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A step sets a channel twice"
+msgstr "A step sets a channel twice"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
@@ -510,6 +530,10 @@ msgstr "Every fixture of the scene needs at least one channel"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every preset needs a name"
 msgstr "Every preset needs a name"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Every step needs at least one channel"
+msgstr "Every step needs at least one channel"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "Example: an RGB PAR in 3-channel mode at address 10: Red offset 0 (10), Green offset 1 (11), Blue offset 2 (12)."
@@ -1034,9 +1058,17 @@ msgstr "Start address <0>{startAddress}</0>"
 msgid "Start channel"
 msgstr "Start channel"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
+msgstr "Step channels must be whole numbers from {firstChannel} to {lastChannel}"
+
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Step size of channel {row}"
 msgstr "Step size of channel {row}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Step values must be whole numbers from {minValue} to {maxValue}"
+msgstr "Step values must be whole numbers from {minValue} to {maxValue}"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Steps"
@@ -1069,6 +1101,18 @@ msgstr "The arrows move a channel up or down: the fixture's faders are shown in 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase has a step twice"
+msgstr "The chase has a step twice"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase needs a name"
+msgstr "The chase needs a name"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The chase needs at least one step"
+msgstr "The chase needs at least one step"
 
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "The color its fader glows in, a hex value like #ff00ff; empty for none"

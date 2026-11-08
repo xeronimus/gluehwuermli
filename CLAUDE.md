@@ -80,6 +80,8 @@ src/
     fixtures.ts              # fixture addressing, validation and overlaps; parseFixtureSetup (used by main and renderer)
     projects.ts              # project files: parseProjectFile (too-new before invalid), the .glp extension, projectNameOf
     scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
+    chases.ts                # chase validation (ChaseError codes), checked by parseFixtureSetup; per absolute
+                             # channel, independent of the fixtures
     channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
                              # scene values checked against them
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation

@@ -1,7 +1,8 @@
 import {createSelector} from 'reselect';
 
+import {setupChases} from '@shared/chases';
 import {emptyFixtureSetup, overlappingFixtures} from '@shared/fixtures';
-import type {Fixture, FixtureSetup, OpenProject, Scene} from '@shared/ipc';
+import type {Chase, Fixture, FixtureSetup, OpenProject, Scene} from '@shared/ipc';
 import {setupScenes} from '@shared/scenes';
 
 import {FixturesState} from './FixturesState';
@@ -20,5 +21,8 @@ export const selectFixtures = (state: FixturesState): readonly Fixture[] => sele
 
 /** the open project's scenes; none without an open project or in a setup from before scenes */
 export const selectScenes = (state: FixturesState): readonly Scene[] => setupScenes(selectSetup(state));
+
+/** the open project's chases, in their saved order; none without an open project or in a setup from before chases */
+export const selectChases = (state: FixturesState): readonly Chase[] => setupChases(selectSetup(state));
 
 export const selectFixtureOverlaps = createSelector([selectFixtures], (fixtures) => overlappingFixtures(fixtures));
