@@ -12,21 +12,23 @@ import {useAppStore} from '@/state/store';
 import Button from '../commons/Button';
 import ColorDot from '../commons/ColorDot';
 import MoveButtons from '../commons/MoveButtons';
-import {DeleteIcon, EditIcon, LockIcon, SceneIcon} from '../commons/icons';
+import {AddSceneIcon, DeleteIcon, EditIcon, LockIcon, SceneIcon} from '../commons/icons';
 import {sceneButtons, sceneEntry} from './SceneButtons.css';
 
 interface SceneButtonsProps {
   /** undefined in Show mode: scenes can be played, not changed */
   onEdit: ((scene: Scene) => void) | undefined;
+  /** undefined in Show mode; an icon button after the scenes, disabled without fixtures to set */
+  onAdd: (() => void) | undefined;
   /** while a scene is being edited: no other edit, and the scene being edited can't be deleted under the editor */
   actionsDisabled: boolean;
 }
 
 /**
  * A button per scene, setting the channels of its fixtures at once. In Setup mode each comes with move, edit and delete
- * buttons. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
+ * buttons, and the Add scene button follows the last scene. A scene touching a channel above its cap stays playable (the channel goes up to its cap) and shows the lock.
  */
-const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
+const SceneButtons = ({onEdit, onAdd, actionsDisabled}: SceneButtonsProps) => {
   const {t} = useLingui();
   const scenes = useAppStore(selectScenes);
   const fixtures = useAppStore(selectFixtures);
@@ -36,7 +38,7 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
   const deleteScene = useActionDeleteScene();
   const moveScene = useActionMoveScene();
 
-  if (scenes.length === 0) {
+  if (scenes.length === 0 && !onAdd) {
     return null;
   }
 
@@ -107,6 +109,11 @@ const SceneButtons = ({onEdit, actionsDisabled}: SceneButtonsProps) => {
           </span>
         );
       })}
+      {onAdd && (
+        <Button onClick={onAdd} disabled={actionsDisabled || fixtures.length === 0} title={t`Add scene`}>
+          <AddSceneIcon />
+        </Button>
+      )}
     </div>
   );
 };

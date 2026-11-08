@@ -11,7 +11,7 @@ import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {AddFixtureIcon, AddSceneIcon, WarningIcon} from '../commons/icons';
+import {AddFixtureIcon, WarningIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
 import {errorMessage, fixtureGroups, fixtureView, footer, message, warnings} from './FixtureView.css';
@@ -84,6 +84,7 @@ const FixtureView = () => {
 
       <SceneButtons
         onEdit={setupMode ? (scene) => setEditing({type: 'editing-scene', scene}) : undefined}
+        onAdd={setupMode ? () => setEditing({type: 'adding-scene'}) : undefined}
         actionsDisabled={editingScene}
       />
 
@@ -144,9 +145,6 @@ const FixtureView = () => {
       {/* rarely needed once the rig is set up: out of the way, below the fixtures */}
       {setupMode && editing.type === 'none' && (
         <div className={footer}>
-          <Button onClick={() => setEditing({type: 'adding-scene'})} disabled={fixtures.length === 0}>
-            <AddSceneIcon /> <Trans>Add scene</Trans>
-          </Button>
           <Button onClick={() => setEditing({type: 'adding'})}>
             <AddFixtureIcon /> <Trans>Add fixture</Trans>
           </Button>
