@@ -2,7 +2,9 @@
 
 <img src="src/assets/gluehwuermli_favicon.png" alt="Glühwürmli" width="96" align="right" />
 
-A desktop app that sends DMX through an **Enttec DMX USB Pro**. Electron + electron-vite, React, TypeScript.
+A desktop app that sends DMX through a USB DMX interface: an **Enttec DMX USB Pro** or a **Eurolite USB-DMX512 PRO**
+(the same protocol). Fixtures with named channels and presets, scenes, chases, and a Show mode that plays but doesn't
+change them. Electron + electron-vite, React, TypeScript.
 
 ## Getting started
 
@@ -11,7 +13,7 @@ pnpm install   # also downloads the Electron binary (postinstall)
 pnpm dev       # the app with hot reload of the UI
 ```
 
-Without a widget, start with one simulated port instead of the real serial ports:
+Without an interface, start with one simulated port instead of the real serial ports:
 
 ```sh
 cp .env.sample .env.development.local   # MAIN_VITE_SIMULATED_OUTPUT=1, gitignored
@@ -23,7 +25,7 @@ set the value to `0`) to see the real ports again. All settings: [.env.sample](.
 
 ### Windows: lower the FTDI latency timer
 
-Device Manager → Ports (COM & LPT) → the widget's COM port → Port Settings → Advanced → **Latency Timer: 1–2 ms**
+Device Manager → Ports (COM & LPT) → the interface's COM port → Port Settings → Advanced → **Latency Timer: 1–2 ms**
 (default 16). It's the biggest single factor in how quickly a fader reaches the light; see
 [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md).
 
@@ -42,7 +44,9 @@ Device Manager → Ports (COM & LPT) → the widget's COM port → Port Settings
 
 ## Docs
 
-- [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md): latency of a web stack with the Enttec Pro, why
+- [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md): latency of a web stack with a USB DMX interface, why
   Electron in 2026
+- [doc/chases.md](doc/chases.md): how chases behave, the spec they were built from
+- [doc/devices](doc/devices): the manuals of the two interfaces and of the example fixtures
 - [doc/architecture/decisions](doc/architecture/decisions): the ADRs
 - [CLAUDE.md](CLAUDE.md): project context, structure and code guidelines

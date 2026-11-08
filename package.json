@@ -2,7 +2,7 @@
   "name": "gluehwuermli",
   "version": "0.2.4",
   "private": true,
-  "description": "Desktop app sending DMX through an Enttec DMX USB Pro",
+  "description": "Desktop app sending DMX through an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO",
   "author": "Sergio Trentini",
   "main": "./out/main/index.js",
   "packageManager": "pnpm@12.4.2",
