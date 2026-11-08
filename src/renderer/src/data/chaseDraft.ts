@@ -25,6 +25,8 @@ export interface ChaseStepDraft {
 }
 
 export interface ChaseStepValueDraft {
+  /** the row's identity in the editor, not stored: the row and its focus follow the channel when the rows are sorted */
+  readonly id: string;
   readonly channel: string;
   readonly value: string;
 }
@@ -45,7 +47,11 @@ export const newChaseDraft = (): ChaseDraft => ({
 const stepDraftOf = (step: ChaseStep): ChaseStepDraft => ({
   id: step.id,
   hold: holdSeconds(step.holdMs),
-  values: step.values.map(({channel, value}) => ({channel: String(channel), value: String(value)}))
+  values: step.values.map(({channel, value}, index) => ({
+    id: String(index),
+    channel: String(channel),
+    value: String(value)
+  }))
 });
 
 export const chaseDraftOf = (chase: Chase): ChaseDraft => ({
@@ -138,16 +144,36 @@ export const withoutStep = (draft: ChaseDraft, stepIndex: number): ChaseDraft =>
 export const withStepHold = (draft: ChaseDraft, stepIndex: number, hold: string): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({...step, hold}));
 
+/** the values by channel, lowest first; a channel that isn't a number goes after them, in the order it was in */
+export const sortedByChannel = (values: readonly ChaseStepValueDraft[]): ChaseStepValueDraft[] => {
+  const sortKey = ({channel}: ChaseStepValueDraft) => {
+    const number = numberOf(channel);
+    return Number.isInteger(number) ? number : Number.POSITIVE_INFINITY;
+  };
+  // Infinity - Infinity is NaN: two non-numbers compare equal, so they keep their order
+  return values.toSorted((first, second) =>
+    sortKey(first) === sortKey(second) ? 0 : sortKey(first) - sortKey(second)
+  );
+};
+
+/** changes one value of the step in its place; the rows are sorted once its channel is left (withStepValuesSorted) */
 export const withStepValueChange = (
   draft: ChaseDraft,
   stepIndex: number,
   valueIndex: number,
-  change: Partial<ChaseStepValueDraft>
+  change: Partial<Omit<ChaseStepValueDraft, 'id'>>
 ): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({
     ...step,
     values: step.values.map((value, index) => (index === valueIndex ? {...value, ...change} : value))
   }));
+
+export const isSortedByChannel = (values: readonly ChaseStepValueDraft[]): boolean =>
+  sortedByChannel(values).every((value, index) => value === values[index]);
+
+/** the step's rows sorted by channel */
+export const withStepValuesSorted = (draft: ChaseDraft, stepIndex: number): ChaseDraft =>
+  withStepAt(draft, stepIndex, (step) => ({...step, values: sortedByChannel(step.values)}));
 
 export const withoutStepValue = (draft: ChaseDraft, stepIndex: number, valueIndex: number): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({...step, values: step.values.filter((_, index) => index !== valueIndex)}));
@@ -170,11 +196,14 @@ export function nextFreeChannel(values: readonly ChaseStepValueDraft[]): number 
   return LAST_DMX_CHANNEL;
 }
 
-/** a channel added by hand at the end of the step, at 0 */
-export const withNewStepValue = (draft: ChaseDraft, stepIndex: number): ChaseDraft =>
+/** a channel added by hand at 0, sorted in with the others (it is the last one unless the universe's end is reached) */
+export const withNewStepValue = (draft: ChaseDraft, stepIndex: number, id: string): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({
     ...step,
-    values: [...step.values, {channel: String(nextFreeChannel(step.values)), value: String(DMX_MIN_VALUE)}]
+    values: sortedByChannel([
+      ...step.values,
+      {id, channel: String(nextFreeChannel(step.values)), value: String(DMX_MIN_VALUE)}
+    ])
   }));
 
 /** a fixture channel on an address, for a step value's label */
