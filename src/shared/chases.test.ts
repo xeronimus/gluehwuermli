@@ -1,4 +1,4 @@
-import {chaseErrors, chasesAreValid, setupChases} from './chases';
+import {chaseErrors, chasesAreValid, passCount, setupChases} from './chases';
 import type {Chase, ChaseStep, Fixture, FixtureSetup} from './ipc';
 
 const stepOf = (overrides: Partial<ChaseStep> = {}): ChaseStep => ({
@@ -128,4 +128,10 @@ describe('chasesAreValid', () => {
 
     expect(chasesAreValid({version: 1, fixtures: [], chases: [chase]})).toBe(true);
   });
+});
+
+test('a chase plays once, its count of passes, or without end', () => {
+  expect(passCount({type: 'once'})).toBe(1);
+  expect(passCount({type: 'times', count: 8})).toBe(8);
+  expect(passCount({type: 'forever'})).toBe(Number.POSITIVE_INFINITY);
 });

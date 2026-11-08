@@ -3,7 +3,6 @@ import {useLayoutEffect, useRef} from 'react';
 import {Trans, useLingui} from '@lingui/react/macro';
 
 import type {ChaseError} from '@shared/chases';
-import {CHASE_HOLD_MAX_MS, CHASE_HOLD_MIN_MS} from '@shared/ipc';
 
 import {
   type ChaseDraft,
@@ -14,6 +13,7 @@ import {
   withStepMoved,
   withStepValuesSorted
 } from '@/data/chaseDraft';
+import {HOLD_INPUT_STEP_SECONDS, HOLD_MAX_SECONDS, HOLD_MIN_SECONDS} from '@/data/chaseHold';
 import {withStepValuesTaken} from '@/data/chaseStepFill';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 
@@ -23,10 +23,6 @@ import {DeleteIcon, DuplicateIcon} from '../commons/icons';
 import {errorList, holdField, holdInput, stepEditor, stepHeader, stepValues} from './ChaseEditor.css';
 import ChaseStepFill from './ChaseStepFill';
 import ChaseStepValueRow from './ChaseStepValueRow';
-
-const MS_PER_SECOND = 1000;
-/** two decimals: the hold is typed in hundredths of a second */
-const HOLD_INPUT_STEP = 0.01;
 
 interface ChaseStepEditorProps {
   step: ChaseStepDraft;
@@ -74,9 +70,9 @@ const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onD
           <input
             className={holdInput}
             type="number"
-            min={CHASE_HOLD_MIN_MS / MS_PER_SECOND}
-            max={CHASE_HOLD_MAX_MS / MS_PER_SECOND}
-            step={HOLD_INPUT_STEP}
+            min={HOLD_MIN_SECONDS}
+            max={HOLD_MAX_SECONDS}
+            step={HOLD_INPUT_STEP_SECONDS}
             value={step.hold}
             onChange={(event) => {
               const hold = event.target.value;

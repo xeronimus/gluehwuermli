@@ -11,9 +11,7 @@ import {
   CHASE_REPEAT_MIN,
   CHASE_STEPS_MAX
 } from '@shared/ipc';
-
-const MS_PER_SECOND = 1000;
-const MS_PER_MINUTE = 60 * MS_PER_SECOND;
+import {MS_PER_MINUTE, MS_PER_SECOND} from '@shared/time';
 
 /** what chaseErrors found, in the UI language; the shortest hold in seconds, as the editor shows it */
 export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
