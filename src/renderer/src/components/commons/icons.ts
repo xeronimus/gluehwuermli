@@ -5,6 +5,7 @@
  */
 export {
   IconPlus as AddIcon,
+  IconPlaylistAdd as AddChaseIcon,
   IconConePlus as AddFixtureIcon,
   IconStackPlus as AddSceneIcon,
   IconAdjustments as ChannelsIcon,
@@ -12,6 +13,7 @@ export {
   IconPlugConnected as ConnectIcon,
   IconFilePlus as CreateProjectIcon,
   IconTrash as DeleteIcon,
+  IconCopy as DuplicateIcon,
   IconPlugConnectedX as DisconnectIcon,
   IconPencil as EditIcon,
   IconBulbOff as EmergencyOffIcon,

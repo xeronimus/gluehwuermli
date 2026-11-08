@@ -16,7 +16,9 @@ port is remembered and preselected on start, the app always starts disconnected;
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
-Planned: adding and editing chases, fades.
+In Setup mode chases are added, edited (name, repeat, steps with their hold and
+channel values), deleted and put in order. Planned: filling chase steps from the current values, scenes and presets,
+fades.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -143,7 +145,8 @@ src/
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status, Emergency off), fixtures/
                              # (fixture groups and editor, scene buttons and editor), chases/ (a row per chase below the fixtures: Start, Pause /
-                             # Resume, Stop, the step boxes, the repeat and pass), project/ (start view without a
+                             # Resume, Stop, the step boxes, the repeat and pass; in Setup mode move, edit, delete,
+                             # Add chase, and the chase editor below the rows), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
                              # help/ (contents, manual, open project, data folder, repo link); ShowView.tsx picks the start view
@@ -151,7 +154,8 @@ src/
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
-                             # presets, scenes, chaseRows, tabs, passwordForm, activityThrottle, recentProjects)
+                             # presets, scenes, chaseRows, chaseDraft, chaseList, tabs, passwordForm, activityThrottle,
+                             # recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
                              # (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)

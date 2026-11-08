@@ -1,60 +1,37 @@
-import {useEffect, useState} from 'react';
-
 import {useLingui} from '@lingui/react/macro';
 
-import type {Fixture, Scene} from '@shared/ipc';
+import type {Fixture} from '@shared/ipc';
 
-import {overlapMessage} from '@/i18n/messages/fixtureMessages';
 import {useActionDeleteFixture, useActionMoveFixture} from '@/state/actionHooks/saveFixtures';
-import {selectFixtureOverlaps, selectFixtures} from '@/state/fixtures/fixturesSelectors';
+import {selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
+import ChaseEditor from '../chases/ChaseEditor';
 import ChaseList from '../chases/ChaseList';
 import Button from '../commons/Button';
-import {AddFixtureIcon, WarningIcon} from '../commons/icons';
+import {AddFixtureIcon} from '../commons/icons';
 import FixtureEditor from './FixtureEditor';
 import FixtureGroup from './FixtureGroup';
-import {addFixture, errorMessage, fixtureGroups, fixtureView, warnings} from './FixtureView.css';
+import FixtureOverlapWarnings from './FixtureOverlapWarnings';
+import {addFixture, errorMessage, fixtureGroups, fixtureView} from './FixtureView.css';
 import NoFixturesHint from './NoFixturesHint';
 import SceneButtons from './SceneButtons';
 import SceneEditor from './SceneEditor';
-
-type Editing =
-  | {type: 'none'}
-  | {type: 'adding'}
-  | {type: 'editing'; fixture: Fixture}
-  | {type: 'adding-scene'}
-  | {type: 'editing-scene'; scene: Scene};
-
-const NOT_EDITING: Editing = {type: 'none'};
+import {NOT_EDITING, useFixtureViewEditing} from './useFixtureViewEditing';
 
 /**
  * the open project's scene buttons, one control group per fixture and the chase rows below them; adding, editing,
- * moving and deleting scenes and fixtures in Setup mode
+ * moving and deleting scenes, fixtures and chases in Setup mode
  */
 const FixtureView = () => {
   const {t, i18n} = useLingui();
   const fixtures = useAppStore(selectFixtures);
-  const overlaps = useAppStore(selectFixtureOverlaps);
   const error = useAppStore((state) => state.fixturesError);
   const deleteFixture = useActionDeleteFixture();
   const moveFixture = useActionMoveFixture();
   const setupMode = useAppStore(selectIsSetupMode);
-  const setHasOpenDraft = useAppStore((state) => state.setHasOpenDraft);
-  const [editing, setEditing] = useState<Editing>(NOT_EDITING);
-  const hasOpenDraft = editing.type !== 'none';
-
-  // locking (the Lock button, being idle) drops an unsaved edit (set during render, React re-renders right away)
-  if (editing.type !== 'none' && !setupMode) {
-    setEditing(NOT_EDITING);
-  }
-
-  // a double-clicked .glp asks before it drops the draft; the main process pushes that request outside React
-  useEffect(() => {
-    setHasOpenDraft(hasOpenDraft);
-    return () => setHasOpenDraft(false);
-  }, [hasOpenDraft, setHasOpenDraft]);
+  const [editing, setEditing] = useFixtureViewEditing(setupMode);
 
   const onDelete = (fixture: Fixture) => {
     const fixtureName = fixture.name;
@@ -77,18 +54,22 @@ const FixtureView = () => {
     );
   }
 
-  // the scene editor works with the setup as it is: editing or deleting fixtures and scenes waits until it closes
+  // one editor at a time; the scene editor works with the setup as it is: editing or deleting fixtures and scenes
+  // waits until it closes
   const editingScene = editing.type === 'adding-scene' || editing.type === 'editing-scene';
+  const editingChase = editing.type === 'adding-chase' || editing.type === 'editing-chase';
+  const editorOpen = editingScene || editingChase;
   const onAddFixture = () => setEditing({type: 'adding'});
 
   return (
     <div className={fixtureView}>
-      {error && <span className={errorMessage}>{i18n._(error)}</span>}
+      {/* the chase editor shows a failed save next to its Save button, below the fixtures */}
+      {error && !editingChase && <span className={errorMessage}>{i18n._(error)}</span>}
 
       <SceneButtons
         onEdit={setupMode ? (scene) => setEditing({type: 'editing-scene', scene}) : undefined}
         onAdd={setupMode ? () => setEditing({type: 'adding-scene'}) : undefined}
-        actionsDisabled={editingScene}
+        actionsDisabled={editorOpen}
       />
 
       {/* above the fixtures, not in place of them: the look is set with their faders while the scene is named */}
@@ -100,18 +81,10 @@ const FixtureView = () => {
         />
       )}
 
-      {overlaps.length > 0 && (
-        <ul className={warnings}>
-          {overlaps.map((overlap) => (
-            <li key={`${overlap.first.id}-${overlap.second.id}`}>
-              <WarningIcon /> {i18n._(overlapMessage(overlap))}
-            </li>
-          ))}
-        </ul>
-      )}
+      <FixtureOverlapWarnings />
 
       {fixtures.length === 0 && (
-        <NoFixturesHint onAdd={setupMode ? onAddFixture : undefined} addDisabled={editingScene} />
+        <NoFixturesHint onAdd={setupMode ? onAddFixture : undefined} addDisabled={editorOpen} />
       )}
 
       <div className={fixtureGroups}>
@@ -127,7 +100,7 @@ const FixtureView = () => {
                     onMove: (direction) => void moveFixture(fixture, direction),
                     index,
                     count: fixtures.length,
-                    disabled: editingScene
+                    disabled: editorOpen
                   }
                 : undefined
             }
@@ -136,14 +109,32 @@ const FixtureView = () => {
         {/* after the last fixture, at its top: where the new one will be */}
         {setupMode && fixtures.length > 0 && (
           <span className={addFixture}>
-            <Button onClick={onAddFixture} disabled={editingScene} title={t`Add fixture`}>
+            <Button onClick={onAddFixture} disabled={editorOpen} title={t`Add fixture`}>
               <AddFixtureIcon />
             </Button>
           </span>
         )}
       </div>
 
-      <ChaseList />
+      <ChaseList
+        editing={
+          setupMode
+            ? {
+                onEdit: (chase) => setEditing({type: 'editing-chase', chase}),
+                onAdd: () => setEditing({type: 'adding-chase'}),
+                disabled: editorOpen
+              }
+            : undefined
+        }
+      />
+
+      {editingChase && (
+        <ChaseEditor
+          key={editing.type === 'editing-chase' ? editing.chase.id : 'new'}
+          chase={editing.type === 'editing-chase' ? editing.chase : undefined}
+          onClose={() => setEditing(NOT_EDITING)}
+        />
+      )}
     </div>
   );
 };
