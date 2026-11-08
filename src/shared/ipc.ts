@@ -180,18 +180,73 @@ export const SceneSchema = Type.Object({
 });
 export type Scene = Static<typeof SceneSchema>;
 
+/** short enough to fit in a chase's row, like a scene's */
+export const CHASE_NAME_MAX_LENGTH = 40;
+
+/** about two engine ticks (23 ms each): a shorter step might never go out */
+export const CHASE_HOLD_MIN_MS = 50;
+
+/** an hour */
+export const CHASE_HOLD_MAX_MS = 3_600_000;
+
+/** the most passes of a chase that doesn't loop until stopped */
+export const CHASE_REPEAT_MAX = 99;
+
+export const CHASE_STEPS_MAX = 100;
+
+/** a channel's address, 1–512 */
+const DmxChannelSchema = Type.Integer({minimum: FIRST_DMX_CHANNEL, maximum: LAST_DMX_CHANNEL});
+
+/** the value a chase step sets on an absolute channel; not checked against a fixture's value rules on that address */
+export const ChaseStepValueSchema = Type.Object({
+  channel: DmxChannelSchema,
+  value: DmxValueSchema
+});
+export type ChaseStepValue = Static<typeof ChaseStepValueSchema>;
+
+/** what a chase sets at once, and how long it stays before the next step */
+export const ChaseStepSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  /** how long the step stays before the next one, in milliseconds */
+  holdMs: Type.Integer({minimum: CHASE_HOLD_MIN_MS, maximum: CHASE_HOLD_MAX_MS}),
+  values: Type.Array(ChaseStepValueSchema, {minItems: 1})
+});
+export type ChaseStep = Static<typeof ChaseStepSchema>;
+
+/** what happens after the last step: end, play the steps `count` times in total, or loop until stopped */
+export const ChaseRepeatSchema = Type.Union([
+  Type.Object({type: Type.Literal('once')}),
+  Type.Object({type: Type.Literal('times'), count: Type.Integer({minimum: 2, maximum: CHASE_REPEAT_MAX})}),
+  Type.Object({type: Type.Literal('forever')})
+]);
+export type ChaseRepeat = Static<typeof ChaseRepeatSchema>;
+
+/**
+ * a named sequence of steps played one after the other (doc/chases.md). Its values are per absolute channel and know
+ * nothing about fixtures, so no fixture change touches a chase
+ */
+export const ChaseSchema = Type.Object({
+  id: Type.String({minLength: 1}),
+  name: Type.String({minLength: 1, maxLength: CHASE_NAME_MAX_LENGTH}),
+  repeat: ChaseRepeatSchema,
+  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX})
+});
+export type Chase = Static<typeof ChaseSchema>;
+
 /**
  * the version of a project file, so a later format change can migrate an older file instead of dropping it; a file
  * with a higher one is refused, never overwritten
  */
 export const PROJECT_VERSION = 1;
 
-/** every fixture and scene of a project, as stored in its .glp file; the file name is the project's name */
+/** every fixture, scene and chase of a project, as stored in its .glp file; the file name is the project's name */
 export const FixtureSetupSchema = Type.Object({
   version: Type.Literal(PROJECT_VERSION),
   fixtures: Type.Array(FixtureSchema),
   /** optional, so older files load */
-  scenes: Type.Optional(Type.Array(SceneSchema))
+  scenes: Type.Optional(Type.Array(SceneSchema)),
+  /** optional, so older files load; as many as the user likes */
+  chases: Type.Optional(Type.Array(ChaseSchema))
 });
 export type FixtureSetup = Static<typeof FixtureSetupSchema>;
 

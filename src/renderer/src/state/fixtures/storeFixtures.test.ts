@@ -3,7 +3,7 @@ import {combine} from 'zustand/middleware';
 import {createStore} from 'zustand/vanilla';
 
 import {fixtureSetupOf} from '@shared/fixtures';
-import type {Fixture, FixtureSetup} from '@shared/ipc';
+import type {Chase, Fixture, FixtureSetup} from '@shared/ipc';
 import {createSerialQueue} from '@shared/serialQueue';
 
 import type ProjectService from '@/data/service/ProjectService';
@@ -133,12 +133,20 @@ test('overlapping changes are all stored', async () => {
   expect(saved.at(-1)).toEqual(fixtureSetupOf([par, smoke, fog]));
 });
 
-test('a change keeps what else the setup holds, e.g. its scenes', async () => {
+const chorus: Chase = {
+  id: 'chorus',
+  name: 'Chorus flash',
+  repeat: {type: 'forever'},
+  steps: [{id: 'one', holdMs: 500, values: [{channel: 1, value: 37}]}]
+};
+
+test('a change keeps what else the setup holds, e.g. its scenes and chases', async () => {
   const projectService = projectServiceWithPar();
   const scenes = [{id: 'intro', name: 'Intro', fixtures: [{fixtureId: 'par', values: [{offset: 0, value: 255}]}]}];
+  const chases = [chorus];
   const initialState: FixturesState = {
     ...getDefaultFixturesState(),
-    project: openProjectOf({...fixtureSetupOf([par]), scenes})
+    project: openProjectOf({...fixtureSetupOf([par]), scenes, chases})
   };
   const store = createStore(combine(initialState, (set) => getFixturesActions(set)));
   const storeFixtures = storeFixturesWith({
@@ -150,7 +158,21 @@ test('a change keeps what else the setup holds, e.g. its scenes', async () => {
 
   await storeFixtures(append(smoke), 'saving', failure('Could not save'));
 
-  expect(await savedSetupOf(projectService)).toEqual({...fixtureSetupOf([par, smoke]), scenes});
+  expect(await savedSetupOf(projectService)).toEqual({...fixtureSetupOf([par, smoke]), scenes, chases});
+});
+
+test('a chase is stored like a fixture: shown once saved, not after a failed save', async () => {
+  const addChase = (setup: FixtureSetup): FixtureSetup => ({...setup, chases: [chorus]});
+  const projectService = projectServiceWithPar();
+  const {store, storeFixtures} = setUp(projectService);
+  const failing = setUp(failingProjectService);
+
+  expect(await storeFixtures(addChase, 'saving the chase', failure('Could not save'))).toBe(true);
+  expect(await failing.storeFixtures(addChase, 'saving the chase', failure('Could not save'))).toBe(false);
+
+  expect(store.getState().project).toEqual(openProjectOf({...fixtureSetupOf([par]), chases: [chorus]}));
+  expect(await savedSetupOf(projectService)).toEqual({...fixtureSetupOf([par]), chases: [chorus]});
+  expect(failing.store.getState().project).toEqual(openProjectOf(fixtureSetupOf([par])));
 });
 
 test('without an open project nothing is saved, the error is shown', async () => {

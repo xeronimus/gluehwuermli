@@ -1,5 +1,5 @@
 import {DMX_UNIVERSE_SIZE} from '@shared/dmx';
-import type {Fixture, FixtureSetup, Scene} from '@shared/ipc';
+import type {Chase, Fixture, FixtureSetup, Scene} from '@shared/ipc';
 
 import {channelOffsetChanges, draftOf, fixtureOfDraft, withChannelChange, withChannelMoved} from './fixtureDraft';
 import {withoutFixture} from './fixtureList';
@@ -373,5 +373,35 @@ describe('sceneEditErrors', () => {
     expect(sceneEditErrors(fixtures, {name: 'Intro', fixtureIds: ['par'], color: 'orange'})).toEqual([
       {type: 'scene-color-invalid'}
     ]);
+  });
+});
+
+describe('fixture changes and chases', () => {
+  const chorus: Chase = {
+    id: 'chorus',
+    name: 'Chorus flash',
+    repeat: {type: 'forever'},
+    steps: [
+      {
+        id: 'one',
+        holdMs: 500,
+        values: [
+          {channel: 1, value: 37},
+          {channel: 10, value: 255}
+        ]
+      }
+    ]
+  };
+  const setup: FixtureSetup = {...setupOf(fixtures, [intro]), chases: [chorus]};
+  const fadingBlue: Fixture = {
+    ...par,
+    startAddress: 5,
+    channels: [{name: 'Red', offset: 1, values: {mode: 'steps', min: 0, max: 255, step: 64}}]
+  };
+
+  test('a deleted, moved or edited fixture leaves the chases as they are', () => {
+    expect(changingFixturesAndScenes((current) => withoutFixture(current, 'smoke'))(setup).chases).toEqual([chorus]);
+    expect(withSavedFixture(setup, fadingBlue, new Map([[0, 1]])).chases).toEqual([chorus]);
+    expect(withFittedScenes(setup).chases).toEqual([chorus]);
   });
 });
