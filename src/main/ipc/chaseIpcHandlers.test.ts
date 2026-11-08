@@ -18,7 +18,7 @@ const strobe: Chase = {
 
 const projectWith = (chases: Chase[]): ProjectStatus => ({
   type: 'open',
-  project: {path: 'D:\Waldfest.glp', setup: {...fixtureSetupOf([]), chases}}
+  project: {path: 'D:\\Waldfest.glp', setup: {...fixtureSetupOf([]), chases}}
 });
 
 let projectStatus: ProjectStatus;
