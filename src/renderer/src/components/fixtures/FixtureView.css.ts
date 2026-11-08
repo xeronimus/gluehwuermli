@@ -10,19 +10,6 @@ export const fixtureView = style({
   flex: 1
 });
 
-/** at the bottom of the view, or below the fixtures once they fill more than the window */
-export const footer = style({
-  marginTop: 'auto',
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: '8px',
-  alignSelf: 'stretch'
-});
-
-export const message = style({
-  color: vars.colors.textSecondary
-});
-
 export const errorMessage = style({
   color: vars.colors.danger
 });
@@ -41,4 +28,9 @@ export const fixtureGroups = style({
   display: 'flex',
   flexWrap: 'wrap',
   gap: '16px'
+});
+
+/** at the top of the row, not stretched to the height of the fixtures beside it */
+export const addFixture = style({
+  alignSelf: 'flex-start'
 });
