@@ -10,6 +10,7 @@ import {
   sceneChannelValues,
   sceneEditErrors,
   withFittedScenes,
+  withSavedFixture,
   withScene,
   withSceneMoved,
   withSceneOffsetsChanged,
@@ -317,13 +318,8 @@ describe('withSceneOffsetsChanged', () => {
 });
 
 describe('a fixture saved from the editor', () => {
-  /** what the save does: the scenes follow the channels, then the fixture is replaced and the scenes fitted */
-  const saved = (setup: FixtureSetup, draft: ReturnType<typeof draftOf>): FixtureSetup => {
-    const fixture = fixtureOfDraft('par', draft);
-    return changingFixturesAndScenes((current) => current.map((other) => (other.id === 'par' ? fixture : other)))(
-      withSceneOffsetsChanged(setup, 'par', channelOffsetChanges(draft))
-    );
-  };
+  const saved = (setup: FixtureSetup, draft: ReturnType<typeof draftOf>): FixtureSetup =>
+    withSavedFixture(setup, fixtureOfDraft('par', draft), channelOffsetChanges(draft));
   const namedValues = (setup: FixtureSetup) => {
     const fixture = setup.fixtures[0];
     return sceneChannelValues(setup.scenes?.[0] ?? intro, setup.fixtures)
@@ -350,6 +346,12 @@ describe('a fixture saved from the editor', () => {
 
     expect(namedValues(after)).toEqual(namedValues(setup));
     expect(after.fixtures[0].presets).toEqual([{id: 'warm', name: 'Warm', values: [{offset: 3, value: 40}]}]);
+  });
+
+  test('a new fixture is added, and the scenes stay as they are', () => {
+    const laser: Fixture = {id: 'laser', name: 'Laser', startAddress: 20, channels: [{name: 'Mode', offset: 0}]};
+
+    expect(withSavedFixture(setup, laser, new Map())).toEqual({...setup, fixtures: [withPreset, smoke, laser]});
   });
 });
 

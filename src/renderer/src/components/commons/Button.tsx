@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {ReactNode, Ref} from 'react';
 
 import {ButtonSize, ButtonVariant, buttonSizes, buttonVariants} from './Button.css';
 
@@ -12,6 +12,7 @@ interface ButtonProps {
   title?: string;
   /** a plain button by default, so one inside a form doesn't submit it */
   type?: 'button' | 'submit';
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const Button = ({
@@ -21,9 +22,11 @@ const Button = ({
   variant = 'default',
   size = 'default',
   title,
-  type = 'button'
+  type = 'button',
+  ref
 }: ButtonProps) => (
   <button
+    ref={ref}
     className={`${buttonVariants[variant]} ${buttonSizes[size]}`}
     type={type}
     disabled={disabled}

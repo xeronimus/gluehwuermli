@@ -9,6 +9,13 @@ export function canMove(count: number, index: number, direction: MoveDirection):
   return index >= 0 && index < count && target >= 0 && target < count;
 }
 
+/**
+ * the arrow to keep the focus on after the item at `index` moved in `direction`: the same one, or the other one once
+ * the item has reached the end the pressed arrow pointed to, where the pressed one is disabled
+ */
+export const arrowAfterMove = (count: number, index: number, direction: MoveDirection): MoveDirection =>
+  canMove(count, index, direction) ? direction : direction === 'earlier' ? 'later' : 'earlier';
+
 /** a copy of `items` with the item at `index` swapped with its neighbour in `direction`; unchanged at either end */
 export function moved<T>(items: readonly T[], index: number, direction: MoveDirection): T[] {
   if (!canMove(items.length, index, direction)) {

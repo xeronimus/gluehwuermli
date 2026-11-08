@@ -1,4 +1,4 @@
-import {canMove, moved, movedWithId} from './listOrder';
+import {arrowAfterMove, canMove, moved, movedWithId} from './listOrder';
 
 const letters = ['a', 'b', 'c', 'd'] as const;
 
@@ -39,4 +39,11 @@ test('moves the item with the id; an unknown id changes nothing', () => {
 
   expect(movedWithId(items, 'smoke', 'earlier')).toEqual([{id: 'front'}, {id: 'smoke'}, {id: 'back'}]);
   expect(movedWithId(items, 'laser', 'earlier')).toEqual(items);
+});
+
+test('the focus stays on the pressed arrow, or goes to the other one at the end it pointed to', () => {
+  expect(arrowAfterMove(4, 2, 'later')).toBe('later');
+  expect(arrowAfterMove(4, 1, 'earlier')).toBe('earlier');
+  expect(arrowAfterMove(4, 3, 'later')).toBe('earlier');
+  expect(arrowAfterMove(4, 0, 'earlier')).toBe('later');
 });
