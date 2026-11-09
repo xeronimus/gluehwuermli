@@ -3,7 +3,7 @@ import type {MessageDescriptor} from '@lingui/core';
 import type {Fixture} from '@shared/ipc';
 
 import {activateLocale, i18n} from '../i18n';
-import {chaseErrorMessage} from './chaseMessages';
+import {allStepsLineMessage, chaseErrorMessage} from './chaseMessages';
 import {fixtureErrorMessage, overlapMessage} from './fixtureMessages';
 import {outputStatusMessage} from './outputMessages';
 import {passwordFormErrorMessage} from './passwordMessages';
@@ -129,5 +129,45 @@ describe('in German', () => {
     expect(translate(overlapMessage({first, second, addresses: [12, 13]}))).toBe(
       'PAR und Nebel teilen sich die Adressen 12, 13'
     );
+  });
+});
+
+describe('the All steps panel', () => {
+  beforeEach(() => activateLocale('en'));
+
+  const remove = (emptiedStepIndexes: number[], done: boolean) =>
+    translate(
+      allStepsLineMessage({
+        action: 'remove',
+        done,
+        channel: 12,
+        effect: {removedCount: 3, emptiedStepIndexes, shownChangedIds: []}
+      })
+    );
+
+  test('says what an action would do, and what it did', () => {
+    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 1}}))).toBe(
+      'Sets the hold of 1 step'
+    );
+    expect(translate(allStepsLineMessage({action: 'hold', done: true, effect: {changedCount: 0}}))).toBe(
+      'Changes nothing'
+    );
+    expect(
+      translate(allStepsLineMessage({action: 'add', done: false, channel: 12, effect: {addedCount: 3, stepCount: 5}}))
+    ).toBe('Adds channel 12 to 3 of 5 steps');
+    expect(
+      translate(allStepsLineMessage({action: 'add', done: true, channel: 12, effect: {addedCount: 0, stepCount: 5}}))
+    ).toBe('Every step already sets channel 12');
+    expect(remove([], true)).toBe('Removed channel 12 from 3 steps');
+    expect(remove([3], false)).toBe('Removes channel 12 from 3 steps; step 4 would be left without channels');
+    expect(remove([1, 3], true)).toBe('Removed channel 12 from 3 steps; steps 2, 4 are left without channels');
+  });
+
+  test('in German', () => {
+    activateLocale('de');
+    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 2}}))).toBe(
+      'Setzt die Haltezeit von 2 Schritten'
+    );
+    expect(remove([3], false)).toBe('Entfernt Kanal 12 aus 3 Schritten; Schritt 4 wäre danach ohne Kanäle');
   });
 });

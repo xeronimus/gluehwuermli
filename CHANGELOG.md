@@ -10,6 +10,12 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- An "All steps" panel at the top of the chase editor changes every step at once: it adds a channel (at 0, in the steps
+  that don't set it yet), removes a channel the steps set, or sets the hold of all steps. Hovering an action says what
+  it would do and marks the shown step's rows it changes; nothing is stored until Save (#85)
+
 ### Changed
 
 - The chase step editor shows a step's channels as a table grouped by fixture (the fixture's name once, with a button

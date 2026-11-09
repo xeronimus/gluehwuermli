@@ -17,6 +17,14 @@ msgstr ""
 msgid "{addedCount} new, {changedCount} changed"
 msgstr "{addedCount} new, {changedCount} changed"
 
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "{channelNumber} · {channelName} ({stepCount} of {totalSteps})"
+msgstr "{channelNumber} · {channelName} ({stepCount} of {totalSteps})"
+
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "{channelNumber} ({stepCount} of {totalSteps})"
+msgstr "{channelNumber} ({stepCount} of {totalSteps})"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
@@ -141,6 +149,10 @@ msgstr "A step only sets the channels it names; all others stay as they are. The
 msgid "A step sets a channel twice"
 msgstr "A step sets a channel twice"
 
+#: src/renderer/src/components/chases/ChaseAddToAllSteps.tsx
+msgid "Add"
+msgstr "Add"
+
 #: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
 msgstr "Add a <0>channel</0> for every entry of the device's channel list you want to control. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1."
@@ -179,9 +191,21 @@ msgstr "Add scene"
 msgid "Add step"
 msgstr "Add step"
 
+#: src/renderer/src/components/chases/ChaseAddToAllSteps.tsx
+msgid "Add the channel to all steps"
+msgstr "Add the channel to all steps"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Added channel {channel} to {addedCount} of {stepCount, plural, one {# step} other {# steps}}"
+msgstr "Added channel {channel} to {addedCount} of {stepCount, plural, one {# step} other {# steps}}"
+
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Address"
 msgstr "Address"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Adds channel {channel} to {addedCount} of {stepCount, plural, one {# step} other {# steps}}"
+msgstr "Adds channel {channel} to {addedCount} of {stepCount, plural, one {# step} other {# steps}}"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
@@ -190,6 +214,10 @@ msgstr "After <0>Disconnect</0>, and after closing the app, the interface keeps 
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 msgid "All"
 msgstr "All"
+
+#: src/renderer/src/components/chases/ChaseAllSteps.tsx
+msgid "All steps"
+msgstr "All steps"
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -244,12 +272,17 @@ msgstr "Cancel"
 msgid "Ch"
 msgstr "Ch"
 
+#: src/renderer/src/components/chases/ChaseAllSteps.tsx
+msgid "Change all steps"
+msgstr "Change all steps"
+
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Change password"
 msgstr "Change password"
 
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
+#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Changes nothing"
 msgstr "Changes nothing"
 
@@ -646,6 +679,10 @@ msgid "Every preset needs a name"
 msgstr "Every preset needs a name"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Every step already sets channel {channel}"
+msgstr "Every step already sets channel {channel}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Every step needs at least one channel"
 msgstr "Every step needs at least one channel"
 
@@ -725,6 +762,7 @@ msgstr "Highest value of channel {row}"
 msgid "Hint"
 msgstr "Hint"
 
+#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Hold"
 msgstr "Hold"
@@ -1097,6 +1135,7 @@ msgstr "Projects"
 msgid "Recent projects"
 msgstr "Recent projects"
 
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepTable.tsx
 msgid "Remove"
 msgstr "Remove"
@@ -1121,6 +1160,10 @@ msgstr "Remove channel {channelNumber}"
 msgid "Remove the channel"
 msgstr "Remove the channel"
 
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "Remove the channel from all steps"
+msgstr "Remove the channel from all steps"
+
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Remove the position"
 msgstr "Remove the position"
@@ -1128,6 +1171,22 @@ msgstr "Remove the position"
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Remove the preset"
 msgstr "Remove the preset"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Removed channel {channel} from {removedCount, plural, one {# step} other {# steps}}"
+msgstr "Removed channel {channel} from {removedCount, plural, one {# step} other {# steps}}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Removed channel {channel} from {removedCount, plural, one {# step} other {# steps}}; {emptiedCount, plural, one {step {emptiedSteps} is} other {steps {emptiedSteps} are}} left without channels"
+msgstr "Removed channel {channel} from {removedCount, plural, one {# step} other {# steps}}; {emptiedCount, plural, one {step {emptiedSteps} is} other {steps {emptiedSteps} are}} left without channels"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Removes channel {channel} from {removedCount, plural, one {# step} other {# steps}}"
+msgstr "Removes channel {channel} from {removedCount, plural, one {# step} other {# steps}}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Removes channel {channel} from {removedCount, plural, one {# step} other {# steps}}; {emptiedCount, plural, one {step {emptiedSteps} would be} other {steps {emptiedSteps} would be}} left without channels"
+msgstr "Removes channel {channel} from {removedCount, plural, one {# step} other {# steps}}; {emptiedCount, plural, one {step {emptiedSteps} would be} other {steps {emptiedSteps} would be}} left without channels"
 
 #: src/renderer/src/components/chases/ChaseRepeatField.tsx
 msgid "Repeat"
@@ -1146,6 +1205,7 @@ msgstr "Repeat the new password"
 msgid "Resume the chase {chaseName}"
 msgstr "Resume the chase {chaseName}"
 
+#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "s"
 msgstr "s"
@@ -1187,6 +1247,10 @@ msgstr "Search the serial ports again"
 msgid "Sending on {path}"
 msgstr "Sending on {path}"
 
+#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
+msgid "Set"
+msgstr "Set"
+
 #: src/renderer/src/components/output/EmergencyOffButton.tsx
 msgid "Set all 512 channels to 0 now"
 msgstr "Set all 512 channels to 0 now"
@@ -1211,9 +1275,21 @@ msgstr "Set the <0>start address</0> to the DMX address set on the device (its d
 msgid "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 msgstr "Set the <0>start address</0> to the DMX address set on the device (its display or DIP switches). The device listens there and on the addresses after it."
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Set the hold of {changedCount, plural, one {# step} other {# steps}}"
+msgstr "Set the hold of {changedCount, plural, one {# step} other {# steps}}"
+
+#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
+msgid "Set the hold of all steps"
+msgstr "Set the hold of all steps"
+
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 msgstr "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Sets the hold of {changedCount, plural, one {# step} other {# steps}}"
+msgstr "Sets the hold of {changedCount, plural, one {# step} other {# steps}}"
 
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Setting up a fixture"
@@ -1574,6 +1650,7 @@ msgstr "Turn channel lock on"
 msgid "Type the current password"
 msgstr "Type the current password"
 
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepTable.tsx
 msgid "Unassigned"
 msgstr "Unassigned"

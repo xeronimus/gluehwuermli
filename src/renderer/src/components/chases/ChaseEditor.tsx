@@ -18,6 +18,7 @@ import {useActionSaveChase} from '@/state/actionHooks/saveFixtures';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
+import ChaseAllSteps from './ChaseAllSteps';
 import {
   actions,
   chaseEditor,
@@ -53,6 +54,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
   const [saving, setSaving] = useState(false);
   const [chosenStepId, setChosenStepId] = useState<string | undefined>(undefined);
   const rowMarks = useStepRowMarks();
+  const shownId = shownStepId(draft.steps, chosenStepId);
 
   const errors = chaseEditErrors(draft);
   const canSave = canSaveChase(errors) && !saving;
@@ -93,12 +95,18 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
           </label>
           <ChaseRepeatField draft={draft} onChange={setDraft} />
         </div>
+        <ChaseAllSteps
+          steps={draft.steps}
+          shownStep={draft.steps.find(({id}) => id === shownId)}
+          rowMarks={rowMarks}
+          onChange={setDraft}
+        />
       </div>
       <div className={steps}>
         <ChaseStepTabs
           steps={draft.steps}
           stepErrors={errors.steps}
-          shownId={shownStepId(draft.steps, chosenStepId)}
+          shownId={shownId}
           onSelect={(stepId) => {
             setChosenStepId(stepId);
             rowMarks.stepShown();
