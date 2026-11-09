@@ -21,6 +21,7 @@ import Button from '../commons/Button';
 import {actions, chaseEditor, editorTitle, errorList, field, nameInput, steps} from './ChaseEditor.css';
 import ChaseRepeatField from './ChaseRepeatField';
 import ChaseStepTabs from './ChaseStepTabs';
+import {useStepRowMarks} from './useStepRowMarks';
 
 interface ChaseEditorProps {
   /** undefined to add a new chase */
@@ -41,6 +42,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
   const [draft, setDraft] = useState<ChaseDraft>(() => (chase ? chaseDraftOf(chase) : newChaseDraft()));
   const [saving, setSaving] = useState(false);
   const [chosenStepId, setChosenStepId] = useState<string | undefined>(undefined);
+  const rowMarks = useStepRowMarks();
 
   const errors = chaseEditErrors(draft);
   const canSave = canSaveChase(errors) && !saving;
@@ -83,7 +85,11 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
           steps={draft.steps}
           stepErrors={errors.steps}
           shownId={shownStepId(draft.steps, chosenStepId)}
-          onSelect={setChosenStepId}
+          onSelect={(stepId) => {
+            setChosenStepId(stepId);
+            rowMarks.stepShown();
+          }}
+          rowMarks={rowMarks}
           onChange={setDraft}
         />
       </div>

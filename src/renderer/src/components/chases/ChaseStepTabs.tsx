@@ -18,6 +18,7 @@ import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 import Tabs, {type Tab, type TabsHandle} from '../commons/Tabs';
 import {AddIcon} from '../commons/icons';
 import ChaseStepEditor from './ChaseStepEditor';
+import type {StepRowMarks} from './useStepRowMarks';
 
 interface ChaseStepTabsProps {
   steps: readonly ChaseStepDraft[];
@@ -26,6 +27,7 @@ interface ChaseStepTabsProps {
   /** the step whose tab is shown; none without steps */
   shownId: string | undefined;
   onSelect: (stepId: string | undefined) => void;
+  rowMarks: StepRowMarks;
   onChange: (change: (draft: ChaseDraft) => ChaseDraft) => void;
 }
 
@@ -33,7 +35,7 @@ interface ChaseStepTabsProps {
  * a tab per step, labelled with its number and marked when something is wrong with it, its panel editing it; Add step
  * after the last tab, shown even without steps
  */
-const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseStepTabsProps) => {
+const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, rowMarks, onChange}: ChaseStepTabsProps) => {
   const {t, i18n} = useLingui();
   const tabs = useRef<TabsHandle<string>>(null);
   // the tab to focus once it is rendered: a duplicate's tab only exists after the change
@@ -59,6 +61,7 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, onChange}: ChaseSt
           index={index}
           count={steps.length}
           errors={errors}
+          rowMarks={rowMarks}
           onChange={onChange}
           onDuplicate={() => {
             const copyId = crypto.randomUUID();

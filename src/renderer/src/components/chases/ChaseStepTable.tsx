@@ -3,11 +3,12 @@ import {Trans, useLingui} from '@lingui/react/macro';
 import type {ChaseError} from '@shared/chases';
 
 import {type ChaseDraft, type ChaseStepValueDraft, withoutStepValues} from '@/data/chaseDraft';
+import type {StepRowMark} from '@/data/chaseStepMarks';
 import {type ChaseStepGroup, groupValueIndexes, rowErrors} from '@/data/chaseStepTable';
 
 import Button from '../commons/Button';
 import {RemoveIcon} from '../commons/icons';
-import {type StepRowMark, cell, groupHeading, groupRemove, headerCell, stepTable} from './ChaseStepTable.css';
+import {cell, groupHeading, groupRemove, headerCell, stepTable} from './ChaseStepTable.css';
 import ChaseStepValueRow from './ChaseStepValueRow';
 
 interface ChaseStepTableProps {
@@ -15,7 +16,7 @@ interface ChaseStepTableProps {
   stepIndex: number;
   /** what is wrong with the step: the problems of a row are shown on it */
   errors: readonly ChaseError[];
-  /** how the row with this value id is marked: by a hovered fill button, or after a take */
+  /** how the row with this value id is marked: by a hovered button of a panel, or after its click */
   markOf: (valueId: string) => StepRowMark;
   onChange: (change: (draft: ChaseDraft) => ChaseDraft) => void;
   onChannelFocus: (value: ChaseStepValueDraft) => void;
