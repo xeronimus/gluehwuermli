@@ -1,4 +1,4 @@
-import {parseChannelsChanged} from '@shared/ipc';
+import {parseChannelsChanged, parseUniverseValues} from '@shared/ipc';
 import type {PreloadBridge} from '@shared/preloadBridge';
 
 import type DmxService from '@/data/service/DmxService';
@@ -14,6 +14,13 @@ export const electronDmxServiceFactory = (bridge: PreloadBridge): DmxService => 
   disconnect: () => bridge.disconnect(),
   getStatus: () => bridge.getStatus(),
   getRememberedPort: () => bridge.getRememberedPort(),
+  getChannelValues: async () => {
+    const answer = parseUniverseValues(await bridge.getChannelValues());
+    if (!answer) {
+      throw new Error('invalid channel values');
+    }
+    return answer.values;
+  },
   onStatusChanged: (listener) => bridge.onStatusChanged(listener),
   onChannelsChanged: (listener) =>
     bridge.onChannelsChanged((payload) => {

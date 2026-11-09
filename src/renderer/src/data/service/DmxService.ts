@@ -20,6 +20,8 @@ export default interface DmxService {
   getStatus: () => Promise<DmxOutputStatus>;
   /** the port the output was last connected to, to preselect it */
   getRememberedPort: () => Promise<RememberedPort>;
+  /** every channel's value as main holds it (after the caps), index 0 is channel 1; rejects for an invalid answer */
+  getChannelValues: () => Promise<readonly number[]>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
   /** values main set on its own (a chase step), after the caps; returns the function that removes the listener again */

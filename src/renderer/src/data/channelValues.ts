@@ -35,6 +35,15 @@ export function withChannelValues(channelValues: readonly number[], values: read
   return channelValues.map((current, index) => changed.get(index) ?? current);
 }
 
+/** `channelValues` (index 0 is channel 1) as one value per channel, leaving out the channels in `skipped` */
+export const channelValuesExcept = (
+  channelValues: readonly number[],
+  skipped: ReadonlySet<number>
+): SetChannelRequest[] =>
+  channelValues
+    .map((value, index) => ({channel: index + FIRST_DMX_CHANNEL, value}))
+    .filter(({channel}) => !skipped.has(channel));
+
 export const channelValueOf = (channelValues: readonly number[], channel: number): number =>
   channelValues[channel - FIRST_DMX_CHANNEL] ?? DMX_MIN_VALUE;
 

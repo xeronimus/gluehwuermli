@@ -454,6 +454,10 @@ msgstr "Der Ordner konnte nicht geöffnet werden: {message}"
 msgid "Could not pause the chase"
 msgstr "Der Chase konnte nicht pausiert werden"
 
+#: src/renderer/src/state/actionHooks/channelValuesSubscription.ts
+msgid "Could not read the channel values the output sends"
+msgstr "Die Kanalwerte, die der Ausgang sendet, konnten nicht gelesen werden"
+
 #: src/renderer/src/state/actionHooks/outputStatusSubscription.ts
 msgid "Could not read the output status"
 msgstr "Der Status des Ausgangs konnte nicht gelesen werden"

@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Fixed
+
+- After the window was reloaded, the faders showed 0 until a chase step set each channel again, while the output kept
+  sending the real values; the app now reads every channel's value from the output when it starts (#81)
+
 ## [0.3.0] - 2026-11-08
 
 ### Added
