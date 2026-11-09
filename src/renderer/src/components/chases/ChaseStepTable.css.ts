@@ -114,7 +114,7 @@ const FLASH_DURATION = '1.2s';
 
 /**
  * a row a hovered fill button would change is tinted; the rows a click changed flash. Two flashes alike, alternated on
- * each take: a class that stays on the row doesn't start its animation again (see rowMarkOf in ChaseStepTable)
+ * each take: a class that stays on the row doesn't start its animation again (see rowMarkOf in ChaseStepEditor)
  */
 export const stepRow = styleVariants({
   none: {},
