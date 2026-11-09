@@ -83,6 +83,22 @@ export const buttonVariants = styleVariants({
         }
       }
     }
+  ],
+  /** just the icon, in the accent: the important action among icon buttons, e.g. a chase's Start */
+  iconPrimary: [
+    buttonBase,
+    {
+      padding: '2px',
+      color: vars.colors.primary,
+      background: 'none',
+      borderColor: 'transparent',
+      selectors: {
+        '&:hover:not(:disabled), &:focus-visible:not(:disabled)': {
+          color: vars.colors.primaryHover,
+          borderColor: 'transparent'
+        }
+      }
+    }
   ]
 });
 

@@ -70,7 +70,12 @@ const ChaseRow = ({chase, rowState, onControl, actions}: ChaseRowProps) => {
         {chaseRowControls(rowState).map((control) => {
           const Icon = ICONS[control];
           return (
-            <Button key={control} variant="icon" onClick={() => onControl(control)} title={titles[control]}>
+            <Button
+              key={control}
+              variant={control === 'start' ? 'iconPrimary' : 'icon'}
+              onClick={() => onControl(control)}
+              title={titles[control]}
+            >
               <Icon />
             </Button>
           );

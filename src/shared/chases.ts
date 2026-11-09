@@ -48,9 +48,20 @@ export type ChaseError =
   | {readonly type: 'chase-step-id-twice'}
   | {readonly type: 'chase-step-hold-invalid'}
   | {readonly type: 'chase-step-values-missing'}
-  | {readonly type: 'chase-step-channel-invalid'}
-  | {readonly type: 'chase-step-channel-twice'}
-  | {readonly type: 'chase-step-value-invalid'};
+  | ChaseValueError;
+
+/** a problem of some of a step's values, with their indexes in the step: the editor marks them on their rows */
+export interface ChaseValueError {
+  readonly type: 'chase-step-channel-invalid' | 'chase-step-channel-twice' | 'chase-step-value-invalid';
+  /** ascending, at least one */
+  readonly valueIndexes: readonly number[];
+}
+
+/** the values of a step that are in error, by their index; an error for none of them is no error */
+const valueError = (type: ChaseValueError['type'], values: readonly boolean[]): ChaseValueError[] => {
+  const valueIndexes = values.flatMap((inError, index) => (inError ? [index] : []));
+  return valueIndexes.length > 0 ? [{type, valueIndexes}] : [];
+};
 
 const isValidRepeat = (repeat: ChaseRepeat): boolean =>
   repeat.type !== 'times' ||
@@ -69,16 +80,22 @@ export function chaseStepErrors(step: ChaseStep): ChaseError[] {
   if (channels.length === 0) {
     errors.push({type: 'chase-step-values-missing'});
   }
-  if (!channels.every(isDmxChannel)) {
-    errors.push({type: 'chase-step-channel-invalid'});
-  }
-  if (duplicatesOf(channels).length > 0) {
-    errors.push({type: 'chase-step-channel-twice'});
-  }
-  if (!step.values.every(({value}) => isDmxValue(value))) {
-    errors.push({type: 'chase-step-value-invalid'});
-  }
-  return errors;
+  const duplicates = duplicatesOf(channels);
+  return [
+    ...errors,
+    ...valueError(
+      'chase-step-channel-invalid',
+      channels.map((channel) => !isDmxChannel(channel))
+    ),
+    ...valueError(
+      'chase-step-channel-twice',
+      channels.map((channel) => isDmxChannel(channel) && duplicates.includes(channel))
+    ),
+    ...valueError(
+      'chase-step-value-invalid',
+      step.values.map(({value}) => !isDmxValue(value))
+    )
+  ];
 }
 
 const firstOfEachType = (errors: readonly ChaseError[]): ChaseError[] =>
