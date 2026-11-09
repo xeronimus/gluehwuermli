@@ -98,7 +98,8 @@ src/
                              # second-instance, window title
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
-    ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine
+    ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine; dmx:get-channel-values answers the
+                             # capped universe (dmxIpcHandlers, also in Show mode)
     ipc/registerProjectIpc.ts # project:* channels wired to the session, pushes project:changed / project:open-requested
     ipc/projectIpcHandlers.ts # the project payloads checked against their schema, without Electron
     ipc/registerAppIpc.ts    # app:get-data-folder / app:open-data-folder (userData, shell.openPath via dataFolder/;

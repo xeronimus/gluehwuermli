@@ -3,26 +3,19 @@ import {useEffect} from 'react';
 import {msg} from '@lingui/core/macro';
 
 import type ChaseService from '@/data/service/ChaseService';
-import type DmxService from '@/data/service/DmxService';
 import logger from '@/data/service/Logger';
-import {chaseService, dmxService} from '@/data/service/services';
+import {chaseService} from '@/data/service/services';
 
-import type {ChannelsActions} from '../channels/ChannelsActions';
 import type {ChaseActions} from '../chase/ChaseActions';
 import {useAppStore} from '../store';
 
 /**
- * Follows the chase player in main: its status, and the values each step set (already capped in main), so fixture and
- * raw faders show what goes out. A fader moved by hand keeps its value until a step sets that channel again, since
- * main only pushes the channels a step names. Asks for the status once, then follows the pushes; returns the function
- * that stops following
+ * Follows the chase player in main: asks for its status once, then follows the pushes; returns the function that stops
+ * following. The values its steps set are followed by followChannelValues
  */
 export function followChases(
-  services: {
-    chaseService: Pick<ChaseService, 'getStatus' | 'onStatusChanged'>;
-    dmxService: Pick<DmxService, 'onChannelsChanged'>;
-  },
-  actions: Pick<ChaseActions, 'setChaseStatus' | 'setChaseError'> & Pick<ChannelsActions, 'setChannelValues'>
+  services: {chaseService: Pick<ChaseService, 'getStatus' | 'onStatusChanged'>},
+  actions: Pick<ChaseActions, 'setChaseStatus' | 'setChaseError'>
 ): () => void {
   // a step pushed while the first answer is on its way is newer than that answer
   let pushed = false;
@@ -30,7 +23,6 @@ export function followChases(
     pushed = true;
     actions.setChaseStatus(status);
   });
-  const stopFollowingValues = services.dmxService.onChannelsChanged(({values}) => actions.setChannelValues(values));
   services.chaseService
     .getStatus()
     .then((status) => {
@@ -43,13 +35,10 @@ export function followChases(
       logger.error('reading the chase status failed', error);
       actions.setChaseError(msg`Could not read whether a chase is playing`);
     });
-  return () => {
-    stopFollowingStatus();
-    stopFollowingValues();
-  };
+  return stopFollowingStatus;
 }
 
-/** keeps the store's chase status and channel values in sync with main (external sync, so useEffect is right here) */
+/** keeps the store's chase status in sync with main (external sync, so useEffect is right here) */
 export function useChaseSubscription(): void {
-  useEffect(() => followChases({chaseService, dmxService}, useAppStore.getState()), []);
+  useEffect(() => followChases({chaseService}, useAppStore.getState()), []);
 }
