@@ -1,6 +1,12 @@
-import {style, styleVariants} from '@vanilla-extract/css';
+import {globalStyle, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
+
+/**
+ * how far a hovered channel's border lies outside its cells, like a hovered channel row's (FixtureChannelRows); the
+ * column's padding leaves room for it
+ */
+const CHANNEL_BORDER_OFFSET = '3px';
 
 /** as wide as the tab, scrolls sideways when the presets need more */
 export const presetsSection = style({
@@ -9,10 +15,15 @@ export const presetsSection = style({
   minWidth: 0
 });
 
+/**
+ * half the room between two presets: each column has it on both sides, so the border between two of them lies in the
+ * middle of that room
+ */
+const PRESET_SPACING = '24px';
+
 export const presetColumns = style({
   display: 'flex',
   alignItems: 'flex-start',
-  gap: '8px',
   overflowX: 'auto',
   paddingBottom: '6px'
 });
@@ -25,8 +36,14 @@ export const presetColumn = style({
   gap: '6px 6px',
   alignItems: 'center',
   flexShrink: 0,
-  padding: '0 8px',
+  padding: `0 ${PRESET_SPACING}`,
   borderLeft: `1px solid ${vars.colors.border}`
+});
+
+globalStyle(`${presetColumn}:first-child`, {
+  borderLeft: 'none',
+  // room for a hovered channel's outline (its offset and width): the scrolling row would cut it off
+  paddingLeft: '4px'
 });
 
 export const presetHeader = style({
@@ -46,12 +63,14 @@ export const presetValue = style({
   display: 'grid',
   gridTemplateColumns: 'subgrid',
   alignItems: 'center',
-  fontSize: '0.9em'
-});
-
-/** room for `#` and six hex digits, and the swatch */
-export const presetColorField = style({
-  width: '100px'
+  fontSize: '0.9em',
+  borderRadius: vars.constants.radiusMd,
+  // an outline, not a border: it takes no room, so the channel's cells stay in line with the other channels
+  outline: '1px solid transparent',
+  outlineOffset: CHANNEL_BORDER_OFFSET,
+  selectors: {
+    '&:hover': {outlineColor: vars.colors.focusBorder}
+  }
 });
 
 /** the channel's color dot, if it has a color, and its name */

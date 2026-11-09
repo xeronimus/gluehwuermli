@@ -1,3 +1,4 @@
+import {DMX_UNIVERSE_SIZE} from './dmx';
 import {
   parseChannelsChanged,
   parseChaseStatus,
@@ -6,6 +7,7 @@ import {
   parseSetChannelRequest,
   parseSetChannelValuesRequest,
   parseStartChaseRequest,
+  parseUniverseValues,
   parseUnlockRequest
 } from './ipc';
 
@@ -115,6 +117,27 @@ describe('parseChaseStatus', () => {
     null
   ])('rejects %j', (payload) => {
     expect(parseChaseStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseUniverseValues', () => {
+  const universe = (value: unknown, length = DMX_UNIVERSE_SIZE) => ({values: Array<unknown>(length).fill(value)});
+
+  test('accepts a whole universe', () => {
+    const answer = universe(255);
+    expect(parseUniverseValues(answer)).toEqual(answer);
+  });
+
+  test.each([
+    universe(0, DMX_UNIVERSE_SIZE - 1),
+    universe(0, DMX_UNIVERSE_SIZE + 1),
+    universe(256),
+    universe(-1),
+    universe(1.5),
+    {},
+    null
+  ])('rejects a payload that is not one', (payload) => {
+    expect(parseUniverseValues(payload)).toBeUndefined();
   });
 });
 

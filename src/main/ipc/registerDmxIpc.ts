@@ -9,6 +9,7 @@ import type {DmxEngine} from '../dmx/dmxEngine';
 import {emergencyOffFactory} from '../dmx/emergencyOff';
 import type {PortMemory} from '../dmx/portMemory';
 import log from '../log';
+import {universeValuesOf} from './dmxIpcHandlers';
 
 /**
  * Connects the IPC channels of @shared/ipcChannels to the DMX engine. Payloads from the renderer are checked against
@@ -58,6 +59,8 @@ export function registerDmxIpc(
   ipcMain.handle(IpcChannel.GET_STATUS, () => engine.status());
 
   ipcMain.handle(IpcChannel.GET_REMEMBERED_PORT, () => portMemory.remembered());
+
+  ipcMain.handle(IpcChannel.GET_CHANNEL_VALUES, () => universeValuesOf(engine));
 
   engine.onStatusChanged((status) => {
     BrowserWindow.getAllWindows().forEach((window) => window.webContents.send(IpcChannel.STATUS_CHANGED, status));

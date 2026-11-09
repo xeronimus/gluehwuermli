@@ -267,6 +267,15 @@ export const ChannelsChangedSchema = SetChannelValuesRequestSchema;
 export type ChannelsChanged = Static<typeof ChannelsChangedSchema>;
 
 /**
+ * every channel's value as main holds it, after the caps, index 0 is channel 1: what GET_CHANNEL_VALUES answers, so
+ * the faders show what goes out after a window reload
+ */
+export const UniverseValuesSchema = Type.Object({
+  values: Type.Array(DmxValueSchema, {minItems: DMX_UNIVERSE_SIZE, maxItems: DMX_UNIVERSE_SIZE})
+});
+export type UniverseValues = Static<typeof UniverseValuesSchema>;
+
+/**
  * the version of a project file, so a later format change can migrate an older file instead of dropping it; a file
  * with a higher one is refused, never overwritten
  */
@@ -467,6 +476,9 @@ export const parseStartChaseRequest = (payload: unknown): StartChaseRequest | un
 
 export const parseChaseStatus = (payload: unknown): ChaseStatus | undefined =>
   Value.Check(ChaseStatusSchema, payload) ? payload : undefined;
+
+export const parseUniverseValues = (payload: unknown): UniverseValues | undefined =>
+  Value.Check(UniverseValuesSchema, payload) ? payload : undefined;
 
 export const parseChannelsChanged = (payload: unknown): ChannelsChanged | undefined =>
   Value.Check(ChannelsChangedSchema, payload) ? payload : undefined;

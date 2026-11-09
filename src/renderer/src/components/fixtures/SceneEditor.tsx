@@ -15,7 +15,6 @@ import ColorField from './ColorField';
 import {
   actions,
   checkboxLabel,
-  colorFieldWidth,
   columns,
   editorTitle,
   errorList,
@@ -97,14 +96,12 @@ const SceneEditor = ({scene, onClose}: SceneEditorProps) => {
             </label>
             <label className={field}>
               <Trans>Color</Trans>
-              <span className={colorFieldWidth}>
-                <ColorField
-                  color={color}
-                  label={t`Color of the scene`}
-                  title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
-                  onChange={setColor}
-                />
-              </span>
+              <ColorField
+                color={color}
+                label={t`Color of the scene`}
+                title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
+                onChange={setColor}
+              />
             </label>
           </div>
           <SceneFixtureChoices fixtures={fixtures} fixtureIds={fixtureIds} onChange={setFixtureIds} />

@@ -1,5 +1,6 @@
 import {
   channelValueOf,
+  channelValuesExcept,
   fadersFor,
   glowLevel,
   isChannelChange,
@@ -72,6 +73,19 @@ describe('withChannelValues', () => {
       ])
     ).toEqual([10, 0, 30]);
     expect(channelValues).toEqual([0, 0, 0]);
+  });
+});
+
+describe('channelValuesExcept', () => {
+  test('one value per channel, counted from channel 1, without the skipped channels', () => {
+    expect(channelValuesExcept([10, 20, 30], new Set([2]))).toEqual([
+      {channel: 1, value: 10},
+      {channel: 3, value: 30}
+    ]);
+  });
+
+  test('nothing when every channel is skipped', () => {
+    expect(channelValuesExcept([10], new Set([1]))).toEqual([]);
   });
 });
 

@@ -15,7 +15,8 @@ import type {
   RecentProject,
   RememberedPort,
   SerialPortDescription,
-  SetChannelRequest
+  SetChannelRequest,
+  UniverseValues
 } from './ipc';
 
 /** the global under which the preload script exposes the PreloadBridge to the renderer (`window.gluehwuermli`) */
@@ -33,6 +34,8 @@ export interface PreloadBridge {
   getStatus: () => Promise<DmxOutputStatus>;
   /** the port the output was last connected to, to preselect it */
   getRememberedPort: () => Promise<RememberedPort>;
+  /** every channel's value as main holds it, after the caps */
+  getChannelValues: () => Promise<UniverseValues>;
   /** returns the function that removes the listener again */
   onStatusChanged: (listener: (status: DmxOutputStatus) => void) => () => void;
   /** the values main set on its own (a chase step), after the caps; returns the function that removes the listener */
