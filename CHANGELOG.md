@@ -12,6 +12,12 @@ change bumps the minor version and everything else the patch version.
 
 ### Changed
 
+- The chase step editor shows a step's channels as a table grouped by fixture (the fixture's name once, with a button
+  removing all its channels; addresses of no fixture under Unassigned), with aligned columns, a bar in the channel's
+  color beside each value and the name of a named position the value is on; a problem is marked on its row. A "Fill
+  from" panel beside the table (above it on a narrow window) takes the current values of one fixture or of all, a scene
+  or a preset in one click; hovering a button marks the rows it would change, and the rows a click changed flash. Save
+  and Cancel stay in view while the chase editor is open (#90)
 - The presets in the fixture editor have more room between them, and the channel under the mouse is outlined like a
   row in the channels tab
 - Radio buttons (the repeat of a chase) look like the app's checkboxes: a dark circle, a ring and a dot in the accent

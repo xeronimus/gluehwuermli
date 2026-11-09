@@ -127,25 +127,30 @@ project has no chases yet; the editor opens below it.
 - **Steps**, in order, one tab each, numbered and marked when something is wrong with the step (its problems on
   hover), with **Add step** after the last tab. Each step's panel has:
   - its own **hold time**, in seconds with two decimals: at least 0.05 s (about two engine ticks), at most 3600 s
-  - its **values**: a list of `channel → value`, shown with the fixture and channel name on that address if there is
-    one, all of them where fixtures share an address, each after a dot in the channel's color if it has one (only as
-    a label: it isn't stored), editable and removable one by one. The list is sorted by channel once a channel field
-    is left, not while it is typed
-  - buttons to fill it. Each one **merges** into the step: a channel the step already sets takes the new value, a new
-    channel is added, the others stay. Taking several scenes or presets builds a step up:
-    - **Add channel**: a single channel by hand
-    - **Take current values**: pick fixtures with checkboxes, all channels of the checked ones are taken with the
-      values they have now
-    - **Take from scene…**: a choice list of the scenes; the scene's values, turned into absolute channels at the time
-      of taking
-    - **Take from preset…**: a choice list of the presets, grouped by fixture; the preset's values on its fixture's
+  - its **values**: a table with the columns Ch · Channel · Value · ✕, its rows grouped under a heading per fixture
+    using their addresses (the fixture's name once, a button removing all its rows), a shared address under each of
+    its fixtures, addresses of no fixture under **Unassigned**. A row shows the channel's name with a dot in its color
+    (the dot's slot stays without a color, so the names align), the value with a thin bar in that color (neutral
+    without one, display only) and the name of a named position the value is on. The grouping is only a label: a step
+    stores addresses. The rows are sorted and regrouped once a channel field is left, not while it is typed; a
+    problem of a row (an invalid channel or value, a channel set twice) is marked on it, the step's own problems below
+    the table. An empty step shows a hint instead of the table; **Add channel** below it adds a single channel by hand
+  - the **Fill from** panel beside the table (above it below 900 px, compact; sticky while a long step is scrolled).
+    Each button **merges** into the step: a channel the step already sets takes the new value, a new channel is added,
+    the others stay. Taking several scenes or presets builds a step up. Hovering or focusing a button tints the rows
+    it would change and says how many it adds and changes; after a click the changed and added rows flash:
+    - **Current values**: **All**, and a button per fixture; all channels of it with the values they have now
+    - **Scenes**: a button per scene, as in the Show view; its values, turned into absolute channels at the time of
+      taking
+    - **Presets**: the presets' buttons under the name of their fixture; the preset's values on its fixture's
       addresses
-  - move left / move right (the tab's place), duplicate (the copy's tab is shown), delete (the next tab is shown)
+  - the step's header: Hold on the left; move left / move right (the tab's place), duplicate (the copy's tab is
+    shown) on the right, delete (the next tab is shown) set apart from them
 - **Add step** appends an empty step with the hold of the last step (1 s for the first one) and shows its tab; at most
   100 steps. Duplicate copies a step with its hold and values right after it.
 - A step needs at least one channel; a chase at least one step.
 
-Saving follows the other editors: the whole project is written to its file first and only then shown; a failed save
+Save and Cancel stay at the bottom of the view while the editor is open. Saving follows the other editors: the whole project is written to its file first and only then shown; a failed save
 keeps the editor open with the error. Enter in the name field saves, Escape cancels. Saving a change to the running chase
 or deleting it stops it; main compares the chase as saved before and after, so saving it unchanged, saving a fixture or
 reordering the chases lets it play on.

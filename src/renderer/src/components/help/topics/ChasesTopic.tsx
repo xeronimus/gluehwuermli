@@ -39,12 +39,12 @@ const ChasesTopic = () => (
     <p>
       <Trans>
         To make one, unlock Setup mode and press <strong>Add chase</strong> below the rows. The chase editor sets the
-        name, the repeat and the steps, a tab each with its <strong>Hold</strong> in seconds and the channels it sets
-        (channel → value, labelled with the fixture channels on that address). <strong>Add channel</strong> adds one by
-        hand. <strong>Take current values</strong> (of the fixtures you check), <strong>Take from scene…</strong> and{' '}
-        <strong>Take from preset…</strong> merge those values into the step: a channel the step already sets takes the
-        new value, the others are added. A step stores only channels and values, so changing a fixture, scene or preset
-        later doesn't change the chase. The buttons next to a chase edit, delete and move it.
+        name, the repeat and the steps, a tab each with its <strong>Hold</strong> in seconds and the channels it sets,
+        in a table grouped by the fixtures on those addresses. <strong>Add channel</strong> adds one by hand. The{' '}
+        <strong>Fill from</strong> panel beside it takes the current values of a fixture or of all, a scene or a preset
+        in one click and merges them into the step: a channel the step already sets takes the new value, the others are
+        added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a
+        fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it.
       </Trans>
     </p>
   </>
