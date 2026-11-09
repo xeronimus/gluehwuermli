@@ -1,5 +1,7 @@
 import {globalStyle, keyframes, style, styleVariants} from '@vanilla-extract/css';
 
+import type {StepRowMark} from '@/data/chaseStepMarks';
+
 import {vars} from '../themes.css';
 
 export const stepTable = style({
@@ -114,13 +116,11 @@ const FLASH_DURATION = '1.2s';
 
 /**
  * a row a hovered fill button would change is tinted; the rows a click changed flash. Two flashes alike, alternated on
- * each take: a class that stays on the row doesn't start its animation again (see rowMarkOf in ChaseStepEditor)
+ * each take: a class that stays on the row doesn't start its animation again (see rowMarkOf in data/chaseStepMarks)
  */
-export const stepRow = styleVariants({
+export const stepRow: Record<StepRowMark, string> = styleVariants({
   none: {},
   affected: {background: ROW_TINT},
   flashEven: {animation: `${flashFrames()} ${FLASH_DURATION} ease-out`},
   flashOdd: {animation: `${flashFrames()} ${FLASH_DURATION} ease-out`}
 });
-
-export type StepRowMark = keyof typeof stepRow;
