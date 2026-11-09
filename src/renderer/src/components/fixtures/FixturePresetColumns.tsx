@@ -67,7 +67,6 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                   title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
                   onChange={(color) => onChange(withPresetColor(draft, presetIndex, color))}
                 />
-
                 <MoveButtons
                   index={presetIndex}
                   count={presetCount}

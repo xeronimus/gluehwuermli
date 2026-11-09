@@ -10,10 +10,18 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Changed
+
+- The presets in the fixture editor have more room between them, and the channel under the mouse is outlined like a
+  row in the channels tab
+- Radio buttons (the repeat of a chase) look like the app's checkboxes: a dark circle, a ring and a dot in the accent
+  when chosen
+
 ### Fixed
 
 - After the window was reloaded, the faders showed 0 until a chase step set each channel again, while the output kept
   sending the real values; the app now reads every channel's value from the output when it starts (#81)
+- The color fields of channels, presets and scenes were too narrow for `#` and six hex digits
 
 ## [0.3.0] - 2026-11-08
 
