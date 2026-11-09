@@ -169,8 +169,12 @@ export const isSortedByChannel = (values: readonly ChaseStepValueDraft[]): boole
 export const withStepValuesSorted = (draft: ChaseDraft, stepIndex: number): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({...step, values: sortedByChannel(step.values)}));
 
-export const withoutStepValue = (draft: ChaseDraft, stepIndex: number, valueIndex: number): ChaseDraft =>
-  withStepAt(draft, stepIndex, (step) => ({...step, values: step.values.filter((_, index) => index !== valueIndex)}));
+/** the step without the values at these indexes: one row's ✕, or a fixture's in the table */
+export const withoutStepValues = (draft: ChaseDraft, stepIndex: number, valueIndexes: readonly number[]): ChaseDraft =>
+  withStepAt(draft, stepIndex, (step) => ({
+    ...step,
+    values: step.values.filter((_, index) => !valueIndexes.includes(index))
+  }));
 
 /**
  * the channel a channel added by hand starts on: the one after the highest the step sets, so a run of channels is

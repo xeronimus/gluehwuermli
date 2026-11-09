@@ -21,7 +21,7 @@ import {
   withStepValueChange,
   withStepValuesSorted,
   withoutStep,
-  withoutStepValue
+  withoutStepValues
 } from './chaseDraft';
 
 const chorus: Chase = {
@@ -98,7 +98,8 @@ test('edits, adds and removes a step value one by one', () => {
     {id: '0', channel: '1', value: '0'},
     {id: '1', channel: '20', value: '128'}
   ]);
-  expect(withoutStepValue(draft, 1, 0).steps[1]?.values).toEqual([{id: '1', channel: '20', value: '200'}]);
+  expect(withoutStepValues(draft, 1, [0]).steps[1]?.values).toEqual([{id: '1', channel: '20', value: '200'}]);
+  expect(withoutStepValues(draft, 1, [0, 1]).steps[1]?.values).toEqual([]);
   expect(withNewStepValue(draft, 1, 'new').steps[1]?.values.at(-1)).toEqual({id: 'new', channel: '21', value: '0'});
   expect(withNewStepValue(withNewStep(newChaseDraft(), 'a'), 0, 'new').steps[0]?.values).toEqual([
     {id: 'new', channel: '1', value: '0'}
@@ -170,13 +171,16 @@ test('reports a hold, a repeat count and a step value out of range, at the step 
   });
 
   expect(errors.chase).toEqual([{type: 'chase-repeat-invalid'}]);
-  expect(errors.steps).toEqual([[], [{type: 'chase-step-hold-invalid'}, {type: 'chase-step-channel-twice'}]]);
+  expect(errors.steps).toEqual([
+    [],
+    [{type: 'chase-step-hold-invalid'}, {type: 'chase-step-channel-twice', valueIndexes: [0, 1]}]
+  ]);
   expect(chaseEditErrors(withStepHold(draft, 0, '')).steps[0]).toEqual([{type: 'chase-step-hold-invalid'}]);
   expect(chaseEditErrors(withStepValueChange(draft, 0, 0, {value: '256'})).steps[0]).toEqual([
-    {type: 'chase-step-value-invalid'}
+    {type: 'chase-step-value-invalid', valueIndexes: [0]}
   ]);
   expect(chaseEditErrors(withStepValueChange(draft, 0, 0, {channel: '513'})).steps[0]).toEqual([
-    {type: 'chase-step-channel-invalid'}
+    {type: 'chase-step-channel-invalid', valueIndexes: [0]}
   ]);
 });
 

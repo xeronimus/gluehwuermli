@@ -1,7 +1,7 @@
 import type {MessageDescriptor} from '@lingui/core';
 import {msg} from '@lingui/core/macro';
 
-import type {ChaseError} from '@shared/chases';
+import type {ChaseError, ChaseValueError} from '@shared/chases';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {
   CHASE_HOLD_MAX_MS,
@@ -53,6 +53,24 @@ export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
       const minValue = DMX_MIN_VALUE;
       const maxValue = DMX_MAX_VALUE;
       return msg`Step values must be whole numbers from ${minValue} to ${maxValue}`;
+    }
+  }
+}
+
+/** a problem of a step's value, said on its row: the row shows which channel or value it is about */
+export function chaseRowErrorMessage(error: ChaseValueError): MessageDescriptor {
+  switch (error.type) {
+    case 'chase-step-channel-invalid': {
+      const firstChannel = FIRST_DMX_CHANNEL;
+      const lastChannel = LAST_DMX_CHANNEL;
+      return msg`Channel: a whole number from ${firstChannel} to ${lastChannel}`;
+    }
+    case 'chase-step-channel-twice':
+      return msg`The step sets this channel twice`;
+    case 'chase-step-value-invalid': {
+      const minValue = DMX_MIN_VALUE;
+      const maxValue = DMX_MAX_VALUE;
+      return msg`Value: a whole number from ${minValue} to ${maxValue}`;
     }
   }
 }

@@ -1,12 +1,12 @@
-import {channelAddress, fixturePresets} from '@shared/fixtures';
-import type {Fixture, FixturePreset, SetChannelRequest} from '@shared/ipc';
+import {channelAddress} from '@shared/fixtures';
+import type {Fixture, SetChannelRequest} from '@shared/ipc';
 
 import {channelValueOf} from './channelValues';
 import {numberOf} from './channelValuesDraft';
 import {type ChaseDraft, type ChaseStepDraft, type ChaseStepValueDraft, sortedByChannel} from './chaseDraft';
 
 /**
- * every channel of the checked fixtures, on its absolute address, at the value it has now; as it is, not fitted to the
+ * every channel of the fixtures picked, on its absolute address, at the value it has now; as it is, not fitted to the
  * channel's value rules: a step isn't checked against them. Fixtures in the order of the fixture list
  */
 export const currentFixturesChannelValues = (
@@ -22,16 +22,6 @@ export const currentFixturesChannelValues = (
         return {channel: address, value: channelValueOf(channelValues, address)};
       })
     );
-
-/** a preset to take into a step, with the fixture whose addresses it is set on */
-export interface PresetChoice {
-  readonly fixture: Fixture;
-  readonly preset: FixturePreset;
-}
-
-/** every preset of every fixture, in the order of the fixture list and of the fixture's presets */
-export const presetChoices = (fixtures: readonly Fixture[]): PresetChoice[] =>
-  fixtures.flatMap((fixture) => fixturePresets(fixture).map((preset) => ({fixture, preset})));
 
 /** the step's rows with the values merged in: a channel a row already sets takes the new value, a new one gets a row */
 function mergedValues(
@@ -68,3 +58,28 @@ export const withStepValuesTaken = (
     index === stepIndex ? {...step, values: mergedValues(step.values, taken, newId)} : step
   )
 });
+
+/** what taking values would do to a step: shown while a fill button is hovered, flashed once it is clicked */
+export interface StepFillEffect {
+  /** the rows whose value would change, by their id */
+  readonly changedIds: readonly string[];
+  /** the channels that would get a new row */
+  readonly addedCount: number;
+}
+
+/** what withStepValuesTaken would change; a row taking the value it has is no change */
+export function stepFillEffect(
+  values: readonly ChaseStepValueDraft[],
+  taken: readonly SetChannelRequest[]
+): StepFillEffect {
+  const takenByChannel = new Map(taken.map(({channel, value}) => [channel, value]));
+  const changedIds = values
+    .filter((row) => {
+      const value = takenByChannel.get(numberOf(row.channel));
+      return value !== undefined && value !== numberOf(row.value);
+    })
+    .map(({id}) => id);
+  const setChannels = new Set(values.map(({channel}) => numberOf(channel)));
+  const addedCount = [...takenByChannel.keys()].filter((channel) => !setChannels.has(channel)).length;
+  return {changedIds, addedCount};
+}

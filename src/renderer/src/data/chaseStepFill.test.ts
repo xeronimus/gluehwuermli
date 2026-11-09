@@ -1,7 +1,7 @@
 import type {Fixture, Scene} from '@shared/ipc';
 
 import {type ChaseDraft} from './chaseDraft';
-import {currentFixturesChannelValues, presetChoices, withStepValuesTaken} from './chaseStepFill';
+import {currentFixturesChannelValues, stepFillEffect, withStepValuesTaken} from './chaseStepFill';
 import {presetChannelValues} from './presets';
 import {sceneChannelValues} from './scenes';
 
@@ -69,17 +69,11 @@ describe('currentFixturesChannelValues', () => {
   });
 });
 
-describe('presetChoices', () => {
-  test('every preset with its fixture, fixtures without presets have none', () => {
-    expect(presetChoices(fixtures).map(({fixture, preset}) => `${fixture.id}/${preset.id}`)).toEqual([
-      'spot/full',
-      'spot/red'
-    ]);
-  });
-
-  test("a preset's values land on its fixture's addresses", () => {
-    const [, red] = presetChoices([{...spot, startAddress: 100}]);
-    expect(red && presetChannelValues(red.fixture, red.preset)).toEqual([{channel: 101, value: 200}]);
+describe('a preset taken', () => {
+  test("its values land on its fixture's addresses", () => {
+    const moved = {...spot, startAddress: 100};
+    const red = moved.presets?.[1];
+    expect(red && presetChannelValues(moved, red)).toEqual([{channel: 101, value: 200}]);
   });
 });
 
@@ -177,5 +171,28 @@ describe('withStepValuesTaken', () => {
 
     expect(withStepValuesTaken(draft, 0, [{channel: 1, value: 1}], counter()).steps[1]).toBe(draft.steps[1]);
     expect(withStepValuesTaken(draft, 5, [{channel: 1, value: 1}], counter())).toEqual(draft);
+  });
+});
+
+describe('stepFillEffect', () => {
+  const rows = [
+    {id: 'a', channel: '1', value: '10'},
+    {id: 'b', channel: '2', value: '20'},
+    {id: 'c', channel: '', value: '30'}
+  ];
+
+  test('names the rows whose value changes and counts the channels added', () => {
+    expect(
+      stepFillEffect(rows, [
+        {channel: 1, value: 11},
+        {channel: 2, value: 20},
+        {channel: 3, value: 0},
+        {channel: 3, value: 1}
+      ])
+    ).toEqual({changedIds: ['a'], addedCount: 1});
+  });
+
+  test('nothing taken changes nothing', () => {
+    expect(stepFillEffect(rows, [])).toEqual({changedIds: [], addedCount: 0});
   });
 });

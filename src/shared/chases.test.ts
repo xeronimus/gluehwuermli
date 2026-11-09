@@ -1,4 +1,4 @@
-import {chaseErrors, chasesAreValid, passCount, setupChases} from './chases';
+import {chaseErrors, chaseStepErrors, chasesAreValid, passCount, setupChases} from './chases';
 import type {Chase, ChaseStep, Fixture, FixtureSetup} from './ipc';
 
 const stepOf = (overrides: Partial<ChaseStep> = {}): ChaseStep => ({
@@ -94,7 +94,24 @@ describe('chaseErrors', () => {
     ['chase-step-value-invalid', chaseOf({steps: [stepOf({values: [{channel: 3, value: 256}]})]})],
     ['chase-step-value-invalid', chaseOf({steps: [stepOf({values: [{channel: 3, value: -1}]})]})]
   ])('%s', (type, chase) => {
-    expect(chaseErrors(chase)).toEqual([{type}]);
+    expect(chaseErrors(chase).map((error) => error.type)).toEqual([type]);
+  });
+
+  test('a problem of some values names their rows', () => {
+    const step = stepOf({
+      values: [
+        {channel: 3, value: 1},
+        {channel: 0, value: 300},
+        {channel: 3, value: 2},
+        {channel: 0, value: 4}
+      ]
+    });
+
+    expect(chaseStepErrors(step)).toEqual([
+      {type: 'chase-step-channel-invalid', valueIndexes: [1, 3]},
+      {type: 'chase-step-channel-twice', valueIndexes: [0, 2]},
+      {type: 'chase-step-value-invalid', valueIndexes: [1]}
+    ]);
   });
 
   test('a problem on several steps is named once', () => {
