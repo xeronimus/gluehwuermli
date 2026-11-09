@@ -84,6 +84,41 @@ globalStyle('input[type="checkbox"]:disabled', {
   opacity: 0.5
 });
 
+// -- radio buttons: the checkbox's dark box as a circle; checked, a ring and a dot in the firefly accent. The gap between
+// them is an inset shadow in the box's own colour, so unlike the tick it can read the theme vars
+const RADIO_DOT_GAP = '3px';
+
+globalStyle('input[type="radio"]', {
+  appearance: 'none',
+  flexShrink: 0,
+  width: '16px',
+  height: '16px',
+  margin: 0,
+  padding: 0,
+  borderRadius: '50%',
+  cursor: 'pointer'
+});
+
+globalStyle('input[type="radio"]:hover:not(:disabled)', {
+  borderColor: vars.colors.focusBorder
+});
+
+globalStyle('input[type="radio"]:checked', {
+  backgroundColor: vars.colors.primary,
+  borderColor: vars.colors.primary,
+  boxShadow: `inset 0 0 0 ${RADIO_DOT_GAP} ${vars.colors.surfaceRaised}`
+});
+
+globalStyle('input[type="radio"]:checked:hover:not(:disabled), input[type="radio"]:checked:focus-visible', {
+  backgroundColor: vars.colors.primaryHover,
+  borderColor: vars.colors.primaryHover
+});
+
+globalStyle('input[type="radio"]:disabled', {
+  cursor: 'default',
+  opacity: 0.5
+});
+
 // -- scrollbars: thin, a rounded thumb on no track, like the rest of the desk. Chromium's own pseudo-elements: the
 // standard `scrollbar-color` / `scrollbar-width` would override them and can't round the thumb
 globalStyle('::-webkit-scrollbar', {
