@@ -1,5 +1,5 @@
 import type {MessageDescriptor} from '@lingui/core';
-import {msg} from '@lingui/core/macro';
+import {msg, plural} from '@lingui/core/macro';
 
 import type {ChaseError, ChaseValueError} from '@shared/chases';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
@@ -12,6 +12,9 @@ import {
   CHASE_STEPS_MAX
 } from '@shared/ipc';
 import {MS_PER_MINUTE, MS_PER_SECOND} from '@shared/time';
+
+import type {AllStepsLine, ChannelInAllStepsEffect, WithoutChannelInAllStepsEffect} from '@/data/chaseAllSteps';
+import {holdSeconds} from '@/data/chaseHold';
 
 /** what chaseErrors found, in the UI language; the shortest hold in seconds, as the editor shows it */
 export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
@@ -72,5 +75,48 @@ export function chaseRowErrorMessage(error: ChaseValueError): MessageDescriptor 
       const maxValue = DMX_MAX_VALUE;
       return msg`Value: a whole number from ${minValue} to ${maxValue}`;
     }
+  }
+}
+
+function addLineMessage(channel: number, done: boolean, {addedCount, stepCount}: ChannelInAllStepsEffect) {
+  if (addedCount === 0) {
+    return msg`Every step already sets channel ${channel}`;
+  }
+  return done
+    ? msg`Added channel ${channel} to ${addedCount} of ${plural(stepCount, {one: '# step', other: '# steps'})}`
+    : msg`Adds channel ${channel} to ${addedCount} of ${plural(stepCount, {one: '# step', other: '# steps'})}`;
+}
+
+function removeLineMessage(channel: number, done: boolean, effect: WithoutChannelInAllStepsEffect) {
+  const {removedCount, emptiedStepIndexes} = effect;
+  const emptiedCount = emptiedStepIndexes.length;
+  const emptiedSteps = emptiedStepIndexes.map((index) => index + 1).join(', ');
+  if (emptiedCount === 0) {
+    return done
+      ? msg`Removed channel ${channel} from ${plural(removedCount, {one: '# step', other: '# steps'})}`
+      : msg`Removes channel ${channel} from ${plural(removedCount, {one: '# step', other: '# steps'})}`;
+  }
+  return done
+    ? msg`Removed channel ${channel} from ${plural(removedCount, {one: '# step', other: '# steps'})}; ${plural(emptiedCount, {one: `step ${emptiedSteps} is`, other: `steps ${emptiedSteps} are`})} left without channels`
+    : msg`Removes channel ${channel} from ${plural(removedCount, {one: '# step', other: '# steps'})}; ${plural(emptiedCount, {one: `step ${emptiedSteps} would be`, other: `steps ${emptiedSteps} would be`})} left without channels`;
+}
+
+/** what the All steps panel says: what the hovered action would do, or what the clicked one did */
+export function allStepsLineMessage(line: AllStepsLine): MessageDescriptor {
+  switch (line.action) {
+    case 'hold': {
+      const {changedCount, holdMs} = line.effect;
+      if (changedCount === 0) {
+        const hold = holdSeconds(holdMs);
+        return msg`Every step already holds ${hold} s`;
+      }
+      return line.done
+        ? msg`Set the hold of ${plural(changedCount, {one: '# step', other: '# steps'})}`
+        : msg`Sets the hold of ${plural(changedCount, {one: '# step', other: '# steps'})}`;
+    }
+    case 'add':
+      return addLineMessage(line.channel, line.done, line.effect);
+    case 'remove':
+      return removeLineMessage(line.channel, line.done, line.effect);
   }
 }

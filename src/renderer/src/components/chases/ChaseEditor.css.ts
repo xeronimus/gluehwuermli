@@ -1,6 +1,12 @@
 import {style} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
+import {
+  NARROW_STEP_EDITOR,
+  STEP_EDITOR_COLUMNS,
+  STEP_EDITOR_COLUMN_GAP,
+  STEP_EDITOR_INSET
+} from './ChaseStepEditor.css';
 
 /** below the chase rows, as wide as the view */
 export const chaseEditor = style({
@@ -13,6 +19,36 @@ export const chaseEditor = style({
   background: vars.colors.surface,
   border: `1px solid ${vars.colors.focusBorder}`,
   borderRadius: vars.constants.radiusMd
+});
+
+/**
+ * title, name and repeat on the left, the All steps panel on the right: the step editor's columns, inset by its padding
+ * and border, so the panel has the fill panel's width and right edge. Below the step editor's breakpoint the panel goes
+ * under the repeat field (inset on both sides there, see allStepsPanel)
+ */
+export const editorTop = style({
+  alignSelf: 'stretch',
+  display: 'grid',
+  gridTemplateColumns: STEP_EDITOR_COLUMNS,
+  gridTemplateAreas: '"fields allSteps"',
+  alignItems: 'start',
+  gap: `12px ${STEP_EDITOR_COLUMN_GAP}`,
+  paddingRight: STEP_EDITOR_INSET,
+  '@media': {
+    [NARROW_STEP_EDITOR]: {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+      gridTemplateAreas: '"fields" "allSteps"',
+      paddingRight: 0
+    }
+  }
+});
+
+export const editorFields = style({
+  gridArea: 'fields',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '12px'
 });
 
 export const editorTitle = style({
