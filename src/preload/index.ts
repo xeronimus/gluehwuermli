@@ -22,6 +22,7 @@ const preloadBridge: PreloadBridge = {
   disconnect: () => ipcRenderer.invoke(IpcChannel.DISCONNECT),
   getStatus: () => ipcRenderer.invoke(IpcChannel.GET_STATUS),
   getRememberedPort: () => ipcRenderer.invoke(IpcChannel.GET_REMEMBERED_PORT),
+  getChannelValues: () => ipcRenderer.invoke(IpcChannel.GET_CHANNEL_VALUES),
   onStatusChanged: (listener) => {
     const handler = (_event: IpcRendererEvent, status: DmxOutputStatus) => listener(status);
     ipcRenderer.on(IpcChannel.STATUS_CHANGED, handler);

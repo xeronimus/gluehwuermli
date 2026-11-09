@@ -16,6 +16,8 @@ export const IpcChannel = {
   DISCONNECT: 'dmx:disconnect',
   GET_STATUS: 'dmx:get-status',
   GET_REMEMBERED_PORT: 'dmx:get-remembered-port',
+  /** the whole universe as main holds it (after the caps), asked once on load; allowed in Show mode too */
+  GET_CHANNEL_VALUES: 'dmx:get-channel-values',
   GET_PROJECT_STATUS: 'project:get-status',
   /** Setup mode only: a save dialog for the new file, then opens the empty project */
   CREATE_PROJECT: 'project:create',
