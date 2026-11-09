@@ -92,8 +92,8 @@ export const fillButton = style({
   display: 'inline-flex'
 });
 
-/** what the hovered button would do */
-export const fillPreview = style({
+/** what the hovered button would do, at the bottom of a tool panel; the All steps panel also says what it did */
+export const toolPanelLine = style({
   minHeight: '1lh',
   margin: 0,
   color: vars.colors.textSecondary,

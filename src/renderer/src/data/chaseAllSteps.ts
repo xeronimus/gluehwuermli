@@ -112,3 +112,17 @@ export function withoutChannelInAllStepsEffect(
     shownChangedIds: shownStep ? shownStep.values.filter(isOnChannel).map(({id}) => id) : []
   };
 }
+
+/**
+ * what the All steps panel says below its actions: what the hovered action would do, or, after a click, what it did
+ * (until the next hover)
+ */
+export type AllStepsLine =
+  | {readonly action: 'hold'; readonly done: boolean; readonly effect: HoldOfAllStepsEffect}
+  | {readonly action: 'add'; readonly done: boolean; readonly channel: number; readonly effect: ChannelInAllStepsEffect}
+  | {
+      readonly action: 'remove';
+      readonly done: boolean;
+      readonly channel: number;
+      readonly effect: WithoutChannelInAllStepsEffect;
+    };
