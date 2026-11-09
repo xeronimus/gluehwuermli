@@ -482,3 +482,13 @@ export const parseUniverseValues = (payload: unknown): UniverseValues | undefine
 
 export const parseChannelsChanged = (payload: unknown): ChannelsChanged | undefined =>
   Value.Check(ChannelsChangedSchema, payload) ? payload : undefined;
+
+export const parseDmxOutputStatus = (payload: unknown): DmxOutputStatus | undefined =>
+  Value.Check(DmxOutputStatusSchema, payload) ? payload : undefined;
+
+export const parseLockStatus = (payload: unknown): LockStatus | undefined =>
+  Value.Check(LockStatusSchema, payload) ? payload : undefined;
+
+/** the shape only: the setup's own validation ran in main when the file was opened */
+export const parseProjectStatus = (payload: unknown): ProjectStatus | undefined =>
+  Value.Check(ProjectStatusSchema, payload) ? payload : undefined;

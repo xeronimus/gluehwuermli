@@ -11,6 +11,7 @@ import type {
   OpenDataFolderResult,
   PasswordResult,
   ProjectOpenResult,
+  ProjectPathRequest,
   ProjectStatus,
   RecentProject,
   RememberedPort,
@@ -54,7 +55,7 @@ export interface PreloadBridge {
   /** returns the function that removes the listener again */
   onProjectChanged: (listener: (status: ProjectStatus) => void) => () => void;
   /** returns the function that removes the listener again */
-  onProjectOpenRequested: (listener: (path: string) => void) => () => void;
+  onProjectOpenRequested: (listener: (request: ProjectPathRequest) => void) => () => void;
   getDataFolder: () => Promise<DataFolder>;
   /** a folder that can't be opened is a `failed` result, not a rejection; refused in Show mode */
   openDataFolder: () => Promise<OpenDataFolderResult>;

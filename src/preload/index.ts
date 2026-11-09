@@ -52,7 +52,7 @@ const preloadBridge: PreloadBridge = {
     };
   },
   onProjectOpenRequested: (listener) => {
-    const handler = (_event: IpcRendererEvent, request: ProjectPathRequest) => listener(request.path);
+    const handler = (_event: IpcRendererEvent, request: ProjectPathRequest) => listener(request);
     ipcRenderer.on(IpcChannel.PROJECT_OPEN_REQUESTED, handler);
     return () => {
       ipcRenderer.removeListener(IpcChannel.PROJECT_OPEN_REQUESTED, handler);
