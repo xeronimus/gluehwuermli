@@ -2,6 +2,8 @@ import {ReactNode} from 'react';
 
 import {useLingui} from '@lingui/react/macro';
 
+import {projectNameOf} from '@shared/projects';
+
 import fireflyLogo from '@assets/favicon/favicon-96x96.png';
 
 import {outputStatusMessage} from '@/i18n/messages/outputMessages';
@@ -28,23 +30,34 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const outputStatus = useAppStore((state) => state.outputStatus);
   const error = useAppStore((state) => state.outputError);
 
+  const projectName = useAppStore((state) =>
+    state.project.type === 'open' ? projectNameOf(state.project.project.path) : ''
+  );
+
   return (
     <header className={outputBar}>
-      <img className={appLogo} src={fireflyLogo} alt="" />
-      <span className={appTitle}>Glühwürmli</span>
-      {viewToggle}
-      <LockIndicator onClick={onShowSettings} />
-      <span className={spacer} />
-      <button
-        className={statusVariants[outputStatus.type]}
-        onClick={onShowSettings}
-        title={t`Open the Settings to choose the port`}
-      >
-        {i18n._(outputStatusMessage(outputStatus))}
-      </button>
-      <OutputConnection />
-      {error && <span className={outputError}>{i18n._(error)}</span>}
-      <EmergencyOffButton />
+      <div>
+        <img className={appLogo} src={fireflyLogo} alt="" />
+        <span className={appTitle}>Glühwürmli</span>
+        <span>{projectName}</span>
+      </div>
+      <div>
+        {viewToggle}
+        <LockIndicator onClick={onShowSettings} />
+      </div>
+      <div>
+        <span className={spacer} />
+        <button
+          className={statusVariants[outputStatus.type]}
+          onClick={onShowSettings}
+          title={t`Open the Settings to choose the port`}
+        >
+          {i18n._(outputStatusMessage(outputStatus))}
+        </button>
+        <OutputConnection />
+        {error && <span className={outputError}>{i18n._(error)}</span>}
+        <EmergencyOffButton />
+      </div>
     </header>
   );
 };

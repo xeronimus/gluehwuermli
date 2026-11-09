@@ -1,14 +1,20 @@
-import {style, styleVariants} from '@vanilla-extract/css';
+import {globalStyle, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
 export const outputBar = style({
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
-  padding: '12px 24px',
+  justifyContent: 'space-between',
   background: vars.colors.surface,
   borderBottom: `1px solid ${vars.colors.border}`
+});
+
+globalStyle(`${outputBar} > *`, {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  padding: '12px 24px'
 });
 
 export const appLogo = style({
