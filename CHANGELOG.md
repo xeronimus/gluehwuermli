@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-09
+
 ### Added
 
 - An "All steps" panel at the top of the chase editor changes every step at once: it adds a channel (at 0, in the steps
@@ -235,7 +237,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.2...v0.2.3
