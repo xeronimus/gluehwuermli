@@ -23,7 +23,6 @@ import {
   addPreset,
   presetChannelLabel,
   presetChannelName,
-  presetColorField,
   presetColumn,
   presetColumns,
   presetHeader,
@@ -62,14 +61,13 @@ const FixturePresetColumns = ({draft, onChange}: FixturePresetColumnsProps) => {
                   aria-label={t`Name of preset ${presetNumber}`}
                   onChange={(event) => onChange(withPresetName(draft, presetIndex, event.target.value))}
                 />
-                <span className={presetColorField}>
-                  <ColorField
-                    color={preset.color}
-                    label={t`Color of preset ${presetNumber}`}
-                    title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
-                    onChange={(color) => onChange(withPresetColor(draft, presetIndex, color))}
-                  />
-                </span>
+                <ColorField
+                  color={preset.color}
+                  label={t`Color of preset ${presetNumber}`}
+                  title={t`The color of the dot on its button, a hex value like #ff00ff; empty for none`}
+                  onChange={(color) => onChange(withPresetColor(draft, presetIndex, color))}
+                />
+
                 <MoveButtons
                   index={presetIndex}
                   count={presetCount}

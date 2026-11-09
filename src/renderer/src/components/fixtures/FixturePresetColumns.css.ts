@@ -1,4 +1,4 @@
-import {style, styleVariants} from '@vanilla-extract/css';
+import {globalStyle, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
@@ -19,7 +19,7 @@ export const presetsSection = style({
  * half the room between two presets: each column has it on both sides, so the border between two of them lies in the
  * middle of that room
  */
-const PRESET_SPACING = '12px';
+const PRESET_SPACING = '24px';
 
 export const presetColumns = style({
   display: 'flex',
@@ -38,6 +38,11 @@ export const presetColumn = style({
   flexShrink: 0,
   padding: `0 ${PRESET_SPACING}`,
   borderLeft: `1px solid ${vars.colors.border}`
+});
+
+globalStyle(`${presetColumn}:first-child`, {
+  borderLeft: 'none',
+  paddingLeft: '2px'
 });
 
 export const presetHeader = style({
@@ -65,11 +70,6 @@ export const presetValue = style({
   selectors: {
     '&:hover': {outlineColor: vars.colors.focusBorder}
   }
-});
-
-/** room for `#` and six hex digits, and the swatch */
-export const presetColorField = style({
-  width: '100px'
 });
 
 /** the channel's color dot, if it has a color, and its name */
