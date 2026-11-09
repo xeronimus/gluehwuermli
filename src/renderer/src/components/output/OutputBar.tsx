@@ -11,19 +11,28 @@ import {useAppStore} from '@/state/store';
 
 import EmergencyOffButton from './EmergencyOffButton';
 import LockIndicator from './LockIndicator';
-import {appLogo, appTitle, outputBar, outputError, spacer, statusVariants} from './OutputBar.css';
+import {
+  appLogo,
+  appTitle,
+  barEnd,
+  barGroup,
+  openProjectName,
+  outputBar,
+  outputError,
+  statusVariants
+} from './OutputBar.css';
 import OutputConnection from './OutputConnection';
 
 interface OutputBarProps {
-  /** switches between the app's views, shown next to the title */
+  /** switches between the app's views, shown in the middle of the bar */
   viewToggle: ReactNode;
   /** a click on a lock reminder or the output status opens the Settings view, where their controls are */
   onShowSettings: () => void;
 }
 
 /**
- * the view switch, what is unlocked, the status of the DMX output, Connect / Disconnect and Emergency off; the port is
- * chosen in the Settings view
+ * the open project, the view switch, what is unlocked, the status of the DMX output, Connect / Disconnect and
+ * Emergency off; the port is chosen in the Settings view
  */
 const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
   const {t, i18n} = useLingui();
@@ -36,17 +45,20 @@ const OutputBar = ({viewToggle, onShowSettings}: OutputBarProps) => {
 
   return (
     <header className={outputBar}>
-      <div>
+      <div className={barGroup}>
         <img className={appLogo} src={fireflyLogo} alt="" />
         <span className={appTitle}>Glühwürmli</span>
-        <span>{projectName}</span>
+        {projectName && (
+          <span className={openProjectName} title={projectName}>
+            {projectName}
+          </span>
+        )}
       </div>
-      <div>
+      <div className={barGroup}>
         {viewToggle}
         <LockIndicator onClick={onShowSettings} />
       </div>
-      <div>
-        <span className={spacer} />
+      <div className={barEnd}>
         <button
           className={statusVariants[outputStatus.type]}
           onClick={onShowSettings}
