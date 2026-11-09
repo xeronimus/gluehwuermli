@@ -133,7 +133,13 @@ const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onD
       <ChaseFillPanel
         preview={preview}
         onTake={onTake}
-        onPreview={(values) => setPreview(values && stepFillEffect(step.values, values))}
+        onPreview={(values) => {
+          setPreview(values && stepFillEffect(step.values, values));
+          // the last take's rows are forgotten once a preview starts, so leaving it doesn't flash them again
+          if (values) {
+            setLastTake((last) => (last.valueIds.length === 0 ? last : {...last, valueIds: []}));
+          }
+        }}
       />
     </div>
   );
