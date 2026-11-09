@@ -18,6 +18,7 @@ change bumps the minor version and everything else the patch version.
   from" panel beside the table (above it on a narrow window) takes the current values of one fixture or of all, a scene
   or a preset in one click; hovering a button marks the rows it would change, and the rows a click changed flash. Save
   and Cancel stay in view while the chase editor is open (#90)
+- A chase's Start button is in the accent color, the important action of its row
 - The presets in the fixture editor have more room between them, and the channel under the mouse is outlined like a
   row in the channels tab
 - Radio buttons (the repeat of a chase) look like the app's checkboxes: a dark circle, a ring and a dot in the accent
