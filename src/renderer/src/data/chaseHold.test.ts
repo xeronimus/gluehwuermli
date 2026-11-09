@@ -1,4 +1,11 @@
-import {HOLD_INPUT_STEP_SECONDS, HOLD_MAX_SECONDS, HOLD_MIN_SECONDS, holdMsOf, holdSeconds} from './chaseHold';
+import {
+  HOLD_INPUT_STEP_SECONDS,
+  HOLD_MAX_SECONDS,
+  HOLD_MIN_SECONDS,
+  holdMsOf,
+  holdSeconds,
+  isValidHoldText
+} from './chaseHold';
 
 test('a hold reads in seconds with two decimals', () => {
   expect(holdSeconds(500)).toBe('0.50');
@@ -26,4 +33,13 @@ test('the hold field takes hundredths from the shortest to the longest hold', ()
   expect(HOLD_INPUT_STEP_SECONDS).toBe(0.01);
   expect(HOLD_MIN_SECONDS).toBe(0.05);
   expect(HOLD_MAX_SECONDS).toBe(3600);
+});
+
+test('a typed hold is valid from the shortest to the longest hold', () => {
+  expect(isValidHoldText('0.05')).toBe(true);
+  expect(isValidHoldText('3600')).toBe(true);
+  expect(isValidHoldText('0.04')).toBe(false);
+  expect(isValidHoldText('3600.01')).toBe(false);
+  expect(isValidHoldText('')).toBe(false);
+  expect(isValidHoldText('abc')).toBe(false);
 });

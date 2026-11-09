@@ -204,6 +204,48 @@ export const withNewStepValue = (draft: ChaseDraft, stepIndex: number, id: strin
     ])
   }));
 
+/** whether one of the step's rows is on the channel; a typed `010` is channel 10 */
+export const setsChannel = (step: ChaseStepDraft, channel: number): boolean =>
+  step.values.some((row) => numberOf(row.channel) === channel);
+
+/**
+ * the channel at 0 in every step that doesn't set it yet, sorted in; a step that sets it keeps its value. The new rows'
+ * ids come from `newId`, by the step's id: the caller makes them once, so a change that runs twice adds the same rows
+ */
+export const withChannelInAllSteps = (
+  draft: ChaseDraft,
+  channel: number,
+  newId: (stepId: string) => string
+): ChaseDraft =>
+  withSteps(
+    draft,
+    draft.steps.map((step) =>
+      setsChannel(step, channel)
+        ? step
+        : {
+            ...step,
+            values: sortedByChannel([
+              ...step.values,
+              {id: newId(step.id), channel: String(channel), value: String(DMX_MIN_VALUE)}
+            ])
+          }
+    )
+  );
+
+/** every step without its rows on the channel; a step left without any shows the hint of an empty step */
+export const withoutChannelInAllSteps = (draft: ChaseDraft, channel: number): ChaseDraft =>
+  withSteps(
+    draft,
+    draft.steps.map((step) => ({...step, values: step.values.filter((row) => numberOf(row.channel) !== channel)}))
+  );
+
+/** every step holding as long, shown with two decimals like a stored hold */
+export const withHoldOfAllSteps = (draft: ChaseDraft, holdMs: number): ChaseDraft =>
+  withSteps(
+    draft,
+    draft.steps.map((step) => ({...step, hold: holdSeconds(holdMs)}))
+  );
+
 /** a fixture channel on an address, for a step value's label */
 export interface FixtureChannelLabel {
   readonly fixtureName: string;

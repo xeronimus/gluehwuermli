@@ -25,7 +25,8 @@ export interface ChannelBeingTyped {
   readonly channel: string;
 }
 
-const channelAt = (fixture: Fixture, address: number): FixtureChannel | undefined =>
+/** the fixture's channel on the address; none if the fixture doesn't use it */
+export const channelAt = (fixture: Fixture, address: number): FixtureChannel | undefined =>
   fixture.channels.find((channel) => channelAddress(fixture, channel) === address);
 
 /**
