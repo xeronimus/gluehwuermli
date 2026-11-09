@@ -2,17 +2,20 @@ import {createVar, style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-/** the color field with a swatch beside it that opens the color picker */
+/** the color field with a swatch beside it that opens the color picker; as wide as they are, wherever it stands */
 export const colorField = style({
   display: 'flex',
   alignItems: 'center',
-  gap: '6px',
-  width: '100%'
+  gap: '6px'
 });
 
+/** the left and right padding and border of an input (global.css.ts), around the text */
+const INPUT_HORIZONTAL_FRAME = '18px';
+
+/** wide enough for `#` and six hex digits: `ch` is a digit of the field's own (mono) font */
 export const colorInput = style({
-  width: '100%',
-  minWidth: 0,
+  flexShrink: 0,
+  width: `calc(7ch + ${INPUT_HORIZONTAL_FRAME})`,
   boxSizing: 'border-box',
   fontFamily: vars.fonts.mono
 });

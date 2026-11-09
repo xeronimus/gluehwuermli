@@ -54,11 +54,6 @@ export const nameFields = style({
   gap: '12px'
 });
 
-/** room for `#` and six hex digits, and the swatch */
-export const colorFieldWidth = style({
-  width: '100px'
-});
-
 export const nameInput = style({
   width: '240px'
 });
