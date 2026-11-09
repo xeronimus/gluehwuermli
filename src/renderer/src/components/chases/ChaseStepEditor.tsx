@@ -24,8 +24,8 @@ import ChaseFillPanel from './ChaseFillPanel';
 import {emptyStepHint, errorList, stepEditor, stepMain} from './ChaseStepEditor.css';
 import ChaseStepHeader from './ChaseStepHeader';
 import ChaseStepTable from './ChaseStepTable';
-import type {StepRowMark} from './ChaseStepTable.css';
 import {useFocusKept} from './useFocusKept';
+import type {StepRowMarks} from './useStepRowMarks';
 
 interface ChaseStepEditorProps {
   step: ChaseStepDraft;
@@ -34,40 +34,34 @@ interface ChaseStepEditorProps {
   count: number;
   /** what is wrong with this step */
   errors: readonly ChaseError[];
+  /** the marks on the step's rows, kept above the tabs */
+  rowMarks: StepRowMarks;
   onChange: (change: (draft: ChaseDraft) => ChaseDraft) => void;
   /** the tabs pick the step shown after these */
   onDuplicate: () => void;
   onDelete: () => void;
 }
 
-/** the rows the last take changed or added, and how many takes so far: each take starts their flash again */
-interface LastTake {
-  readonly valueIds: readonly string[];
-  readonly count: number;
-}
-
-/** a row a hovered button would change is marked; else it flashes if the last take changed it */
-function rowMarkOf(valueId: string, preview: StepFillEffect | undefined, lastTake: LastTake): StepRowMark {
-  if (preview) {
-    return preview.changedIds.includes(valueId) ? 'affected' : 'none';
-  }
-  if (!lastTake.valueIds.includes(valueId)) {
-    return 'none';
-  }
-  return lastTake.count % 2 === 0 ? 'flashEven' : 'flashOdd';
-}
-
 /**
  * one step of the chase, the panel of its tab: its header, the channels it sets as a table grouped by fixture, and the
  * fill panel beside it
  */
-const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onDelete}: ChaseStepEditorProps) => {
+const ChaseStepEditor = ({
+  step,
+  index,
+  count,
+  errors,
+  rowMarks,
+  onChange,
+  onDuplicate,
+  onDelete
+}: ChaseStepEditorProps) => {
   const {i18n} = useLingui();
   const fixtures = useAppStore(selectFixtures);
   const {editorRef, keepFocusOn} = useFocusKept<HTMLDivElement>();
   const [beingTyped, setBeingTyped] = useState<ChannelBeingTyped | undefined>(undefined);
+  // what the hovered fill button would do, for the panel's text; the rows it marks are in rowMarks
   const [preview, setPreview] = useState<StepFillEffect | undefined>(undefined);
-  const [lastTake, setLastTake] = useState<LastTake>({valueIds: [], count: 0});
   const groups = chaseStepGroups(fixtures, step.values, beingTyped);
   const ownErrors = stepWideErrors(errors);
 
@@ -89,7 +83,7 @@ const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onD
       return withStepValuesTaken(draft, index, values, () => addedIds[next++] ?? crypto.randomUUID());
     });
     setPreview(undefined);
-    setLastTake((last) => ({valueIds: [...effect.changedIds, ...addedIds], count: last.count + 1}));
+    rowMarks.took({stepId: step.id, valueIds: [...effect.changedIds, ...addedIds]});
   };
 
   return (
@@ -112,7 +106,7 @@ const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onD
             groups={groups}
             stepIndex={index}
             errors={errors}
-            markOf={(valueId) => rowMarkOf(valueId, preview, lastTake)}
+            markOf={(valueId) => rowMarks.markOf(step.id, valueId)}
             onChange={onChange}
             onChannelFocus={({id, channel}) => setBeingTyped({id, channel})}
             onChannelLeft={onChannelLeft}
@@ -134,11 +128,9 @@ const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onD
         preview={preview}
         onTake={onTake}
         onPreview={(values) => {
-          setPreview(values && stepFillEffect(step.values, values));
-          // the last take's rows are forgotten once a preview starts, so leaving it doesn't flash them again
-          if (values) {
-            setLastTake((last) => (last.valueIds.length === 0 ? last : {...last, valueIds: []}));
-          }
+          const effect = values && stepFillEffect(step.values, values);
+          setPreview(effect);
+          rowMarks.preview(effect && {stepId: step.id, valueIds: effect.changedIds});
         }}
       />
     </div>

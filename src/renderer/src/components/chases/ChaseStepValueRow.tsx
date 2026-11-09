@@ -5,6 +5,7 @@ import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from 
 
 import {numberOf} from '@/data/channelValuesDraft';
 import {type ChaseDraft, type ChaseStepValueDraft, withStepValueChange, withoutStepValues} from '@/data/chaseDraft';
+import type {StepRowMark} from '@/data/chaseStepMarks';
 import {type ChaseStepRow, positionNameOf} from '@/data/chaseStepTable';
 import {chaseRowErrorMessage} from '@/i18n/messages/chaseMessages';
 
@@ -13,7 +14,6 @@ import ColorDot from '../commons/ColorDot';
 import ValueBar from '../commons/ValueBar';
 import {RemoveIcon} from '../commons/icons';
 import {
-  type StepRowMark,
   cell,
   channelName,
   dotSlot,

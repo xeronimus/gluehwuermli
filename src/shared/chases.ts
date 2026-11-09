@@ -67,7 +67,8 @@ const isValidRepeat = (repeat: ChaseRepeat): boolean =>
   repeat.type !== 'times' ||
   (Number.isInteger(repeat.count) && repeat.count >= CHASE_REPEAT_MIN && repeat.count <= CHASE_REPEAT_MAX);
 
-const isValidHold = (holdMs: number): boolean =>
+/** a step's hold, in milliseconds: whole, from the shortest to the longest hold */
+export const isValidHold = (holdMs: number): boolean =>
   Number.isInteger(holdMs) && holdMs >= CHASE_HOLD_MIN_MS && holdMs <= CHASE_HOLD_MAX_MS;
 
 /** what is wrong with one step, each problem once; the editor shows them at the step */

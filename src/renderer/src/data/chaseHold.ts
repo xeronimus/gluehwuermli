@@ -1,3 +1,4 @@
+import {isValidHold} from '@shared/chases';
 import {CHASE_HOLD_MAX_MS, CHASE_HOLD_MIN_MS} from '@shared/ipc';
 import {MS_PER_SECOND} from '@shared/time';
 
@@ -27,3 +28,6 @@ export const holdSeconds = (holdMs: number): string => (holdMs / MS_PER_SECOND).
  */
 export const holdMsOf = (holdText: string): number =>
   Math.round((numberOf(holdText) * MS_PER_SECOND) / HOLD_RESOLUTION_MS) * HOLD_RESOLUTION_MS;
+
+/** whether the hold typed would be a valid step hold once stored; a blank field isn't */
+export const isValidHoldText = (holdText: string): boolean => isValidHold(holdMsOf(holdText));
