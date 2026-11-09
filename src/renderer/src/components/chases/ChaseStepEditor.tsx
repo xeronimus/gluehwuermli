@@ -1,28 +1,31 @@
-import {useLayoutEffect, useRef} from 'react';
+import {useState} from 'react';
 
 import {Trans, useLingui} from '@lingui/react/macro';
 
 import type {ChaseError} from '@shared/chases';
+import type {SetChannelRequest} from '@shared/ipc';
 
 import {
   type ChaseDraft,
   type ChaseStepDraft,
   isSortedByChannel,
   withNewStepValue,
-  withStepHold,
-  withStepMoved,
   withStepValuesSorted
 } from '@/data/chaseDraft';
-import {HOLD_INPUT_STEP_SECONDS, HOLD_MAX_SECONDS, HOLD_MIN_SECONDS} from '@/data/chaseHold';
-import {withStepValuesTaken} from '@/data/chaseStepFill';
+import {type StepFillEffect, stepFillEffect, withStepValuesTaken} from '@/data/chaseStepFill';
+import {type ChannelBeingTyped, chaseStepGroups, stepWideErrors} from '@/data/chaseStepTable';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
+import {selectFixtures} from '@/state/fixtures/fixturesSelectors';
+import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import MoveButtons from '../commons/MoveButtons';
-import {DeleteIcon, DuplicateIcon} from '../commons/icons';
-import {errorList, holdField, holdInput, stepEditor, stepHeader, stepValues} from './ChaseEditor.css';
-import ChaseStepFill from './ChaseStepFill';
-import ChaseStepValueRow from './ChaseStepValueRow';
+import {AddIcon} from '../commons/icons';
+import ChaseFillPanel from './ChaseFillPanel';
+import {emptyStepHint, errorList, stepEditor, stepMain} from './ChaseStepEditor.css';
+import ChaseStepHeader from './ChaseStepHeader';
+import ChaseStepTable from './ChaseStepTable';
+import type {StepRowMark} from './ChaseStepTable.css';
+import {useFocusKept} from './useFocusKept';
 
 interface ChaseStepEditorProps {
   step: ChaseStepDraft;
@@ -37,91 +40,107 @@ interface ChaseStepEditorProps {
   onDelete: () => void;
 }
 
-/** one step of the chase, the panel of its tab: its hold, the channels it sets, moving, duplicating and deleting it */
+/** the rows the last take changed or added, and how many takes so far: each take starts their flash again */
+interface LastTake {
+  readonly valueIds: readonly string[];
+  readonly count: number;
+}
+
+/** a row a hovered button would change is marked; else it flashes if the last take changed it */
+function rowMarkOf(valueId: string, preview: StepFillEffect | undefined, lastTake: LastTake): StepRowMark {
+  if (preview) {
+    return preview.changedIds.includes(valueId) ? 'affected' : 'none';
+  }
+  if (!lastTake.valueIds.includes(valueId)) {
+    return 'none';
+  }
+  return lastTake.count % 2 === 0 ? 'flashEven' : 'flashOdd';
+}
+
+/**
+ * one step of the chase, the panel of its tab: its header, the channels it sets as a table grouped by fixture, and the
+ * fill panel beside it
+ */
 const ChaseStepEditor = ({step, index, count, errors, onChange, onDuplicate, onDelete}: ChaseStepEditorProps) => {
-  const {t, i18n} = useLingui();
-  const stepNumberShown = index + 1;
-  // where the focus went when a channel field was left: sorting may move that element in the list (this row's value
-  // field, reached with Tab), and a moved element loses its focus in the browser
-  const focusAfterSort = useRef<HTMLElement | undefined>(undefined);
+  const {i18n} = useLingui();
+  const fixtures = useAppStore(selectFixtures);
+  const {editorRef, keepFocusOn} = useFocusKept<HTMLDivElement>();
+  const [beingTyped, setBeingTyped] = useState<ChannelBeingTyped | undefined>(undefined);
+  const [preview, setPreview] = useState<StepFillEffect | undefined>(undefined);
+  const [lastTake, setLastTake] = useState<LastTake>({valueIds: [], count: 0});
+  const groups = chaseStepGroups(fixtures, step.values, beingTyped);
+  const ownErrors = stepWideErrors(errors);
 
-  useLayoutEffect(() => {
-    const target = focusAfterSort.current;
-    focusAfterSort.current = undefined;
-    if (target?.isConnected && document.activeElement !== target) {
-      target.focus();
-    }
-  });
-
-  // a channel is sorted in once it is left, not while it is typed
+  // a channel is sorted in and grouped once it is left, not while it is typed
   const onChannelLeft = (nextFocus: EventTarget | null) => {
-    if (isSortedByChannel(step.values)) {
-      return;
+    keepFocusOn(nextFocus);
+    setBeingTyped(undefined);
+    if (!isSortedByChannel(step.values)) {
+      onChange((draft) => withStepValuesSorted(draft, index));
     }
-    focusAfterSort.current = nextFocus instanceof HTMLElement ? nextFocus : undefined;
-    onChange((draft) => withStepValuesSorted(draft, index));
+  };
+
+  const onTake = (values: readonly SetChannelRequest[]) => {
+    const effect = stepFillEffect(step.values, values);
+    // made here, not in the change: a change may run twice (React's strict mode), and must add the same rows each time
+    const addedIds = Array.from({length: effect.addedCount}, () => crypto.randomUUID());
+    onChange((draft) => {
+      let next = 0;
+      return withStepValuesTaken(draft, index, values, () => addedIds[next++] ?? crypto.randomUUID());
+    });
+    setPreview(undefined);
+    setLastTake((last) => ({valueIds: [...effect.changedIds, ...addedIds], count: last.count + 1}));
   };
 
   return (
-    <div className={stepEditor}>
-      <div className={stepHeader}>
-        <label className={holdField}>
-          <Trans>Hold</Trans>
-          <input
-            className={holdInput}
-            type="number"
-            min={HOLD_MIN_SECONDS}
-            max={HOLD_MAX_SECONDS}
-            step={HOLD_INPUT_STEP_SECONDS}
-            value={step.hold}
-            onChange={(event) => {
-              const hold = event.target.value;
-              onChange((draft) => withStepHold(draft, index, hold));
-            }}
-          />
-          <Trans>s</Trans>
-        </label>
-        <MoveButtons
-          index={index}
-          count={count}
-          orientation="horizontal"
-          onMove={(direction) => onChange((draft) => withStepMoved(draft, index, direction))}
-          titles={{
-            earlier: t`Move step ${stepNumberShown} to the left`,
-            later: t`Move step ${stepNumberShown} to the right`
-          }}
-        />
-        <Button variant="icon" onClick={onDuplicate} title={t`Duplicate step ${stepNumberShown}`}>
-          <DuplicateIcon />
-        </Button>
-        <Button variant="icon" onClick={onDelete} title={t`Delete step ${stepNumberShown}`}>
-          <DeleteIcon />
-        </Button>
-      </div>
-      <ul className={stepValues}>
-        {step.values.map((value, valueIndex) => (
-          // by id: the rows are sorted by channel when one is left, and each row moves with its fields
-          <ChaseStepValueRow
-            key={value.id}
-            value={value}
+    <div className={stepEditor} ref={editorRef}>
+      <ChaseStepHeader
+        hold={step.hold}
+        index={index}
+        count={count}
+        onChange={onChange}
+        onDuplicate={onDuplicate}
+        onDelete={onDelete}
+      />
+      <div className={stepMain}>
+        {step.values.length === 0 ? (
+          <p className={emptyStepHint}>
+            <Trans>This step sets no channel yet: fill it from the panel, or add a channel.</Trans>
+          </p>
+        ) : (
+          <ChaseStepTable
+            groups={groups}
             stepIndex={index}
-            valueIndex={valueIndex}
+            errors={errors}
+            markOf={(valueId) => rowMarkOf(valueId, preview, lastTake)}
             onChange={onChange}
+            onChannelFocus={({id, channel}) => setBeingTyped({id, channel})}
             onChannelLeft={onChannelLeft}
           />
-        ))}
-      </ul>
-      <ChaseStepFill
-        onAddChannel={() => onChange((draft) => withNewStepValue(draft, index, crypto.randomUUID()))}
-        onTake={(values) => onChange((draft) => withStepValuesTaken(draft, index, values, () => crypto.randomUUID()))}
+        )}
+        <Button size="compact" onClick={() => onChange((draft) => withNewStepValue(draft, index, crypto.randomUUID()))}>
+          <AddIcon />
+          <Trans>Add channel</Trans>
+        </Button>
+        {ownErrors.length > 0 && (
+          <ul className={errorList}>
+            {ownErrors.map((error) => (
+              <li key={error.type}>{i18n._(chaseErrorMessage(error))}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <ChaseFillPanel
+        preview={preview}
+        onTake={onTake}
+        onPreview={(values) => {
+          setPreview(values && stepFillEffect(step.values, values));
+          // the last take's rows are forgotten once a preview starts, so leaving it doesn't flash them again
+          if (values) {
+            setLastTake((last) => (last.valueIds.length === 0 ? last : {...last, valueIds: []}));
+          }
+        }}
       />
-      {errors.length > 0 && (
-        <ul className={errorList}>
-          {errors.map((error) => (
-            <li key={error.type}>{i18n._(chaseErrorMessage(error))}</li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };

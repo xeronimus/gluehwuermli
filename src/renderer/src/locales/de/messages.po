@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "{addedCount} new, {changedCount} changed"
+msgstr "{addedCount} neu, {changedCount} geändert"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
@@ -145,7 +149,7 @@ msgstr "Füge für jeden Eintrag der Kanalliste des Geräts, den du steuern will
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Füge für jeden Eintrag der Liste, den du steuern willst, einen <0>Kanal</0> hinzu, benannt, wie du magst. Sein <1>Offset</1> ist seine Nummer in der Anleitung minus 1: Kanal 1 hat Offset 0, Kanal 2 Offset 1 und so weiter. Lass weg, was du nicht brauchst, Lücken sind kein Problem."
 
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Add channel"
 msgstr "Kanal hinzufügen"
@@ -182,6 +186,10 @@ msgstr "Adresse"
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
 msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Interface die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
+
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "All"
+msgstr "Alle"
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -223,7 +231,6 @@ msgstr "Knöpfe"
 msgid "by"
 msgstr "in Schritten von"
 
-#: src/renderer/src/components/chases/ChaseCurrentValuesPicker.tsx
 #: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/commons/PasswordForm.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
@@ -233,11 +240,20 @@ msgstr "in Schritten von"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Ch"
+msgstr "Ch"
+
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 #: src/renderer/src/components/settings/PasswordSection.tsx
 msgid "Change password"
 msgstr "Passwort ändern"
 
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Changes nothing"
+msgstr "Ändert nichts"
+
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
 #: src/renderer/src/components/chases/ChaseStepValueRow.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Channel"
@@ -307,6 +323,10 @@ msgstr "Kanalsperre an"
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Channel locks"
 msgstr "Kanalsperren"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Channel: a whole number from {firstChannel} to {lastChannel}"
+msgstr "Kanal: eine ganze Zahl von {firstChannel} bis {lastChannel}"
 
 #: src/renderer/src/components/App.tsx
 msgid "Channels"
@@ -522,6 +542,10 @@ msgstr "Projekt erstellen"
 msgid "Current password"
 msgstr "Aktuelles Passwort"
 
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Current values"
+msgstr "Aktuelle Werte"
+
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Data folder"
 msgstr "Datenordner"
@@ -530,7 +554,7 @@ msgstr "Datenordner"
 msgid "Delete {fixtureName}"
 msgstr "{fixtureName} löschen"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Delete step {stepNumberShown}"
 msgstr "Schritt {stepNumberShown} löschen"
 
@@ -566,7 +590,7 @@ msgstr "Das Gerät oder die Szene, die du gerade bearbeitest, verwerfen und das 
 msgid "Disconnect"
 msgstr "Trennen"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Duplicate step {stepNumberShown}"
 msgstr "Schritt {stepNumberShown} duplizieren"
 
@@ -637,6 +661,14 @@ msgstr "Erkunden"
 msgid "Fader"
 msgstr "Fader"
 
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Fill from"
+msgstr "Füllen aus"
+
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Fill the step"
+msgstr "Schritt füllen"
+
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Finding out what a device does"
 msgstr "Herausfinden, was ein Gerät macht"
@@ -652,10 +684,6 @@ msgstr "Geräte"
 #: src/renderer/src/components/fixtures/SceneFixtureChoices.tsx
 msgid "Fixtures in the scene"
 msgstr "Geräte in der Szene"
-
-#: src/renderer/src/components/chases/ChaseCurrentValuesPicker.tsx
-msgid "Fixtures whose current values to take"
-msgstr "Geräte, deren aktuelle Werte übernommen werden"
 
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Fixtures, presets and scenes can be changed, and the Channels view is open. Back to Show mode with Lock, after 10 minutes without input, or on restart."
@@ -697,7 +725,7 @@ msgstr "Höchster Wert von Kanal {row}"
 msgid "Hint"
 msgstr "Hinweis"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Hold"
 msgstr "Haltezeit"
 
@@ -813,11 +841,11 @@ msgstr "Preset {presetNumber} nach links verschieben"
 msgid "Move preset {presetNumber} to the right"
 msgstr "Preset {presetNumber} nach rechts verschieben"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Move step {stepNumberShown} to the left"
 msgstr "Schritt {stepNumberShown} nach links verschieben"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Move step {stepNumberShown} to the right"
 msgstr "Schritt {stepNumberShown} nach rechts verschieben"
 
@@ -1027,6 +1055,7 @@ msgstr "Die Preset-ID {id} kommt zweimal vor"
 msgid "Preset name"
 msgstr "Preset-Name"
 
+#: src/renderer/src/components/chases/ChaseFillPresets.tsx
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Presets"
 msgstr "Presets"
@@ -1068,9 +1097,21 @@ msgstr "Projekte"
 msgid "Recent projects"
 msgstr "Zuletzt geöffnet"
 
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Remove"
+msgstr "Entfernen"
+
 #: src/renderer/src/components/project/RecentProjectList.tsx
 msgid "Remove {projectName} from the list (the file stays)"
 msgstr "{projectName} aus der Liste entfernen (die Datei bleibt)"
+
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Remove all channels of {fixtureName}"
+msgstr "Alle Kanäle von {fixtureName} entfernen"
+
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Remove all unassigned channels"
+msgstr "Alle nicht zugeordneten Kanäle entfernen"
 
 #: src/renderer/src/components/chases/ChaseStepValueRow.tsx
 msgid "Remove channel {channelNumber}"
@@ -1105,7 +1146,7 @@ msgstr "Neues Passwort nochmals eingeben"
 msgid "Resume the chase {chaseName}"
 msgstr "Chase {chaseName} fortsetzen"
 
-#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "s"
 msgstr "s"
 
@@ -1132,6 +1173,7 @@ msgstr "Szenen-Editor"
 msgid "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
 msgstr "Szenenwerte müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
 
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Scenes"
@@ -1263,29 +1305,21 @@ msgstr "Stufen"
 msgid "Stop the chase {chaseName}"
 msgstr "Chase {chaseName} stoppen"
 
-#: src/renderer/src/components/chases/ChaseCurrentValuesPicker.tsx
-msgid "Take"
-msgstr "Übernehmen"
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Take the current values of {fixtureName}"
+msgstr "Aktuelle Werte von {fixtureName} übernehmen"
 
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
-msgid "Take current values"
-msgstr "Aktuelle Werte übernehmen"
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Take the current values of all fixtures"
+msgstr "Aktuelle Werte aller Geräte übernehmen"
 
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
-msgid "Take from preset"
-msgstr "Aus Preset übernehmen"
+#: src/renderer/src/components/chases/ChaseFillPresets.tsx
+msgid "Take the values of the preset {presetName}"
+msgstr "Werte des Presets {presetName} übernehmen"
 
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
-msgid "Take from preset…"
-msgstr "Aus Preset übernehmen…"
-
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
-msgid "Take from scene"
-msgstr "Aus Szene übernehmen"
-
-#: src/renderer/src/components/chases/ChaseStepFill.tsx
-msgid "Take from scene…"
-msgstr "Aus Szene übernehmen…"
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Take the values of the scene {sceneName}"
+msgstr "Werte der Szene {sceneName} übernehmen"
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
@@ -1496,6 +1530,10 @@ msgstr "Der serielle Port des DMX-Interfaces, eines Enttec DMX USB Pro oder eine
 msgid "The start address must be a whole number from {firstAddress} to {lastUniverseAddress}"
 msgstr "Die Startadresse muss eine ganze Zahl von {firstAddress} bis {lastUniverseAddress} sein"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The step sets this channel twice"
+msgstr "Der Schritt setzt diesen Kanal zweimal"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The values of a channel must be whole numbers from {minValue} to {maxValue}"
 msgstr "Die Werte eines Kanals müssen ganze Zahlen von {minValue} bis {maxValue} sein"
@@ -1503,6 +1541,10 @@ msgstr "Die Werte eines Kanals müssen ganze Zahlen von {minValue} bis {maxValue
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The values of the preset {preset} must be whole numbers from {minValue} to {maxValue} that their channels can have"
 msgstr "Die Werte des Presets {preset} müssen ganze Zahlen von {minValue} bis {maxValue} sein, die ihr Kanal haben kann"
+
+#: src/renderer/src/components/chases/ChaseStepEditor.tsx
+msgid "This step sets no channel yet: fill it from the panel, or add a channel."
+msgstr "Dieser Schritt setzt noch keinen Kanal: Fülle ihn aus dem Panel oder füge einen Kanal hinzu."
 
 #: src/renderer/src/components/chases/ChaseRepeatField.tsx
 msgid "times"
@@ -1513,8 +1555,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Hold</1> in seconds and the channels it sets (channel → value, labelled with the fixture channels on that address). <2>Add channel</2> adds one by hand. <3>Take current values</3> (of the fixtures you check), <4>Take from scene…</4> and <5>Take from preset…</5> merge those values into the step: a channel the step already sets takes the new value, the others are added. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
-msgstr "Um einen zu erstellen, entsperr den Setup-Modus und drück <0>Chase hinzufügen</0> unter den Zeilen. Im Chase-Editor legst du den Namen, die Wiederholung und die Schritte fest, jeder in einem eigenen Tab mit seiner <1>Haltezeit</1> in Sekunden und den Kanälen, die er setzt (Kanal → Wert, beschriftet mit den Gerätekanälen auf dieser Adresse). <2>Kanal hinzufügen</2> fügt einen von Hand hinzu. <3>Aktuelle Werte übernehmen</3> (der Geräte, die du ankreuzt), <4>Aus Szene übernehmen…</4> und <5>Aus Preset übernehmen…</5> führen diese Werte im Schritt zusammen: Ein Kanal, den der Schritt schon setzt, bekommt den neuen Wert, die anderen kommen dazu. Ein Schritt speichert nur Kanäle und Werte; ändert sich später ein Gerät, eine Szene oder ein Preset, bleibt der Chase, wie er ist. Mit den Knöpfen neben einem Chase bearbeitest, löschst und verschiebst du ihn."
+msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Hold</1> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <2>Add channel</2> adds one by hand. The <3>Fill from</3> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+msgstr "Um einen zu erstellen, entsperr den Setup-Modus und drück <0>Chase hinzufügen</0> unter den Zeilen. Im Chase-Editor legst du den Namen, die Wiederholung und die Schritte fest, jeder in einem eigenen Tab mit seiner <1>Haltezeit</1> in Sekunden und den Kanälen, die er setzt, in einer Tabelle nach den Geräten auf diesen Adressen gruppiert. <2>Kanal hinzufügen</2> fügt einen von Hand hinzu. Das Panel <3>Füllen aus</3> daneben übernimmt mit einem Klick die aktuellen Werte eines Geräts oder aller, eine Szene oder ein Preset und führt sie im Schritt zusammen: Ein Kanal, den der Schritt schon setzt, bekommt den neuen Wert, die anderen kommen dazu. Fährst du über einen Knopf, sind die Zeilen markiert, die er ändern würde. Ein Schritt speichert nur Kanäle und Werte; ändert sich später ein Gerät, eine Szene oder ein Preset, bleibt der Chase, wie er ist. Mit den Knöpfen neben einem Chase bearbeitest, löschst und verschiebst du ihn."
 
 #: src/renderer/src/components/help/topics/ScenesTopic.tsx
 msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."
@@ -1532,6 +1574,10 @@ msgstr "Kanalsperre einschalten"
 msgid "Type the current password"
 msgstr "Gib das aktuelle Passwort ein"
 
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Unassigned"
+msgstr "Nicht zugeordnet"
+
 #: src/renderer/src/components/settings/ModeSection.tsx
 msgid "Unlock"
 msgstr "Entsperren"
@@ -1548,6 +1594,10 @@ msgstr "Setup-Modus entsperren"
 msgid "Until stopped"
 msgstr "Bis gestoppt"
 
+#: src/renderer/src/components/chases/ChaseStepTable.tsx
+msgid "Value"
+msgstr "Wert"
+
 #: src/renderer/src/components/fixtures/FixturePresetColumns.tsx
 msgid "Value of {label} in preset {presetNumber}"
 msgstr "Wert von {label} in Preset {presetNumber}"
@@ -1559,6 +1609,10 @@ msgstr "Wert von Kanal {channelNumber}"
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Value of position {positionNumber} of channel {row}"
 msgstr "Wert von Position {positionNumber} von Kanal {row}"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Value: a whole number from {minValue} to {maxValue}"
+msgstr "Wert: eine ganze Zahl von {minValue} bis {maxValue}"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Values"
@@ -1587,6 +1641,10 @@ msgstr "ohne Namen"
 #: src/renderer/src/components/help/topics/ProjectsTopic.tsx
 msgid "Without a project, the <0>Show</0> view offers <1>Create project</1> and <2>Open project</2>; later they are in the <3>Project</3> section of the <4>Settings</4> view, with the recent projects. Creating a project needs Setup mode (in Show mode, the password is asked first), opening one doesn't. A double-click on a .glp file opens it in the app, also while the app is running. The app opens the last project again on its next start."
 msgstr "Ohne Projekt bietet die Ansicht <0>Show</0> <1>Projekt erstellen</1> und <2>Projekt öffnen</2> an; später sind sie im Bereich <3>Projekt</3> der Ansicht <4>Einstellungen</4>, mit den zuletzt geöffneten Projekten. Ein Projekt zu erstellen braucht den Setup-Modus (im Show-Modus wird zuerst das Passwort verlangt), eines zu öffnen nicht. Ein Doppelklick auf eine .glp-Datei öffnet sie in der App, auch während die App läuft. Die App öffnet beim nächsten Start wieder das letzte Projekt."
+
+#: src/renderer/src/components/chases/ChaseFillPanel.tsx
+msgid "Without fixtures there is nothing to fill from; add channels by hand."
+msgstr "Ohne Geräte gibt es nichts zum Füllen; füge Kanäle von Hand hinzu."
 
 #: src/renderer/src/components/settings/ChangePasswordForm.tsx
 msgid "Wrong current password"
