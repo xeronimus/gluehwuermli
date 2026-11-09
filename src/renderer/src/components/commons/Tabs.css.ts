@@ -21,7 +21,7 @@ export const tabHeader = style({
 export const tabList = style({
   display: 'flex',
   flexWrap: 'wrap',
-  gap: '4px'
+  gap: '6px'
 });
 
 const tabBase = style({
@@ -29,7 +29,7 @@ const tabBase = style({
   alignItems: 'center',
   gap: '6px',
   font: 'inherit',
-  padding: '6px 12px',
+  padding: '4px 8px 6px 8px',
   // over the tab list's bottom line, so the active tab's line replaces it
   marginBottom: '-1px',
   background: 'none',
@@ -45,9 +45,32 @@ const tabBase = style({
   }
 });
 
+/** a tab's handle, after tabBase so its background wins over tabBase's none: a light field with rounded top corners, sitting on the tab list's line */
+const tabHandle = style({
+  background: vars.colors.border,
+  borderRadius: `${vars.constants.radiusSm} ${vars.constants.radiusSm} 0 0`
+});
+
 export const tabVariants = styleVariants({
-  active: [tabBase, {color: vars.colors.text, borderBottomColor: vars.colors.primary, cursor: 'default'}],
-  inactive: [tabBase, {color: vars.colors.textSecondary, selectors: {'&:hover': {color: vars.colors.text}}}]
+  active: [
+    tabBase,
+    tabHandle,
+    {
+      // a lighter handle than the others, over the accent bar
+      color: vars.colors.text,
+      borderBottomColor: vars.colors.primary,
+      background: vars.colors.focusBorder,
+      cursor: 'default'
+    }
+  ],
+  inactive: [
+    tabBase,
+    tabHandle,
+    {
+      color: vars.colors.textSecondary,
+      selectors: {'&:hover': {color: vars.colors.text, background: vars.colors.focusBorder}}
+    }
+  ]
 });
 
 /** looks like an inactive tab */
