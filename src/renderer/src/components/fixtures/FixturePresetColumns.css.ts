@@ -2,11 +2,11 @@ import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
-/** how far a hovered preset's border lies outside its column, like a hovered channel row's (FixtureChannelRows) */
-const COLUMN_BORDER_OFFSET = '3px';
-
-/** the border's offset and its width: kept free around the columns, so the scrolling doesn't cut the border off */
-const COLUMN_BORDER_ROOM = '4px';
+/**
+ * how far a hovered channel's border lies outside its cells, like a hovered channel row's (FixtureChannelRows); the
+ * column's padding leaves room for it
+ */
+const CHANNEL_BORDER_OFFSET = '3px';
 
 /** as wide as the tab, scrolls sideways when the presets need more */
 export const presetsSection = style({
@@ -18,10 +18,9 @@ export const presetsSection = style({
 export const presetColumns = style({
   display: 'flex',
   alignItems: 'flex-start',
-  // wide enough that a hovered preset's border stays clear of the next one
   gap: '24px',
   overflowX: 'auto',
-  padding: `${COLUMN_BORDER_ROOM} ${COLUMN_BORDER_ROOM} 6px`
+  paddingBottom: '6px'
 });
 
 /** a column per preset, a row per channel */
@@ -33,14 +32,7 @@ export const presetColumn = style({
   alignItems: 'center',
   flexShrink: 0,
   padding: '0 8px',
-  borderLeft: `1px solid ${vars.colors.border}`,
-  borderRadius: vars.constants.radiusMd,
-  // an outline, not a border: it takes no room, so the columns don't shift while hovered
-  outline: '1px solid transparent',
-  outlineOffset: COLUMN_BORDER_OFFSET,
-  selectors: {
-    '&:hover': {outlineColor: vars.colors.focusBorder}
-  }
+  borderLeft: `1px solid ${vars.colors.border}`
 });
 
 export const presetHeader = style({
@@ -60,7 +52,14 @@ export const presetValue = style({
   display: 'grid',
   gridTemplateColumns: 'subgrid',
   alignItems: 'center',
-  fontSize: '0.9em'
+  fontSize: '0.9em',
+  borderRadius: vars.constants.radiusMd,
+  // an outline, not a border: it takes no room, so the channel's cells stay in line with the other channels
+  outline: '1px solid transparent',
+  outlineOffset: CHANNEL_BORDER_OFFSET,
+  selectors: {
+    '&:hover': {outlineColor: vars.colors.focusBorder}
+  }
 });
 
 /** room for `#` and six hex digits, and the swatch */
