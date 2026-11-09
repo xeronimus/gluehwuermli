@@ -5,17 +5,27 @@ import {vars} from '../themes.css';
 /** below it the fill panel goes above the table: beside it, the table would be too narrow for its columns */
 export const NARROW_STEP_EDITOR = 'screen and (max-width: 900px)';
 
+/** the table and the fill panel; the chase editor's top part uses them too, so the All steps panel lines up with it */
+export const STEP_EDITOR_COLUMNS = 'minmax(0, 1fr) minmax(240px, 340px)';
+export const STEP_EDITOR_COLUMN_GAP = '20px';
+
+const STEP_EDITOR_PADDING_INLINE_PX = 12;
+const STEP_EDITOR_BORDER_PX = 1;
+
+/** from the step editor's edge to its fill panel's: what the All steps panel is inset by to share its right edge */
+export const STEP_EDITOR_INSET = `${STEP_EDITOR_PADDING_INLINE_PX + STEP_EDITOR_BORDER_PX}px`;
+
 /** the step's header across, its table on the left, the fill panel on the right */
 export const stepEditor = style({
   display: 'grid',
-  gridTemplateColumns: 'minmax(0, 1fr) minmax(240px, 340px)',
+  gridTemplateColumns: STEP_EDITOR_COLUMNS,
   gridTemplateAreas: '"header header" "table fill"',
   alignItems: 'start',
-  gap: '12px 20px',
-  padding: '8px 12px 12px',
+  gap: `12px ${STEP_EDITOR_COLUMN_GAP}`,
+  padding: `8px ${STEP_EDITOR_PADDING_INLINE_PX}px 12px`,
   // the chase editor's background, as in the fixture editor: the fields stand out on it
   background: vars.colors.surface,
-  border: `1px solid ${vars.colors.border}`,
+  border: `${STEP_EDITOR_BORDER_PX}px solid ${vars.colors.border}`,
   borderRadius: vars.constants.radiusMd,
   '@media': {
     [NARROW_STEP_EDITOR]: {
