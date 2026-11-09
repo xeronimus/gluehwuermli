@@ -18,7 +18,17 @@ import {useActionSaveChase} from '@/state/actionHooks/saveFixtures';
 import {useAppStore} from '@/state/store';
 
 import Button from '../commons/Button';
-import {actions, chaseEditor, editorTitle, errorList, field, nameInput, steps} from './ChaseEditor.css';
+import {
+  actions,
+  chaseEditor,
+  editorFields,
+  editorTitle,
+  editorTop,
+  errorList,
+  field,
+  nameInput,
+  steps
+} from './ChaseEditor.css';
 import ChaseRepeatField from './ChaseRepeatField';
 import ChaseStepTabs from './ChaseStepTabs';
 import {useStepRowMarks} from './useStepRowMarks';
@@ -61,25 +71,29 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
 
   return (
     <section className={chaseEditor} aria-label={t`Chase editor`}>
-      <h2 className={editorTitle}>{chase ? editTitle(chase) : <Trans>New chase</Trans>}</h2>
-      <label className={field}>
-        <Trans>Name</Trans>
-        <input
-          className={nameInput}
-          value={draft.name}
-          maxLength={CHASE_NAME_MAX_LENGTH}
-          autoFocus
-          onChange={(event) => setDraft({...draft, name: event.target.value})}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              void onSave();
-            } else if (event.key === 'Escape' && !saving) {
-              onClose();
-            }
-          }}
-        />
-      </label>
-      <ChaseRepeatField draft={draft} onChange={setDraft} />
+      <div className={editorTop}>
+        <div className={editorFields}>
+          <h2 className={editorTitle}>{chase ? editTitle(chase) : <Trans>New chase</Trans>}</h2>
+          <label className={field}>
+            <Trans>Name</Trans>
+            <input
+              className={nameInput}
+              value={draft.name}
+              maxLength={CHASE_NAME_MAX_LENGTH}
+              autoFocus
+              onChange={(event) => setDraft({...draft, name: event.target.value})}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  void onSave();
+                } else if (event.key === 'Escape' && !saving) {
+                  onClose();
+                }
+              }}
+            />
+          </label>
+          <ChaseRepeatField draft={draft} onChange={setDraft} />
+        </div>
+      </div>
       <div className={steps}>
         <ChaseStepTabs
           steps={draft.steps}

@@ -18,7 +18,7 @@ import {
   fillPreview,
   fillSection,
   fillSectionTitle,
-  fillTitle
+  toolPanelTitle
 } from './ChaseFillPanel.css';
 import ChaseFillPresets from './ChaseFillPresets';
 
@@ -56,7 +56,7 @@ const ChaseFillPanel = ({preview, onTake, onPreview}: ChaseFillPanelProps) => {
 
   return (
     <aside className={fillPanel} aria-label={t`Fill the step`}>
-      <h3 className={fillTitle}>
+      <h3 className={toolPanelTitle}>
         <Trans>Fill from</Trans>
       </h3>
       {fixtures.length === 0 ? (

@@ -4,38 +4,48 @@ import {vars} from '../themes.css';
 import {NARROW_STEP_EDITOR} from './ChaseStepEditor.css';
 
 /**
- * Beside the table, it stays in view while a long step is scrolled; as high as the window at most, scrolling itself
- * with many presets. Above the table on a narrow window, where it scrolls away with it
+ * the frame of the chase editor's tool panels: Fill from beside a step's table, All steps above the tabs, so the two
+ * read as one column of tools
  */
-export const fillPanel = style({
-  gridArea: 'fill',
-  position: 'sticky',
-  top: 0,
-  maxHeight: '80vh',
-  overflowY: 'auto',
+export const toolPanel = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
   padding: '10px 12px',
-  // the step's background behind it: a sticky panel without one would show the rows scrolling under it
+  // the editor's background behind it: a sticky panel without one would show the rows scrolling under it
   background: vars.colors.surface,
   border: `1px solid ${vars.colors.border}`,
-  borderRadius: vars.constants.radiusMd,
-  '@media': {
-    [NARROW_STEP_EDITOR]: {
-      position: 'static',
-      maxHeight: 'none',
-      gap: '8px',
-      padding: '6px 10px'
-    }
-  }
+  borderRadius: vars.constants.radiusMd
 });
 
-export const fillTitle = style({
+export const toolPanelTitle = style({
   margin: 0,
   fontSize: '0.95em',
   fontWeight: 600
 });
+
+/**
+ * Beside the table, it stays in view while a long step is scrolled; as high as the window at most, scrolling itself
+ * with many presets. Above the table on a narrow window, where it scrolls away with it
+ */
+export const fillPanel = style([
+  toolPanel,
+  {
+    gridArea: 'fill',
+    position: 'sticky',
+    top: 0,
+    maxHeight: '80vh',
+    overflowY: 'auto',
+    '@media': {
+      [NARROW_STEP_EDITOR]: {
+        position: 'static',
+        maxHeight: 'none',
+        gap: '8px',
+        padding: '6px 10px'
+      }
+    }
+  }
+]);
 
 export const fillSection = style({
   display: 'flex',
