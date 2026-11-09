@@ -24,7 +24,7 @@ export const chaseEditor = style({
 /**
  * title, name and repeat on the left, the All steps panel on the right: the step editor's columns, inset by its padding
  * and border, so the panel has the fill panel's width and right edge. Below the step editor's breakpoint the panel goes
- * under the repeat field
+ * under the repeat field (inset on both sides there, see allStepsPanel)
  */
 export const editorTop = style({
   alignSelf: 'stretch',

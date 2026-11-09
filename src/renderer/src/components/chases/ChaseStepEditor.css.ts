@@ -6,7 +6,7 @@ import {vars} from '../themes.css';
 export const NARROW_STEP_EDITOR = 'screen and (max-width: 900px)';
 
 /** the table and the fill panel; the chase editor's top part uses them too, so the All steps panel lines up with it */
-export const STEP_EDITOR_COLUMNS = 'minmax(0, 1fr) minmax(240px, 340px)';
+export const STEP_EDITOR_COLUMNS = 'minmax(0, 1fr) minmax(260px, 400px)';
 export const STEP_EDITOR_COLUMN_GAP = '20px';
 
 const STEP_EDITOR_PADDING_INLINE_PX = 12;

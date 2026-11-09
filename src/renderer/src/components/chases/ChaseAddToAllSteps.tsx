@@ -17,7 +17,7 @@ import ChaseAllStepsButton from './ChaseAllStepsButton';
 import {numberInput} from './ChaseStepTable.css';
 import {type AllStepsActionProps, applyOnEnter} from './allStepsAction';
 
-/** Add [ N ] [Add]: channel N at 0 in every step without it; the fixture channels on N beside the field */
+/** Add channel [ N ] [Add]: channel N at 0 in every step without it; the fixture channels on N beside the field */
 const ChaseAddToAllSteps = ({steps, shownStep, onPreview, onApply}: AllStepsActionProps) => {
   const {t, i18n} = useLingui();
   const fieldId = useId();
@@ -49,7 +49,7 @@ const ChaseAddToAllSteps = ({steps, shownStep, onPreview, onApply}: AllStepsActi
   return (
     <div className={allStepsAction}>
       <label className={actionLabel} htmlFor={fieldId}>
-        <Trans>Add</Trans>
+        <Trans>Add channel</Trans>
       </label>
       <span className={actionField}>
         <input

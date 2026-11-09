@@ -161,6 +161,7 @@ msgstr "Füge für jeden Eintrag der Kanalliste des Geräts, den du steuern will
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Füge für jeden Eintrag der Liste, den du steuern willst, einen <0>Kanal</0> hinzu, benannt, wie du magst. Sein <1>Offset</1> ist seine Nummer in der Anleitung minus 1: Kanal 1 hat Offset 0, Kanal 2 Offset 1 und so weiter. Lass weg, was du nicht brauchst, Lücken sind kein Problem."
 
+#: src/renderer/src/components/chases/ChaseAddToAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Add channel"
@@ -1151,6 +1152,10 @@ msgstr "Alle Kanäle von {fixtureName} entfernen"
 #: src/renderer/src/components/chases/ChaseStepTable.tsx
 msgid "Remove all unassigned channels"
 msgstr "Alle nicht zugeordneten Kanäle entfernen"
+
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "Remove channel"
+msgstr "Kanal entfernen"
 
 #: src/renderer/src/components/chases/ChaseStepValueRow.tsx
 msgid "Remove channel {channelNumber}"
