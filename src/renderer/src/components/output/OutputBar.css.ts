@@ -2,14 +2,25 @@ import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 
+/** three groups: the title and open project, the view toggle in the middle of the bar, the output controls */
 export const outputBar = style({
-  display: 'flex',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto 1fr',
   alignItems: 'center',
-  gap: '12px',
-  padding: '12px 24px',
   background: vars.colors.surface,
   borderBottom: `1px solid ${vars.colors.border}`
 });
+
+export const barGroup = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  minWidth: 0,
+  padding: '12px 24px'
+});
+
+/** the output controls, at the right edge */
+export const barEnd = style([barGroup, {justifyContent: 'flex-end'}]);
 
 export const appLogo = style({
   width: '32px',
@@ -23,9 +34,12 @@ export const appTitle = style({
   marginRight: '12px'
 });
 
-/** pushes the output controls to the right edge, away from the view toggle */
-export const spacer = style({
-  flex: 1
+/** the open project's name, cut off with an ellipsis when the bar is narrow */
+export const openProjectName = style({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  color: vars.colors.textSecondary
 });
 
 /** a button that looks like text until hovered: a click leads to the port controls in the Settings view */

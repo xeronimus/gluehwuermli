@@ -18,6 +18,8 @@ change bumps the minor version and everything else the patch version.
 
 ### Changed
 
+- The top bar shows the name of the open project next to the app title, and the view toggle sits in the middle of the
+  bar
 - The chase step editor shows a step's channels as a table grouped by fixture (the fixture's name once, with a button
   removing all its channels; addresses of no fixture under Unassigned), with aligned columns, a bar in the channel's
   color beside each value and the name of a named position the value is on; a problem is marked on its row. A "Fill
