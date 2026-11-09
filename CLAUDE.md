@@ -145,7 +145,7 @@ src/
       i18n/                  # i18n.ts (locales, pickLocale, activateLocale); messages/: the codes of data/, shared/ and
                              # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
-      components/            # UI by feature: output/ (top bar: view toggle, lock indicator, output status, Emergency off), fixtures/
+      components/            # UI by feature: output/ (top bar: open project, view toggle, lock indicator, output status, Emergency off), fixtures/
                              # (fixture groups and editor, scene buttons and editor), chases/ (a row per chase below the fixtures: Start, Pause /
                              # Resume, Stop, the step boxes, the repeat and pass; in Setup mode move, edit, delete,
                              # Add chase, and the chase editor below the rows), project/ (start view without a
