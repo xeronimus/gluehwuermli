@@ -1,10 +1,10 @@
-import {parseChannelsChanged, parseUniverseValues} from '@shared/ipc';
+import {parseChannelsChanged, parseDmxOutputStatus, parseUniverseValues} from '@shared/ipc';
 import type {PreloadBridge} from '@shared/preloadBridge';
 
 import type DmxService from '@/data/service/DmxService';
 import logger from '@/data/service/Logger';
 
-/** the DmxService over the bridge the preload script exposes */
+/** the DmxService over the bridge the preload script exposes; a push that isn't valid is dropped */
 export const electronDmxServiceFactory = (bridge: PreloadBridge): DmxService => ({
   setChannel: (channel, value) => bridge.setChannel(channel, value),
   setChannelValues: (values) => bridge.setChannelValues(values),
@@ -21,7 +21,15 @@ export const electronDmxServiceFactory = (bridge: PreloadBridge): DmxService => 
     }
     return answer.values;
   },
-  onStatusChanged: (listener) => bridge.onStatusChanged(listener),
+  onStatusChanged: (listener) =>
+    bridge.onStatusChanged((payload) => {
+      const status = parseDmxOutputStatus(payload);
+      if (!status) {
+        logger.warn('dropped invalid output status', payload);
+        return;
+      }
+      listener(status);
+    }),
   onChannelsChanged: (listener) =>
     bridge.onChannelsChanged((payload) => {
       const change = parseChannelsChanged(payload);

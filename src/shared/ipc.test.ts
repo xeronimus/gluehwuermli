@@ -1,9 +1,14 @@
 import {DMX_UNIVERSE_SIZE} from './dmx';
 import {
+  PROJECT_VERSION,
   parseChannelsChanged,
   parseChaseStatus,
   parseConnectRequest,
+  parseDmxOutputStatus,
   parseLiftChannelLockRequest,
+  parseLockStatus,
+  parseProjectPathRequest,
+  parseProjectStatus,
   parseSetChannelRequest,
   parseSetChannelValuesRequest,
   parseStartChaseRequest,
@@ -149,5 +154,77 @@ describe('parseChannelsChanged', () => {
 
   test.each([{values: []}, {values: [{channel: 513, value: 0}]}, {}, null])('rejects %j', (payload) => {
     expect(parseChannelsChanged(payload)).toBeUndefined();
+  });
+});
+
+describe('parseDmxOutputStatus', () => {
+  test.each([
+    {type: 'disconnected'},
+    {type: 'connecting', path: 'COM3'},
+    {type: 'connected', path: 'COM3'},
+    {type: 'failed', path: 'COM3', reason: 'port-closed'},
+    {type: 'failed', path: 'COM3', reason: 'port-error', message: 'Access denied'}
+  ])('accepts %j', (payload) => {
+    expect(parseDmxOutputStatus(payload)).toEqual(payload);
+  });
+
+  test.each([
+    {type: 'connected'},
+    {type: 'failed', path: 'COM3'},
+    {type: 'failed', path: 'COM3', reason: 'port-error'},
+    {type: 'sending', path: 'COM3'},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseDmxOutputStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseLockStatus', () => {
+  test.each([
+    {mode: 'show', passwordSet: false, channelLocked: true},
+    {mode: 'setup', passwordSet: true, channelLocked: false}
+  ])('accepts %j', (payload) => {
+    expect(parseLockStatus(payload)).toEqual(payload);
+  });
+
+  test.each([
+    {mode: 'show', passwordSet: true},
+    {mode: 'edit', passwordSet: true, channelLocked: true},
+    {mode: 'setup', passwordSet: 'yes', channelLocked: false},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseLockStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseProjectStatus', () => {
+  const setup = {version: PROJECT_VERSION, fixtures: []};
+
+  test.each([
+    {type: 'none'},
+    {type: 'open', project: {path: 'C:/shows/club.glp', setup}},
+    {type: 'failed', path: 'C:/shows/club.glp', error: {reason: 'too-new', version: PROJECT_VERSION + 1}}
+  ])('accepts %j', (payload) => {
+    expect(parseProjectStatus(payload)).toEqual(payload);
+  });
+
+  test.each([
+    {type: 'open', project: {path: 'C:/shows/club.glp'}},
+    {type: 'open', project: {path: '', setup}},
+    {type: 'failed', path: 'C:/shows/club.glp', error: {reason: 'unreadable'}},
+    {type: 'closed'},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseProjectStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseProjectPathRequest', () => {
+  test('accepts a path', () => {
+    expect(parseProjectPathRequest({path: 'C:/shows/club.glp'})).toEqual({path: 'C:/shows/club.glp'});
+  });
+
+  test.each([{path: ''}, {path: 42}, {}, null])('rejects %j', (payload) => {
+    expect(parseProjectPathRequest(payload)).toBeUndefined();
   });
 });
