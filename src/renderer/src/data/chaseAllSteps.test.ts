@@ -3,6 +3,7 @@ import type {Fixture} from '@shared/ipc';
 import {
   channelInAllStepsEffect,
   holdOfAllStepsEffect,
+  pickedRemovableChannel,
   removableChannels,
   stepIdsWithoutChannel,
   withoutChannelInAllStepsEffect
@@ -66,10 +67,10 @@ describe('the channels to remove', () => {
 });
 
 test('setting the hold counts the steps holding for another time', () => {
-  expect(holdOfAllStepsEffect(steps, 1000)).toEqual({changedCount: 1});
-  expect(holdOfAllStepsEffect(steps, 2000)).toEqual({changedCount: 3});
-  expect(holdOfAllStepsEffect([stepOf('a', '1', [])], 1000)).toEqual({changedCount: 0});
-  expect(holdOfAllStepsEffect([stepOf('a', '', [])], 1000)).toEqual({changedCount: 1});
+  expect(holdOfAllStepsEffect(steps, 1000)).toEqual({changedCount: 1, holdMs: 1000});
+  expect(holdOfAllStepsEffect(steps, 2000)).toEqual({changedCount: 3, holdMs: 2000});
+  expect(holdOfAllStepsEffect([stepOf('a', '1', [])], 1000)).toEqual({changedCount: 0, holdMs: 1000});
+  expect(holdOfAllStepsEffect([stepOf('a', '', [])], 1000)).toEqual({changedCount: 1, holdMs: 1000});
 });
 
 test('adding a channel counts the steps without it, of all steps', () => {
@@ -77,6 +78,16 @@ test('adding a channel counts the steps without it, of all steps', () => {
   expect(channelInAllStepsEffect(steps, 11)).toEqual({addedCount: 1, stepCount: 3});
   expect(channelInAllStepsEffect(steps, 1)).toEqual({addedCount: 3, stepCount: 3});
   expect(channelInAllStepsEffect([], 1)).toEqual({addedCount: 0, stepCount: 0});
+});
+
+test('Remove removes only the channel picked, while the steps set it', () => {
+  const groups = removableChannels([par, wash], steps);
+  expect(pickedRemovableChannel(groups, undefined)).toBeUndefined();
+  expect(pickedRemovableChannel(groups, 40)).toBe(40);
+  expect(
+    pickedRemovableChannel(removableChannels([par, wash], [stepOf('a', '1.00', ['10', '11'])]), 40)
+  ).toBeUndefined();
+  expect(pickedRemovableChannel([], 40)).toBeUndefined();
 });
 
 describe('removing a channel', () => {

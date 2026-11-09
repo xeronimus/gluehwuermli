@@ -60,13 +60,25 @@ export function removableChannels(
   return unassigned.length > 0 ? [...fixtureGroups, {kind: 'unassigned', channels: unassigned}] : fixtureGroups;
 }
 
-/** what setting the hold of all steps would do: how many steps would hold for another time */
+/**
+ * the channel Remove would remove: the one picked, while the steps still set it. Nothing at first and once it is gone,
+ * never another one, so a second click after a removal can't remove a channel that wasn't picked
+ */
+export const pickedRemovableChannel = (
+  groups: readonly RemovableChannelGroup[],
+  picked: number | undefined
+): number | undefined =>
+  groups.some(({channels}) => channels.some(({channel}) => channel === picked)) ? picked : undefined;
+
+/** what setting the hold of all steps would do: how many steps would hold for another time, and the hold set */
 export interface HoldOfAllStepsEffect {
   readonly changedCount: number;
+  readonly holdMs: number;
 }
 
 export const holdOfAllStepsEffect = (steps: readonly ChaseStepDraft[], holdMs: number): HoldOfAllStepsEffect => ({
-  changedCount: steps.filter((step) => holdMsOf(step.hold) !== holdMs).length
+  changedCount: steps.filter((step) => holdMsOf(step.hold) !== holdMs).length,
+  holdMs
 });
 
 /** what adding a channel to all steps would do: the steps that don't set it get it, of all the chase's steps */

@@ -6,6 +6,7 @@ import {
   type AllStepsLine,
   type RemovableChannel,
   type RemovableChannelGroup,
+  pickedRemovableChannel,
   removableChannels,
   withoutChannelInAllStepsEffect
 } from '@/data/chaseAllSteps';
@@ -20,17 +21,16 @@ import {type AllStepsActionProps, applyOnEnter} from './allStepsAction';
 const groupKeyOf = (group: RemovableChannelGroup) => (group.kind === 'fixture' ? group.fixture.id : 'unassigned');
 
 /**
- * Remove channel [ choice ▾ ] [Remove]: a channel the steps set, out of every step. Only what is there is offered; the choice is
- * kept while its channel is, else it falls back to the first one
+ * Remove channel [ choice ▾ ] [Remove]: a channel the steps set, out of every step. Only what is there is offered;
+ * nothing is picked at first and after a removal, so Remove never removes a channel that wasn't picked
  */
 const ChaseRemoveFromAllSteps = ({steps, shownStep, onPreview, onApply}: AllStepsActionProps) => {
   const {t} = useLingui();
   const fieldId = useId();
   const fixtures = useAppStore(selectFixtures);
-  const [chosen, setChosen] = useState<number | undefined>(undefined);
+  const [picked, setPicked] = useState<number | undefined>(undefined);
   const groups = removableChannels(fixtures, steps);
-  const offered = groups.flatMap(({channels}) => channels.map(({channel}) => channel));
-  const channel = chosen !== undefined && offered.includes(chosen) ? chosen : offered[0];
+  const channel = pickedRemovableChannel(groups, picked);
   const totalSteps = steps.length;
 
   const effectOf = (removed: number) => {
@@ -41,6 +41,7 @@ const ChaseRemoveFromAllSteps = ({steps, shownStep, onPreview, onApply}: AllStep
   const apply = () => {
     if (channel !== undefined) {
       onApply((draft) => withoutChannelInAllSteps(draft, channel), effectOf(channel));
+      setPicked(undefined);
     }
   };
   const optionText = ({channel: channelNumber, stepCount, fixtureChannel}: RemovableChannel) => {
@@ -61,10 +62,13 @@ const ChaseRemoveFromAllSteps = ({steps, shownStep, onPreview, onApply}: AllStep
           id={fieldId}
           className={removeChoice}
           value={channel ?? ''}
-          disabled={channel === undefined}
-          onChange={(event) => setChosen(Number(event.target.value))}
+          disabled={groups.length === 0}
+          onChange={(event) => setPicked(Number(event.target.value))}
           onKeyDown={applyOnEnter(apply)}
         >
+          <option value="" disabled>
+            {t`Pick a channel`}
+          </option>
           {groups.map((group) => (
             <optgroup key={groupKeyOf(group)} label={group.kind === 'fixture' ? group.fixture.name : t`Unassigned`}>
               {group.channels.map((removable) => (

@@ -283,7 +283,6 @@ msgid "Change password"
 msgstr "Passwort ändern"
 
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
-#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Changes nothing"
 msgstr "Ändert nichts"
 
@@ -680,6 +679,10 @@ msgid "Every preset needs a name"
 msgstr "Jedes Preset braucht einen Namen"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Every step already holds {hold} s"
+msgstr "Jeder Schritt hält schon {hold} s"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Every step already sets channel {channel}"
 msgstr "Jeder Schritt setzt Kanal {channel} schon"
 
@@ -1073,6 +1076,10 @@ msgstr "Passwort"
 #: src/renderer/src/components/chases/ChaseRow.tsx
 msgid "Pause the chase {chaseName}"
 msgstr "Chase {chaseName} pausieren"
+
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "Pick a channel"
+msgstr "Kanal wählen"
 
 #: src/renderer/src/components/fixtures/ColorField.tsx
 msgid "Pick a color"

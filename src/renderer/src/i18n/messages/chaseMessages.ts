@@ -14,6 +14,7 @@ import {
 import {MS_PER_MINUTE, MS_PER_SECOND} from '@shared/time';
 
 import type {AllStepsLine, ChannelInAllStepsEffect, WithoutChannelInAllStepsEffect} from '@/data/chaseAllSteps';
+import {holdSeconds} from '@/data/chaseHold';
 
 /** what chaseErrors found, in the UI language; the shortest hold in seconds, as the editor shows it */
 export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
@@ -104,9 +105,10 @@ function removeLineMessage(channel: number, done: boolean, effect: WithoutChanne
 export function allStepsLineMessage(line: AllStepsLine): MessageDescriptor {
   switch (line.action) {
     case 'hold': {
-      const changedCount = line.effect.changedCount;
+      const {changedCount, holdMs} = line.effect;
       if (changedCount === 0) {
-        return msg`Changes nothing`;
+        const hold = holdSeconds(holdMs);
+        return msg`Every step already holds ${hold} s`;
       }
       return line.done
         ? msg`Set the hold of ${plural(changedCount, {one: '# step', other: '# steps'})}`

@@ -146,11 +146,11 @@ describe('the All steps panel', () => {
     );
 
   test('says what an action would do, and what it did', () => {
-    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 1}}))).toBe(
+    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 1, holdMs: 1000}}))).toBe(
       'Sets the hold of 1 step'
     );
-    expect(translate(allStepsLineMessage({action: 'hold', done: true, effect: {changedCount: 0}}))).toBe(
-      'Changes nothing'
+    expect(translate(allStepsLineMessage({action: 'hold', done: true, effect: {changedCount: 0, holdMs: 1500}}))).toBe(
+      'Every step already holds 1.50 s'
     );
     expect(
       translate(allStepsLineMessage({action: 'add', done: false, channel: 12, effect: {addedCount: 3, stepCount: 5}}))
@@ -165,7 +165,7 @@ describe('the All steps panel', () => {
 
   test('in German', () => {
     activateLocale('de');
-    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 2}}))).toBe(
+    expect(translate(allStepsLineMessage({action: 'hold', done: false, effect: {changedCount: 2, holdMs: 1000}}))).toBe(
       'Setzt die Haltezeit von 2 Schritten'
     );
     expect(remove([3], false)).toBe('Entfernt Kanal 12 aus 3 Schritten; Schritt 4 wäre danach ohne Kanäle');
