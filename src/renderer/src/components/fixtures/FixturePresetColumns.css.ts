@@ -42,7 +42,8 @@ export const presetColumn = style({
 
 globalStyle(`${presetColumn}:first-child`, {
   borderLeft: 'none',
-  paddingLeft: '2px'
+  // room for a hovered channel's outline (its offset and width): the scrolling row would cut it off
+  paddingLeft: '4px'
 });
 
 export const presetHeader = style({
