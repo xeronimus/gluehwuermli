@@ -161,6 +161,7 @@ msgstr "Add a <0>channel</0> for every entry of the device's channel list you wa
 msgid "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 msgstr "Add a <0>channel</0> for every entry of the list you want to control, named as you like. Its <1>offset</1> is its number in the manual minus 1: channel 1 has offset 0, channel 2 offset 1, and so on. Leave out the ones you don't need, the gaps are fine."
 
+#: src/renderer/src/components/chases/ChaseAddToAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureChannelRows.tsx
 msgid "Add channel"
@@ -1151,6 +1152,10 @@ msgstr "Remove all channels of {fixtureName}"
 #: src/renderer/src/components/chases/ChaseStepTable.tsx
 msgid "Remove all unassigned channels"
 msgstr "Remove all unassigned channels"
+
+#: src/renderer/src/components/chases/ChaseRemoveFromAllSteps.tsx
+msgid "Remove channel"
+msgstr "Remove channel"
 
 #: src/renderer/src/components/chases/ChaseStepValueRow.tsx
 msgid "Remove channel {channelNumber}"

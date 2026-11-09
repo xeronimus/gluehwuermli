@@ -2,10 +2,22 @@ import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 import {toolPanel} from './ChaseFillPanel.css';
-import {NARROW_STEP_EDITOR, holdInput} from './ChaseStepEditor.css';
+import {NARROW_STEP_EDITOR, STEP_EDITOR_INSET, holdInput} from './ChaseStepEditor.css';
 
-/** at the top right of the chase editor, beside name and repeat; not sticky: it is used before the steps are */
-export const allStepsPanel = style([toolPanel, {gridArea: 'allSteps', gap: '8px'}]);
+/**
+ * at the top right of the chase editor, beside name and repeat; not sticky: it is used before the steps are. Below the
+ * breakpoint under the repeat field, inset like the fill panel inside the step, so both stay as wide
+ */
+export const allStepsPanel = style([
+  toolPanel,
+  {
+    gridArea: 'allSteps',
+    gap: '8px',
+    '@media': {
+      [NARROW_STEP_EDITOR]: {marginInline: STEP_EDITOR_INSET}
+    }
+  }
+]);
 
 /** without a border or room of its own: it only disables the actions together */
 export const allStepsFieldset = style({

@@ -20,7 +20,7 @@ import {type AllStepsActionProps, applyOnEnter} from './allStepsAction';
 const groupKeyOf = (group: RemovableChannelGroup) => (group.kind === 'fixture' ? group.fixture.id : 'unassigned');
 
 /**
- * Remove [ choice ▾ ] [Remove]: a channel the steps set, out of every step. Only what is there is offered; the choice is
+ * Remove channel [ choice ▾ ] [Remove]: a channel the steps set, out of every step. Only what is there is offered; the choice is
  * kept while its channel is, else it falls back to the first one
  */
 const ChaseRemoveFromAllSteps = ({steps, shownStep, onPreview, onApply}: AllStepsActionProps) => {
@@ -54,7 +54,7 @@ const ChaseRemoveFromAllSteps = ({steps, shownStep, onPreview, onApply}: AllStep
   return (
     <div className={allStepsAction}>
       <label className={actionLabel} htmlFor={fieldId}>
-        <Trans>Remove</Trans>
+        <Trans>Remove channel</Trans>
       </label>
       <span className={actionField}>
         <select
