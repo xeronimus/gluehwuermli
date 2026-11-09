@@ -15,10 +15,15 @@ export const presetsSection = style({
   minWidth: 0
 });
 
+/**
+ * half the room between two presets: each column has it on both sides, so the border between two of them lies in the
+ * middle of that room
+ */
+const PRESET_SPACING = '12px';
+
 export const presetColumns = style({
   display: 'flex',
   alignItems: 'flex-start',
-  gap: '24px',
   overflowX: 'auto',
   paddingBottom: '6px'
 });
@@ -31,7 +36,7 @@ export const presetColumn = style({
   gap: '6px 6px',
   alignItems: 'center',
   flexShrink: 0,
-  padding: '0 8px',
+  padding: `0 ${PRESET_SPACING}`,
   borderLeft: `1px solid ${vars.colors.border}`
 });
 
