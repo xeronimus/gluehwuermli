@@ -10,9 +10,12 @@ import {
   isSortedByChannel,
   newChaseDraft,
   nextFreeChannel,
+  setsChannel,
   shownStepId,
   sortedByChannel,
   stepIdAfterRemoval,
+  withChannelInAllSteps,
+  withHoldOfAllSteps,
   withNewStep,
   withNewStepValue,
   withStepDuplicated,
@@ -20,6 +23,7 @@ import {
   withStepMoved,
   withStepValueChange,
   withStepValuesSorted,
+  withoutChannelInAllSteps,
   withoutStep,
   withoutStepValues
 } from './chaseDraft';
@@ -151,6 +155,47 @@ test('a channel added by hand follows the highest one, or takes the lowest free 
       {id: 'b', channel: '512', value: '0'}
     ])
   ).toBe(2);
+});
+
+describe('all steps at once', () => {
+  const draft = chaseDraftOf(chorus);
+
+  test('adds a channel at 0 to the steps without it, sorted in; a step setting it keeps its value', () => {
+    const added = withChannelInAllSteps(draft, 20, (stepId) => `new-${stepId}`);
+
+    expect(added.steps[0]?.values).toEqual([
+      {id: '0', channel: '1', value: '255'},
+      {id: 'new-laser', channel: '20', value: '0'}
+    ]);
+    expect(added.steps[1]).toBe(draft.steps[1]);
+    expect(
+      channelsOf(
+        withChannelInAllSteps(draft, 5, (stepId) => `new-${stepId}`),
+        1
+      )
+    ).toEqual(['0:1', 'new-strobe:5', '1:20']);
+  });
+
+  test('a typed channel with a leading zero counts as the channel', () => {
+    const typed = withStepValueChange(draft, 0, 0, {channel: '020'});
+
+    expect(setsChannel({id: 'a', hold: '1.00', values: [{id: '0', channel: '020', value: '0'}]}, 20)).toBe(true);
+    expect(setsChannel({id: 'a', hold: '1.00', values: [{id: '0', channel: '', value: '0'}]}, 0)).toBe(false);
+    expect(withChannelInAllSteps(typed, 20, () => 'new').steps[0]).toBe(typed.steps[0]);
+  });
+
+  test('removes a channel from every step, leaving a step without channels', () => {
+    const removed = withoutChannelInAllSteps(draft, 1);
+
+    expect(removed.steps.map(({values}) => values.map(({channel}) => channel))).toEqual([[], ['20']]);
+    expect(chaseEditErrors(removed).steps[0]).toEqual([{type: 'chase-step-values-missing'}]);
+    expect(withoutChannelInAllSteps(draft, 99)).toEqual(draft);
+  });
+
+  test('sets the hold of every step, with two decimals', () => {
+    expect(withHoldOfAllSteps(draft, 2000).steps.map(({hold}) => hold)).toEqual(['2.00', '2.00']);
+    expect(withHoldOfAllSteps(newChaseDraft(), 2000).steps).toEqual([]);
+  });
 });
 
 test('a chase needs a name and a step, each step a channel', () => {
