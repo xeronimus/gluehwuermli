@@ -305,6 +305,26 @@ describe('parseFixtureSetup', () => {
     expect(parseFixtureSetup({version: 1, fixtures: [unknownMode]})).toBeUndefined();
   });
 
+  test('accepts a momentary position, rejects a momentary flag that is not true', () => {
+    const flashWith = (momentary: unknown) => ({
+      ...fixtureOf(),
+      channels: [
+        {
+          name: 'Flash',
+          offset: 0,
+          values: {mode: 'positions', positions: [{value: 0}, {value: 255, momentary}], display: 'buttons'}
+        }
+      ]
+    });
+
+    expect(parseFixtureSetup({version: 1, fixtures: [flashWith(true)]})).toEqual({
+      version: 1,
+      fixtures: [flashWith(true)]
+    });
+    expect(parseFixtureSetup({version: 1, fixtures: [flashWith(false)]})).toBeUndefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [flashWith('yes')]})).toBeUndefined();
+  });
+
   test('rejects fixtures sharing an address with different value rules', () => {
     const plain = fixtureOf({id: 'a'});
     const ranged = fixtureOf({

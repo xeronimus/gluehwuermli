@@ -51,6 +51,7 @@ export const positionStack = style({
 });
 
 const positionButtonBase = style({
+  position: 'relative',
   font: 'inherit',
   fontSize: '0.9em',
   color: vars.colors.text,
@@ -88,6 +89,17 @@ export const positionButton = styleVariants({
       }
     }
   ]
+});
+
+/** the corner marker of a momentary position's button: it sets the value only while held */
+export const momentaryMarker = style({
+  position: 'absolute',
+  top: '1px',
+  right: '1px',
+  width: '0.85em',
+  height: '0.85em',
+  color: vars.colors.textMuted,
+  pointerEvents: 'none'
 });
 
 /** the channel's name, below the buttons like a fader's */

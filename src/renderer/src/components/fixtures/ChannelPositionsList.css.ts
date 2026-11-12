@@ -18,7 +18,7 @@ export const positionsList = style({
 
 export const positionRows = style({
   display: 'grid',
-  gridTemplateColumns: 'auto 220px auto',
+  gridTemplateColumns: 'auto 220px auto auto',
   gap: '6px 8px',
   alignItems: 'center',
   justifyItems: 'start'
@@ -33,6 +33,14 @@ export const positionValueInput = style({
 export const positionNameInput = style({
   width: '100%',
   boxSizing: 'border-box'
+});
+
+/** the momentary checkbox of a position, with its label, between the name and the remove button */
+export const positionMomentary = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  whiteSpace: 'nowrap'
 });
 
 /** Add position, and the toggle between a fader and buttons right next to it */
