@@ -43,6 +43,7 @@ export {
   IconDeviceFloppy as SavePresetIcon,
   IconStack as SceneIcon,
   IconSettings as SettingsIcon,
+  IconBroadcast as StepOnRigIcon,
   IconPlayerStop as StopChaseIcon,
   IconLockOpen as UnlockIcon,
   IconAlertTriangle as WarningIcon

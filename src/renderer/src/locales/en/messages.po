@@ -57,6 +57,10 @@ msgstr "{stepCount} steps"
 msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
+msgstr "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
+
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
 msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
@@ -1138,6 +1142,10 @@ msgstr "Pressing the scene sets these values again. Unticked fixtures are left o
 msgid "Preview"
 msgstr "Preview"
 
+#: src/renderer/src/components/chases/ChaseOnRigToggle.tsx
+msgid "Preview on rig"
+msgstr "Preview on rig"
+
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Previous channels"
 msgstr "Previous channels"
@@ -1270,6 +1278,10 @@ msgstr "Scenes"
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Search the serial ports again"
 msgstr "Search the serial ports again"
+
+#: src/renderer/src/components/chases/ChaseOnRigToggle.tsx
+msgid "Send the shown step to the output while you edit it"
+msgstr "Send the shown step to the output while you edit it"
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Sending on {path}"

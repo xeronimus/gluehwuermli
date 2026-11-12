@@ -13,8 +13,10 @@ import {
   withStepValuesSorted
 } from '@/data/chaseDraft';
 import {type StepFillEffect, stepFillEffect, withStepValuesTaken} from '@/data/chaseStepFill';
+import {stepOnRigValues} from '@/data/chaseStepOnRig';
 import {type ChannelBeingTyped, chaseStepGroups, stepWideErrors} from '@/data/chaseStepTable';
 import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
+import {useStepOnRig} from '@/state/actionHooks/stepOnRig';
 import {selectFixtures} from '@/state/fixtures/fixturesSelectors';
 import {useAppStore} from '@/state/store';
 
@@ -64,6 +66,7 @@ const ChaseStepEditor = ({
   const [preview, setPreview] = useState<StepFillEffect | undefined>(undefined);
   const groups = chaseStepGroups(fixtures, step.values, beingTyped);
   const ownErrors = stepWideErrors(errors);
+  useStepOnRig(stepOnRigValues(step.values, beingTyped));
 
   // a channel is sorted in and grouped once it is left, not while it is typed
   const onChannelLeft = (nextFocus: EventTarget | null) => {
