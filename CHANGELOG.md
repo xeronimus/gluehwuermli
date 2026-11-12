@@ -14,6 +14,7 @@ change bumps the minor version and everything else the patch version.
 
 - A position of a channel shown as buttons can be momentary: its button, a raised key that sinks while held, sets the
   value only while held and puts back the value from before on release (#95)
+- Chase editor: "Preview on rig" sends the shown step to the output while it is edited (#91)
 
 ### Fixed
 

@@ -10,6 +10,8 @@ interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   title?: string;
+  /** a toggle's state, for assistive technology only; its on look is a variant */
+  pressed?: boolean;
   /** a plain button by default, so one inside a form doesn't submit it */
   type?: 'button' | 'submit';
   ref?: Ref<HTMLButtonElement>;
@@ -22,6 +24,7 @@ const Button = ({
   variant = 'default',
   size = 'default',
   title,
+  pressed,
   type = 'button',
   ref
 }: ButtonProps) => (
@@ -32,6 +35,7 @@ const Button = ({
     disabled={disabled}
     onClick={onClick}
     title={title}
+    aria-pressed={pressed}
   >
     {children}
   </button>
