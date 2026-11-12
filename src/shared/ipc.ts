@@ -75,7 +75,12 @@ export const CHANNEL_POSITION_NAME_MAX_LENGTH = 20;
 /** a value a positions channel can have, e.g. a slot of a gobo wheel; shown by its name, or its value without one */
 export const ChannelPositionSchema = Type.Object({
   value: DmxValueSchema,
-  name: Type.Optional(Type.String({minLength: 1, maxLength: CHANNEL_POSITION_NAME_MAX_LENGTH}))
+  name: Type.Optional(Type.String({minLength: 1, maxLength: CHANNEL_POSITION_NAME_MAX_LENGTH})),
+  /**
+   * optional, so older files load; only stored on a channel shown as buttons: its button sets the value only while
+   * held
+   */
+  momentary: Type.Optional(Type.Literal(true))
 });
 export type ChannelPosition = Static<typeof ChannelPositionSchema>;
 

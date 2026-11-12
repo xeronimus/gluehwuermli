@@ -250,8 +250,8 @@ describe('value rules', () => {
     const back = withChannelChange(positions, 0, {values: withValueMode(positions.channels[0].values, 'steps')});
 
     expect(positions.channels[0].values.positions).toEqual([
-      {value: '', name: ''},
-      {value: '', name: ''}
+      {value: '', name: '', momentary: false},
+      {value: '', name: '', momentary: false}
     ]);
     expect(fixtureOfDraft('par', back).channels[0].values).toEqual({mode: 'steps', min: 0, max: 255, step: 10});
   });
@@ -263,8 +263,8 @@ describe('value rules', () => {
     const positions = withValues(draftOf(par), {
       mode: 'positions',
       positions: [
-        {value: '5', name: ' '},
-        {value: '', name: 'Star'}
+        {value: '5', name: ' ', momentary: false},
+        {value: '', name: 'Star', momentary: false}
       ]
     });
     expect(fixtureOfDraft('par', positions).channels[0].values).toEqual({

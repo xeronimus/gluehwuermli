@@ -18,6 +18,7 @@ export {
   IconPencil as EditIcon,
   IconBulbOff as EmergencyOffIcon,
   IconFileOff as MissingProjectIcon,
+  IconHandFinger as MomentaryIcon,
   IconExternalLink as ExternalLinkIcon,
   IconChevronDown as ExpandIcon,
   IconCone as FixtureIcon,

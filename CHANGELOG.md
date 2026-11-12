@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- A position of a channel shown as buttons can be momentary: its button sets the value only while held and puts back
+  the value from before on release (#95)
+
 ## [0.3.1] - 2026-11-09
 
 ### Added

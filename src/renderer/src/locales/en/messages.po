@@ -58,8 +58,8 @@ msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow these, the Channels view sends any value."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -792,6 +792,10 @@ msgid "If the port can't be opened, or the interface is unplugged while sending,
 msgstr "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "In the Show view, the button sets this value only while it is held down, then puts back the value from before"
+msgstr "In the Show view, the button sets this value only while it is held down, then puts back the value from before"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "In the Show view: a fader, or a button per position"
 msgstr "In the Show view: a fader, or a button per position"
 
@@ -858,6 +862,10 @@ msgstr "Mode"
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Modes"
 msgstr "Modes"
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Momentary"
+msgstr "Momentary"
 
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Move {fixtureName} to the left"
@@ -1020,6 +1028,10 @@ msgstr "Offsets must be whole numbers from 0"
 msgid "Once"
 msgstr "Once"
 
+#: src/renderer/src/components/fixtures/ChannelPositionButtons.tsx
+msgid "Only while held"
+msgstr "Only while held"
+
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Open in Explorer"
 msgstr "Open in Explorer"
@@ -1088,6 +1100,10 @@ msgstr "Pick a color"
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+
+#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
+msgid "Position {positionNumber} of channel {row} only while held"
+msgstr "Position {positionNumber} of channel {row} only while held"
 
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Positions"

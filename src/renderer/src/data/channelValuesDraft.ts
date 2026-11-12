@@ -23,15 +23,19 @@ export interface PositionDraft {
   readonly value: string;
   /** blank for none: the position is shown by its value */
   readonly name: string;
+  /**
+   * its button sets the value only while held; kept while the display is a fader, so switching back loses nothing,
+   * but only stored with buttons
+   */
+  readonly momentary: boolean;
 }
 
 export const CHANNEL_VALUE_MODES: readonly ChannelValueMode[] = ['continuous', 'steps', 'positions'];
 
+const NEW_POSITION: PositionDraft = {value: '', name: '', momentary: false};
+
 /** a positions channel needs two, so it starts with two empty ones */
-const NEW_POSITIONS: readonly PositionDraft[] = [
-  {value: '', name: ''},
-  {value: '', name: ''}
-];
+const NEW_POSITIONS: readonly PositionDraft[] = [NEW_POSITION, NEW_POSITION];
 
 export const newChannelValuesDraft = (): ChannelValuesDraft => ({
   mode: 'continuous',
@@ -74,16 +78,27 @@ export function channelValuesDraftOf(values: ChannelValues | undefined): Channel
       return {
         ...draft,
         mode: 'positions',
-        positions: values.positions.map(({value, name}) => ({value: String(value), name: name ?? ''})),
+        positions: values.positions.map(({value, name, momentary}) => ({
+          value: String(value),
+          name: name ?? '',
+          momentary: momentary ?? false
+        })),
         display: values.display ?? 'fader'
       };
   }
 }
 
-const positionOf = ({value, name}: PositionDraft): ChannelPosition => {
-  const trimmed = name.trim();
-  return {value: numberOf(value), ...(trimmed && {name: trimmed})};
-};
+/** the momentary flag only on a channel shown as buttons, so a fader channel never stores it */
+const positionOf =
+  (display: PositionsDisplay) =>
+  ({value, name, momentary}: PositionDraft): ChannelPosition => {
+    const trimmed = name.trim();
+    return {
+      value: numberOf(value),
+      ...(trimmed && {name: trimmed}),
+      ...(display === 'buttons' && momentary && {momentary: true as const})
+    };
+  };
 
 /** lowest value first; a blank one (NaN, reported by the validation) last */
 const byValue = (first: ChannelPosition, second: ChannelPosition): number =>
@@ -94,7 +109,8 @@ const byValue = (first: ChannelPosition, second: ChannelPosition): number =>
 /**
  * the rules the draft describes, valid or not (fixtureErrors checks them); none for every value from 0 to 255, so a
  * fixture without rules is stored as before. Positions are stored lowest value first, whatever order they were added
- * in; only buttons are stored for the display, a fader is stored as before
+ * in; only buttons are stored for the display, a fader is stored as before, and only with buttons a position is
+ * stored as momentary
  */
 export function channelValuesOfDraft(draft: ChannelValuesDraft): ChannelValues | undefined {
   const min = boundOf(draft.min, DMX_MIN_VALUE);
@@ -107,7 +123,7 @@ export function channelValuesOfDraft(draft: ChannelValuesDraft): ChannelValues |
     case 'positions':
       return {
         mode: 'positions',
-        positions: draft.positions.map(positionOf).sort(byValue),
+        positions: draft.positions.map(positionOf(draft.display)).sort(byValue),
         ...(draft.display === 'buttons' && {display: 'buttons' as const})
       };
   }
@@ -122,7 +138,7 @@ export const withValueMode = (draft: ChannelValuesDraft, mode: ChannelValueMode)
 
 export const withNewPosition = (draft: ChannelValuesDraft): ChannelValuesDraft => ({
   ...draft,
-  positions: [...draft.positions, {value: '', name: ''}]
+  positions: [...draft.positions, NEW_POSITION]
 });
 
 export const withPositionChange = (

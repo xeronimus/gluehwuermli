@@ -18,6 +18,7 @@ import ModeToggle, {type Mode} from '../commons/ModeToggle';
 import {AddIcon, RemoveIcon} from '../commons/icons';
 import {
   positionActions,
+  positionMomentary,
   positionNameInput,
   positionRows,
   positionValueInput,
@@ -31,8 +32,8 @@ interface ChannelPositionsListProps {
 }
 
 /**
- * the positions of a positions channel, below its row in the channels: a value and an optional name each; and whether
- * the Show view has a fader for them or a button per position
+ * the positions of a positions channel, below its row in the channels: a value and an optional name each, and with
+ * buttons whether its button is momentary; and whether the Show view has a fader for them or a button per position
  */
 const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps) => {
   const {t} = useLingui();
@@ -65,6 +66,23 @@ const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps
                 aria-label={t`Name of position ${positionNumber} of channel ${row}`}
                 onChange={(event) => onChange(withPositionChange(values, index, {name: event.target.value}))}
               />
+              {values.display === 'buttons' ? (
+                <label
+                  className={positionMomentary}
+                  title={t`In the Show view, the button sets this value only while it is held down, then puts back the value from before`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={position.momentary}
+                    aria-label={t`Position ${positionNumber} of channel ${row} only while held`}
+                    onChange={(event) => onChange(withPositionChange(values, index, {momentary: event.target.checked}))}
+                  />
+                  <Trans>Momentary</Trans>
+                </label>
+              ) : (
+                // keeps the remove button in its column, so the rows don't shift when the boxes are hidden
+                <span />
+              )}
               <Button onClick={() => onChange(withoutPosition(values, index))} title={t`Remove the position`}>
                 <RemoveIcon />
               </Button>
