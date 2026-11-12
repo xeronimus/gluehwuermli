@@ -39,8 +39,10 @@ const FixtureChannelHelp = ({initiallyOpen}: FixtureChannelHelpProps) => (
         size, e.g. a strobe in steps of 10. <strong>Positions</strong> stops only at the values listed, each with an
         optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on
         mouse over), and a preset picks one of them. With <strong>Buttons</strong> next to Add position, the Show view
-        has a button per position instead of the fader, the highest value on top. Only the fixture's faders follow
-        these, the Channels view sends any value.
+        has a button per position instead of the fader, the highest value on top. A <strong>Momentary</strong>{' '}
+        position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash,
+        and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these,
+        the Channels view sends any value.
       </Trans>
     </p>
     <p className={helpExample}>

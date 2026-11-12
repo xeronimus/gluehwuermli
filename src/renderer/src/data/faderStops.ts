@@ -80,6 +80,8 @@ export interface PositionButton {
   readonly value: number;
   /** the position's name, or its value without one */
   readonly label: string;
+  /** sets the value only while held, then puts back the one from before */
+  readonly momentary: boolean;
 }
 
 /**
@@ -87,4 +89,6 @@ export interface PositionButton {
  * the other channels
  */
 export const positionButtons = (fader: Fader): PositionButton[] =>
-  [...faderPositions(fader)].reverse().map(({value, name}) => ({value, label: name ?? String(value)}));
+  [...faderPositions(fader)]
+    .reverse()
+    .map(({value, name, momentary}) => ({value, label: name ?? String(value), momentary: momentary === true}));
