@@ -27,8 +27,11 @@ export const channelButtons = style({
 /** a channel whose cap is lifted with the channel lock, as on its fader */
 export const channelButtonsCapLifted = style([channelButtons, {borderColor: vars.colors.danger}]);
 
+/** as wide as `255` and `100%` in the mono font, so a value going 99 → 100 doesn't widen the stack and its fixture */
 export const channelValue = style({
   alignSelf: 'center',
+  minWidth: '3ch',
+  textAlign: 'center',
   fontFamily: vars.fonts.mono,
   fontSize: '0.85em',
   color: vars.colors.text
@@ -36,6 +39,8 @@ export const channelValue = style({
 
 export const channelPercent = style({
   alignSelf: 'center',
+  minWidth: '4ch',
+  textAlign: 'center',
   marginTop: '-4px',
   fontFamily: vars.fonts.mono,
   fontSize: '0.75em',
@@ -51,7 +56,6 @@ export const positionStack = style({
 });
 
 const positionButtonBase = style({
-  position: 'relative',
   font: 'inherit',
   fontSize: '0.9em',
   color: vars.colors.text,
@@ -69,37 +73,52 @@ const positionButtonBase = style({
     '&:disabled': {
       cursor: 'default',
       opacity: 0.5
+    },
+    // an invisible bold copy of the label holds the width of the active look, so pressing a button doesn't widen the
+    // stack and its fixture
+    '&::after': {
+      content: 'attr(data-label)',
+      display: 'block',
+      height: 0,
+      overflow: 'hidden',
+      visibility: 'hidden',
+      fontWeight: 600
     }
   }
 });
 
-export const positionButton = styleVariants({
-  inactive: [positionButtonBase],
-  active: [
-    positionButtonBase,
-    {
-      fontWeight: 600,
-      borderColor: activeColor,
-      background: `color-mix(in srgb, ${activeColor} ${ACTIVE_TINT_STRENGTH}, ${vars.colors.surfaceRaised})`,
-      boxShadow: `0 0 8px 1px ${activeColor}`,
-      selectors: {
-        '&:hover:not(:disabled), &:focus-visible:not(:disabled)': {
-          borderColor: activeColor
-        }
-      }
+const activeGlow = `0 0 8px 1px ${activeColor}`;
+
+const activeLook = style({
+  fontWeight: 600,
+  borderColor: activeColor,
+  background: `color-mix(in srgb, ${activeColor} ${ACTIVE_TINT_STRENGTH}, ${vars.colors.surfaceRaised})`,
+  boxShadow: activeGlow,
+  selectors: {
+    '&:hover:not(:disabled), &:focus-visible:not(:disabled)': {
+      borderColor: activeColor
     }
-  ]
+  }
 });
 
-/** the corner marker of a momentary position's button: it sets the value only while held */
-export const momentaryMarker = style({
-  position: 'absolute',
-  top: '1px',
-  right: '1px',
-  width: '0.85em',
-  height: '0.85em',
-  color: vars.colors.textMuted,
-  pointerEvents: 'none'
+/** how far a momentary position's button stands out: the height of its edge, and how far it sinks while held */
+const KEY_DEPTH = '3px';
+
+/** the edge below a momentary button, so it looks like a key that springs back */
+const keyEdge = `0 ${KEY_DEPTH} 0 ${vars.colors.focusBorder}`;
+
+/** a momentary button keeps the room of its edge below it, so the stack's gaps look even and it can sink into it */
+const momentaryKey = style({marginBottom: KEY_DEPTH});
+
+/**
+ * a button per position; a momentary one (it sets the value only while held) is a raised key, sunk while its value is
+ * on
+ */
+export const positionButton = styleVariants({
+  inactive: [positionButtonBase],
+  active: [positionButtonBase, activeLook],
+  momentaryInactive: [positionButtonBase, momentaryKey, {boxShadow: keyEdge}],
+  momentaryActive: [positionButtonBase, momentaryKey, activeLook, {transform: `translateY(${KEY_DEPTH})`}]
 });
 
 /** the channel's name, below the buttons like a fader's */
