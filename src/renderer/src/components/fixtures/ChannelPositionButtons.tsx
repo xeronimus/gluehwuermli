@@ -11,7 +11,6 @@ import {selectChannelValue} from '@/state/channels/channelsSelectors';
 import {selectChannelLimit, selectLiftedChannelLimit} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {MomentaryIcon} from '../commons/icons';
 import {useFaderTitles} from '../commons/useFaderTitles';
 import {
   buttonColor,
@@ -20,7 +19,6 @@ import {
   channelLabel,
   channelPercent,
   channelValue,
-  momentaryMarker,
   positionButton,
   positionStack
 } from './ChannelPositionButtons.css';
@@ -31,12 +29,15 @@ interface ChannelPositionButtonsProps {
   onChange: (channel: number, value: number) => void;
 }
 
+const buttonLook = (momentary: boolean, on: boolean): keyof typeof positionButton =>
+  momentary ? (on ? 'momentaryActive' : 'momentaryInactive') : on ? 'active' : 'inactive';
+
 /**
  * a positions channel set to buttons, in place of its fader: a button per position, the highest value on top like
  * on the fader, the one of the channel's value on (in the channel's color), none for a value off the positions.
  * Positions above the channel lock's cap are disabled. Reads only its own channel from the store, like the fader; a
- * right click sets the lowest position, like a fader's sets its min. A momentary position's button (with a marker)
- * sets its value only while held and then puts back the one from before (useMomentaryPress)
+ * right click sets the lowest position, like a fader's sets its min. A momentary position's button (a raised key, sunk
+ * while on) sets its value only while held and then puts back the one from before (useMomentaryPress)
  */
 const ChannelPositionButtons = ({fader, onChange}: ChannelPositionButtonsProps) => {
   const {t} = useLingui();
@@ -75,8 +76,9 @@ const ChannelPositionButtons = ({fader, onChange}: ChannelPositionButtonsProps) 
             <button
               key={position.value}
               type="button"
-              className={positionButton[position.value === value ? 'active' : 'inactive']}
+              className={positionButton[buttonLook(position.momentary, position.value === value)]}
               aria-pressed={position.value === value}
+              data-label={position.label}
               disabled={!allowed}
               title={allowed ? (position.momentary ? t`Only while held` : undefined) : titles.locked}
               {...(position.momentary
@@ -84,7 +86,6 @@ const ChannelPositionButtons = ({fader, onChange}: ChannelPositionButtonsProps) 
                 : {onClick: () => sendIfChanged(position.value)})}
             >
               {position.label}
-              {position.momentary && <MomentaryIcon className={momentaryMarker} aria-hidden />}
             </button>
           );
         })}
