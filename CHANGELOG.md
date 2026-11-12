@@ -12,8 +12,12 @@ change bumps the minor version and everything else the patch version.
 
 ### Added
 
-- A position of a channel shown as buttons can be momentary: its button sets the value only while held and puts back
-  the value from before on release (#95)
+- A position of a channel shown as buttons can be momentary: its button, a raised key that sinks while held, sets the
+  value only while held and puts back the value from before on release (#95)
+
+### Fixed
+
+- A fixture no longer grows a little wider when a channel shown as buttons changes its value or its active button
 
 ## [0.3.1] - 2026-11-09
 
