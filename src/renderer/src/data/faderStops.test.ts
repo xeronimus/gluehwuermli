@@ -74,9 +74,19 @@ test('only a positions channel set to buttons shows as buttons', () => {
 
 test('the buttons go from the highest value on top to the lowest, named or by value; other channels have none', () => {
   expect(positionButtons(gobo)).toEqual([
-    {value: 200, label: 'Star'},
-    {value: 6, label: 'Open'},
-    {value: 5, label: '5'}
+    {value: 200, label: 'Star', momentary: false},
+    {value: 6, label: 'Open', momentary: false},
+    {value: 5, label: '5', momentary: false}
   ]);
   expect(positionButtons(strobe)).toEqual([]);
+});
+
+test('a momentary position has a momentary button', () => {
+  const flash: Fader = {
+    channel: 4,
+    label: 'Flash',
+    values: {mode: 'positions', positions: [{value: 0}, {value: 255, momentary: true}], display: 'buttons'}
+  };
+
+  expect(positionButtons(flash).map(({momentary}) => momentary)).toEqual([true, false]);
 });

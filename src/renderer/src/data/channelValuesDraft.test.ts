@@ -3,6 +3,8 @@ import {
   channelValuesOfDraft,
   newChannelValuesDraft,
   positionChoices,
+  withNewPosition,
+  withPositionChange,
   withValueMode
 } from './channelValuesDraft';
 
@@ -21,10 +23,10 @@ test('a preset picks from the valid positions, lowest first, each value once, by
     ...newChannelValuesDraft(),
     mode: 'positions' as const,
     positions: [
-      {value: '200', name: 'Star'},
-      {value: '', name: 'Not yet'},
-      {value: '5', name: ' '},
-      {value: '200', name: 'Twice'}
+      {value: '200', name: 'Star', momentary: false},
+      {value: '', name: 'Not yet', momentary: false},
+      {value: '5', name: ' ', momentary: false},
+      {value: '200', name: 'Twice', momentary: false}
     ]
   };
 
@@ -55,14 +57,51 @@ describe('the display of a positions channel', () => {
   });
 });
 
+describe('momentary positions', () => {
+  const flash = {
+    mode: 'positions' as const,
+    positions: [{value: 0}, {value: 255, name: 'Flash', momentary: true as const}],
+    display: 'buttons' as const
+  };
+
+  test('are stored and drafted back with buttons', () => {
+    expect(channelValuesDraftOf(flash).positions.map(({momentary}) => momentary)).toEqual([false, true]);
+    expect(channelValuesOfDraft(channelValuesDraftOf(flash))).toEqual(flash);
+  });
+
+  test('are not stored with a fader, and come back when switched to buttons again', () => {
+    const fader = {...channelValuesDraftOf(flash), display: 'fader' as const};
+    expect(channelValuesOfDraft(fader)).toEqual({
+      mode: 'positions',
+      positions: [{value: 0}, {value: 255, name: 'Flash'}]
+    });
+    expect(channelValuesOfDraft({...fader, display: 'buttons'})).toEqual(flash);
+  });
+
+  test('are not stored after switching to steps or continuous', () => {
+    const draft = channelValuesDraftOf(flash);
+    expect(channelValuesOfDraft(withValueMode(draft, 'steps'))).not.toHaveProperty('positions');
+    expect(channelValuesOfDraft(withValueMode(draft, 'continuous'))).toBeUndefined();
+  });
+
+  test('a checked box makes a position momentary, a new position is not', () => {
+    const draft = withPositionChange(channelValuesDraftOf({...flash, positions: [{value: 0}, {value: 255}]}), 0, {
+      momentary: true
+    });
+    expect(channelValuesOfDraft(draft)).toEqual({...flash, positions: [{value: 0, momentary: true}, {value: 255}]});
+    expect(withNewPosition(draft).positions.at(-1)?.momentary).toBe(false);
+    expect(withValueMode(newChannelValuesDraft(), 'positions').positions.every(({momentary}) => !momentary)).toBe(true);
+  });
+});
+
 test('positions are stored lowest value first, blank ones last', () => {
   const draft = {
     ...newChannelValuesDraft(),
     mode: 'positions' as const,
     positions: [
-      {value: '200', name: 'Star'},
-      {value: '', name: 'Not yet'},
-      {value: '5', name: ''}
+      {value: '200', name: 'Star', momentary: false},
+      {value: '', name: 'Not yet', momentary: false},
+      {value: '5', name: '', momentary: false}
     ]
   };
 
