@@ -13,10 +13,14 @@ import {useAppStore} from '../store';
 import {playChase} from './playChase';
 import {useActionSetChannelValues} from './setChannelValues';
 
+/** counts the requests to turn the preview on or off, so one waiting for a chase to stop is dropped by any later one */
+let latestRequest = 0;
+
 /**
  * turns the chase editor's "Preview on rig" on or off. On stops a chase playing or paused first, as its next step would
  * overwrite the preview, and turns it on only once the chase is stopped: main's pushes and its reply share one ordered
- * IPC link, so no step pushed before the stop arrives after it. A failed stop shows the error and leaves it off
+ * IPC link, so no step pushed before the stop arrives after it. A failed stop shows the error and leaves it off, as does
+ * a later request (toggled again, the editor closed) coming in while the stop is awaited
  */
 export async function turnStepOnRig(
   service: ChaseService,
@@ -26,6 +30,8 @@ export async function turnStepOnRig(
   },
   on: boolean
 ): Promise<void> {
+  latestRequest += 1;
+  const request = latestRequest;
   const actions = store.getState();
   if (!on) {
     actions.setStepOnRig(false);
@@ -34,13 +40,16 @@ export async function turnStepOnRig(
   if (actions.chaseStatus.type !== 'idle') {
     await playChase(service, actions, 'stop', actions.chaseStatus.chaseId);
   }
-  if (store.getState().chaseStatus.type === 'idle') {
+  if (request === latestRequest && store.getState().chaseStatus.type === 'idle') {
     actions.setStepOnRig(true);
   }
 }
 
+const toggleStepOnRig = (on: boolean) => turnStepOnRig(chaseService, useAppStore, on);
+
+/** the same function on every render, so it can be an effect's dependency */
 export function useActionToggleStepOnRig() {
-  return (on: boolean) => turnStepOnRig(chaseService, useAppStore, on);
+  return toggleStepOnRig;
 }
 
 const keyOf = (values: readonly SetChannelRequest[]): string =>

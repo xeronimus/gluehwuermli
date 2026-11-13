@@ -11,15 +11,15 @@ import {StepOnRigIcon} from '../commons/icons';
 /**
  * the chase editor's "Preview on rig": sends the shown step to the output while it is edited (ChaseStepEditor). Mounts
  * and unmounts with the editor, so every way of closing it (Save, Cancel, Escape, Show mode, another project) turns the
- * preview off here; the output keeps the last values
+ * preview off here, also one still waiting for a chase to stop; the output keeps the last values
  */
 const ChaseOnRigToggle = () => {
   const {t} = useLingui();
   const stepOnRig = useAppStore((state) => state.stepOnRig);
-  const setStepOnRig = useAppStore((state) => state.setStepOnRig);
   const toggleStepOnRig = useActionToggleStepOnRig();
 
-  useEffect(() => () => setStepOnRig(false), [setStepOnRig]);
+  // off through the toggle, so it also drops a request still waiting for a chase to stop
+  useEffect(() => () => void toggleStepOnRig(false), [toggleStepOnRig]);
 
   return (
     <Button
