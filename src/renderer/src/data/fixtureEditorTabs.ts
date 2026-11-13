@@ -25,7 +25,6 @@ export function tabOfFixtureError(error: FixtureError): FixtureEditorTab {
     case 'values-positions-too-few':
     case 'values-position-twice':
     case 'values-position-name-too-long':
-    case 'shared-address-rules-differ':
     case 'past-universe-end':
       return 'channels';
     case 'preset-name-missing':

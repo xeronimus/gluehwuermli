@@ -29,10 +29,6 @@ msgstr "{channelNumber} ({stepCount} von {totalSteps})"
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
 
-#: src/renderer/src/i18n/messages/fixtureMessages.ts
-msgid "{otherFixtureName} uses {addressCount, plural, one {address} other {addresses}} {addressList} too, with other values: shared channels need the same mode and values"
-msgstr "{otherFixtureName} nutzt {addressCount, plural, one {Adresse} other {die Adressen}} {addressList} auch, mit anderen Werten: Geteilte Kanäle brauchen denselben Modus und dieselben Werte"
-
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "{path}: {message}"
 msgstr "{path}: {message}"

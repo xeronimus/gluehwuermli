@@ -7,7 +7,6 @@ import {
   nearestStop,
   nextStop,
   previousStop,
-  sameValueRules,
   valueRange,
   valueRulesErrors
 } from './channelValueRules';
@@ -131,17 +130,5 @@ describe('isValidValueOf', () => {
     expect(isValidValueOf(fixture, 0, 256)).toBe(false);
     expect(isValidValueOf(fixture, 9, 17)).toBe(true);
     expect(isValidValueOf(fixture, 9, -1)).toBe(false);
-  });
-});
-
-describe('sameValueRules', () => {
-  test('rules stopping at the same values are the same, whatever their mode or position names', () => {
-    expect(sameValueRules(FULL_RANGE, {mode: 'steps', min: 0, max: 255, step: 1})).toBe(true);
-    expect(sameValueRules(gobo, {mode: 'positions', positions: [{value: 6}, {value: 200}, {value: 5}]})).toBe(true);
-  });
-
-  test('rules stopping at other values differ, also against a channel without rules', () => {
-    expect(sameValueRules(FULL_RANGE, dimmer)).toBe(false);
-    expect(sameValueRules(strobe, {...strobe, step: 30})).toBe(false);
   });
 });
