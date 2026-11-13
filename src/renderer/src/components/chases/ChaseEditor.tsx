@@ -60,6 +60,11 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
   const errors = chaseEditErrors(draft);
   const canSave = canSaveChase(errors) && !saving;
 
+  const onStepSelect = (stepId: string | undefined) => {
+    setChosenStepId(stepId);
+    rowMarks.stepShown();
+  };
+
   const onSave = async () => {
     if (!canSave) {
       return;
@@ -109,10 +114,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
           steps={draft.steps}
           stepErrors={errors.steps}
           shownId={shownId}
-          onSelect={(stepId) => {
-            setChosenStepId(stepId);
-            rowMarks.stepShown();
-          }}
+          onSelect={onStepSelect}
           rowMarks={rowMarks}
           onChange={setDraft}
         />

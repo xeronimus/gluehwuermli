@@ -14,6 +14,7 @@ import {
   shownStepId,
   sortedByChannel,
   stepIdAfterRemoval,
+  stepIdBeside,
   withChannelInAllSteps,
   withHoldOfAllSteps,
   withNewStep,
@@ -264,5 +265,13 @@ describe('the step tab shown', () => {
     expect(stepIdAfterRemoval(steps, 0)).toBe('strobe');
     expect(stepIdAfterRemoval(steps, 1)).toBe('laser');
     expect(stepIdAfterRemoval(steps.slice(0, 1), 0)).toBeUndefined();
+  });
+
+  test('stepping through: the step before or after the shown one, none past either end or without one shown', () => {
+    expect(stepIdBeside(steps, 'laser', 'later')).toBe('strobe');
+    expect(stepIdBeside(steps, 'strobe', 'earlier')).toBe('laser');
+    expect(stepIdBeside(steps, 'laser', 'earlier')).toBeUndefined();
+    expect(stepIdBeside(steps, 'strobe', 'later')).toBeUndefined();
+    expect(stepIdBeside(steps, undefined, 'later')).toBeUndefined();
   });
 });

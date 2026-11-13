@@ -5,7 +5,7 @@ import {CHASE_REPEAT_MIN, type Chase, type ChaseRepeat, type ChaseStep, type Fix
 
 import {numberOf} from './channelValuesDraft';
 import {holdMsOf, holdSeconds} from './chaseHold';
-import {type MoveDirection, moved} from './listOrder';
+import {type MoveDirection, canMove, moved} from './listOrder';
 
 /** a chase as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
 export interface ChaseDraft {
@@ -278,3 +278,15 @@ export const shownStepId = (steps: readonly ChaseStepDraft[], chosenId: string |
 /** the step shown once the one at `stepIndex` is deleted: the one after it, the one before it at the end */
 export const stepIdAfterRemoval = (steps: readonly ChaseStepDraft[], stepIndex: number): string | undefined =>
   (steps[stepIndex + 1] ?? steps[stepIndex - 1])?.id;
+
+/** the step beside the shown one in `direction`, for stepping through the tabs; none past either end */
+export const stepIdBeside = (
+  steps: readonly ChaseStepDraft[],
+  shownId: string | undefined,
+  direction: MoveDirection
+): string | undefined => {
+  const index = steps.findIndex(({id}) => id === shownId);
+  return index >= 0 && canMove(steps.length, index, direction)
+    ? steps[index + (direction === 'earlier' ? -1 : 1)]?.id
+    : undefined;
+};

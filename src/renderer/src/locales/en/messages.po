@@ -966,6 +966,10 @@ msgstr "New scene"
 msgid "Next channels"
 msgstr "Next channels"
 
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Next step"
+msgstr "Next step"
+
 #: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: add the devices of your rig, to control them by name."
 msgstr "No fixtures yet: add the devices of your rig, to control them by name."
@@ -1149,6 +1153,10 @@ msgstr "Preview on rig"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Previous channels"
 msgstr "Previous channels"
+
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Previous step"
+msgstr "Previous step"
 
 #: src/renderer/src/components/help/ProjectInfoSection.tsx
 #: src/renderer/src/components/project/ProjectSection.tsx
@@ -1456,6 +1464,10 @@ msgstr "The app remembers the port it was last connected to, also after a Discon
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 msgstr "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off."
+msgstr "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."

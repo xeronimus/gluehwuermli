@@ -966,6 +966,10 @@ msgstr "Neue Szene"
 msgid "Next channels"
 msgstr "Nächste Kanäle"
 
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Next step"
+msgstr "Nächster Schritt"
+
 #: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: add the devices of your rig, to control them by name."
 msgstr "Noch keine Geräte: Füg die Geräte deiner Anlage ein, um sie beim Namen zu steuern."
@@ -1149,6 +1153,10 @@ msgstr "Vorschau auf der Anlage"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Previous channels"
 msgstr "Vorherige Kanäle"
+
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Previous step"
+msgstr "Vorheriger Schritt"
 
 #: src/renderer/src/components/help/ProjectInfoSection.tsx
 #: src/renderer/src/components/project/ProjectSection.tsx
@@ -1456,6 +1464,10 @@ msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nac
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 msgstr "Hier liegen die eigenen Einstellungen der App als JSON-Dateien: der Passwort-Hash, der Ausgabe-Port, die Sprache, die zuletzt geöffneten Projekte und die Fensterposition. Die Geräte und Szenen sind in den Projektdateien."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off."
+msgstr "Die Pfeile links der Schritt-Tabs wählen den vorherigen oder den nächsten Schritt, wie ein Klick auf einen Tab, ob «Vorschau auf der Anlage» ein- oder ausgeschaltet ist."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
