@@ -696,10 +696,6 @@ msgstr "Englisch und Deutsch"
 msgid "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
 msgstr "Jede Änderung an den Geräten und Szenen wird sofort in die Projektdatei gespeichert. Beim Öffnen eines anderen Projekts gehen zuerst alle Kanäle auf 0."
 
-#: ghpage/src/Limitations.tsx
-msgid "Every channel is 0–255; a device's coarse and fine channel are two separate faders."
-msgstr "Jeder Kanal geht von 0 bis 255; Grob- und Feinkanal eines Geräts sind zwei getrennte Fader."
-
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
 msgstr "Jeder Kanal braucht einen Namen"
@@ -801,8 +797,8 @@ msgid "Glühwürmli comes without any warranty. It is made for private use, such
 msgstr "Glühwürmli kommt ohne jede Gewährleistung. Es ist für den privaten Gebrauch gemacht, etwa im Wohnzimmer, an einer Party oder für eine kleine Band, nicht für professionelle Shows oder für irgendetwas Sicherheitskritisches."
 
 #: ghpage/src/Limitations.tsx
-msgid "Glühwürmli is made to be set up in an evening and played without a manual at hand. It leaves out what professional lighting software does:"
-msgstr "Glühwürmli ist dafür gemacht, an einem Abend eingerichtet und ohne Handbuch gespielt zu werden. Es lässt weg, was professionelle Lichtsoftware kann:"
+msgid "Glühwürmli is made to be set up in an evening and played without a manual at hand, so it does less than professional lighting software:"
+msgstr "Glühwürmli ist dafür gemacht, an einem Abend eingerichtet und ohne Handbuch gespielt zu werden; darum kann es weniger als professionelle Lichtsoftware:"
 
 #: ghpage/src/TestedHardware.tsx
 msgid "Glühwürmli sends DMX through a USB DMX interface. It is tested with these two, which speak the same protocol:"
@@ -1034,8 +1030,16 @@ msgid "Next step"
 msgstr "Nächster Schritt"
 
 #: ghpage/src/Limitations.tsx
+msgid "No 16-bit channels: every channel is 0–255, a device's coarse and fine channel are two separate faders."
+msgstr "Keine 16-Bit-Kanäle: Jeder Kanal geht von 0 bis 255, Grob- und Feinkanal eines Geräts sind zwei getrennte Fader."
+
+#: ghpage/src/Limitations.tsx
 msgid "No cue lists, no moving-head effects (pan/tilt shapes), no RDM."
 msgstr "Keine Cue-Listen, keine Moving-Head-Effekte (Pan/Tilt-Figuren), kein RDM."
+
+#: ghpage/src/Limitations.tsx
+msgid "No fades yet: values and chase steps change at once (fades are planned)."
+msgstr "Noch keine Überblendungen: Werte und Chase-Schritte wechseln sofort (Überblendungen sind geplant)."
 
 #: ghpage/src/Limitations.tsx
 msgid "No fixture library: you enter each device's channels yourself, from its manual."
@@ -1120,12 +1124,12 @@ msgid "One button sets the channels of several fixtures at once: the whole rig i
 msgstr "Ein Knopf setzt die Kanäle mehrerer Geräte auf einmal: die ganze Anlage in einer Stimmung."
 
 #: ghpage/src/Limitations.tsx
-msgid "One computer, one operator; no remote control from a phone or tablet."
-msgstr "Ein Computer, eine Person am Pult; keine Fernsteuerung vom Handy oder Tablet."
+msgid "Only one computer and one operator; no remote control from a phone or tablet."
+msgstr "Nur ein Computer und eine Person am Pult; keine Fernsteuerung vom Handy oder Tablet."
 
 #: ghpage/src/Limitations.tsx
-msgid "One DMX universe: 512 channels."
-msgstr "Ein DMX-Universum: 512 Kanäle."
+msgid "Only one DMX universe: 512 channels."
+msgstr "Nur ein DMX-Universum: 512 Kanäle."
 
 #: ghpage/src/Limitations.tsx
 msgid "Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network."
@@ -1134,6 +1138,10 @@ msgstr "Nur die beiden USB-Interfaces oben; kein Art-Net, sACN oder anderes DMX 
 #: src/renderer/src/components/fixtures/ChannelPositionButtons.tsx
 msgid "Only while held"
 msgstr "Nur solange gedrückt"
+
+#: ghpage/src/Limitations.tsx
+msgid "Only Windows, for now."
+msgstr "Vorerst nur Windows."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Open in Explorer"
@@ -1909,10 +1917,6 @@ msgstr "Wert: eine ganze Zahl von {minValue} bis {maxValue}"
 msgid "Values"
 msgstr "Werte"
 
-#: ghpage/src/Limitations.tsx
-msgid "Values and chase steps change at once; there are no fades yet (planned)."
-msgstr "Werte und Chase-Schritte wechseln sofort; Überblendungen gibt es noch nicht (geplant)."
-
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
 msgstr "Einzelne Werte lassen sich hier nicht ändern. Ein Kanal, der einem Gerät später hinzugefügt wird, kommt erst in eine Szene, wenn sie mit «Aktuelle Werte speichern» gespeichert wird; wird ein Gerät gelöscht, fällt es aus jeder Szene. Solange die Kanalsperre an ist, geht ein gesperrter Kanal nur bis zu seinem Maximum, was auch immer die Szene gespeichert hat."
@@ -1932,10 +1936,6 @@ msgstr "Beim Bearbeiten ändern ein neuer Name oder das Setzen und Entfernen von
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
 msgstr "Wo der Fader anhält: bei jedem Wert von Min. bis Max., in Stufen oder nur bei einigen Positionen"
-
-#: ghpage/src/Limitations.tsx
-msgid "Windows only, for now."
-msgstr "Vorerst nur Windows."
 
 #: ghpage/src/SafetyNote.tsx
 msgid "Windows SmartScreen"

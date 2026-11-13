@@ -36,19 +36,19 @@ Any DMX device can be connected to them. Other interfaces aren't supported.
 
 ## Kept simple on purpose
 
-Glühwürmli is made to be set up in an evening and played without a manual at hand. It leaves out what professional
-lighting software does:
+Glühwürmli is made to be set up in an evening and played without a manual at hand, so it does less than professional
+lighting software:
 
-- One DMX universe: 512 channels
+- Only one DMX universe: 512 channels
 - Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network
-- Windows only, for now ([#11](https://github.com/xeronimus/gluehwuermli/issues/11))
-- Values and chase steps change at once; there are no fades yet (planned)
+- Only Windows, for now ([#11](https://github.com/xeronimus/gluehwuermli/issues/11))
+- No fades yet: values and chase steps change at once (fades are planned)
 - No fixture library: you enter each device's channels yourself, from its manual
-- Every channel is 0–255; a device's coarse and fine channel are two separate faders
+- No 16-bit channels: every channel is 0–255, a device's coarse and fine channel are two separate faders
 - No MIDI or other hardware controllers; mouse and keyboard only
 - No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel
 - No cue lists, no moving-head effects (pan/tilt shapes), no RDM
-- One computer, one operator; no remote control from a phone or tablet
+- Only one computer and one operator; no remote control from a phone or tablet
 
 ## Installing
 
