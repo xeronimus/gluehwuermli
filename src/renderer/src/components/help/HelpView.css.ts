@@ -36,7 +36,8 @@ globalStyle(`${sideSection} h2`, {
   fontWeight: 600
 });
 
-export const repositoryLink = style({
+/** the website and the repo */
+export const externalLink = style({
   color: vars.colors.primary,
   textDecoration: 'none',
   outline: 'none',

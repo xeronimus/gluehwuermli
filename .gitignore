@@ -9,6 +9,10 @@ node_modules/
 /out
 /dist
 
+# the landing page: built by `pnpm --dir ghpage build`, deployed by .github/workflows/ghpage.yml
+/ghpageOut
+/ghpage/.render
+
 # misc
 .DS_Store
 .env

@@ -26,7 +26,7 @@ export default defineConfig({
       {
         extends: true,
         resolve: {alias: sharedAlias},
-        test: {name: 'shared', include: ['src/shared/**/*.test.ts', 'src/*.test.ts']}
+        test: {name: 'shared', include: ['src/shared/**/*.test.ts', 'src/*.test.ts', 'ghpage/src/**/*.test.ts']}
       },
       {
         extends: true,

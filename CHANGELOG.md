@@ -14,6 +14,8 @@ change bumps the minor version and everything else the patch version.
 
 - A Safety section in the Help view: no warranty, made for private use, and the channel lock is not a laser safety
   system (#103)
+- A Website section in the Help view, linking to the new website (https://xeronimus.github.io/gluehwuermli/) with the
+  download and the manual in English and German (#103)
 
 ### Changed
 

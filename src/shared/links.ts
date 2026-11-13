@@ -1,6 +1,9 @@
 /** the project on GitHub, linked from the Help view */
 export const REPOSITORY_URL = 'https://github.com/xeronimus/gluehwuermli';
 
+/** the landing page (GitHub Pages, built from ghpage/): download, features and the manual; linked from the Help view */
+export const LANDING_PAGE_URL = 'https://xeronimus.github.io/gluehwuermli/';
+
 /** the schemes the app opens in the system browser; anything else (file:, javascript:, mailto:, custom ones) is refused */
 const OPENABLE_PROTOCOLS: readonly string[] = ['http:', 'https:'];
 

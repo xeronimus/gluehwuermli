@@ -1,10 +1,62 @@
 # Glühwürmli
 
-<img src="src/assets/gluehwuermli_favicon.png" alt="Glühwürmli" width="96" align="right" />
+<img src="src/assets/gluehwuermli_mascot_600.png" alt="The Glühwürmli mascot, a firefly" width="160" align="right" />
 
-A desktop app that sends DMX through a USB DMX interface: an **Enttec DMX USB Pro** or a **Eurolite USB-DMX512 PRO**
-(the same protocol). Fixtures with named channels and presets, scenes, chases, and a Show mode that plays but doesn't
-change them. Electron + electron-vite, React, TypeScript.
+A DMX lighting controller for Windows, for the living room, the party and the small band. Plug in a USB DMX
+interface, set up your devices once, then play them with faders and buttons.
+
+**[Download for Windows](https://github.com/xeronimus/gluehwuermli/releases/latest)** ·
+[Website and manual](https://xeronimus.github.io/gluehwuermli/) ·
+[Deutsch](https://xeronimus.github.io/gluehwuermli/de/)
+
+![Show mode: scenes on top, a fixture each with its faders and presets, the chases below](doc/screenshots/show-mode.png)
+
+## What it does
+
+- **Fixtures and presets:** name your devices and their channels, give a channel a color, and set several channels at
+  once with a preset button
+- **Scenes:** one button sets the channels of several fixtures at once
+- **Chases:** steps of channel values played one after the other, started, paused and stopped with a click
+- **Show mode and Setup mode:** the app starts in Show mode, where everything can be played and nothing changed; a
+  password unlocks Setup mode
+- **Channel caps:** a channel, e.g. a laser's, can be capped while the channel lock is on; only the password lifts it
+- **English and German**, switched in the Settings view
+
+Projects are `.glp` files, saved on every change; keep them wherever you like and copy them to back up a rig. More
+screenshots: [doc/screenshots](doc/screenshots).
+
+## Supported interfaces
+
+Glühwürmli is tested with two USB DMX interfaces, which speak the same protocol:
+
+- **Enttec DMX USB Pro**
+- **Eurolite USB-DMX512 PRO**
+
+Any DMX device can be connected to them. Other interfaces aren't supported.
+
+## Kept simple on purpose
+
+Glühwürmli is made to be set up in an evening and played without a manual at hand, so it does less than professional
+lighting software:
+
+- Only one DMX universe: 512 channels
+- Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network
+- Only Windows, for now ([#11](https://github.com/xeronimus/gluehwuermli/issues/11))
+- No fades yet: values and chase steps change at once (fades are planned)
+- No fixture library: you enter each device's channels yourself, from its manual
+- No 16-bit channels: every channel is 0–255, a device's coarse and fine channel are two separate faders
+- No MIDI or other hardware controllers; mouse and keyboard only
+- No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel
+- No cue lists, no moving-head effects (pan/tilt shapes), no RDM
+- Only one computer and one operator; no remote control from a phone or tablet
+
+## Installing
+
+Download the installer from the [latest release](https://github.com/xeronimus/gluehwuermli/releases/latest) and run
+it. The installer isn't signed yet, so Windows SmartScreen may warn about an unknown publisher: choose **More info**,
+then **Run anyway**.
+
+The manual is in the app (the Help view) and on the [website](https://xeronimus.github.io/gluehwuermli/#manual).
 
 ## Safety
 
@@ -13,47 +65,11 @@ room, a party or a small band, not for professional shows or anything safety-cri
 safety system: it only caps what the app sends. Mount and aim a laser so that it can never hit anyone's eyes, whatever
 the app does.
 
-## Getting started
+## Contributing
 
-```sh
-pnpm install   # also downloads the Electron binary (postinstall)
-pnpm dev       # the app with hot reload of the UI
-```
+Bug reports and ideas are welcome in the [issues](https://github.com/xeronimus/gluehwuermli/issues). How to build and
+run the app from source: [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Without an interface, start with one simulated port instead of the real serial ports:
+## License
 
-```sh
-cp .env.sample .env.development.local   # MAIN_VITE_SIMULATED_OUTPUT=1, gitignored
-pnpm dev
-```
-
-The settings in `.env.development.local` apply to `pnpm dev` only, never to a build or installer. Delete the file (or
-set the value to `0`) to see the real ports again. All settings: [.env.sample](.env.sample).
-
-### Windows: lower the FTDI latency timer
-
-Device Manager → Ports (COM & LPT) → the interface's COM port → Port Settings → Advanced → **Latency Timer: 1–2 ms**
-(default 16). It's the biggest single factor in how quickly a fader reaches the light; see
-[doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md).
-
-## Commands
-
-| Command           | Description                                                  |
-| ----------------- | ------------------------------------------------------------ |
-| `pnpm dev`        | Electron with the Vite dev server (HMR for the renderer)     |
-| `pnpm start`      | Build and run the production build (`electron-vite preview`) |
-| `pnpm build`      | Build main, preload and renderer to `out/`                   |
-| `pnpm dist`       | Build and package the Windows installer (NSIS) to `dist/`    |
-| `pnpm test`       | Typecheck (both tsconfigs), then all Vitest tests            |
-| `pnpm test:watch` | Vitest in watch mode                                         |
-| `pnpm format`     | Import normalizer + Prettier (code and Markdown)             |
-| `pnpm ft`         | Format + test, run it before considering a task done         |
-
-## Docs
-
-- [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md): latency of a web stack with a USB DMX interface, why
-  Electron in 2026
-- [doc/chases.md](doc/chases.md): how chases behave, the spec they were built from
-- [doc/dmxInterfaces](doc/dmxInterfaces): the two USB DMX interfaces, with links to their product pages and the protocol
-- [doc/architecture/decisions](doc/architecture/decisions): the ADRs
-- [CLAUDE.md](CLAUDE.md): project context, structure and code guidelines
+[GPL-3.0-or-later](LICENSE)

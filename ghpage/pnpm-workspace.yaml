@@ -1,0 +1,2 @@
+# its own root, apart from the app's package one folder up: `pnpm --dir ghpage install` installs only what the page needs
+packages: []
