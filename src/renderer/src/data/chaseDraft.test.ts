@@ -267,11 +267,16 @@ describe('the step tab shown', () => {
     expect(stepIdAfterRemoval(steps.slice(0, 1), 0)).toBeUndefined();
   });
 
-  test('stepping through: the step before or after the shown one, none past either end or without one shown', () => {
-    expect(stepIdBeside(steps, 'laser', 'later')).toBe('strobe');
-    expect(stepIdBeside(steps, 'strobe', 'earlier')).toBe('laser');
-    expect(stepIdBeside(steps, 'laser', 'earlier')).toBeUndefined();
-    expect(stepIdBeside(steps, 'strobe', 'later')).toBeUndefined();
+  test('stepping through: the step before or after the shown one, round from either end to the other', () => {
+    const three = [...steps, {id: 'blackout', hold: '1.00', values: []}];
+    expect(stepIdBeside(three, 'laser', 'later')).toBe('strobe');
+    expect(stepIdBeside(three, 'strobe', 'earlier')).toBe('laser');
+    expect(stepIdBeside(three, 'blackout', 'later')).toBe('laser');
+    expect(stepIdBeside(three, 'laser', 'earlier')).toBe('blackout');
+  });
+
+  test('stepping through: none with a single step or without one shown', () => {
+    expect(stepIdBeside(steps.slice(0, 1), 'laser', 'later')).toBeUndefined();
     expect(stepIdBeside(steps, undefined, 'later')).toBeUndefined();
   });
 });
