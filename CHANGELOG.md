@@ -10,6 +10,17 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- A Safety section in the Help view: no warranty, made for private use, and the channel lock is not a laser safety
+  system (#103)
+
+### Changed
+
+- The installer has a new app id (`ch.xeronimus.gluehwuermli`), so it no longer upgrades 0.3.2 and older in place:
+  uninstall the old version once before installing this one. Projects and settings are kept (#103)
+- Glühwürmli is licensed under the GPL-3.0 (#103)
+
 ## [0.3.2] - 2026-11-13
 
 ### Added

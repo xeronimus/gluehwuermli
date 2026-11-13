@@ -67,10 +67,11 @@ electron-builder.yml         # packaging; serialport's native binding is unpacke
 build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer
 doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
+  dmxInterfaces/             # the two USB DMX interfaces: links to their product pages and the Pro's protocol
   architecture/decisions/    # ADRs (.adr-dir)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
 scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through either interface (-Port,
-                             # -From, -To; -Chase, -Alternate, -Sweep), follows doc/devices/enttec_dmx_usb_pro/
+                             # -From, -To; -Chase, -Alternate, -Sweep), follows doc/dmxInterfaces/enttec_dmx_usb_pro/
 lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
