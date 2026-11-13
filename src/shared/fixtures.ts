@@ -1,12 +1,6 @@
 import Value from 'typebox/value';
 
-import {
-  type ValueRulesError,
-  channelValueRules,
-  isValidValueOf,
-  sameValueRules,
-  valueRulesErrors
-} from './channelValueRules';
+import {type ValueRulesError, channelValueRules, isValidValueOf, valueRulesErrors} from './channelValueRules';
 import {chasesAreValid} from './chases';
 import {isValidColor} from './colors';
 import {FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL, isDmxValue} from './dmx';
@@ -83,16 +77,7 @@ export type FixtureError =
   | {readonly type: 'preset-channel-unknown'; readonly presetName: string | undefined}
   | {readonly type: 'preset-channel-twice'; readonly presetName: string | undefined}
   | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined}
-  | {readonly type: 'preset-color-invalid'; readonly presetName: string | undefined}
-  | SharedAddressError;
-
-/** a shared address where the other fixture's channel has different value rules: their faders would disagree */
-export interface SharedAddressError {
-  readonly type: 'shared-address-rules-differ';
-  readonly otherFixtureId: string;
-  readonly otherFixtureName: string;
-  readonly addresses: readonly number[];
-}
+  | {readonly type: 'preset-color-invalid'; readonly presetName: string | undefined};
 
 const presetNameOf = (preset: FixturePreset): string | undefined => (isBlank(preset.name) ? undefined : preset.name);
 
@@ -200,44 +185,6 @@ export function overlappingFixtures(fixtures: readonly Fixture[]): FixtureOverla
   );
 }
 
-/** the channel of the fixture on this address, if it has one there */
-const channelAt = (fixture: Fixture, address: number): FixtureChannel | undefined =>
-  fixture.channels.find((channel) => channelAddress(fixture, channel) === address);
-
-/** the addresses the two fixtures share where their channels stop at different values */
-function addressesWithOtherRules({first, second, addresses}: FixtureOverlap): number[] {
-  return addresses.filter((address) => {
-    const firstChannel = channelAt(first, address);
-    const secondChannel = channelAt(second, address);
-    return (
-      firstChannel !== undefined &&
-      secondChannel !== undefined &&
-      !sameValueRules(channelValueRules(firstChannel), channelValueRules(secondChannel))
-    );
-  });
-}
-
-/**
- * every pair of fixtures sharing an address where their channels have different value rules: their faders would
- * stop at different values on the same address, so such a setup can't be saved. Only the addresses in question
- */
-export const addressRuleConflicts = (fixtures: readonly Fixture[]): FixtureOverlap[] =>
-  overlappingFixtures(fixtures).flatMap((overlap) => {
-    const addresses = addressesWithOtherRules(overlap);
-    return addresses.length > 0 ? [{...overlap, addresses}] : [];
-  });
-
-/** the fixture's shared addresses where another fixture's channel has different value rules, as errors */
-export const sharedAddressErrors = (fixture: Fixture, otherFixtures: readonly Fixture[]): SharedAddressError[] =>
-  addressRuleConflicts([fixture, ...otherFixtures])
-    .filter(({first}) => first.id === fixture.id)
-    .map(({second, addresses}) => ({
-      type: 'shared-address-rules-differ',
-      otherFixtureId: second.id,
-      otherFixtureName: second.name,
-      addresses
-    }));
-
 /** the highest value per DMX address while the channel lock is on; an address missing here is never capped */
 export type ChannelLimits = ReadonlyMap<number, number>;
 
@@ -259,14 +206,14 @@ export function channelLimits(fixtures: readonly Fixture[]): ChannelLimits {
 const hasUniqueIds = (fixtures: readonly Fixture[]) => new Set(fixtures.map(({id}) => id)).size === fixtures.length;
 
 /**
- * the payload if it is a setup the app can work with (schema, unique ids, every fixture, scene and chase valid, no
- * shared address with different value rules), otherwise undefined
+ * the payload if it is a setup the app can work with (schema, unique ids, every fixture, scene and chase valid),
+ * otherwise undefined. Fixtures sharing an address may stop at different values there: the stops only say where a
+ * fixture's fader goes, a value between them is still sent (from the raw channels or a chase)
  */
 export const parseFixtureSetup = (payload: unknown): FixtureSetup | undefined =>
   Value.Check(FixtureSetupSchema, payload) &&
   hasUniqueIds(payload.fixtures) &&
   payload.fixtures.every((fixture) => fixtureErrors(fixture).length === 0) &&
-  addressRuleConflicts(payload.fixtures).length === 0 &&
   scenesAreValid(payload) &&
   chasesAreValid(payload)
     ? payload

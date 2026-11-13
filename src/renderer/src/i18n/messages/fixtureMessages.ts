@@ -99,12 +99,6 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
       const preset = presetLabel(error.presetName, translate);
       return msg`The color of the preset ${preset} must be a hex value like #ff00ff`;
     }
-    case 'shared-address-rules-differ': {
-      const {otherFixtureName} = error;
-      const addressList = error.addresses.join(', ');
-      const addressCount = error.addresses.length;
-      return msg`${otherFixtureName} uses ${plural(addressCount, {one: 'address', other: 'addresses'})} ${addressList} too, with other values: shared channels need the same mode and values`;
-    }
   }
 }
 

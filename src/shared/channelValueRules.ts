@@ -129,10 +129,3 @@ export function isValidValueOf(fixture: Fixture, offset: number, value: number):
   const channel = fixture.channels.find((candidate) => candidate.offset === offset);
   return isDmxValue(value) && (!channel || isValidChannelValue(channelValueRules(channel), value));
 }
-
-/** whether two channels stop at the same values; their position names don't matter, only what is sent */
-export function sameValueRules(first: ChannelValues, second: ChannelValues): boolean {
-  const firstStops = channelStops(first);
-  const secondStops = channelStops(second);
-  return firstStops.length === secondStops.length && firstStops.every((stop, index) => stop === secondStops[index]);
-}
