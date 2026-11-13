@@ -29,10 +29,6 @@ msgstr "{channelNumber} ({stepCount} von {totalSteps})"
 msgid "{firstName} and {secondName} share {addressCount, plural, one {address} other {addresses}} {addressList}"
 msgstr "{firstName} und {secondName} teilen sich {addressCount, plural, one {Adresse} other {die Adressen}} {addressList}"
 
-#: src/renderer/src/i18n/messages/fixtureMessages.ts
-msgid "{otherFixtureName} uses {addressCount, plural, one {address} other {addresses}} {addressList} too, with other values: shared channels need the same mode and values"
-msgstr "{otherFixtureName} nutzt {addressCount, plural, one {Adresse} other {die Adressen}} {addressList} auch, mit anderen Werten: Geteilte Kanäle brauchen denselben Modus und dieselben Werte"
-
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "{path}: {message}"
 msgstr "{path}: {message}"
@@ -1264,6 +1260,10 @@ msgstr "Aktuelle Werte speichern"
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
 msgid "Save the current values of {fixtureName} as a preset"
 msgstr "Die aktuellen Werte von {fixtureName} als Preset speichern"
+
+#: src/renderer/src/i18n/messages/fixtureMessages.ts
+msgid "Saving also gives {otherFixtureName} these values on {addressCount, plural, one {address} other {addresses}} {addressList}, replacing its own"
+msgstr "Beim Speichern erhält auch {otherFixtureName} diese Werte auf {addressCount, plural, one {Adresse} other {Adressen}} {addressList}, anstelle der eigenen"
 
 #: src/renderer/src/components/fixtures/SceneEditor.tsx
 msgid "Scene editor"

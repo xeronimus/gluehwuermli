@@ -1,4 +1,5 @@
 import {DMX_UNIVERSE_SIZE} from '@shared/dmx';
+import {parseFixtureSetup} from '@shared/fixtures';
 import type {Chase, Fixture, FixtureSetup, Scene} from '@shared/ipc';
 
 import {channelOffsetChanges, draftOf, fixtureOfDraft, withChannelChange, withChannelMoved} from './fixtureDraft';
@@ -352,6 +353,37 @@ describe('a fixture saved from the editor', () => {
     const laser: Fixture = {id: 'laser', name: 'Laser', startAddress: 20, channels: [{name: 'Mode', offset: 0}]};
 
     expect(withSavedFixture(setup, laser, new Map())).toEqual({...setup, fixtures: [withPreset, smoke, laser]});
+  });
+
+  test('a fixture sharing its address gets its new rules, its scenes fitted, in one save main accepts', () => {
+    const twin: Fixture = {...par, id: 'twin', name: 'Twin'};
+    const twinScene: Scene = {
+      id: 'twins',
+      name: 'Twins',
+      fixtures: [{fixtureId: 'twin', values: [{offset: 0, value: 130}]}]
+    };
+    const before = setupOf([par, twin], [twinScene]);
+    const inSteps = {mode: 'steps', min: 0, max: 200, step: 100} as const;
+    const stepped: Fixture = {
+      ...par,
+      channels: [
+        {name: 'Red', offset: 0, values: inSteps},
+        {name: 'Blue', offset: 1}
+      ]
+    };
+
+    const after = withSavedFixture(
+      before,
+      stepped,
+      new Map([
+        [0, 0],
+        [1, 1]
+      ])
+    );
+
+    expect(after.fixtures[1].channels[0]).toEqual({name: 'Red', offset: 0, values: inSteps});
+    expect(after.scenes?.[0].fixtures).toEqual([{fixtureId: 'twin', values: [{offset: 0, value: 100}]}]);
+    expect(parseFixtureSetup(after)).toBeDefined();
   });
 });
 

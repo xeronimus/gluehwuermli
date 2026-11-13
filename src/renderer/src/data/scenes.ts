@@ -5,6 +5,7 @@ import {type SceneError, sceneErrors, setupScenes} from '@shared/scenes';
 import {changingFixtures, withFixture} from './fixtureList';
 import {type MoveDirection, movedWithId} from './listOrder';
 import {currentFixtureValues, fittedFixtureValues, fixtureChannelValues} from './presets';
+import {withSharedRules} from './sharedRules';
 
 /**
  * what the scene editor sets: the name, the color of its button's dot, the fixtures it covers, and whether to store the
@@ -175,14 +176,15 @@ export const changingFixturesAndScenes =
 
 /**
  * the setup with the fixture saved from the editor: added, or replacing the one with its id. Its scenes' values follow
- * its channels to their new offsets first (`offsetChanges`: stored offset to new, empty for a new fixture), then the
- * scenes are fitted to the changed fixture
+ * its channels to their new offsets first (`offsetChanges`: stored offset to new, empty for a new fixture). The
+ * fixtures sharing one of its addresses get its value rules there (withSharedRules), then the scenes are fitted to
+ * the changed fixtures
  */
 export const withSavedFixture = (
   setup: FixtureSetup,
   fixture: Fixture,
   offsetChanges: ReadonlyMap<number, number>
 ): FixtureSetup =>
-  changingFixturesAndScenes((fixtures) => withFixture(fixtures, fixture))(
+  changingFixturesAndScenes((fixtures) => withSharedRules(withFixture(fixtures, fixture), fixture))(
     withSceneOffsetsChanged(setup, fixture.id, offsetChanges)
   );

@@ -19,6 +19,9 @@ change bumps the minor version and everything else the patch version.
 
 ### Changed
 
+- Saving a fixture gives the fixtures sharing one of its addresses the same values there, their presets and scenes
+  fitted to them; the fixture editor warns which fixtures and addresses before saving. Two fixtures driven together no
+  longer have to be moved apart to change their values (#55)
 - Chase editor: Save and Cancel no longer stay at the bottom of the window, they scroll with the editor like the rest
 - Disabled buttons are fainter, so they stand out more from the ones that can be pressed
 

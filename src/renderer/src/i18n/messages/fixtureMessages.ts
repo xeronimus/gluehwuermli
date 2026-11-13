@@ -99,12 +99,6 @@ export function fixtureErrorMessage(error: FixtureError, translate: Translate): 
       const preset = presetLabel(error.presetName, translate);
       return msg`The color of the preset ${preset} must be a hex value like #ff00ff`;
     }
-    case 'shared-address-rules-differ': {
-      const {otherFixtureName} = error;
-      const addressList = error.addresses.join(', ');
-      const addressCount = error.addresses.length;
-      return msg`${otherFixtureName} uses ${plural(addressCount, {one: 'address', other: 'addresses'})} ${addressList} too, with other values: shared channels need the same mode and values`;
-    }
   }
 }
 
@@ -115,4 +109,12 @@ export function overlapMessage({first, second, addresses}: FixtureOverlap): Mess
   const addressList = addresses.join(', ');
   const addressCount = addresses.length;
   return msg`${firstName} and ${secondName} share ${plural(addressCount, {one: 'address', other: 'addresses'})} ${addressList}`;
+}
+
+/** a warning: saving the fixture (`first`) replaces the value rules of the other one on these shared addresses */
+export function rulesSharedMessage({second, addresses}: FixtureOverlap): MessageDescriptor {
+  const otherFixtureName = second.name;
+  const addressList = addresses.join(', ');
+  const addressCount = addresses.length;
+  return msg`Saving also gives ${otherFixtureName} these values on ${plural(addressCount, {one: 'address', other: 'addresses'})} ${addressList}, replacing its own`;
 }

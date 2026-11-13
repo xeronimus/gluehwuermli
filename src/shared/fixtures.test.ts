@@ -8,8 +8,7 @@ import {
   fixturePresets,
   lastAddress,
   overlappingFixtures,
-  parseFixtureSetup,
-  sharedAddressErrors
+  parseFixtureSetup
 } from './fixtures';
 import type {ChannelValues, Fixture} from './ipc';
 
@@ -214,13 +213,6 @@ describe('addressRuleConflicts', () => {
     const conflicts = addressRuleConflicts([dimmerOf('a'), dimmerOf('b', fromHundred)]);
 
     expect(conflicts.map(({first, second, addresses}) => [first.id, second.id, addresses])).toEqual([['a', 'b', [10]]]);
-  });
-
-  test('as errors of the fixture being edited, naming the other fixture', () => {
-    expect(sharedAddressErrors(dimmerOf('a'), [dimmerOf('b', fromHundred), dimmerOf('c')])).toEqual([
-      {type: 'shared-address-rules-differ', otherFixtureId: 'b', otherFixtureName: 'b', addresses: [10]}
-    ]);
-    expect(sharedAddressErrors(dimmerOf('a'), [dimmerOf('c')])).toEqual([]);
   });
 });
 

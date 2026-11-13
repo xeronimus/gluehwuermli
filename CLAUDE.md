@@ -156,7 +156,7 @@ src/
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
-                             # presets, scenes, chaseRows, chaseDraft, chaseHold, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
+                             # presets, scenes, sharedRules, chaseRows, chaseDraft, chaseHold, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
                              # recentProjects)
         service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
                              # (composition root), impl/electron, impl/inMemory
@@ -200,7 +200,7 @@ src/
 - **Fixture changes are stored first**: add/edit/delete of a fixture or scene save the whole setup to the project file
   and only then update the store; a failed save shows `fixturesError` and leaves the shown setup unchanged. A fixture change fits the scenes
   in the same save (`withFittedScenes`), since main refuses scenes naming a fixture or channel that is gone; before
-  that, a saved fixture's scene values follow its channels to their new offsets (`withSceneOffsetsChanged`)
+  that, a saved fixture's scene values follow its channels to their new offsets (`withSceneOffsetsChanged`); the fixtures sharing one of its addresses get its value rules there, their presets fitted (`withSharedRules`)
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
   `domain/` imports only `domain/`, `shared/` and packages, `data/` never imports `state/` or `components/`, `state/`

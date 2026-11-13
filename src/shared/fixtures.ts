@@ -83,16 +83,7 @@ export type FixtureError =
   | {readonly type: 'preset-channel-unknown'; readonly presetName: string | undefined}
   | {readonly type: 'preset-channel-twice'; readonly presetName: string | undefined}
   | {readonly type: 'preset-value-invalid'; readonly presetName: string | undefined}
-  | {readonly type: 'preset-color-invalid'; readonly presetName: string | undefined}
-  | SharedAddressError;
-
-/** a shared address where the other fixture's channel has different value rules: their faders would disagree */
-export interface SharedAddressError {
-  readonly type: 'shared-address-rules-differ';
-  readonly otherFixtureId: string;
-  readonly otherFixtureName: string;
-  readonly addresses: readonly number[];
-}
+  | {readonly type: 'preset-color-invalid'; readonly presetName: string | undefined};
 
 const presetNameOf = (preset: FixturePreset): string | undefined => (isBlank(preset.name) ? undefined : preset.name);
 
@@ -226,17 +217,6 @@ export const addressRuleConflicts = (fixtures: readonly Fixture[]): FixtureOverl
     const addresses = addressesWithOtherRules(overlap);
     return addresses.length > 0 ? [{...overlap, addresses}] : [];
   });
-
-/** the fixture's shared addresses where another fixture's channel has different value rules, as errors */
-export const sharedAddressErrors = (fixture: Fixture, otherFixtures: readonly Fixture[]): SharedAddressError[] =>
-  addressRuleConflicts([fixture, ...otherFixtures])
-    .filter(({first}) => first.id === fixture.id)
-    .map(({second, addresses}) => ({
-      type: 'shared-address-rules-differ',
-      otherFixtureId: second.id,
-      otherFixtureName: second.name,
-      addresses
-    }));
 
 /** the highest value per DMX address while the channel lock is on; an address missing here is never capped */
 export type ChannelLimits = ReadonlyMap<number, number>;
