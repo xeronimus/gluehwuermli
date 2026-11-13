@@ -19,6 +19,9 @@ change bumps the minor version and everything else the patch version.
 
 ### Changed
 
+- Fixtures sharing an address may have different values there: each fixture's fader stops at its own values, and one
+  set by another fixture is shown between them until the fader is moved. Two fixtures driven together no longer have
+  to be moved apart to change their values (#55)
 - Chase editor: Save and Cancel no longer stay at the bottom of the window, they scroll with the editor like the rest
 - Disabled buttons are fainter, so they stand out more from the ones that can be pressed
 

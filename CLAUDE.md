@@ -187,7 +187,8 @@ src/
   no round trip. Each `ChannelFader` subscribes to its own channel only. A fixture fader is a `ChannelFader` on the
   fixture channel's absolute address, so fixtures and the raw channels always show the same values. A fixture fader
   with value rules snaps in the renderer (`faderStops`) and only sends valid values; main checks the rules only when
-  saving (presets, scenes, shared addresses), not per address
+  saving (presets and scenes against their own fixture), not per address; fixtures sharing an address may stop at
+  different values there
 - **Show mode is enforced in main** (ADR 3): the `AppLock` owns the mode, the channel lock (independent of each other),
   the password and the idle timer, the `DmxEngine` caps locked channels per address in `setChannel`, whichever view
   sent the value, and main refuses saving fixtures, creating a project, opening the data folder and lifting the channel lock without the
