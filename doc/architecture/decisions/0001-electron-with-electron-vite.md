@@ -10,8 +10,8 @@ Accepted
 
 Glühwürmli is a desktop app that drives DMX fixtures through an Enttec DMX USB Pro, a virtual COM port (later
 also a Eurolite USB-DMX512 PRO, the same protocol). It needs
-serial port access, timing that keeps running while the window is in the background, and a UI built with the stack
-known from my-life (TypeScript, React, Vite, Vanilla Extract, Zustand).
+serial port access, timing that keeps running while the window is in the background, and a UI built with a familiar web
+stack (TypeScript, React, Vite, Vanilla Extract, Zustand).
 
 The alternatives (Tauri 2, a plain web app on the Web Serial API, Wails) are compared in
 `doc/dmx-latency-and-stack.md`.
@@ -19,8 +19,8 @@ The alternatives (Tauri 2, a plain web app on the Web Serial API, Wails) are com
 ## Decision
 
 - **Electron**, with the serial port accessed through **`serialport`** (Node, N-API prebuilds) in the main process.
-- **electron-vite** builds main, preload and renderer with Vite; the renderer uses the my-life frontend stack
-  unchanged.
+- **electron-vite** builds main, preload and renderer with Vite; the renderer is a plain Vite + React
+  frontend.
 - **electron-builder** packages a Windows NSIS installer (`electron-builder.yml`, `pnpm dist`).
 - Only what the packaged app loads at runtime is a `dependency` (`serialport`); everything Vite bundles is a
   `devDependency`, so the installer only carries what it needs.

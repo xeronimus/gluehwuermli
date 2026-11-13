@@ -23,7 +23,7 @@ Chromium slows down timers in hidden or minimized renderers. Fades and chases (p
 - The port is behind a **`DmxPortConnector`** interface (`src/main/dmx/DmxPortConnector.ts`), with implementations in
   `impl/`: `serialport` for the real widget, `inMemory` for tests and for working without hardware
   (`MAIN_VITE_SIMULATED_OUTPUT=1` in `.env.development.local`, see `.env.sample`). `src/main/services.ts` is the
-  composition root, as in my-life.
+  composition root.
 - The renderer reaches the engine only through the **IPC contract** in `src/shared/`: channel names
   (`ipcChannels.ts`), TypeBox schemas for every payload (`ipc.ts`) and the preload API (`dmxBridge.ts`). Fader moves
   are fire-and-forget (`ipcRenderer.send`), everything else is request/response (`invoke`). The main process checks
