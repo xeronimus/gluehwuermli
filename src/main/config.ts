@@ -18,9 +18,16 @@ export interface MainConfig {
 
 const ENABLED = '1';
 
-export const mainConfigOf = (env: MainEnv, isPackaged: boolean): MainConfig => ({
+/**
+ * Debug logging in a packaged app, too, e.g. the start-up timing: `Glühwürmli.exe --debug-log` from a terminal. Not
+ * `--debug`: Electron reads that as Node's old debugger switch and quits.
+ */
+export const DEBUG_SWITCH = '--debug-log';
+
+export const mainConfigOf = (env: MainEnv, isPackaged: boolean, argv: readonly string[]): MainConfig => ({
   simulatedOutput: env.MAIN_VITE_SIMULATED_OUTPUT === ENABLED,
-  debug: !isPackaged
+  debug: !isPackaged || argv.includes(DEBUG_SWITCH)
 });
 
-export const loadMainConfig = (isPackaged: boolean): MainConfig => mainConfigOf(import.meta.env, isPackaged);
+export const loadMainConfig = (isPackaged: boolean): MainConfig =>
+  mainConfigOf(import.meta.env, isPackaged, process.argv);

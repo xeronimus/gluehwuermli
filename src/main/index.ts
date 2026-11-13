@@ -18,6 +18,7 @@ import {projectPathFromArgv} from './project/commandLine';
 import {windowTitleOf} from './project/windowTitle';
 import {quitGuardFactory} from './quit/quitGuard';
 import {createMainServices} from './services';
+import {type StartupTiming, startupTimingFactory} from './startup/startupTiming';
 import {guardExternalLinks} from './window/externalLinks';
 import {persistWindowState} from './window/persistWindowState';
 import {type WindowPlacement, restorableBounds} from './window/windowState';
@@ -28,10 +29,14 @@ const SETTINGS_FILE_NAME = 'settings.json';
 /** closing the port takes a few ms; a port that hangs must not keep the app from quitting */
 const QUIT_TIMEOUT_MS = 2000;
 
+/** the main bundle is one module: its first statement runs once everything it imports is loaded */
+const startupTiming = startupTimingFactory(() => process.uptime());
+startupTiming.mark('main-entered');
+
 const boundsOf = (placement: WindowPlacement) =>
   placement.type === 'restored' ? {...placement.bounds, fullscreen: placement.fullScreen} : placement.size;
 
-function createMainWindow(placement: WindowPlacement, title: string): BrowserWindow {
+function createMainWindow(placement: WindowPlacement, title: string, timing: StartupTiming): BrowserWindow {
   const window = new BrowserWindow({
     ...boundsOf(placement),
     show: false,
@@ -58,12 +63,15 @@ function createMainWindow(placement: WindowPlacement, title: string): BrowserWin
   // the title names the open project (set by main), not the page's <title>
   window.on('page-title-updated', (event) => event.preventDefault());
 
-  window.on('ready-to-show', () => {
+  window.webContents.once('did-finish-load', () => timing.mark('page-loaded'));
+  window.once('ready-to-show', () => {
     // maximized only now: maximize() shows a hidden window, before its content is there
     if (placement.type === 'restored' && placement.maximized) {
       window.maximize();
     }
     window.show();
+    timing.mark('window-shown');
+    log.debug(`start-up: ${timing.summary()}`);
   });
 
   void window.loadURL(appPageUrl);
@@ -99,8 +107,10 @@ function startApp(): void {
     const displayWorkAreas = screen.getAllDisplays().map((display) => display.workArea);
     const window = createMainWindow(
       restorableBounds(savedState, displayWorkAreas, MAIN_WINDOW_SIZE),
-      windowTitleOf(projectSession.status())
+      windowTitleOf(projectSession.status()),
+      startupTiming
     );
+    startupTiming.mark('window-created');
     persistWindowState(window, services.windowStateStore, log);
   }
 
@@ -121,8 +131,10 @@ function startApp(): void {
   });
 
   void app.whenReady().then(async () => {
+    startupTiming.mark('app-ready');
     // the project's channel locks apply before anything can be connected, so the output is capped from its first packet
     await projectSession.start(projectPathFromArgv(process.argv, process.cwd()));
+    startupTiming.mark('project-started');
     registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory, services.chasePlayer);
     registerProjectIpc(projectSession, projectIpcHandlers(projectSession));
     registerAppIpc(
