@@ -1462,8 +1462,8 @@ msgid "The app's own settings are stored here as JSON files: the password hash, 
 msgstr "Hier liegen die eigenen Einstellungen der App als JSON-Dateien: der Passwort-Hash, der Ausgabe-Port, die Sprache, die zuletzt geöffneten Projekte und die Fensterposition. Die Geräte und Szenen sind in den Projektdateien."
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off."
-msgstr "Die Pfeile links der Schritt-Tabs wählen den vorherigen oder den nächsten Schritt, wie ein Klick auf einen Tab, ob «Vorschau auf der Anlage» ein- oder ausgeschaltet ist."
+msgid "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off; after the last step comes the first again, before the first the last."
+msgstr "Die Pfeile links der Schritt-Tabs wählen den vorherigen oder den nächsten Schritt, wie ein Klick auf einen Tab, ob «Vorschau auf der Anlage» ein- oder ausgeschaltet ist; nach dem letzten Schritt kommt wieder der erste, vor dem ersten der letzte."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."

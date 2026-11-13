@@ -15,7 +15,8 @@ interface ChaseStepNavigationProps {
 }
 
 /**
- * the previous and the next step's tab, to step through the chase; with Preview on rig on, each step chosen is sent to
+ * the previous and the next step's tab, to step through the chase, round from the last step to the first and back;
+ * disabled with fewer than two steps. With Preview on rig on, each step chosen is sent to
  * the output like a tab chosen, the buttons themselves don't depend on it
  */
 const ChaseStepNavigation = ({steps, shownId, onSelect}: ChaseStepNavigationProps) => {

@@ -58,7 +58,7 @@ const ChasesTopic = () => (
     <p>
       <Trans>
         The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on
-        or off.
+        or off; after the last step comes the first again, before the first the last.
       </Trans>
     </p>
   </>
