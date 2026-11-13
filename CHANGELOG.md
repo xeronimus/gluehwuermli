@@ -14,6 +14,13 @@ change bumps the minor version and everything else the patch version.
 
 - A position of a channel shown as buttons can be momentary: its button, a raised key that sinks while held, sets the
   value only while held and puts back the value from before on release (#95)
+- Chase editor: "Preview on rig" sends the shown step to the output while it is edited; arrows left of the step tabs
+  step to the previous or the next step, round from the last to the first and back (#91)
+
+### Changed
+
+- Chase editor: Save and Cancel no longer stay at the bottom of the window, they scroll with the editor like the rest
+- Disabled buttons are fainter, so they stand out more from the ones that can be pressed
 
 ### Fixed
 

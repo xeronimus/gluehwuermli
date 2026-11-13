@@ -18,6 +18,7 @@ export {
   IconPencil as EditIcon,
   IconBulbOff as EmergencyOffIcon,
   IconFileOff as MissingProjectIcon,
+  IconCircleDot as MomentaryIcon,
   IconExternalLink as ExternalLinkIcon,
   IconChevronDown as ExpandIcon,
   IconCone as FixtureIcon,
@@ -43,6 +44,7 @@ export {
   IconDeviceFloppy as SavePresetIcon,
   IconStack as SceneIcon,
   IconSettings as SettingsIcon,
+  IconBroadcast as StepOnRigIcon,
   IconPlayerStop as StopChaseIcon,
   IconLockOpen as UnlockIcon,
   IconAlertTriangle as WarningIcon

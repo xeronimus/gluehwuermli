@@ -13,9 +13,11 @@ export type ChaseStateSetter = (
 export interface ChaseActions {
   setChaseStatus: (chaseStatus: ChaseStatus) => void;
   setChaseError: (chaseError: MessageDescriptor | undefined) => void;
+  setStepOnRig: (stepOnRig: boolean) => void;
 }
 
 export const getChaseActions = (set: ChaseStateSetter): ChaseActions => ({
   setChaseStatus: (chaseStatus) => set({chaseStatus}, undefined, 'chase/setChaseStatus'),
-  setChaseError: (chaseError) => set({chaseError}, undefined, 'chase/setChaseError')
+  setChaseError: (chaseError) => set({chaseError}, undefined, 'chase/setChaseError'),
+  setStepOnRig: (stepOnRig) => set({stepOnRig}, undefined, 'chase/setStepOnRig')
 });

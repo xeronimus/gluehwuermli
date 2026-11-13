@@ -18,6 +18,7 @@ import {chaseErrorMessage} from '@/i18n/messages/chaseMessages';
 import Tabs, {type Tab, type TabsHandle} from '../commons/Tabs';
 import {AddIcon} from '../commons/icons';
 import ChaseStepEditor from './ChaseStepEditor';
+import ChaseStepNavigation from './ChaseStepNavigation';
 import type {StepRowMarks} from './useStepRowMarks';
 
 interface ChaseStepTabsProps {
@@ -96,6 +97,7 @@ const ChaseStepTabs = ({steps, stepErrors, shownId, onSelect, rowMarks, onChange
       tabs={steps.map(tabOf)}
       activeId={shownId}
       onSelect={onSelect}
+      beforeTabs={<ChaseStepNavigation steps={steps} shownId={shownId} onSelect={onSelect} />}
       // a panel per step, up to 100, all from the editor's draft: only the shown one is rendered
       unmountHiddenPanels
       addTab={{

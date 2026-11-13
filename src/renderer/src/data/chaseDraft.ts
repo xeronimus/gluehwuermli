@@ -278,3 +278,20 @@ export const shownStepId = (steps: readonly ChaseStepDraft[], chosenId: string |
 /** the step shown once the one at `stepIndex` is deleted: the one after it, the one before it at the end */
 export const stepIdAfterRemoval = (steps: readonly ChaseStepDraft[], stepIndex: number): string | undefined =>
   (steps[stepIndex + 1] ?? steps[stepIndex - 1])?.id;
+
+/**
+ * the step beside the shown one in `direction`, for stepping through the tabs: past the last step the first, before the
+ * first the last, as the chase loops; none without another step to go to or without one shown
+ */
+export const stepIdBeside = (
+  steps: readonly ChaseStepDraft[],
+  shownId: string | undefined,
+  direction: MoveDirection
+): string | undefined => {
+  const index = steps.findIndex(({id}) => id === shownId);
+  if (index === -1 || steps.length < 2) {
+    return undefined;
+  }
+  const offset = direction === 'earlier' ? -1 : 1;
+  return steps[(index + offset + steps.length) % steps.length]?.id;
+};
