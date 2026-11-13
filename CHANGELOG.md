@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-11-13
+
 ### Added
 
 - A position of a channel shown as buttons can be momentary: its button, a raised key that sinks while held, sets the
@@ -256,7 +258,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.3...v0.2.4
