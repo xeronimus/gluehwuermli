@@ -15,7 +15,7 @@ const TIME_DECIMALS = 2;
 const TIME_RESOLUTION_MS = MS_PER_SECOND / 10 ** TIME_DECIMALS;
 
 /** the step of the hold and fade fields, in seconds */
-export const HOLD_INPUT_STEP_SECONDS = TIME_RESOLUTION_MS / MS_PER_SECOND;
+export const TIME_INPUT_STEP_SECONDS = TIME_RESOLUTION_MS / MS_PER_SECOND;
 
 /** the hold field's min and max, in seconds */
 export const HOLD_MIN_SECONDS = CHASE_HOLD_MIN_MS / MS_PER_SECOND;

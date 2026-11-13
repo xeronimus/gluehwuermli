@@ -84,8 +84,8 @@ the sum of them over all steps.
   the time that was left (paused 0.3 s into a 1 s step: 0.7 s more), the rest of the fade first, then the full hold. It
   doesn't send the step's values again: a fader moved during the pause keeps its value until the next step sets that
   channel. The exception is a channel still fading: it goes back onto the line of its fade with the next tick.
-- **Stop** ends the chase; the values stay as they are, also in the middle of a fade. A stopped chase can be started again (from step 1), or another
-  chase can be started.
+- **Stop** ends the chase; the values stay as they are, also in the middle of a fade. A stopped chase can be started
+  again (from step 1), or another chase can be started.
 - **Finished**: a chase that doesn't repeat ends after the last step's hold, like a stop. Its row goes back to normal,
   nothing marks it as done.
 - **Stops by itself on**: Emergency off (before the blackout, so no step comes after it), opening or creating another
@@ -128,8 +128,9 @@ Each row shows:
 
 - the name
 - Start (when not running), Pause / Resume and Stop (when running or paused)
-- the steps as small boxes, the current one filled (also during its fade), each showing its fade and hold on hover. The boxes get narrower to fit
-  the row; below a minimum width (4 px) the row only shows `step 12 / 100` while the chase plays, `100 steps` otherwise
+- the steps as small boxes, the current one filled (also during its fade), each showing its fade and hold on hover. The
+  boxes get narrower to fit the row; below a minimum width (4 px) the row only shows `step 12 / 100` while the chase
+  plays, `100 steps` otherwise
 - the repeat: `1×`, `8×` or `∞`, and while running or paused the current pass (`pass 3 / 8`, `pass 3` for `∞`; none for
   a chase played once)
 
@@ -155,7 +156,7 @@ project has no chases yet; the editor opens below it.
 - **Repeat**: Once · N times (N ≥ 2, N passes in total: "3 times" plays the steps three times) · Until stopped
 - **Steps**, in order, one tab each, numbered and marked when something is wrong with the step (its problems on
   hover), with **Add step** after the last tab. Each step's panel has:
-  - its own **fade in**, in seconds with two decimals: 0 (the values at once) up to 3600 s
+  - its own **fade in**, in seconds with two decimals: 0 (the values at once, also for an empty field) up to 3600 s
   - its own **hold time**, in seconds with two decimals: at least 0.05 s (about two engine ticks), at most 3600 s
   - its **values**: a table with the columns Ch · Channel · Value · ✕, its rows grouped under a heading per fixture
     using their addresses (the fixture's name once, a button removing all its rows), a shared address under each of
@@ -174,8 +175,8 @@ project has no chases yet; the editor opens below it.
       taking
     - **Presets**: the presets' buttons under the name of their fixture; the preset's values on its fixture's
       addresses
-  - the step's header: Fade in and Hold on the left; move left / move right (the tab's place), duplicate (the copy's tab is
-    shown) on the right, delete (the next tab is shown) set apart from them
+  - the step's header: Fade in and Hold on the left; move left / move right (the tab's place), duplicate (the copy's
+    tab is shown) on the right, delete (the next tab is shown) set apart from them
 - **Add step** appends an empty step with the fade and hold of the last step (no fade and 1 s for the first one) and
   shows its tab; at most 100 steps. Duplicate copies a step with its fade, hold and values right after it.
 - The **All steps** panel sets the fade in or the hold of every step at once (**Fade in [ X ] s [Set]**, **Hold [ X ] s

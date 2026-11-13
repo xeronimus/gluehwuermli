@@ -6,9 +6,9 @@ import {type ChaseDraft, withStepFade, withStepHold, withStepMoved} from '@/data
 import {
   FADE_MAX_SECONDS,
   FADE_MIN_SECONDS,
-  HOLD_INPUT_STEP_SECONDS,
   HOLD_MAX_SECONDS,
-  HOLD_MIN_SECONDS
+  HOLD_MIN_SECONDS,
+  TIME_INPUT_STEP_SECONDS
 } from '@/data/chaseHold';
 
 import Button from '../commons/Button';
@@ -33,7 +33,7 @@ const StepTimeField = ({label, value, minSeconds, maxSeconds, onChange}: StepTim
       type="number"
       min={minSeconds}
       max={maxSeconds}
-      step={HOLD_INPUT_STEP_SECONDS}
+      step={TIME_INPUT_STEP_SECONDS}
       value={value}
       onChange={(event) => onChange(event.target.value)}
     />

@@ -5,7 +5,7 @@ import {Trans, useLingui} from '@lingui/react/macro';
 
 import type {AllStepsLine} from '@/data/chaseAllSteps';
 import type {ChaseDraft, ChaseStepDraft} from '@/data/chaseDraft';
-import {HOLD_INPUT_STEP_SECONDS, msOfSecondsText} from '@/data/chaseHold';
+import {TIME_INPUT_STEP_SECONDS, msOfSecondsText} from '@/data/chaseHold';
 
 import {actionField, actionLabel, allStepsAction, fieldErrors, timeOfAllInput} from './ChaseAllSteps.css';
 import ChaseAllStepsButton from './ChaseAllStepsButton';
@@ -54,7 +54,7 @@ const ChaseTimeOfAllSteps = ({steps, shownStep, onPreview, onApply, time}: AllSt
           type="number"
           min={time.minSeconds}
           max={time.maxSeconds}
-          step={HOLD_INPUT_STEP_SECONDS}
+          step={TIME_INPUT_STEP_SECONDS}
           value={text}
           placeholder={shownStep && time.shownText(shownStep)}
           aria-invalid={inError}

@@ -2,6 +2,7 @@ import {type ChaseError, chaseOwnErrors, chaseStepErrors, stepFadeMs} from '@sha
 import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {channelAddress} from '@shared/fixtures';
 import {CHASE_REPEAT_MIN, type Chase, type ChaseRepeat, type ChaseStep, type Fixture} from '@shared/ipc';
+import {isBlank} from '@shared/validation';
 
 import {numberOf} from './channelValuesDraft';
 import {holdMsOf, holdSeconds, msOfSecondsText, secondsText} from './chaseHold';
@@ -75,9 +76,12 @@ function repeatOf({repeatType, repeatCount}: ChaseDraft): ChaseRepeat {
   }
 }
 
-/** a fade of 0 isn't stored: a chase without fades saved unchanged leaves the file as it was */
+/**
+ * a fade of 0 isn't stored: a chase without fades saved unchanged leaves the file as it was. A blank fade field is no
+ * fade, since a step needs none
+ */
 const stepOf = (step: ChaseStepDraft): ChaseStep => {
-  const fadeMs = msOfSecondsText(step.fade);
+  const fadeMs = isBlank(step.fade) ? 0 : msOfSecondsText(step.fade);
   return {
     id: step.id,
     ...(fadeMs !== 0 && {fadeMs}),

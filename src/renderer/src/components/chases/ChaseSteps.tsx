@@ -18,8 +18,8 @@ interface ChaseStepsProps {
 }
 
 /**
- * A small box per step, the current one filled, each with its fade in and hold on hover. The boxes get narrower to fit; when they
- * would get too narrow, the step number instead.
+ * A small box per step, the current one filled, each with its fade in and hold on hover. The boxes get narrower to
+ * fit; when they would get too narrow, the step number instead.
  */
 const ChaseSteps = ({steps, currentIndex}: ChaseStepsProps) => {
   const {t} = useLingui();

@@ -72,11 +72,14 @@ test('a fade survives the round trip; a fade of 0 is left out, so a chase withou
   expect(chaseOfDraft('chorus', chaseDraftOf(chorus)).steps[0]).toEqual(firstStep);
 });
 
-test('a blank fade is an error, like a blank hold', () => {
-  expect(chaseEditErrors(withStepFade(chaseDraftOf(chorus), 0, '')).steps[0]).toEqual([
-    {type: 'chase-step-fade-invalid'}
+test('a blank fade is no fade, unlike a blank hold', () => {
+  const blankFade = withStepFade(chaseDraftOf(chorus), 0, ' ');
+
+  expect(chaseEditErrors(blankFade).steps[0]).toEqual([]);
+  expect(chaseOfDraft(chorus.id, blankFade).steps[0]).not.toHaveProperty('fadeMs');
+  expect(chaseEditErrors(withStepHold(chaseDraftOf(chorus), 0, '')).steps[0]).toEqual([
+    {type: 'chase-step-hold-invalid'}
   ]);
-  expect(chaseEditErrors(withStepFade(chaseDraftOf(chorus), 0, '0')).steps[0]).toEqual([]);
 });
 
 test('shows a hold in seconds with two decimals', () => {

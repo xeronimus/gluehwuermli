@@ -1,9 +1,9 @@
 import {
   FADE_MAX_SECONDS,
   FADE_MIN_SECONDS,
-  HOLD_INPUT_STEP_SECONDS,
   HOLD_MAX_SECONDS,
   HOLD_MIN_SECONDS,
+  TIME_INPUT_STEP_SECONDS,
   holdMsOf,
   holdSeconds,
   isValidFadeText,
@@ -33,7 +33,7 @@ test('a typed hold is rounded to a hundredth of a second, so it reads back as st
 });
 
 test('the hold field takes hundredths from the shortest to the longest hold', () => {
-  expect(HOLD_INPUT_STEP_SECONDS).toBe(0.01);
+  expect(TIME_INPUT_STEP_SECONDS).toBe(0.01);
   expect(HOLD_MIN_SECONDS).toBe(0.05);
   expect(HOLD_MAX_SECONDS).toBe(3600);
 });
