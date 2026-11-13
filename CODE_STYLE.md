@@ -1,12 +1,11 @@
 # Code Style Guidelines
 
-How code is written in Glühwürmli. The frontend follows **my-life** (`~/Documents/git/my-life`): same libraries, same
-rules. What the app is, its architecture and its project structure are in `CLAUDE.md`.
+How code is written in Glühwürmli. What the app is, its architecture and its project structure are in `CLAUDE.md`.
 
 ## Tooling and formatting
 
 - **TypeScript strict mode**, with `noUnusedLocals` and `noUnusedParameters`.
-- **Prettier** does all formatting (`.prettierrc`, the same as my-life's plus the `@shared/` and `@assets/` groups):
+- **Prettier** does all formatting (`.prettierrc`, with import groups for `@shared/` and `@assets/`):
   - single quotes
   - no bracket spacing (`{a, b}`, not `{ a, b }`)
   - no trailing commas

@@ -6,6 +6,13 @@ A desktop app that sends DMX through a USB DMX interface: an **Enttec DMX USB Pr
 (the same protocol). Fixtures with named channels and presets, scenes, chases, and a Show mode that plays but doesn't
 change them. Electron + electron-vite, React, TypeScript.
 
+## Safety
+
+Glühwürmli comes without any warranty (GPL-3.0, see [LICENSE](LICENSE)). It is made for private use, such as a living
+room, a party or a small band, not for professional shows or anything safety-critical. The channel lock is not a laser
+safety system: it only caps what the app sends. Mount and aim a laser so that it can never hit anyone's eyes, whatever
+the app does.
+
 ## Getting started
 
 ```sh
@@ -47,6 +54,6 @@ Device Manager → Ports (COM & LPT) → the interface's COM port → Port Setti
 - [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md): latency of a web stack with a USB DMX interface, why
   Electron in 2026
 - [doc/chases.md](doc/chases.md): how chases behave, the spec they were built from
-- [doc/devices](doc/devices): the manuals of the two interfaces and of the example fixtures
+- [doc/dmxInterfaces](doc/dmxInterfaces): the two USB DMX interfaces, with links to their product pages and the protocol
 - [doc/architecture/decisions](doc/architecture/decisions): the ADRs
 - [CLAUDE.md](CLAUDE.md): project context, structure and code guidelines

@@ -746,6 +746,10 @@ msgstr "Allgemein"
 msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 msgstr "Gib der Szene einen <0>Namen</0> und setze ein Häkchen bei den <1>Geräten</1>, die sie umfasst. Beim <2>Speichern</2> wird der aktuelle Wert jedes Kanals der angehakten Geräte gespeichert."
 
+#: src/renderer/src/components/help/SafetySection.tsx
+msgid "Glühwürmli comes without any warranty. It is made for private use, such as a living room, a party or a small band, not for professional shows or anything safety-critical."
+msgstr "Glühwürmli kommt ohne jede Gewährleistung. Es ist für den privaten Gebrauch gemacht, etwa im Wohnzimmer, an einer Party oder für eine kleine Band, nicht für professionelle Shows oder für irgendetwas Sicherheitskritisches."
+
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Has errors"
 msgstr "Hat Fehler"
@@ -1246,6 +1250,10 @@ msgstr "Chase {chaseName} fortsetzen"
 msgid "s"
 msgstr "s"
 
+#: src/renderer/src/components/help/SafetySection.tsx
+msgid "Safety"
+msgstr "Sicherheit"
+
 #: src/renderer/src/components/chases/ChaseEditor.tsx
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 #: src/renderer/src/components/fixtures/FixturePresetButtons.tsx
@@ -1464,6 +1472,10 @@ msgstr "Die Pfeile links der Schritt-Tabs wählen den vorherigen oder den nächs
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
 msgstr "Die Pfeile verschieben einen Kanal nach oben oder unten: Die Fader des Geräts erscheinen in der Reihenfolge dieser Liste. Sein Offset und seine Adresse bleiben, wie sie sind, und seine Presets und Szenen setzen ihn weiterhin."
+
+#: src/renderer/src/components/help/SafetySection.tsx
+msgid "The channel lock is not a laser safety system: it only caps what the app sends. Mount and aim a laser so that it can never hit anyone's eyes, whatever the app does."
+msgstr "Die Kanalsperre ist kein Laserschutzsystem: Sie begrenzt nur, was die App sendet. Montiere und richte einen Laser so aus, dass er nie jemandem in die Augen treffen kann, egal was die App tut."
 
 #: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."

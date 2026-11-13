@@ -25,7 +25,7 @@ universe when something changed. Why a web stack is fast enough, and why Electro
 
 ## Tech Stack
 
-The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, same rules. How code is written:
+A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, Lingui). How code is written:
 `CODE_STYLE.md`.
 
 - **Desktop:** Electron 45, built with **electron-vite** (Vite 8 for main, preload and renderer), packaged with
@@ -35,10 +35,10 @@ The frontend follows **my-life** (`~/Documents/git/my-life`), same libraries, sa
 - **Framework:** React 19 + TypeScript 7 (strict mode)
 - **Styling:** Vanilla Extract (zero-runtime CSS-in-JS)
 - **State:** Zustand with `combine` + Reselect selectors
-- **Validation:** TypeBox schemas for every IPC payload (`src/shared/ipc.ts`), like my-life's `@my-life/contract`
+- **Validation:** TypeBox schemas for every IPC payload (`src/shared/ipc.ts`), one contract shared by both sides
 - **Faders:** react-range; **icons:** `@tabler/icons-react`
 - **Logging:** loglevel
-- **i18n:** Lingui (as in tinytrend), in the renderer only: `en` is the source language, `de` the catalog to keep
+- **i18n:** Lingui, in the renderer only: `en` is the source language, `de` the catalog to keep
   complete; the macro runs through `lingui-macro-plugin.mts` (Babel), the `.po` catalogs compile in the build
 - **Testing:** Vitest, one project per process (`vitest.config.mts`), `node` environment
 - **Formatting:** Prettier with sorted imports
@@ -67,10 +67,11 @@ electron-builder.yml         # packaging; serialport's native binding is unpacke
 build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer
 doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
+  dmxInterfaces/             # the two USB DMX interfaces: links to their product pages and the Pro's protocol
   architecture/decisions/    # ADRs (.adr-dir)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
 scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through either interface (-Port,
-                             # -From, -To; -Chase, -Alternate, -Sweep), follows doc/devices/enttec_dmx_usb_pro/
+                             # -From, -To; -Chase, -Alternate, -Sweep), follows doc/dmxInterfaces/enttec_dmx_usb_pro/
 lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
@@ -179,7 +180,7 @@ src/
   `i18n/messages/` turns into text; `state/` keeps errors as Lingui `MessageDescriptor`s, so a language switch also
   changes an error already shown. Raw texts of `serialport` or the OS are shown as they are, inside a translated
   sentence
-- **One way to wire services** (as in my-life): every provider-specific service is an interface, implemented by a
+- **One way to wire services**: every provider-specific service is an interface, implemented by a
   factory `xxxFactory(deps)` in `impl/<provider>/`; `services.ts` in main and in the renderer is the single
   composition root and the only module importing from `impl/`. Tests pass fakes (`inMemory`) into the factories
   rather than mocking modules

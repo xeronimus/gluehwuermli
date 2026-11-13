@@ -44,7 +44,7 @@ const innerUseAppStore = combine(
   })
 );
 
-// no logger middleware like my-life: a fader move is one action per pointer event and would flood the console
+// no logger middleware: a fader move is one action per pointer event and would flood the console
 export const useAppStore: UseBoundStore<StoreApi<AppStore>> = envConfig.debug
   ? create(devtools(innerUseAppStore, {name: 'gluehwuermli'}))
   : create(innerUseAppStore);

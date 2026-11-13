@@ -4,7 +4,7 @@ import type {Plugin} from 'vite';
 const SOURCE_FILE_PATTERN = /\.[jt]sx?$/;
 
 /**
- * Runs @lingui/babel-plugin-lingui-macro on the renderer's source files (as in tinytrend). @vitejs/plugin-react 6
+ * Runs @lingui/babel-plugin-lingui-macro on the renderer's source files. @vitejs/plugin-react 6
  * compiles with OXC instead of Babel, so the macro can't go into `react({babel: …})` any more; this plugin runs only
  * the macro's transform step.
  */
