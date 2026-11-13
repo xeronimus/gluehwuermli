@@ -26,6 +26,7 @@
     "i18n:compile": "lingui compile --strict"
   },
   "dependencies": {
+    "electron-updater": "^6.8.11",
     "serialport": "^13.0.0"
   },
   "devDependencies": {

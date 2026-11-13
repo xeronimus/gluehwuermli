@@ -29,9 +29,10 @@ A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, 
 `CODE_STYLE.md`.
 
 - **Desktop:** Electron 45, built with **electron-vite** (Vite 8 for main, preload and renderer), packaged with
-  electron-builder (Windows NSIS, `electron-builder.yml`). ADR 1
-- **Serial port:** `serialport` in the main process; the only runtime `dependency`, everything Vite bundles is a
-  `devDependency`
+  electron-builder (Windows NSIS, `electron-builder.yml`), released by `.github/workflows/release.yml`, updated by
+  `electron-updater` from the GitHub Releases. ADR 1
+- **Serial port:** `serialport` in the main process; with `electron-updater` the only runtime `dependencies`,
+  everything Vite bundles is a `devDependency`
 - **Framework:** React 19 + TypeScript 7 (strict mode)
 - **Styling:** Vanilla Extract (zero-runtime CSS-in-JS)
 - **State:** Zustand with `combine` + Reselect selectors
@@ -75,6 +76,8 @@ doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   dmxInterfaces/             # the two USB DMX interfaces: links to their product pages and the Pro's protocol
   architecture/decisions/    # ADRs (.adr-dir)
+scripts/releaseNotes.mjs     # a version's CHANGELOG.md section, the release notes (release.yml)
+scripts/signedUpdateInfo.mjs # the signed installer's SHA-512 into latest.yml (release.yml)
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
 scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through either interface (-Port,
                              # -From, -To; -Chase, -Alternate, -Sweep), follows doc/dmxInterfaces/enttec_dmx_usb_pro/
@@ -122,6 +125,8 @@ src/
                              # channel limits on a switch), ProjectFileStore + impl/file (never touches a file it can't
                              # open), ProjectDialogs + impl/electron, recentProjects, commandLine (argv), windowTitle
     quit/quitGuard.ts        # holds the quit until the DMX port is closed (blackout first if set), at most 2 s
+    update/                  # autoUpdate (check on start, download in the background, install on quit, never a
+                             # prompt or restart), Updater + impl/electronUpdater; packaged builds only
     lock/                    # Show/Setup mode (ADR 3): appLock (mode, unlock, idle timer, channel lock), passwordHash
                              # (scrypt)
     settings/                # settings.json: settings (schema), SettingsStore + impl/file, appSettings (the one owner,
@@ -228,7 +233,15 @@ version, everything else the patch version.
   sections: Added, Changed, Fixed, Removed); internal refactors, tests and docs don't
 - A change to a stored file format bumps its `PROJECT_VERSION` / `SETTINGS_VERSION` and migrates older files
 - Releasing: rename `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD` and add a fresh empty `[Unreleased]` with its compare
-  link, then `npm version <minor|patch>` (bumps `package.json`, commits, tags) and push the tag
+  link, merge to `main`, then on `main` `npm version <minor|patch>` (bumps `package.json`, commits, tags) and
+  `git push --follow-tags`. The pushed `v*` tag runs `.github/workflows/release.yml` on `windows-latest`: checks the tag
+  against `package.json`, takes the notes from the version's `CHANGELOG.md` section, `pnpm test`, `pnpm dist`, signs the
+  app's exe and the installer through SignPath Foundation (once the repo variable `SIGNPATH_ORGANIZATION_ID` and the
+  secret `SIGNPATH_API_TOKEN` are set; unsigned until then), fixes `latest.yml` for the signed installer and publishes
+  the installer and `latest.yml` as a GitHub Release. Nothing is published by hand or by electron-builder itself
+- Installed apps update from the latest release (`publish` in `electron-builder.yml`): checked once on start,
+  downloaded in the background, installed silently when the app quits, after the quit guard closed the DMX port. Never
+  a prompt or a restart while it runs; no blockmap (`differentialPackage: false`), since signing changes the installer
 
 ## Code Style and Workflow
 
