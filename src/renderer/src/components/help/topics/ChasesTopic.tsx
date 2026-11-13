@@ -55,6 +55,12 @@ const ChasesTopic = () => (
         the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again.
       </Trans>
     </p>
+    <p>
+      <Trans>
+        The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on
+        or off.
+      </Trans>
+    </p>
   </>
 );
 
