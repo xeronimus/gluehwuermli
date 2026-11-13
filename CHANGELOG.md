@@ -21,6 +21,7 @@ change bumps the minor version and everything else the patch version.
 ### Changed
 
 - Chase editor: Save and Cancel no longer stay at the bottom of the window, they scroll with the editor like the rest
+- Disabled buttons are fainter, so they stand out more from the ones that can be pressed
 
 ### Fixed
 
