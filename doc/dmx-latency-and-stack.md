@@ -66,7 +66,7 @@ consoles behave the same way, because the bottleneck is DMX itself: a full frame
 For this app, yes. The options:
 
 - **Electron + `serialport` (Node)**, the choice (ADR 1). Everything stays TypeScript, `serialport` is mature, and
-  its N-API prebuilds load in Electron without a compiler. electron-vite gives Vite (HMR, the same plugins as my-life)
+  its N-API prebuilds load in Electron without a compiler. electron-vite gives Vite (HMR, the usual plugins)
   for main, preload and renderer. The downsides are the usual ones: an installer of about 100 MB and higher RAM use.
   For a lighting tool that doesn't matter.
 - **Tauri 2**: much smaller installers and less memory, with the same React frontend. But the serial and timing code
