@@ -65,6 +65,10 @@ msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 msgstr "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
 
+#: ghpage/src/FeatureCards.tsx
+msgid "A channel can be capped, e.g. a laser's, while the channel lock is on. Only the password lifts the lock."
+msgstr "A channel can be capped, e.g. a laser's, while the channel lock is on. Only the password lifts the lock."
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A channel has the same position twice"
 msgstr "A channel has the same position twice"
@@ -104,6 +108,11 @@ msgstr "A chase stops by itself on Emergency off (before the blackout), when ano
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "A color must be a hex value like #ff00ff"
 msgstr "A color must be a hex value like #ff00ff"
+
+#: ghpage/src/Hero.tsx
+#: ghpage/src/LandingPage.tsx
+msgid "A DMX lighting controller for Windows, for the living room, the party and the small band."
+msgstr "A DMX lighting controller for Windows, for the living room, the party and the small band."
 
 #: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
@@ -219,6 +228,10 @@ msgstr "All"
 #: src/renderer/src/components/chases/ChaseAllSteps.tsx
 msgid "All steps"
 msgstr "All steps"
+
+#: ghpage/src/TestedHardware.tsx
+msgid "Any DMX device can be connected to them: PARs, moving heads, lasers, smoke machines."
+msgstr "Any DMX device can be connected to them: PARs, moving heads, lasers, smoke machines."
 
 #: src/renderer/src/components/fixtures/DescriptionField.tsx
 msgid "Anything worth knowing, in Markdown: the DMX mode, DIP switch settings, where it hangs, a link to the manual…"
@@ -340,6 +353,10 @@ msgstr "Channel {label}: next value, not capped at {liftedLimit}: the channel lo
 msgid "Channel {label}: previous value"
 msgstr "Channel {label}: previous value"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "Channel caps"
+msgstr "Channel caps"
+
 #: src/renderer/src/components/settings/ChannelLockSection.tsx
 msgid "Channel lock"
 msgstr "Channel lock"
@@ -377,6 +394,7 @@ msgstr "Channels with a \"Max while locked\" (e.g. a laser) never go above it, w
 msgid "Chase editor"
 msgstr "Chase editor"
 
+#: ghpage/src/FeatureCards.tsx
 #: src/renderer/src/components/chases/ChaseList.tsx
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Chases"
@@ -623,6 +641,14 @@ msgstr "Discard the fixture or scene you are editing, and open the other project
 msgid "Disconnect"
 msgstr "Disconnect"
 
+#: ghpage/src/Hero.tsx
+msgid "Download for Windows"
+msgstr "Download for Windows"
+
+#: src/renderer/src/components/help/HelpView.tsx
+msgid "Downloads of new versions, and this manual to read in the browser."
+msgstr "Downloads of new versions, and this manual to read in the browser."
+
 #: src/renderer/src/components/chases/ChaseStepHeader.tsx
 msgid "Duplicate step {stepNumberShown}"
 msgstr "Duplicate step {stepNumberShown}"
@@ -662,9 +688,17 @@ msgstr "Edit the scene {sceneName}"
 msgid "Emergency off"
 msgstr "Emergency off"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "English and German"
+msgstr "English and German"
+
 #: src/renderer/src/components/project/ProjectSection.tsx
 msgid "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
 msgstr "Every change to the fixtures and scenes is saved to the project file right away. Opening another project sets all channels to 0 first."
+
+#: ghpage/src/Limitations.tsx
+msgid "Every channel is 0–255; a device's coarse and fine channel are two separate faders."
+msgstr "Every channel is 0–255; a device's coarse and fine channel are two separate faders."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "Every channel needs a name"
@@ -702,6 +736,10 @@ msgstr "Exploring"
 msgid "Fader"
 msgstr "Fader"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "Features"
+msgstr "Features"
+
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 msgid "Fill from"
 msgstr "Fill from"
@@ -722,6 +760,10 @@ msgstr "Fixture editor"
 msgid "Fixtures"
 msgstr "Fixtures"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "Fixtures and presets"
+msgstr "Fixtures and presets"
+
 #: src/renderer/src/components/fixtures/SceneFixtureChoices.tsx
 msgid "Fixtures in the scene"
 msgstr "Fixtures in the scene"
@@ -738,6 +780,10 @@ msgstr "Fixtures, presets and scenes can be played, not changed. Unlock Setup mo
 msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 msgstr "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 
+#: ghpage/src/Hero.tsx
+msgid "Free and open source (GPL-3.0)."
+msgstr "Free and open source (GPL-3.0)."
+
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "General"
 msgstr "General"
@@ -746,9 +792,21 @@ msgstr "General"
 msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 msgstr "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 
-#: src/renderer/src/components/help/SafetySection.tsx
+#: ghpage/src/LandingPage.tsx
+msgid "Glühwürmli – DMX lighting controller for Windows"
+msgstr "Glühwürmli – DMX lighting controller for Windows"
+
+#: src/renderer/src/components/help/topics/SafetyNotice.tsx
 msgid "Glühwürmli comes without any warranty. It is made for private use, such as a living room, a party or a small band, not for professional shows or anything safety-critical."
 msgstr "Glühwürmli comes without any warranty. It is made for private use, such as a living room, a party or a small band, not for professional shows or anything safety-critical."
+
+#: ghpage/src/Limitations.tsx
+msgid "Glühwürmli is made to be set up in an evening and played without a manual at hand. It leaves out what professional lighting software does:"
+msgstr "Glühwürmli is made to be set up in an evening and played without a manual at hand. It leaves out what professional lighting software does:"
+
+#: ghpage/src/TestedHardware.tsx
+msgid "Glühwürmli sends DMX through a USB DMX interface. It is tested with these two, which speak the same protocol:"
+msgstr "Glühwürmli sends DMX through a USB DMX interface. It is tested with these two, which speak the same protocol:"
 
 #: src/renderer/src/components/fixtures/FixtureEditor.tsx
 msgid "Has errors"
@@ -799,6 +857,11 @@ msgstr "If the port can't be opened, or the interface is unplugged while sending
 msgid "In the Show view: a fader, or a button per position"
 msgstr "In the Show view: a fader, or a button per position"
 
+#: ghpage/src/Limitations.tsx
+msgid "Kept simple on purpose"
+msgstr "Kept simple on purpose"
+
+#: ghpage/src/LanguageSwitch.tsx
 #: src/renderer/src/components/settings/LanguageSection.tsx
 msgid "Language"
 msgstr "Language"
@@ -937,6 +1000,10 @@ msgstr "Name of preset {presetNumber}"
 msgid "Name of the new preset"
 msgstr "Name of the new preset"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "Name your devices and their channels, give a channel a color, and set several channels at once with a preset button."
+msgstr "Name your devices and their channels, give a channel a color, and set several channels at once with a preset button."
+
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Name, e.g. Star (optional)"
 msgstr "Name, e.g. Star (optional)"
@@ -966,6 +1033,14 @@ msgstr "Next channels"
 msgid "Next step"
 msgstr "Next step"
 
+#: ghpage/src/Limitations.tsx
+msgid "No cue lists, no moving-head effects (pan/tilt shapes), no RDM."
+msgstr "No cue lists, no moving-head effects (pan/tilt shapes), no RDM."
+
+#: ghpage/src/Limitations.tsx
+msgid "No fixture library: you enter each device's channels yourself, from its manual."
+msgstr "No fixture library: you enter each device's channels yourself, from its manual."
+
 #: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: add the devices of your rig, to control them by name."
 msgstr "No fixtures yet: add the devices of your rig, to control them by name."
@@ -981,6 +1056,10 @@ msgstr "No manual, or not sure it is right? The <0>Channels</0> view (Setup mode
 #: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
 msgstr "No manual? Use the <0>Channels</0> tab to move one channel after the other from the device's address and watch what it does."
+
+#: ghpage/src/Limitations.tsx
+msgid "No MIDI or other hardware controllers; mouse and keyboard only."
+msgstr "No MIDI or other hardware controllers; mouse and keyboard only."
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "No port selected"
@@ -999,6 +1078,10 @@ msgstr "No project open. Create or open one in the Show view or in Settings."
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "No serial port found"
 msgstr "No serial port found"
+
+#: ghpage/src/Limitations.tsx
+msgid "No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel."
+msgstr "No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel."
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Not connected"
@@ -1031,6 +1114,22 @@ msgstr "Offsets must be whole numbers from 0"
 #: src/renderer/src/components/chases/ChaseRepeatField.tsx
 msgid "Once"
 msgstr "Once"
+
+#: ghpage/src/FeatureCards.tsx
+msgid "One button sets the channels of several fixtures at once: the whole rig in one look."
+msgstr "One button sets the channels of several fixtures at once: the whole rig in one look."
+
+#: ghpage/src/Limitations.tsx
+msgid "One computer, one operator; no remote control from a phone or tablet."
+msgstr "One computer, one operator; no remote control from a phone or tablet."
+
+#: ghpage/src/Limitations.tsx
+msgid "One DMX universe: 512 channels."
+msgstr "One DMX universe: 512 channels."
+
+#: ghpage/src/Limitations.tsx
+msgid "Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network."
+msgstr "Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network."
 
 #: src/renderer/src/components/fixtures/ChannelPositionButtons.tsx
 msgid "Only while held"
@@ -1250,6 +1349,7 @@ msgstr "Resume the chase {chaseName}"
 msgid "s"
 msgstr "s"
 
+#: ghpage/src/SafetyNote.tsx
 #: src/renderer/src/components/help/SafetySection.tsx
 msgid "Safety"
 msgstr "Safety"
@@ -1277,11 +1377,16 @@ msgstr "Scene editor"
 msgid "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
 msgstr "Scene values must be whole numbers from {minValue} to {maxValue} that their channels can have"
 
+#: ghpage/src/FeatureCards.tsx
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 #: src/renderer/src/components/fixtures/SceneButtons.tsx
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Scenes"
 msgstr "Scenes"
+
+#: ghpage/src/Screenshots.tsx
+msgid "Screenshots"
+msgstr "Screenshots"
 
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Search the serial ports again"
@@ -1356,6 +1461,10 @@ msgstr "Setup mode"
 msgid "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
 msgstr "Setup mode returns to Show mode with the <0>Lock</0> button, after 10 minutes without input and whenever the app is restarted. A fixture or scene being edited and not saved yet is dropped then. The channel lock stays as it is."
 
+#: ghpage/src/Screenshots.tsx
+msgid "Setup mode: the same view, with buttons to add, edit, arrange and delete."
+msgstr "Setup mode: the same view, with buttons to add, edit, arrange and delete."
+
 #: src/renderer/src/components/App.tsx
 msgid "Show"
 msgstr "Show"
@@ -1364,9 +1473,14 @@ msgstr "Show"
 msgid "Show mode"
 msgstr "Show mode"
 
+#: ghpage/src/FeatureCards.tsx
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Show mode and Setup mode"
 msgstr "Show mode and Setup mode"
+
+#: ghpage/src/Screenshots.tsx
+msgid "Show mode: scenes on top, a fixture each with its faders and presets, the chases below."
+msgstr "Show mode: scenes on top, a fixture each with its faders and presets, the chases below."
 
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Show the description"
@@ -1383,6 +1497,10 @@ msgstr "Something went wrong"
 #: src/renderer/src/components/help/HelpView.tsx
 msgid "Source code"
 msgstr "Source code"
+
+#: ghpage/src/PageFooter.tsx
+msgid "Source code on GitHub"
+msgstr "Source code on GitHub"
 
 #: src/renderer/src/components/fixtures/FixtureGeneralFields.tsx
 msgid "Start address"
@@ -1425,6 +1543,10 @@ msgstr "Step values must be whole numbers from {minValue} to {maxValue}"
 msgid "Steps"
 msgstr "Steps"
 
+#: ghpage/src/FeatureCards.tsx
+msgid "Steps of channel values played one after the other, each held as long as you like; started, paused and stopped with a click."
+msgstr "Steps of channel values played one after the other, each held as long as you like; started, paused and stopped with a click."
+
 #: src/renderer/src/components/chases/ChaseRow.tsx
 msgid "Stop the chase {chaseName}"
 msgstr "Stop the chase {chaseName}"
@@ -1445,6 +1567,10 @@ msgstr "Take the values of the preset {presetName}"
 msgid "Take the values of the scene {sceneName}"
 msgstr "Take the values of the scene {sceneName}"
 
+#: ghpage/src/TestedHardware.tsx
+msgid "Tested hardware"
+msgstr "Tested hardware"
+
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
 msgstr "The <0>Address</0> column shows where each channel lands. Fixtures sharing addresses get a warning: on purpose, e.g. two PARs moving together, or by mistake."
@@ -1457,9 +1583,17 @@ msgstr "The <0>hint</0> is shown below the faders, for what you need while playi
 msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
 msgstr "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
 
+#: ghpage/src/FeatureCards.tsx
+msgid "The app and its manual in English and German, switched in the Settings view."
+msgstr "The app and its manual in English and German, switched in the Settings view."
+
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
 msgstr "The app remembers the port it was last connected to, also after a Disconnect, and chooses it again on the next start. It always starts disconnected, so nothing is sent before you press Connect. Plugged the interface in after starting the app? Search the serial ports again in the Settings, then press Connect."
+
+#: ghpage/src/FeatureCards.tsx
+msgid "The app starts in Show mode: everything can be played, nothing changed. A password unlocks Setup mode."
+msgstr "The app starts in Show mode: everything can be played, nothing changed. A password unlocks Setup mode."
 
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
@@ -1473,13 +1607,21 @@ msgstr "The arrows left of the step tabs choose the previous or the next step, l
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
 msgstr "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."
 
-#: src/renderer/src/components/help/SafetySection.tsx
+#: src/renderer/src/components/help/topics/SafetyNotice.tsx
 msgid "The channel lock is not a laser safety system: it only caps what the app sends. Mount and aim a laser so that it can never hit anyone's eyes, whatever the app does."
 msgstr "The channel lock is not a laser safety system: it only caps what the app sends. Mount and aim a laser so that it can never hit anyone's eyes, whatever the app does."
 
 #: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
 msgstr "The channel lock is on after every start, independent of the mode. Lift it in the <0>Settings</0> view, e.g. for a show where the laser hangs high enough: in Show mode with the password, in Setup mode with a confirmation. It then stays lifted, also in Show mode and after Lock, until <1>Turn channel lock on</1> or a restart; the top bar shows <2>Channel lock lifted</2> meanwhile. Turned on again, the locked channels drop to their maximum right away."
+
+#: ghpage/src/Screenshots.tsx
+msgid "The Channels view: 16 raw faders, moved across all 512 channels."
+msgstr "The Channels view: 16 raw faders, moved across all 512 channels."
+
+#: ghpage/src/Screenshots.tsx
+msgid "The chase editor: a step's channel values, filled from the current values, a scene or a preset."
+msgstr "The chase editor: a step's channel values, filled from the current values, a scene or a preset."
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "The chase has a step twice"
@@ -1546,6 +1688,10 @@ msgstr "The file isn't there: it was moved, renamed or deleted, or it is on a dr
 msgid "The file was saved by a newer version of Glühwürmli (project version {version}). Update the app to open it."
 msgstr "The file was saved by a newer version of Glühwürmli (project version {version}). Update the app to open it."
 
+#: ghpage/src/Screenshots.tsx
+msgid "The fixture editor: channels with their address, color and named positions."
+msgstr "The fixture editor: channels with their address, color and named positions."
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
 msgstr "The fixture ends at address {lastAddress}, after the last one ({lastUniverseAddress})"
@@ -1570,6 +1716,10 @@ msgstr "The fixtures and scenes of a rig live in a <0>project</0>: a .glp file y
 msgid "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 msgstr "The fixtures are shown in the order they were added. To arrange them the way your rig is run, use the arrows next to a fixture's name in Setup mode: they move it one place to the left or right. The scene buttons have the same arrows, and so do the presets and the channels in the fixture editor. Moving a channel only changes where its fader is shown, not its address."
 
+#: ghpage/src/Hero.tsx
+msgid "The Glühwürmli mascot, a firefly"
+msgstr "The Glühwürmli mascot, a firefly"
+
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "The highest value of the fader; empty for {highestValue}"
 msgstr "The highest value of the fader; empty for {highestValue}"
@@ -1581,6 +1731,10 @@ msgstr "The highest value while the channel lock is on; empty for no lock"
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The hint can have at most {maxLength} characters"
 msgstr "The hint can have at most {maxLength} characters"
+
+#: ghpage/src/SafetyNote.tsx
+msgid "The installer isn't signed yet, so Windows SmartScreen may warn about an unknown publisher. To install it anyway, choose <0>More info</0>, then <1>Run anyway</1>."
+msgstr "The installer isn't signed yet, so Windows SmartScreen may warn about an unknown publisher. To install it anyway, choose <0>More info</0>, then <1>Run anyway</1>."
 
 #: src/renderer/src/components/help/topics/ChannelLocksTopic.tsx
 msgid "The lock only covers what the app sends. A laser can still come on without it: through its infrared remote (Laser, Auto, Sound), the programs in its own menu, or on its own when there is no DMX signal. Where it can't be mounted high enough, cover the laser opening, put the remote away and leave the device's menu on DMX."
@@ -1727,6 +1881,10 @@ msgstr "Unlock Setup mode"
 msgid "Until stopped"
 msgstr "Until stopped"
 
+#: ghpage/src/Manual.tsx
+msgid "User manual"
+msgstr "User manual"
+
 #: src/renderer/src/components/chases/ChaseStepTable.tsx
 msgid "Value"
 msgstr "Value"
@@ -1751,6 +1909,10 @@ msgstr "Value: a whole number from {minValue} to {maxValue}"
 msgid "Values"
 msgstr "Values"
 
+#: ghpage/src/Limitations.tsx
+msgid "Values and chase steps change at once; there are no fades yet (planned)."
+msgstr "Values and chase steps change at once; there are no fades yet (planned)."
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
 msgstr "Values can't be changed one by one here. A channel added to a fixture later is only stored in a scene once it is saved with Save current values; deleting a fixture takes it out of every scene. While the channel lock is on, a locked channel only goes up to its maximum, whatever the scene stores."
@@ -1759,6 +1921,10 @@ msgstr "Values can't be changed one by one here. A channel added to a fixture la
 msgid "Values of channel {row}"
 msgstr "Values of channel {row}"
 
+#: src/renderer/src/components/help/HelpView.tsx
+msgid "Website"
+msgstr "Website"
+
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
 msgstr "When editing, renaming the scene or ticking and unticking fixtures doesn't change the values already stored: only a newly ticked fixture is stored with what its faders show now. <0>Save current values</0> stores what the faders show now for every ticked fixture, replacing the stored values. To change a scene's look, press the scene, adjust the faders, then save it with Save current values."
@@ -1766,6 +1932,14 @@ msgstr "When editing, renaming the scene or ticking and unticking fixtures doesn
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Where the fader stops: every value from min to max, in steps, or only at some positions"
 msgstr "Where the fader stops: every value from min to max, in steps, or only at some positions"
+
+#: ghpage/src/Limitations.tsx
+msgid "Windows only, for now."
+msgstr "Windows only, for now."
+
+#: ghpage/src/SafetyNote.tsx
+msgid "Windows SmartScreen"
+msgstr "Windows SmartScreen"
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "without a name"

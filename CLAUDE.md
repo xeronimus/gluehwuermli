@@ -4,7 +4,7 @@
 
 A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port) or a **Eurolite USB-DMX512 PRO** (same protocol, needs
 250000 8N2). Today:
-a Help view (short manual, the data folder, a link to the repo), projects (a `.glp` file wherever the user keeps it, holding the fixtures and scenes of one rig, saved on every change;
+a Help view (short manual, the data folder, links to the website and the repo), projects (a `.glp` file wherever the user keeps it, holding the fixtures and scenes of one rig, saved on every change;
 the last one reopens on start, a double-click on a `.glp` opens it, ADR 4), fixtures (named devices with a start address
 and named channels, each with an optional color its fader fills and glows in and optional value rules: a range, steps
 or named positions its fader stops at, shown as a fader or as buttons, a button optionally momentary) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
@@ -63,6 +63,12 @@ A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, 
 electron.vite.config.ts      # aliases per process: `@/` = that process's source root, `@shared/`, `@assets/` (renderer)
 vitest.config.mts            # one Vitest project per process, with the same aliases
 CHANGELOG.md                 # release notes, Keep a Changelog; what counts as breaking
+README.md, CONTRIBUTING.md   # for users (download, interfaces, safety); for developers (setup, commands, ghpage)
+ghpage/                      # the landing page (GitHub Pages), a package of its own (`pnpm --dir ghpage install`,
+                             # `build` to the untracked ghpageOut/, `preview`): React + Lingui prerendered to static
+                             # HTML per language by a Vite SSR build (build.mts); renders the manual from the app's
+                             # help/topics/ and .po catalogs, its own texts are extracted into those catalogs too;
+                             # deployed by .github/workflows/ghpage.yml
 electron-builder.yml         # packaging; serialport's native binding is unpacked from the asar
 build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer
 doc/
@@ -72,7 +78,7 @@ doc/
 scripts/normalizeImports.mjs # turns ../../ imports into @/ (main and renderer), run by `pnpm format`
 scripts/dmxRangeTest.ps1     # hardware check without the app: sends a channel range through either interface (-Port,
                              # -From, -To; -Chase, -Alternate, -Sweep), follows doc/dmxInterfaces/enttec_dmx_usb_pro/
-lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/
+lingui.config.ts             # locales en (source) and de, catalogs in src/renderer/src/locales/ (also extracts ghpage/src)
 lingui-macro-plugin.mts      # runs the Lingui macro with Babel (plugin-react 6 compiles with OXC)
 src/
   architecture.test.ts       # the import rules below
@@ -92,7 +98,7 @@ src/
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
     colors.ts                # channel, preset and scene colors: stored form, normalizing what is typed, validity
     preloadBridge.ts         # the API the preload exposes as window.gluehwuermli
-    links.ts                 # the repo URL: the Help view's link and main's external-link allow-list
+    links.ts                 # the repo and website URLs: the Help view's links and main's external-link allow-list
     serialQueue.ts           # runs overlapping async tasks one after the other (saves, project switches)
   main/                      # Electron main process
     index.ts                 # single-instance lock (before any service), window, lifecycle, .glp from argv and
@@ -152,7 +158,9 @@ src/
                              # Add chase, and the chase editor below the rows), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
-                             # help/ (the manual as tabs, one topics/ component each, open project, data folder, repo link); ShowView.tsx picks the start view
+                             # help/ (the manual as tabs, one topics/ component each, topicContents and SafetyNotice
+                             # shared with ghpage, so topics/ imports only packages and each other; open project, data
+                             # folder, website and repo links); ShowView.tsx picks the start view
                              # or the fixtures; commons/ (Button, ChannelFader, MarkdownText, ModeToggle, PasswordForm,
                              # Tabs, FaderTicks, useFaderTitles, useElementWidth, ErrorBoundary, icons.ts)
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
@@ -206,7 +214,8 @@ src/
 - **Layer imports** (enforced by `src/architecture.test.ts`): the renderer imports neither main, preload, Node nor
   Electron; main never imports the renderer; `shared/` depends only on itself and packages; in the renderer
   `domain/` imports only `domain/`, `shared/` and packages, `data/` never imports `state/` or `components/`, `state/`
-  never imports `components/`
+  never imports `components/`; the app never imports `ghpage/`, which takes only `help/topics/` and `manualTopics.ts`
+  (and the catalogs) from it
 
 ## Versioning and Releases
 

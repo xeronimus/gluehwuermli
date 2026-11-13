@@ -1,0 +1,70 @@
+name: Landing page
+
+# builds ghpage/ into ghpageOut/ and deploys it to https://xeronimus.github.io/gluehwuermli/
+# (repo settings: Pages → Source: GitHub Actions)
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ghpage/**'
+      # the page renders the app's manual topics with the app's catalogs, and shows the mascot, favicon and screenshots
+      - 'src/renderer/src/components/help/manualTopics.ts'
+      - 'src/renderer/src/components/help/topics/**'
+      - 'src/renderer/src/locales/**/*.po'
+      - 'src/assets/**'
+      - 'doc/screenshots/**'
+      - '.github/workflows/ghpage.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# one deployment at a time; a newer push doesn't cancel one already deploying
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        package_json_file: ghpage/package.json
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '24'
+        cache: 'pnpm'
+        cache-dependency-path: ghpage/pnpm-lock.yaml
+
+    # the page's own dependencies only, not the app's
+    - name: Install dependencies
+      run: pnpm --dir ghpage install --frozen-lockfile
+
+    - name: Build
+      run: pnpm --dir ghpage build
+
+    - name: Upload
+      uses: actions/upload-pages-artifact@v5
+      with:
+        path: ghpageOut
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: Deploy
+      id: deployment
+      uses: actions/deploy-pages@v5

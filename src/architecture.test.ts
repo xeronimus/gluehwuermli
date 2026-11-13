@@ -2,8 +2,9 @@ import {readFileSync, readdirSync} from 'node:fs';
 import path from 'node:path';
 
 /**
- * The import rules between the processes and, inside the renderer, between its layers (CLAUDE.md, ADR 2).
- * `@/` resolves into the source root of the importing file's process, `@shared/` into src/shared.
+ * The import rules between the processes and, inside the renderer, between its layers (CLAUDE.md, ADR 2), and between
+ * the app and its landing page (ghpage/). `@/` resolves into the source root of the importing file's process,
+ * `@shared/` into src/shared.
  */
 const SRC_DIR = path.resolve(__dirname);
 const MAIN_DIR = path.join(SRC_DIR, 'main');
@@ -16,6 +17,12 @@ const RENDERER_STATE_DIR = path.join(RENDERER_DIR, 'state');
 const RENDERER_COMPONENTS_DIR = path.join(RENDERER_DIR, 'components');
 const RENDERER_DOMAIN_DIR = path.join(RENDERER_DIR, 'domain');
 const RENDERER_I18N_DIR = path.join(RENDERER_DIR, 'i18n');
+
+const RENDERER_HELP_DIR = path.join(RENDERER_COMPONENTS_DIR, 'help');
+const MANUAL_TOPICS_DIR = path.join(RENDERER_HELP_DIR, 'topics');
+const MANUAL_TOPICS_MODULE = path.join(RENDERER_HELP_DIR, 'manualTopics');
+const GHPAGE_DIR = path.resolve(SRC_DIR, '..', 'ghpage');
+const GHPAGE_SOURCE_DIR = path.join(GHPAGE_DIR, 'src');
 
 const COMPOSITION_ROOTS = [path.join(MAIN_DIR, 'services.ts'), path.join(RENDERER_DATA_DIR, 'service', 'services.ts')];
 const ICONS_MODULE = path.join(RENDERER_COMPONENTS_DIR, 'commons', 'icons.ts');
@@ -70,10 +77,13 @@ function importsOf(file: string): ImportOfFile[] {
   }));
 }
 
-const describeImport = ({file, specifier}: ImportOfFile) => `${path.relative(SRC_DIR, file)} -> ${specifier}`;
+const describeImport = ({file, specifier}: ImportOfFile) =>
+  `${path.relative(path.dirname(SRC_DIR), file)} -> ${specifier}`;
 
 const allSourceFiles = listSourceFiles(SRC_DIR).filter((file) => file !== __filename);
 const allImports = allSourceFiles.flatMap(importsOf);
+
+const ghpageImports = listSourceFiles(GHPAGE_SOURCE_DIR).flatMap(importsOf);
 
 const importsFrom = (dir: string) => allImports.filter(({file}) => isInside(dir, file));
 const targetsInside = (dir: string) => (anImport: ImportOfFile) =>
@@ -171,6 +181,39 @@ test('the i18n module never depends on the state or UI layer', () => {
 
 test('only commons/icons.ts imports the icon package, everything else uses its semantic names', () => {
   const violations = allImports.filter(({file, specifier}) => file !== ICONS_MODULE && specifier === ICON_PACKAGE);
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+const withoutExtension = (file: string) => file.replace(/\.tsx?$/, '');
+
+test('the app never imports the landing page', () => {
+  const violations = allImports.filter(targetsInside(GHPAGE_DIR));
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+test('the landing page takes nothing from the app but the manual topics and their order', () => {
+  const violations = ghpageImports.filter(
+    ({target}) =>
+      target !== undefined &&
+      !isInside(GHPAGE_SOURCE_DIR, target) &&
+      !isInside(MANUAL_TOPICS_DIR, target) &&
+      withoutExtension(target) !== MANUAL_TOPICS_MODULE
+  );
+
+  expect(violations.map(describeImport)).toEqual([]);
+});
+
+test('the manual topics depend on nothing but each other and packages, so the landing page can render them', () => {
+  const topicFiles = [MANUAL_TOPICS_DIR, `${MANUAL_TOPICS_MODULE}.ts`];
+  const violations = allImports.filter(
+    ({file, target}) =>
+      topicFiles.some((topicFile) => isInside(topicFile, file)) &&
+      target !== undefined &&
+      !isInside(MANUAL_TOPICS_DIR, target) &&
+      withoutExtension(target) !== MANUAL_TOPICS_MODULE
+  );
 
   expect(violations.map(describeImport)).toEqual([]);
 });
