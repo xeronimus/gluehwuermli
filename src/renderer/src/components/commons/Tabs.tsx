@@ -2,7 +2,16 @@ import {KeyboardEvent, ReactNode, Ref, useId, useImperativeHandle, useRef} from 
 
 import {tabAfterKey} from '@/data/tabs';
 
-import {tabAdd, tabHeader, tabList, tabPanel, tabVariants, tabWarning, tabs as tabsClass} from './Tabs.css';
+import {
+  tabAdd,
+  tabHeader,
+  tabHeaderStart,
+  tabList,
+  tabPanel,
+  tabVariants,
+  tabWarning,
+  tabs as tabsClass
+} from './Tabs.css';
 import {WarningIcon} from './icons';
 
 export interface Tab<Id extends string> {
@@ -20,6 +29,8 @@ interface TabsProps<Id extends string> {
   /** none while there are no tabs */
   activeId: Id | undefined;
   onSelect: (id: Id) => void;
+  /** controls before the first tab (not tabs themselves, so outside the tab list); none without */
+  beforeTabs?: ReactNode;
   /** a button after the last tab that adds one (not a tab itself, so outside the tab list); none without */
   addTab?: AddTab;
   /**
@@ -50,6 +61,7 @@ const Tabs = <Id extends string>({
   tabs,
   activeId,
   onSelect,
+  beforeTabs,
   addTab,
   unmountHiddenPanels = false,
   ref
@@ -84,6 +96,7 @@ const Tabs = <Id extends string>({
   return (
     <div className={tabsClass}>
       <div className={tabHeader}>
+        {beforeTabs !== undefined && <div className={tabHeaderStart}>{beforeTabs}</div>}
         <div className={tabList} role="tablist" aria-label={label}>
           {tabs.map((tab, index) => {
             const active = tab.id === activeId;

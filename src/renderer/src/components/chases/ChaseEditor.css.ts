@@ -114,17 +114,7 @@ export const errorList = style({
   color: vars.colors.danger
 });
 
-/** stuck to the bottom of the view while the editor is in it, so a long step needn't be scrolled to its end */
 export const actions = style({
-  position: 'sticky',
-  bottom: 0,
-  zIndex: 1,
-  alignSelf: 'stretch',
   display: 'flex',
-  gap: '8px',
-  margin: '0 -16px -16px',
-  padding: '10px 16px',
-  background: vars.colors.surface,
-  borderTop: `1px solid ${vars.colors.border}`,
-  borderRadius: `0 0 ${vars.constants.radiusMd} ${vars.constants.radiusMd}`
+  gap: '8px'
 });

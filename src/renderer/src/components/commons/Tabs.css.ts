@@ -10,12 +10,20 @@ export const tabs = style({
   gap: '14px'
 });
 
-/** the tab list and the add button after it, on one line */
+/** what comes before the tab list, the tab list and the add button after it, on one line */
 export const tabHeader = style({
   display: 'flex',
   flexWrap: 'wrap',
   gap: '4px',
   borderBottom: `1px solid ${vars.colors.border}`
+});
+
+/** set apart from the first tab, so it doesn't read as one */
+export const tabHeaderStart = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2px',
+  marginRight: '8px'
 });
 
 export const tabList = style({

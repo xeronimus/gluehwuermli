@@ -30,6 +30,7 @@ import {
   nameInput,
   steps
 } from './ChaseEditor.css';
+import ChaseOnRigToggle from './ChaseOnRigToggle';
 import ChaseRepeatField from './ChaseRepeatField';
 import ChaseStepTabs from './ChaseStepTabs';
 import {useStepRowMarks} from './useStepRowMarks';
@@ -58,6 +59,11 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
 
   const errors = chaseEditErrors(draft);
   const canSave = canSaveChase(errors) && !saving;
+
+  const onStepSelect = (stepId: string | undefined) => {
+    setChosenStepId(stepId);
+    rowMarks.stepShown();
+  };
 
   const onSave = async () => {
     if (!canSave) {
@@ -94,6 +100,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
             />
           </label>
           <ChaseRepeatField draft={draft} onChange={setDraft} />
+          <ChaseOnRigToggle />
         </div>
         <ChaseAllSteps
           steps={draft.steps}
@@ -107,10 +114,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
           steps={draft.steps}
           stepErrors={errors.steps}
           shownId={shownId}
-          onSelect={(stepId) => {
-            setChosenStepId(stepId);
-            rowMarks.stepShown();
-          }}
+          onSelect={onStepSelect}
           rowMarks={rowMarks}
           onChange={setDraft}
         />

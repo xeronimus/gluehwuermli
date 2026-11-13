@@ -47,3 +47,22 @@ test('a failing call keeps the status and shows the error until the next call wo
   await playChase(service, actions, 'stop', 'chorus');
   expect(current().chaseError).toBeUndefined();
 });
+
+test('start and resume turn the preview on rig off, pause and stop keep it', async () => {
+  const service = inMemoryChaseServiceFactory();
+  const {actions, current} = storeActions();
+
+  actions.setStepOnRig(true);
+  await playChase(service, actions, 'start', 'chorus');
+  expect(current().stepOnRig).toBe(false);
+
+  actions.setStepOnRig(true);
+  await playChase(service, actions, 'pause', 'chorus');
+  expect(current().stepOnRig).toBe(true);
+  await playChase(service, actions, 'resume', 'chorus');
+  expect(current().stepOnRig).toBe(false);
+
+  actions.setStepOnRig(true);
+  await playChase(service, actions, 'stop', 'chorus');
+  expect(current().stepOnRig).toBe(true);
+});

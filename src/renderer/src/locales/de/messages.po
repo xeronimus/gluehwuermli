@@ -57,9 +57,13 @@ msgstr "{stepCount} Schritte"
 msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 msgstr "<0>Not-Aus</0> rechts in der oberen Leiste setzt alle 512 Kanäle auf einen Schlag auf 0, im Show-Modus und im Setup-Modus, mit oder ohne Projekt. Die Geräte, Presets und Szenen bleiben, wie sie sind; die Fader zeigen 0."
 
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
+msgstr "<0>Vorschau auf der Anlage</0> im Chase-Editor sendet den angezeigten Schritt an den Ausgang, während er bearbeitet wird: beim Einschalten, wenn ein anderer Schritt gewählt wird und bei jeder Änderung, durch die Kanalsperre begrenzt wie ein Fader. Ein laufender Chase wird beim Einschalten gestoppt. Starten, Fortsetzen, Not-Aus und das Schliessen des Editors schalten sie aus; die Kanäle behalten die zuletzt gesendeten Werte. Ein in der Zwischenzeit bewegter Fader behält seinen Wert, bis sich der Schritt wieder ändert."
+
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Mit <4>Knöpfe</4> neben «Position hinzufügen» hat die Ansicht Show statt des Faders einen Knopf pro Position, der höchste Wert zuoberst. Der Knopf einer <5>tastenden</5> Position setzt ihren Wert nur, solange er mit der Maus oder einem Finger gedrückt bleibt, z. B. ein Blinder-Blitz, danach kommt der Wert von vorher zurück; mit der Tastatur lässt er sich nicht drücken. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A position whose <5/> box is checked is momentary: its button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Werte</0> legt fest, wo der Fader anhält. <1>Stufenlos</1> geht durch jeden Wert von Min. bis Max., z. B. ein Dimmer, der unter 100 nichts tut. <2>Stufen</2> geht von Min. bis Max. in Schritten der Schrittweite, z. B. ein Strobo in Zehnerschritten. <3>Positionen</3> hält nur bei den aufgelisteten Werten an, jeder mit einem optionalen Namen, z. B. die Plätze eines Goborads bei 5, 6 und 200: Der Fader zeigt für jede eine Markierung (mit ihrem Namen, wenn du mit der Maus darüberfährst), und ein Preset wählt eine davon. Mit <4>Knöpfe</4> neben «Position hinzufügen» hat die Ansicht Show statt des Faders einen Knopf pro Position, der höchste Wert zuoberst. Ist bei einer Position das Kästchen <5/> angekreuzt, ist sie tastend: Ihr Knopf setzt ihren Wert nur, solange er mit der Maus oder einem Finger gedrückt bleibt, z. B. ein Blinder-Blitz, danach kommt der Wert von vorher zurück; mit der Tastatur lässt er sich nicht drücken. Nur die Fader des Geräts halten sich daran, die Ansicht Kanäle sendet jeden Wert."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -792,10 +796,6 @@ msgid "If the port can't be opened, or the interface is unplugged while sending,
 msgstr "Lässt sich der Port nicht öffnen oder wird das Interface während des Sendens ausgesteckt, zeigt der Status den Port und was schiefging, z. B. dass ein anderes Programm ihn braucht. Beheb das und drück nochmals auf Verbinden: Die Fader haben ihre Werte behalten und werden wieder gesendet, sobald der Port offen ist."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
-msgid "In the Show view, the button sets this value only while it is held down, then puts back the value from before"
-msgstr "In der Ansicht Show setzt der Knopf diesen Wert nur, solange er gedrückt bleibt, danach kommt der Wert von vorher zurück"
-
-#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "In the Show view: a fader, or a button per position"
 msgstr "In der Ansicht Show: ein Fader oder ein Knopf pro Position"
 
@@ -864,8 +864,8 @@ msgid "Modes"
 msgstr "Modi"
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
-msgid "Momentary"
-msgstr "Tastend"
+msgid "Momentary: in the Show view, the button sets this value only while it is held down, then puts back the value from before"
+msgstr "Tastend: In der Ansicht Show setzt der Knopf diesen Wert nur, solange er gedrückt bleibt, danach kommt der Wert von vorher zurück"
 
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Move {fixtureName} to the left"
@@ -961,6 +961,10 @@ msgstr "Neue Szene"
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Next channels"
 msgstr "Nächste Kanäle"
+
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Next step"
+msgstr "Nächster Schritt"
 
 #: src/renderer/src/components/fixtures/NoFixturesHint.tsx
 msgid "No fixtures yet: add the devices of your rig, to control them by name."
@@ -1138,9 +1142,17 @@ msgstr "Ein Druck auf die Szene setzt diese Werte wieder. Geräte ohne Häkchen 
 msgid "Preview"
 msgstr "Vorschau"
 
+#: src/renderer/src/components/chases/ChaseOnRigToggle.tsx
+msgid "Preview on rig"
+msgstr "Vorschau auf der Anlage"
+
 #: src/renderer/src/components/faders/ChannelBankNavigation.tsx
 msgid "Previous channels"
 msgstr "Vorherige Kanäle"
+
+#: src/renderer/src/components/chases/ChaseStepNavigation.tsx
+msgid "Previous step"
+msgstr "Vorheriger Schritt"
 
 #: src/renderer/src/components/help/ProjectInfoSection.tsx
 #: src/renderer/src/components/project/ProjectSection.tsx
@@ -1270,6 +1282,10 @@ msgstr "Szenen"
 #: src/renderer/src/components/settings/OutputSection.tsx
 msgid "Search the serial ports again"
 msgstr "Serielle Ports nochmals suchen"
+
+#: src/renderer/src/components/chases/ChaseOnRigToggle.tsx
+msgid "Send the shown step to the output while you edit it"
+msgstr "Sendet den angezeigten Schritt an den Ausgang, während du ihn bearbeitest"
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Sending on {path}"
@@ -1444,6 +1460,10 @@ msgstr "Die App merkt sich den Port, mit dem sie zuletzt verbunden war, auch nac
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "The app's own settings are stored here as JSON files: the password hash, the output port, the language, the recent projects and the window position. The fixtures and scenes are in the project files."
 msgstr "Hier liegen die eigenen Einstellungen der App als JSON-Dateien: der Passwort-Hash, der Ausgabe-Port, die Sprache, die zuletzt geöffneten Projekte und die Fensterposition. Die Geräte und Szenen sind in den Projektdateien."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on or off; after the last step comes the first again, before the first the last."
+msgstr "Die Pfeile links der Schritt-Tabs wählen den vorherigen oder den nächsten Schritt, wie ein Klick auf einen Tab, ob «Vorschau auf der Anlage» ein- oder ausgeschaltet ist; nach dem letzten Schritt kommt wieder der erste, vor dem ersten der letzte."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "The arrows move a channel up or down: the fixture's faders are shown in the order of this list. Its offset and address stay as they are, and its presets and scenes keep setting it."

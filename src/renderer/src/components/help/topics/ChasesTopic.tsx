@@ -47,6 +47,20 @@ const ChasesTopic = () => (
         fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it.
       </Trans>
     </p>
+    <p>
+      <Trans>
+        <strong>Preview on rig</strong> in the chase editor sends the shown step to the output while it is edited: when
+        it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A
+        chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off;
+        the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        The arrows left of the step tabs choose the previous or the next step, like a tab, whether Preview on rig is on
+        or off; after the last step comes the first again, before the first the last.
+      </Trans>
+    </p>
   </>
 );
 

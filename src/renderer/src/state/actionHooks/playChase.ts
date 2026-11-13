@@ -31,16 +31,22 @@ const sendControl = (service: ChaseService, control: ChaseControl, chaseId: stri
   }
 };
 
+/** a playing chase would overwrite a previewed step on its next step */
+const turnsStepOnRigOff = (control: ChaseControl): boolean => control === 'start' || control === 'resume';
+
 /**
  * sends a row's button to the chase player in main and shows the status it answers (the push follows with the same);
- * Start replaces a chase already running, in the same tick
+ * Start replaces a chase already running, in the same tick. Start and Resume turn the chase editor's preview off
  */
 export async function playChase(
   service: ChaseService,
-  actions: Pick<ChaseActions, 'setChaseStatus' | 'setChaseError'>,
+  actions: Pick<ChaseActions, 'setChaseStatus' | 'setChaseError' | 'setStepOnRig'>,
   control: ChaseControl,
   chaseId: string
 ): Promise<void> {
+  if (turnsStepOnRigOff(control)) {
+    actions.setStepOnRig(false);
+  }
   try {
     actions.setChaseError(undefined);
     // no guard against a newer push (unlike followChases): the reply and the pushes share one ordered IPC link, and
