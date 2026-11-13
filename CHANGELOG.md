@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-13
+
 ### Added
 
 - A Safety section in the Help view: no warranty, made for private use, and the channel lock is not a laser safety
@@ -274,7 +276,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.2.4...v0.3.0
