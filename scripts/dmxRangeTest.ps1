@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
   Sends DMX through an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO to a range of channels, without any other
-  software. Follows the Enttec DMX USB Pro API v1.44 (doc/devices/enttec_dmx_usb_pro/70304_DMX_USB_PRO_API.pdf), which
+  software. Follows the Enttec DMX USB Pro API v1.44 (doc/dmxInterfaces/enttec_dmx_usb_pro/README.md links to it), which
   the Eurolite interface speaks, too.
 
 .EXAMPLE

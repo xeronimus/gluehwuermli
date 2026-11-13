@@ -4,6 +4,7 @@
   "private": true,
   "description": "Desktop app sending DMX through an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO",
   "author": "Sergio Trentini",
+  "license": "GPL-3.0-or-later",
   "main": "./out/main/index.js",
   "packageManager": "pnpm@12.4.2",
   "engines": {
