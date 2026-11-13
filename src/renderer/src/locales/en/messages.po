@@ -62,8 +62,8 @@ msgid "<0>Preview on rig</0> in the chase editor sends the shown step to the out
 msgstr "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
-msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
-msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A <5>Momentary</5> position's button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
+msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A position whose <5/> box is checked is momentary: its button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
+msgstr "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A position whose <5/> box is checked is momentary: its button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
 
 #: src/renderer/src/components/fixtures/FixturePresetHelp.tsx
 msgid "A <0>preset</0> is a button on the fixture that sets several channels at once, e.g. \"Warm white\". The channels it leaves unticked stay as they are. To make one quickly, set the faders and press the save button next to the presets."
@@ -796,10 +796,6 @@ msgid "If the port can't be opened, or the interface is unplugged while sending,
 msgstr "If the port can't be opened, or the interface is unplugged while sending, the status shows the port and what went wrong, e.g. that another program is using it. Fix that and press Connect again: the faders kept their values and are sent again as soon as the port is open."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
-msgid "In the Show view, the button sets this value only while it is held down, then puts back the value from before"
-msgstr "In the Show view, the button sets this value only while it is held down, then puts back the value from before"
-
-#: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "In the Show view: a fader, or a button per position"
 msgstr "In the Show view: a fader, or a button per position"
 
@@ -868,8 +864,8 @@ msgid "Modes"
 msgstr "Modes"
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
-msgid "Momentary"
-msgstr "Momentary"
+msgid "Momentary: in the Show view, the button sets this value only while it is held down, then puts back the value from before"
+msgstr "Momentary: in the Show view, the button sets this value only while it is held down, then puts back the value from before"
 
 #: src/renderer/src/components/fixtures/FixtureGroup.tsx
 msgid "Move {fixtureName} to the left"

@@ -15,7 +15,7 @@ import {
 
 import Button from '../commons/Button';
 import ModeToggle, {type Mode} from '../commons/ModeToggle';
-import {AddIcon, RemoveIcon} from '../commons/icons';
+import {AddIcon, MomentaryIcon, RemoveIcon} from '../commons/icons';
 import {
   positionActions,
   positionMomentary,
@@ -69,7 +69,7 @@ const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps
               {values.display === 'buttons' ? (
                 <label
                   className={positionMomentary}
-                  title={t`In the Show view, the button sets this value only while it is held down, then puts back the value from before`}
+                  title={t`Momentary: in the Show view, the button sets this value only while it is held down, then puts back the value from before`}
                 >
                   <input
                     type="checkbox"
@@ -77,7 +77,7 @@ const ChannelPositionsList = ({values, row, onChange}: ChannelPositionsListProps
                     aria-label={t`Position ${positionNumber} of channel ${row} only while held`}
                     onChange={(event) => onChange(withPositionChange(values, index, {momentary: event.target.checked}))}
                   />
-                  <Trans>Momentary</Trans>
+                  <MomentaryIcon />
                 </label>
               ) : (
                 // keeps the remove button in its column, so the rows don't shift when the boxes are hidden

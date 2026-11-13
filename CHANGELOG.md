@@ -17,6 +17,10 @@ change bumps the minor version and everything else the patch version.
 - Chase editor: "Preview on rig" sends the shown step to the output while it is edited (#91)
 - Chase editor: arrows left of the step tabs step to the previous or the next step (#91)
 
+### Changed
+
+- Chase editor: Save and Cancel no longer stay at the bottom of the window, they scroll with the editor like the rest
+
 ### Fixed
 
 - A fixture no longer grows a little wider when a channel shown as buttons changes its value or its active button
