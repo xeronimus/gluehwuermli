@@ -45,3 +45,16 @@ test('a failed stop leaves it off and shows the error', async () => {
   expect(store.getState().chaseError).toBeDefined();
   expect(store.getState().chaseStatus).toMatchObject({type: 'running', chaseId: 'chorus'});
 });
+
+test('turned off while the stop is awaited (toggled twice, the editor closed), it stays off', async () => {
+  const service = inMemoryChaseServiceFactory();
+  const store = chaseStore();
+  await playChase(service, store.actions, 'start', 'chorus');
+
+  await Promise.all([turnStepOnRig(service, store, true), turnStepOnRig(service, store, false)]);
+  expect(store.getState().chaseStatus).toEqual({type: 'idle'});
+  expect(store.getState().stepOnRig).toBe(false);
+
+  await turnStepOnRig(service, store, true);
+  expect(store.getState().stepOnRig).toBe(true);
+});
