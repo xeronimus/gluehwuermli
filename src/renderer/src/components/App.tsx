@@ -4,7 +4,7 @@ import type {I18n} from '@lingui/core';
 import {msg} from '@lingui/core/macro';
 import {useLingui} from '@lingui/react/macro';
 
-import mascot from '@assets/gluehwuermli_mascot.png';
+import mascot from '@assets/gluehwuermli_mascot_600.png';
 
 import {leadsToShowView} from '@/data/showViewTriggers';
 import envConfig from '@/envConfig';
