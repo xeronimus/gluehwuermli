@@ -1,10 +1,10 @@
-import {type ChaseError, chaseOwnErrors, chaseStepErrors} from '@shared/chases';
+import {type ChaseError, chaseOwnErrors, chaseStepErrors, stepFadeMs} from '@shared/chases';
 import {DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {channelAddress} from '@shared/fixtures';
 import {CHASE_REPEAT_MIN, type Chase, type ChaseRepeat, type ChaseStep, type Fixture} from '@shared/ipc';
 
 import {numberOf} from './channelValuesDraft';
-import {holdMsOf, holdSeconds} from './chaseHold';
+import {holdMsOf, holdSeconds, msOfSecondsText, secondsText} from './chaseHold';
 import {type MoveDirection, moved} from './listOrder';
 
 /** a chase as typed into the editor: the numbers are still text, so a half-typed value doesn't jump */
@@ -19,6 +19,8 @@ export interface ChaseDraft {
 export interface ChaseStepDraft {
   /** the step's identity, stored with it; a moved step keeps its focus */
   readonly id: string;
+  /** the fade in, in seconds, two decimals; 0 sets the values at once */
+  readonly fade: string;
   /** in seconds, two decimals */
   readonly hold: string;
   readonly values: readonly ChaseStepValueDraft[];
@@ -34,6 +36,9 @@ export interface ChaseStepValueDraft {
 /** the hold of the first step added; later ones take the hold of the step before them */
 const FIRST_STEP_HOLD_MS = 1000;
 
+/** the fade in of the first step added: none; later ones take the fade of the step before them */
+const FIRST_STEP_FADE_MS = 0;
+
 export const newChaseDraft = (): ChaseDraft => ({
   name: '',
   repeatType: 'once',
@@ -43,6 +48,7 @@ export const newChaseDraft = (): ChaseDraft => ({
 
 const stepDraftOf = (step: ChaseStep): ChaseStepDraft => ({
   id: step.id,
+  fade: secondsText(stepFadeMs(step)),
   hold: holdSeconds(step.holdMs),
   values: step.values.map(({channel, value}, index) => ({
     id: String(index),
@@ -69,11 +75,16 @@ function repeatOf({repeatType, repeatCount}: ChaseDraft): ChaseRepeat {
   }
 }
 
-const stepOf = (step: ChaseStepDraft): ChaseStep => ({
-  id: step.id,
-  holdMs: holdMsOf(step.hold),
-  values: step.values.map((value) => ({channel: numberOf(value.channel), value: numberOf(value.value)}))
-});
+/** a fade of 0 isn't stored: a chase without fades saved unchanged leaves the file as it was */
+const stepOf = (step: ChaseStepDraft): ChaseStep => {
+  const fadeMs = msOfSecondsText(step.fade);
+  return {
+    id: step.id,
+    ...(fadeMs !== 0 && {fadeMs}),
+    holdMs: holdMsOf(step.hold),
+    values: step.values.map((value) => ({channel: numberOf(value.channel), value: numberOf(value.value)}))
+  };
+};
 
 /** the chase as it is saved, with a trimmed name; it may be invalid, chaseEditErrors says why */
 export const chaseOfDraft = (id: string, draft: ChaseDraft): Chase => ({
@@ -110,14 +121,15 @@ const withStepAt = (
     draft.steps.map((step, index) => (index === stepIndex ? change(step) : step))
   );
 
-/** an empty step at the end, holding as long as the step before it (1 s for the first) */
+/** an empty step at the end, fading and holding as long as the step before it (no fade and 1 s for the first) */
 export function withNewStep(draft: ChaseDraft, id: string): ChaseDraft {
   const previous = draft.steps.at(-1);
+  const fade = previous ? previous.fade : secondsText(FIRST_STEP_FADE_MS);
   const hold = previous ? previous.hold : holdSeconds(FIRST_STEP_HOLD_MS);
-  return withSteps(draft, [...draft.steps, {id, hold, values: []}]);
+  return withSteps(draft, [...draft.steps, {id, fade, hold, values: []}]);
 }
 
-/** a copy of the step with its hold and values, right after it, under a new id */
+/** a copy of the step with its fade, hold and values, right after it, under a new id */
 export function withStepDuplicated(draft: ChaseDraft, stepIndex: number, id: string): ChaseDraft {
   const step = draft.steps[stepIndex];
   if (!step) {
@@ -134,6 +146,9 @@ export const withoutStep = (draft: ChaseDraft, stepIndex: number): ChaseDraft =>
     draft,
     draft.steps.filter((_, index) => index !== stepIndex)
   );
+
+export const withStepFade = (draft: ChaseDraft, stepIndex: number, fade: string): ChaseDraft =>
+  withStepAt(draft, stepIndex, (step) => ({...step, fade}));
 
 export const withStepHold = (draft: ChaseDraft, stepIndex: number, hold: string): ChaseDraft =>
   withStepAt(draft, stepIndex, (step) => ({...step, hold}));
@@ -244,6 +259,13 @@ export const withHoldOfAllSteps = (draft: ChaseDraft, holdMs: number): ChaseDraf
   withSteps(
     draft,
     draft.steps.map((step) => ({...step, hold: holdSeconds(holdMs)}))
+  );
+
+/** every step fading in as long, shown with two decimals like a stored fade */
+export const withFadeOfAllSteps = (draft: ChaseDraft, fadeMs: number): ChaseDraft =>
+  withSteps(
+    draft,
+    draft.steps.map((step) => ({...step, fade: secondsText(fadeMs)}))
   );
 
 /** a fixture channel on an address, for a step value's label */

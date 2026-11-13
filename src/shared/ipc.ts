@@ -197,6 +197,9 @@ export const CHASE_HOLD_MIN_MS = 50;
 /** an hour */
 export const CHASE_HOLD_MAX_MS = 3_600_000;
 
+/** as long as the longest hold */
+export const CHASE_FADE_MAX_MS = CHASE_HOLD_MAX_MS;
+
 /** the fewest passes of a chase repeating a number of times: one pass is `once` */
 export const CHASE_REPEAT_MIN = 2;
 
@@ -211,9 +214,14 @@ const ChaseStepValueSchema = Type.Object({
   value: DmxValueSchema
 });
 
-/** what a chase sets at once, and how long it stays before the next step */
+/** what a chase sets, how long it fades in to it and how long it stays before the next step */
 export const ChaseStepSchema = Type.Object({
   id: Type.String({minLength: 1}),
+  /**
+   * how long the step's channels move in a straight line from what they held when it began to its values, in
+   * milliseconds, before the hold; missing (in a file from before fades) is 0, the values are set at once
+   */
+  fadeMs: Type.Optional(Type.Integer({minimum: 0, maximum: CHASE_FADE_MAX_MS})),
   /** how long the step stays before the next one, in milliseconds */
   holdMs: Type.Integer({minimum: CHASE_HOLD_MIN_MS, maximum: CHASE_HOLD_MAX_MS}),
   values: Type.Array(ChaseStepValueSchema, {minItems: 1})

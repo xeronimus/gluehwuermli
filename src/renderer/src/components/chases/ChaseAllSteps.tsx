@@ -8,6 +8,7 @@ import {allStepsLineMessage} from '@/i18n/messages/chaseMessages';
 
 import ChaseAddToAllSteps from './ChaseAddToAllSteps';
 import {allStepsActions, allStepsFieldset, allStepsPanel} from './ChaseAllSteps.css';
+import ChaseFadeOfAllSteps from './ChaseFadeOfAllSteps';
 import {toolPanelLine, toolPanelTitle} from './ChaseFillPanel.css';
 import ChaseHoldOfAllSteps from './ChaseHoldOfAllSteps';
 import ChaseRemoveFromAllSteps from './ChaseRemoveFromAllSteps';
@@ -23,9 +24,9 @@ interface ChaseAllStepsProps {
 }
 
 /**
- * Changes every step of the chase at once: adds a channel, removes one, sets the hold. Like any edit it changes the
- * draft only, Cancel undoes it. Says what the hovered action would do and what the clicked one did, and marks the shown
- * step's rows it changes; disabled without steps
+ * Changes every step of the chase at once: sets the fade in, sets the hold, adds a channel, removes one. Like any edit
+ * it changes the draft only, Cancel undoes it. Says what the hovered action would do and what the clicked one did, and
+ * marks the shown step's rows it changes; disabled without steps
  */
 const ChaseAllSteps = ({steps, shownStep, rowMarks, onChange}: ChaseAllStepsProps) => {
   const {t, i18n} = useLingui();
@@ -55,6 +56,7 @@ const ChaseAllSteps = ({steps, shownStep, rowMarks, onChange}: ChaseAllStepsProp
       </h3>
       <fieldset className={allStepsFieldset} disabled={steps.length === 0}>
         <div className={allStepsActions}>
+          <ChaseFadeOfAllSteps {...actionProps} />
           <ChaseHoldOfAllSteps {...actionProps} />
           <ChaseAddToAllSteps {...actionProps} />
           <ChaseRemoveFromAllSteps {...actionProps} />

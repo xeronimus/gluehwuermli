@@ -3,7 +3,7 @@ import type {Fixture, FixtureChannel} from '@shared/ipc';
 
 import {numberOf} from './channelValuesDraft';
 import {type ChaseStepDraft, type ChaseStepValueDraft, setsChannel} from './chaseDraft';
-import {holdMsOf} from './chaseHold';
+import {holdMsOf, msOfSecondsText} from './chaseHold';
 import {channelAt} from './chaseStepTable';
 
 /**
@@ -81,6 +81,17 @@ export const holdOfAllStepsEffect = (steps: readonly ChaseStepDraft[], holdMs: n
   holdMs
 });
 
+/** what setting the fade in of all steps would do: how many steps would fade for another time, and the fade set */
+export interface FadeOfAllStepsEffect {
+  readonly changedCount: number;
+  readonly fadeMs: number;
+}
+
+export const fadeOfAllStepsEffect = (steps: readonly ChaseStepDraft[], fadeMs: number): FadeOfAllStepsEffect => ({
+  changedCount: steps.filter((step) => msOfSecondsText(step.fade) !== fadeMs).length,
+  fadeMs
+});
+
 /** what adding a channel to all steps would do: the steps that don't set it get it, of all the chase's steps */
 export interface ChannelInAllStepsEffect {
   readonly addedCount: number;
@@ -130,6 +141,7 @@ export function withoutChannelInAllStepsEffect(
  * (until the next hover)
  */
 export type AllStepsLine =
+  | {readonly action: 'fade'; readonly done: boolean; readonly effect: FadeOfAllStepsEffect}
   | {readonly action: 'hold'; readonly done: boolean; readonly effect: HoldOfAllStepsEffect}
   | {readonly action: 'add'; readonly done: boolean; readonly channel: number; readonly effect: ChannelInAllStepsEffect}
   | {

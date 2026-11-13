@@ -2,7 +2,7 @@ import {style, styleVariants} from '@vanilla-extract/css';
 
 import {vars} from '../themes.css';
 import {toolPanel} from './ChaseFillPanel.css';
-import {NARROW_STEP_EDITOR, STEP_EDITOR_INSET, holdInput} from './ChaseStepEditor.css';
+import {NARROW_STEP_EDITOR, STEP_EDITOR_INSET, timeInput} from './ChaseStepEditor.css';
 
 /**
  * at the top right of the chase editor, beside name and repeat; not sticky: it is used before the steps are. Below the
@@ -76,9 +76,10 @@ export const actionButton = style({
   display: 'inline-flex'
 });
 
-export const holdOfAllInput = styleVariants({
-  valid: [holdInput],
-  invalid: [holdInput, {borderColor: vars.colors.danger}]
+/** the fade in or hold of all steps */
+export const timeOfAllInput = styleVariants({
+  valid: [timeInput],
+  invalid: [timeInput, {borderColor: vars.colors.danger}]
 });
 
 export const removeChoice = style({

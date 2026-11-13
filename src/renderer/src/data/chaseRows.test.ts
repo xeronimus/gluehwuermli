@@ -37,6 +37,16 @@ test('the running chase plays, counted from 1; the others are dimmed', () => {
   expect(chaseRowState(colors, RUNNING, chases)).toEqual({type: 'dimmed'});
 });
 
+test('a step fading in is the current step during its fade, as main reports it', () => {
+  const fading: Chase = {...chorus, steps: chorus.steps.map((step) => ({...step, fadeMs: 2000}))};
+  const fadingSecondStep: ChaseStatus = {...RUNNING, stepIndex: 1};
+
+  expect(chaseRowState(fading, fadingSecondStep, [fading])).toMatchObject({
+    type: 'playing',
+    position: {stepNumber: 2}
+  });
+});
+
 test('a paused chase still plays, told apart from a running one', () => {
   const paused: ChaseStatus = {...RUNNING, type: 'paused'};
   expect(chaseRowState(chorus, paused, chases)).toMatchObject({type: 'playing', paused: true});

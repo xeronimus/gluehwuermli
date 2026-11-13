@@ -1,9 +1,12 @@
 import {
+  FADE_MAX_SECONDS,
+  FADE_MIN_SECONDS,
   HOLD_INPUT_STEP_SECONDS,
   HOLD_MAX_SECONDS,
   HOLD_MIN_SECONDS,
   holdMsOf,
   holdSeconds,
+  isValidFadeText,
   isValidHoldText
 } from './chaseHold';
 
@@ -42,4 +45,20 @@ test('a typed hold is valid from the shortest to the longest hold', () => {
   expect(isValidHoldText('3600.01')).toBe(false);
   expect(isValidHoldText('')).toBe(false);
   expect(isValidHoldText('abc')).toBe(false);
+});
+
+test('the fade field takes hundredths from none to an hour', () => {
+  expect(FADE_MIN_SECONDS).toBe(0);
+  expect(FADE_MAX_SECONDS).toBe(3600);
+});
+
+test('a typed fade is valid from 0, which is no valid hold, to the longest fade; a blank one is not', () => {
+  expect(isValidFadeText('0')).toBe(true);
+  expect(isValidHoldText('0')).toBe(false);
+  expect(isValidFadeText('0.01')).toBe(true);
+  expect(isValidFadeText('3600')).toBe(true);
+  expect(isValidFadeText('3600.01')).toBe(false);
+  expect(isValidFadeText('-0.01')).toBe(false);
+  expect(isValidFadeText('')).toBe(false);
+  expect(isValidFadeText('abc')).toBe(false);
 });

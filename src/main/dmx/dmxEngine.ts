@@ -25,6 +25,12 @@ export interface DmxEngine {
   /** what the universe holds for a valid channel, after the caps; 0 for anything else */
   channelValue: (channel: number) => number;
 
+  /**
+   * the value setChannel would put on the channel now: capped at its limit while the limits are enforced, unchanged
+   * otherwise. A chase fade takes its target from it when the step begins (doc/chases.md)
+   */
+  cappedValue: (channel: number, value: number) => number;
+
   /** the caps per address (the channel lock); while they are enforced, channels above their new cap drop to it */
   setChannelLimits: (limits: ChannelLimits) => void;
 
@@ -246,6 +252,7 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
     },
     channelValue: (channel) =>
       isDmxChannel(channel) ? (universe[channel - FIRST_DMX_CHANNEL] ?? DMX_MIN_VALUE) : DMX_MIN_VALUE,
+    cappedValue,
     blackout: () => {
       universe.fill(DMX_MIN_VALUE);
       universeChanged = true;

@@ -1,5 +1,6 @@
 import {isDmxChannel, isDmxValue} from './dmx';
 import {
+  CHASE_FADE_MAX_MS,
   CHASE_HOLD_MAX_MS,
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
@@ -47,6 +48,7 @@ export type ChaseError =
   | {readonly type: 'chase-steps-too-many'}
   | {readonly type: 'chase-step-id-twice'}
   | {readonly type: 'chase-step-hold-invalid'}
+  | {readonly type: 'chase-step-fade-invalid'}
   | {readonly type: 'chase-step-values-missing'}
   | ChaseValueError;
 
@@ -71,12 +73,22 @@ const isValidRepeat = (repeat: ChaseRepeat): boolean =>
 export const isValidHold = (holdMs: number): boolean =>
   Number.isInteger(holdMs) && holdMs >= CHASE_HOLD_MIN_MS && holdMs <= CHASE_HOLD_MAX_MS;
 
+/** a step's fade in, in milliseconds; 0 for a step without one, which sets its values at once */
+export const stepFadeMs = (step: ChaseStep): number => step.fadeMs ?? 0;
+
+/** a step's fade in, in milliseconds: whole, from none to the longest fade */
+export const isValidFade = (fadeMs: number): boolean =>
+  Number.isInteger(fadeMs) && fadeMs >= 0 && fadeMs <= CHASE_FADE_MAX_MS;
+
 /** what is wrong with one step, each problem once; the editor shows them at the step */
 export function chaseStepErrors(step: ChaseStep): ChaseError[] {
   const errors: ChaseError[] = [];
   const channels = step.values.map(({channel}) => channel);
   if (!isValidHold(step.holdMs)) {
     errors.push({type: 'chase-step-hold-invalid'});
+  }
+  if (!isValidFade(stepFadeMs(step))) {
+    errors.push({type: 'chase-step-fade-invalid'});
   }
   if (channels.length === 0) {
     errors.push({type: 'chase-step-values-missing'});

@@ -469,3 +469,308 @@ test('keeps playing while the port is disconnected; the current step goes out on
   await nextTick();
   expect(channelValueIn(lastPacket(), STROBE)).toBe(255);
 });
+
+describe('fades', () => {
+  const FADE_MS = 1000;
+  let clockMs: number;
+  let fadePlayer: ChasePlayer;
+  let fadeValues: (readonly SetChannelRequest[])[];
+
+  const fadingStepOf = (id: string, values: ChaseStep['values'], fadeMs = FADE_MS): ChaseStep => ({
+    id,
+    fadeMs,
+    holdMs: HOLD_MS,
+    values
+  });
+  const chaseOf = (repeat: ChaseRepeat, steps: ChaseStep[]): Chase => ({id: 'fading', name: 'Sunrise', repeat, steps});
+  /** the dimmer fades up to 200 in a second and holds, then drops to 50 at once: a pass takes 2 s */
+  const sunriseOf = (repeat: ChaseRepeat) =>
+    chaseOf(repeat, [
+      fadingStepOf('up', [{channel: DIMMER, value: 200}]),
+      stepOf('down', [{channel: DIMMER, value: 50}])
+    ]);
+  /** a tick that sees the clock at `ms` after the start */
+  const tickAt = async (ms: number) => {
+    clockMs = ms;
+    await nextTick();
+  };
+  const valueOf = (channel: number) => engine.channelValue(channel);
+
+  beforeEach(() => {
+    clockMs = 0;
+    fadePlayer = chasePlayerFactory({engine, now: () => clockMs, log: silentLog});
+    fadeValues = [];
+    fadePlayer.onValuesApplied((values) => fadeValues.push(values));
+  });
+
+  describe('the fade itself', () => {
+    test('moves in a straight line from the clock and ends exactly at the step value', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+
+      await tickAt(250);
+      expect(valueOf(DIMMER)).toBe(50);
+      await tickAt(333);
+      expect(valueOf(DIMMER)).toBe(67);
+      await tickAt(FADE_MS);
+      expect(valueOf(DIMMER)).toBe(200);
+      expect(channelValueIn(lastPacket(), DIMMER)).toBe(200);
+    });
+
+    test("a late tick lands where the clock is, it doesn't stretch the fade", async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(100);
+
+      await tickAt(900);
+
+      expect(valueOf(DIMMER)).toBe(180);
+    });
+
+    test('once the fade is done, the hold leaves a fader moved by hand alone', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(FADE_MS);
+
+      engine.setChannel(DIMMER, 30);
+      await tickAt(FADE_MS + 200);
+
+      expect(valueOf(DIMMER)).toBe(30);
+    });
+
+    test('a fade of 0 sets the values at Start, as without a fade', () => {
+      fadePlayer.start(chaseOf({type: 'once'}, [fadingStepOf('at once', [{channel: DIMMER, value: 200}], 0)]));
+
+      expect(valueOf(DIMMER)).toBe(200);
+      expect(fadeValues).toEqual([[{channel: DIMMER, value: 200}]]);
+    });
+  });
+
+  describe('where a fade starts', () => {
+    test('step 1 fades from what the channel held at Start, set by hand', async () => {
+      engine.setChannel(DIMMER, 100);
+      fadePlayer.start(sunriseOf({type: 'once'}));
+
+      await tickAt(500);
+
+      expect(valueOf(DIMMER)).toBe(150);
+    });
+
+    test('a loop fades from the last step', async () => {
+      fadePlayer.start(sunriseOf({type: 'forever'}));
+      await tickAt(1600);
+      expect(valueOf(DIMMER)).toBe(50);
+
+      await tickAt(2000 + 500);
+
+      expect(fadePlayer.status()).toMatchObject({stepIndex: 0, passIndex: 1});
+      expect(valueOf(DIMMER)).toBe(125);
+    });
+
+    test('a looping chase of one step fades only in its first pass', async () => {
+      fadePlayer.start(chaseOf({type: 'forever'}, [fadingStepOf('up', [{channel: DIMMER, value: 200}])]));
+      await tickAt(500);
+      expect(valueOf(DIMMER)).toBe(100);
+
+      // the next pass: the step before (itself) ends at its value, the new fade starts there
+      await tickAt(1500);
+      expect(valueOf(DIMMER)).toBe(200);
+      await tickAt(2000);
+      expect(valueOf(DIMMER)).toBe(200);
+    });
+  });
+
+  describe('pause and resume', () => {
+    test('pause freezes the values; resume plays the rest of the fade, then the full hold', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(500);
+
+      fadePlayer.pause();
+      await tickAt(5000);
+      expect(valueOf(DIMMER)).toBe(100);
+
+      fadePlayer.resume();
+      await tickAt(5250);
+      expect(valueOf(DIMMER)).toBe(150);
+      await tickAt(5000 + 500 + HOLD_MS - 1);
+      expect(fadePlayer.status()).toMatchObject({type: 'running', stepIndex: 0});
+      await tickAt(5000 + 500 + HOLD_MS);
+      expect(fadePlayer.status()).toMatchObject({type: 'running', stepIndex: 1});
+    });
+
+    test('a fader moved during the pause jumps back onto the fade', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(500);
+      fadePlayer.pause();
+      engine.setChannel(DIMMER, 10);
+
+      fadePlayer.resume();
+      await tickAt(600);
+
+      expect(valueOf(DIMMER)).toBe(120);
+      expect(fadeValues.at(-1)).toEqual([{channel: DIMMER, value: 120}]);
+    });
+  });
+
+  describe('channel lock', () => {
+    /** the laser and the dimmer fade up, then the laser is set to full at once */
+    const laserFade = () =>
+      chaseOf({type: 'once'}, [
+        fadingStepOf('up', [
+          {channel: LASER, value: 255},
+          {channel: DIMMER, value: 200}
+        ]),
+        stepOf('full', [{channel: LASER, value: 255}])
+      ]);
+
+    test('lifting the lock mid-fade keeps the capped channel at its cap until the next step', async () => {
+      engine.setChannelLimits(new Map([[LASER, 0]]));
+      fadePlayer.start(laserFade());
+      await tickAt(500);
+
+      engine.setLimitsEnforced(false);
+      await tickAt(900);
+      expect(valueOf(LASER)).toBe(0);
+      expect(valueOf(DIMMER)).toBe(180);
+
+      await tickAt(FADE_MS + HOLD_MS);
+      expect(valueOf(LASER)).toBe(255);
+    });
+
+    test('turning the lock on mid-fade caps the channel right away', async () => {
+      engine.setChannelLimits(new Map([[LASER, 0]]));
+      engine.setLimitsEnforced(false);
+      fadePlayer.start(laserFade());
+      await tickAt(500);
+      expect(valueOf(LASER)).toBe(128);
+
+      engine.setLimitsEnforced(true);
+      await tickAt(600);
+
+      expect(valueOf(LASER)).toBe(0);
+      expect(channelValueIn(lastPacket(), LASER)).toBe(0);
+    });
+
+    test('new limits mid-fade (a fixture saved): a cap removed raises nothing, a cap added caps', async () => {
+      engine.setChannelLimits(new Map([[LASER, 0]]));
+      fadePlayer.start(laserFade());
+      await tickAt(500);
+
+      engine.setChannelLimits(new Map([[DIMMER, 50]]));
+      await tickAt(900);
+
+      expect(valueOf(LASER)).toBe(0);
+      expect(valueOf(DIMMER)).toBe(50);
+    });
+  });
+
+  describe('a stalled tick', () => {
+    /** two fading steps and one set at once that takes channel 2 back to 0: a pass takes 3.5 s */
+    const threeSteps = () =>
+      chaseOf({type: 'forever'}, [
+        fadingStepOf('a', [{channel: 1, value: 200}]),
+        fadingStepOf('b', [{channel: 2, value: 200}]),
+        stepOf('c', [
+          {channel: 2, value: 0},
+          {channel: 3, value: 3}
+        ])
+      ]);
+    const values = () => [1, 2, 3].map(valueOf);
+
+    test('applies a fading step it skipped in full', async () => {
+      fadePlayer.start(threeSteps());
+
+      await tickAt(1500 + 300);
+
+      expect(fadePlayer.status()).toMatchObject({stepIndex: 1, passIndex: 0});
+      // a in full, b 30% of its fade from 0
+      expect(values()).toEqual([200, 60, 0]);
+    });
+
+    test('across a loop wrap, the new step fades from where the skipped steps left it', async () => {
+      fadePlayer.start(threeSteps());
+      await tickAt(3200);
+      expect(values()).toEqual([200, 0, 3]);
+
+      await tickAt(3500 + 1500 + 250);
+
+      expect(fadePlayer.status()).toMatchObject({stepIndex: 1, passIndex: 1});
+      expect(values()).toEqual([200, 50, 3]);
+    });
+
+    test('longer than a pass: the steps of the pass before land, then the current one fades', async () => {
+      fadePlayer.start(threeSteps());
+
+      await tickAt(2 * 3500 + 1500 + 250);
+
+      expect(fadePlayer.status()).toMatchObject({stepIndex: 1, passIndex: 2});
+      expect(values()).toEqual([200, 50, 3]);
+    });
+  });
+
+  describe('the end', () => {
+    test('finishing while a fade is active ends it at its value', async () => {
+      fadePlayer.start(chaseOf({type: 'once'}, [fadingStepOf('up', [{channel: DIMMER, value: 200}])]));
+      await tickAt(400);
+
+      await tickAt(FADE_MS + HOLD_MS);
+
+      expect(fadePlayer.status()).toEqual({type: 'idle'});
+      expect(valueOf(DIMMER)).toBe(200);
+    });
+
+    test('stopping mid-fade leaves the values where they are', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(400);
+
+      fadePlayer.stop();
+      await tickAt(800);
+
+      expect(valueOf(DIMMER)).toBe(80);
+    });
+  });
+
+  describe('reports', () => {
+    test('one per tick with each faded channel once; nothing on a tick where nothing moved', async () => {
+      fadePlayer.start(
+        chaseOf({type: 'once'}, [
+          fadingStepOf('up', [
+            {channel: LASER, value: 255},
+            {channel: DIMMER, value: 200}
+          ])
+        ])
+      );
+      expect(fadeValues).toEqual([]);
+
+      await tickAt(500);
+      expect(fadeValues).toEqual([
+        [
+          {channel: LASER, value: 128},
+          {channel: DIMMER, value: 100}
+        ]
+      ]);
+
+      await tickAt(500);
+      expect(fadeValues).toHaveLength(1);
+    });
+
+    test('a fader moved by hand on a fading channel is reported back at the fade value', async () => {
+      fadePlayer.start(sunriseOf({type: 'once'}));
+      await tickAt(500);
+
+      engine.setChannel(DIMMER, 10);
+      await tickAt(500);
+
+      expect(fadeValues.at(-1)).toEqual([{channel: DIMMER, value: 100}]);
+    });
+
+    test('the status changes per step, not per tick', async () => {
+      const fadeStatuses: ChasePlayerStatus[] = [];
+      fadePlayer.onStatusChanged((status) => fadeStatuses.push(status));
+      fadePlayer.start(sunriseOf({type: 'once'}));
+
+      for (let ms = 0; ms <= FADE_MS; ms += 100) {
+        await tickAt(ms);
+      }
+
+      expect(fadeStatuses).toEqual([{type: 'running', chaseId: 'fading', stepIndex: 0, passIndex: 0}]);
+    });
+  });
+});

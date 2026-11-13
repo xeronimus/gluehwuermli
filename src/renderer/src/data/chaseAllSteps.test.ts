@@ -2,6 +2,7 @@ import type {Fixture} from '@shared/ipc';
 
 import {
   channelInAllStepsEffect,
+  fadeOfAllStepsEffect,
   holdOfAllStepsEffect,
   pickedRemovableChannel,
   removableChannels,
@@ -24,6 +25,7 @@ const wash: Fixture = {id: 'wash', name: 'Wash', startAddress: 11, channels: [{n
 
 const stepOf = (id: string, hold: string, channels: readonly string[]): ChaseStepDraft => ({
   id,
+  fade: '0.00',
   hold,
   values: channels.map((channel, index) => ({id: `${id}-${index}`, channel, value: '0'}))
 });
@@ -71,6 +73,13 @@ test('setting the hold counts the steps holding for another time', () => {
   expect(holdOfAllStepsEffect(steps, 2000)).toEqual({changedCount: 3, holdMs: 2000});
   expect(holdOfAllStepsEffect([stepOf('a', '1', [])], 1000)).toEqual({changedCount: 0, holdMs: 1000});
   expect(holdOfAllStepsEffect([stepOf('a', '', [])], 1000)).toEqual({changedCount: 1, holdMs: 1000});
+});
+
+test('setting the fade in counts the steps that would fade for another time', () => {
+  const fading = [{...stepOf('a', '1', []), fade: '1.50'}, stepOf('b', '1', []), {...stepOf('c', '1', []), fade: ''}];
+
+  expect(fadeOfAllStepsEffect(fading, 1500)).toEqual({changedCount: 2, fadeMs: 1500});
+  expect(fadeOfAllStepsEffect(fading, 0)).toEqual({changedCount: 2, fadeMs: 0});
 });
 
 test('adding a channel counts the steps without it, of all steps', () => {
