@@ -56,6 +56,9 @@ Download the installer from the [latest release](https://github.com/xeronimus/gl
 it. The installer isn't signed yet, so Windows SmartScreen may warn about an unknown publisher: choose **More info**,
 then **Run anyway**.
 
+Once installed, Glühwürmli updates itself: on start it looks for a newer release and downloads it in the background,
+and installs it when you quit the app. It never asks or restarts while it runs, so a show is never interrupted.
+
 The manual is in the app (the Help view) and on the [website](https://xeronimus.github.io/gluehwuermli/#manual).
 
 ## Safety

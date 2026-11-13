@@ -11,3 +11,8 @@ test('debug logging outside a packaged app only', () => {
   expect(mainConfigOf({}, false).debug).toBe(true);
   expect(mainConfigOf({}, true).debug).toBe(false);
 });
+
+test('updates itself in a packaged app only', () => {
+  expect(mainConfigOf({}, true).autoUpdate).toBe(true);
+  expect(mainConfigOf({}, false).autoUpdate).toBe(false);
+});

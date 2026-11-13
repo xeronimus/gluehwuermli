@@ -17,6 +17,17 @@ win:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+  # ASCII only: GitHub renames release assets with an "ü", which would no longer match the name in latest.yml
+  artifactName: gluehwuermli-setup-${version}.${ext}
+  # the installer is signed after it is built (.github/workflows/release.yml), which would make a blockmap wrong; an
+  # update downloads the whole installer instead of the changed blocks
+  differentialPackage: false
+# where an installed app looks for updates (electron-updater, src/main/update/), packaged as resources/app-update.yml.
+# electron-builder never publishes itself: the release workflow attaches the signed installer and latest.yml
+publish:
+  provider: github
+  owner: xeronimus
+  repo: gluehwuermli
 # a double-click on a .glp starts the app with that project, or hands it to the running one (src/main/index.ts)
 fileAssociations:
   - ext: glp

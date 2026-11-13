@@ -14,13 +14,16 @@ export interface MainEnv {
 export interface MainConfig {
   simulatedOutput: boolean;
   debug: boolean;
+  /** only an installed app updates itself: unpackaged, there is no app-update.yml and nothing to replace */
+  autoUpdate: boolean;
 }
 
 const ENABLED = '1';
 
 export const mainConfigOf = (env: MainEnv, isPackaged: boolean): MainConfig => ({
   simulatedOutput: env.MAIN_VITE_SIMULATED_OUTPUT === ENABLED,
-  debug: !isPackaged
+  debug: !isPackaged,
+  autoUpdate: isPackaged
 });
 
 export const loadMainConfig = (isPackaged: boolean): MainConfig => mainConfigOf(import.meta.env, isPackaged);

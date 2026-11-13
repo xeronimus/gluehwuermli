@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # Formatting, typecheck, tests and the electron-vite build. Packaging (electron-builder) stays manual: `pnpm dist`
+  # Formatting, typecheck, tests and the electron-vite build. Packaging runs on a release tag (release.yml)
   checks:
     runs-on: ubuntu-latest
 

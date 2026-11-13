@@ -16,12 +16,15 @@ change bumps the minor version and everything else the patch version.
   system (#103)
 - A Website section in the Help view, linking to the new website (https://xeronimus.github.io/gluehwuermli/) with the
   download and the manual in English and German (#103)
+- Glühwürmli updates itself: on start it looks for a newer release, downloads it in the background and installs it when
+  the app quits; it never asks or restarts while it runs, and the DMX output isn't touched (#103)
 
 ### Changed
 
 - The installer has a new app id (`ch.xeronimus.gluehwuermli`), so it no longer upgrades 0.3.2 and older in place:
   uninstall the old version once before installing this one. Projects and settings are kept (#103)
 - Glühwürmli is licensed under the GPL-3.0 (#103)
+- The installer is named `gluehwuermli-setup-X.Y.Z.exe` and comes from the GitHub Releases (#103)
 
 ## [0.3.2] - 2026-11-13
 

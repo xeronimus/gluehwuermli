@@ -71,6 +71,19 @@ The page's own texts are extracted into the app's catalogs too, so `pnpm test` a
 well. A push to `main` that changes the page, the manual topics or the catalogs deploys it
 (`.github/workflows/ghpage.yml`).
 
+## Releases
+
+A pushed `v*` tag releases (`.github/workflows/release.yml`): it tests, builds the installer, signs it through
+[SignPath Foundation](https://signpath.org/) once that is set up, and publishes it with `latest.yml` as a GitHub
+Release, its notes taken from the version's section in `CHANGELOG.md`. Installed apps update from the latest release
+(`electron-updater`, `src/main/update/`): checked on start, downloaded in the background, installed on quit.
+
+1. In `CHANGELOG.md`, rename `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD`, add a fresh empty `[Unreleased]` and the compare
+   links, merge that to `main`
+2. On `main`: `npm version <minor|patch>` (bumps `package.json`, commits, tags), then `git push --follow-tags`
+
+The workflow refuses a tag that differs from the version in `package.json` or has no section in `CHANGELOG.md`.
+
 ## Docs
 
 - [doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md): latency of a web stack with a USB DMX interface, why

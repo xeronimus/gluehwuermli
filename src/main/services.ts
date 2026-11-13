@@ -15,6 +15,8 @@ import {type ProjectSession, projectSessionFactory} from './project/projectSessi
 import {type AppSettings, appSettingsFactory} from './settings/appSettings';
 import {fileSettingsStoreFactory} from './settings/impl/file/fileSettingsStoreFactory';
 import {fileExists} from './storage/fileExists';
+import {type AutoUpdate, autoUpdateFactory, disabledAutoUpdate} from './update/autoUpdate';
+import {electronUpdaterFactory} from './update/impl/electronUpdater/electronUpdaterFactory';
 import type {WindowStateStore} from './window/WindowStateStore';
 import {fileWindowStateStoreFactory} from './window/impl/file/fileWindowStateStoreFactory';
 
@@ -39,6 +41,7 @@ export interface MainServices {
   appLock: AppLock;
   portMemory: PortMemory;
   projectSession: ProjectSession;
+  autoUpdate: AutoUpdate;
 }
 
 export interface MainServicesOptions {
@@ -86,5 +89,19 @@ export function createMainServices(
     log
   });
 
-  return {dmxPortConnector, dmxEngine, chasePlayer, windowStateStore, settings, appLock, portMemory, projectSession};
+  const autoUpdate = config.autoUpdate
+    ? autoUpdateFactory({updater: electronUpdaterFactory(log), log})
+    : disabledAutoUpdate;
+
+  return {
+    dmxPortConnector,
+    dmxEngine,
+    chasePlayer,
+    windowStateStore,
+    settings,
+    appLock,
+    portMemory,
+    projectSession,
+    autoUpdate
+  };
 }

@@ -1,0 +1,136 @@
+name: Release
+
+# On a pushed v* tag (npm version, CLAUDE.md "Versioning and Releases"): tests, builds the Windows installer, signs it
+# and publishes it with latest.yml as a GitHub Release. Installed apps update from the latest release (electron-updater,
+# src/main/update/), and the website's download button points at it.
+#
+# Signing (SignPath Foundation) runs once the repo variable SIGNPATH_ORGANIZATION_ID and the secret SIGNPATH_API_TOKEN
+# are set; until then the release carries the unsigned installer. SignPath needs a build on a GitHub-hosted runner from
+# the tagged commit, which is what this is. The SignPath project has two artifact configurations, one per request:
+#   app:       a zip holding Glühwürmli.exe          <zip-file><pe-file path="Glühwürmli.exe" /></zip-file>
+#   installer: a zip holding gluehwuermli-setup-*.exe <zip-file><pe-file path="gluehwuermli-setup-*.exe" /></zip-file>
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  # creating the release
+  contents: write
+  # SignPath reads the uploaded artifacts and the job's details
+  actions: read
+
+env:
+  SIGNPATH_PROJECT_SLUG: gluehwuermli
+  SIGNPATH_SIGNING_POLICY_SLUG: release-signing
+  APP_EXE: Glühwürmli.exe
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v7
+
+    # takes the pnpm version from "packageManager" in package.json
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '24'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    # the tag names the version that is built: npm version tags what it wrote into package.json
+    - name: Check the tag against package.json
+      run: |
+        version=$(node -p "require('./package.json').version")
+        if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+          echo "::error::the tag $GITHUB_REF_NAME doesn't match the version $version in package.json"
+          exit 1
+        fi
+        echo "VERSION=$version" >> "$GITHUB_ENV"
+        echo "INSTALLER=gluehwuermli-setup-$version.exe" >> "$GITHUB_ENV"
+
+    # before the build: a version without its CHANGELOG.md section fails here
+    - name: Release notes
+      run: node scripts/releaseNotes.mjs "$VERSION" > release-notes.md
+
+    - name: Test
+      run: pnpm test
+
+    # never publishes by itself (electron-builder would on a tag in CI): the last step does, with the signed files.
+    # Builds the installer and leaves the app it packed in dist/win-unpacked/, with resources/app-update.yml
+    - name: Build the installer
+      run: pnpm dist --publish never
+
+    # signing the app's exe, then packing the signed app into a new installer and signing that one
+    - name: Upload the app for signing
+      id: unsigned-app
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      uses: actions/upload-artifact@v7
+      with:
+        name: unsigned-app
+        path: dist/win-unpacked/${{ env.APP_EXE }}
+        if-no-files-found: error
+
+    - name: Sign the app
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      uses: signpath/github-action-submit-signing-request@v2
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: ${{ env.SIGNPATH_PROJECT_SLUG }}
+        signing-policy-slug: ${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}
+        artifact-configuration-slug: app
+        github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+        wait-for-completion: true
+        output-artifact-directory: signed-app
+
+    - name: Pack the signed app into the installer
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      run: |
+        cp "signed-app/$APP_EXE" "dist/win-unpacked/$APP_EXE"
+        pnpm exec electron-builder --win nsis --prepackaged dist/win-unpacked --publish never
+
+    - name: Upload the installer for signing
+      id: unsigned-installer
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      uses: actions/upload-artifact@v7
+      with:
+        name: unsigned-installer
+        path: dist/${{ env.INSTALLER }}
+        if-no-files-found: error
+
+    - name: Sign the installer
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      uses: signpath/github-action-submit-signing-request@v2
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: ${{ env.SIGNPATH_PROJECT_SLUG }}
+        signing-policy-slug: ${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}
+        artifact-configuration-slug: installer
+        github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+        wait-for-completion: true
+        output-artifact-directory: signed-installer
+
+    # electron-updater refuses an installer whose SHA-512 differs from latest.yml
+    - name: Describe the signed installer in latest.yml
+      if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      run: |
+        cp "signed-installer/$INSTALLER" "dist/$INSTALLER"
+        node scripts/signedUpdateInfo.mjs dist/latest.yml "dist/$INSTALLER"
+
+    - name: Publish the release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release create "$GITHUB_REF_NAME" --verify-tag --title "Glühwürmli $VERSION" --notes-file release-notes.md \
+          "dist/$INSTALLER" dist/latest.yml

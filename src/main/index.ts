@@ -134,6 +134,8 @@ function startApp(): void {
     registerLockIpc(services.appLock);
     registerChaseIpc(services.chasePlayer, chaseIpcHandlers(services.chasePlayer, projectSession));
     void openMainWindow();
+    // once per start, in the background: a newer release is installed when the app quits, never during a show
+    void services.autoUpdate.check();
 
     // macOS: re-create the window when the dock icon is clicked and none is open
     app.on('activate', () => {
