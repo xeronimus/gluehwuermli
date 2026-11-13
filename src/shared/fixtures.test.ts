@@ -1,5 +1,4 @@
 import {
-  addressRuleConflicts,
   channelAddress,
   channelLimits,
   emptyFixtureSetup,
@@ -8,10 +7,9 @@ import {
   fixturePresets,
   lastAddress,
   overlappingFixtures,
-  parseFixtureSetup,
-  sharedAddressErrors
+  parseFixtureSetup
 } from './fixtures';
-import type {ChannelValues, Fixture} from './ipc';
+import type {Fixture} from './ipc';
 
 const fixtureOf = (overrides: Partial<Fixture> = {}): Fixture => ({
   id: 'par-1',
@@ -200,30 +198,6 @@ describe('overlappingFixtures', () => {
   });
 });
 
-describe('addressRuleConflicts', () => {
-  const dimmerOf = (id: string, values?: ChannelValues): Fixture =>
-    fixtureOf({id, name: id, channels: [{name: 'Dimmer', offset: 0, ...(values && {values})}]});
-  const fromHundred: ChannelValues = {mode: 'continuous', min: 100, max: 255};
-
-  test('fixtures sharing an address with the same rules, or both without, are no conflict', () => {
-    expect(addressRuleConflicts([dimmerOf('a'), dimmerOf('b')])).toEqual([]);
-    expect(addressRuleConflicts([dimmerOf('a', fromHundred), dimmerOf('b', fromHundred)])).toEqual([]);
-  });
-
-  test('fixtures sharing an address with different rules, also one without, conflict on that address', () => {
-    const conflicts = addressRuleConflicts([dimmerOf('a'), dimmerOf('b', fromHundred)]);
-
-    expect(conflicts.map(({first, second, addresses}) => [first.id, second.id, addresses])).toEqual([['a', 'b', [10]]]);
-  });
-
-  test('as errors of the fixture being edited, naming the other fixture', () => {
-    expect(sharedAddressErrors(dimmerOf('a'), [dimmerOf('b', fromHundred), dimmerOf('c')])).toEqual([
-      {type: 'shared-address-rules-differ', otherFixtureId: 'b', otherFixtureName: 'b', addresses: [10]}
-    ]);
-    expect(sharedAddressErrors(dimmerOf('a'), [dimmerOf('c')])).toEqual([]);
-  });
-});
-
 describe('channelLimits', () => {
   test('the cap of every locked channel at its address, none for the others', () => {
     const laser = fixtureOf({
@@ -325,15 +299,19 @@ describe('parseFixtureSetup', () => {
     expect(parseFixtureSetup({version: 1, fixtures: [flashWith('yes')]})).toBeUndefined();
   });
 
-  test('rejects fixtures sharing an address with different value rules', () => {
-    const plain = fixtureOf({id: 'a'});
-    const ranged = fixtureOf({
+  test('accepts fixtures sharing an address with different value rules, each preset checked against its own', () => {
+    const plain = fixtureOf({id: 'a', presets: [{id: 'low', name: 'Low', values: [{offset: 0, value: 20}]}]});
+    const stepped = fixtureOf({
       id: 'b',
-      channels: [{name: 'Red', offset: 0, values: {mode: 'continuous', min: 50, max: 255}}]
+      channels: [{name: 'Red', offset: 0, values: {mode: 'steps', min: 0, max: 200, step: 100}}]
     });
+    const offStep = {...stepped, presets: [{id: 'low', name: 'Low', values: [{offset: 0, value: 20}]}]};
 
-    expect(parseFixtureSetup({version: 1, fixtures: [plain, fixtureOf({id: 'b'})]})).toBeDefined();
-    expect(parseFixtureSetup({version: 1, fixtures: [plain, ranged]})).toBeUndefined();
+    expect(parseFixtureSetup({version: 1, fixtures: [plain, stepped]})).toEqual({
+      version: 1,
+      fixtures: [plain, stepped]
+    });
+    expect(parseFixtureSetup({version: 1, fixtures: [plain, offStep]})).toBeUndefined();
   });
 
   test('accepts a channel with a lock, rejects a lock without a valid maximum', () => {
