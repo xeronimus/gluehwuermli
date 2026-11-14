@@ -28,6 +28,26 @@ describe('parseProjectFile', () => {
     expect(parseProjectFile(withFade)).toEqual({type: 'valid', setup: withFade});
   });
 
+  test('a chase without a reference tempo loads unchanged, one with keeps it, one out of range is invalid', () => {
+    const chaseWith = (referenceBpm: number | undefined) => ({
+      version: 1,
+      fixtures: [],
+      chases: [
+        {
+          id: 'chorus',
+          name: 'Chorus',
+          repeat: {type: 'once'},
+          steps: [{id: 'one', holdMs: 500, values: [{channel: 12, value: 255}]}],
+          ...(referenceBpm === undefined ? {} : {referenceBpm})
+        }
+      ]
+    });
+
+    expect(parseProjectFile(chaseWith(undefined))).toEqual({type: 'valid', setup: chaseWith(undefined)});
+    expect(parseProjectFile(chaseWith(140))).toEqual({type: 'valid', setup: chaseWith(140)});
+    expect(parseProjectFile(chaseWith(301))).toEqual({type: 'invalid', error: {reason: 'invalid'}});
+  });
+
   test('a file without chases loads unchanged, one with chases keeps them', () => {
     const withoutChases = {version: 1, fixtures: [], scenes: []};
     const withChases = {

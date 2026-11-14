@@ -1,4 +1,4 @@
-import {chaseErrors, chaseStepErrors, chasesAreValid, passCount, setupChases} from './chases';
+import {chaseErrors, chaseStepErrors, chasesAreValid, passCount, referenceBpmOf, setupChases} from './chases';
 import type {Chase, ChaseStep, Fixture, FixtureSetup} from './ipc';
 
 const stepOf = (overrides: Partial<ChaseStep> = {}): ChaseStep => ({
@@ -44,11 +44,23 @@ describe('setupChases', () => {
   });
 });
 
+describe('referenceBpmOf', () => {
+  test('120 for a chase without one, else its own', () => {
+    expect(referenceBpmOf(chaseOf())).toBe(120);
+    expect(referenceBpmOf(chaseOf({referenceBpm: 140}))).toBe(140);
+  });
+});
+
 describe('chaseErrors', () => {
   test('a chase of steps on absolute channels is valid, whatever repeat', () => {
     expect(chaseErrors(chaseOf())).toEqual([]);
     expect(chaseErrors(chaseOf({repeat: {type: 'once'}}))).toEqual([]);
     expect(chaseErrors(chaseOf({repeat: {type: 'forever'}}))).toEqual([]);
+  });
+
+  test('a reference tempo from 20 to 300 BPM is valid', () => {
+    expect(chaseErrors(chaseOf({referenceBpm: 20}))).toEqual([]);
+    expect(chaseErrors(chaseOf({referenceBpm: 300}))).toEqual([]);
   });
 
   test('accepts the limits', () => {
@@ -74,6 +86,9 @@ describe('chaseErrors', () => {
     ['chase-repeat-invalid', chaseOf({repeat: {type: 'times', count: 1}})],
     ['chase-repeat-invalid', chaseOf({repeat: {type: 'times', count: 100}})],
     ['chase-repeat-invalid', chaseOf({repeat: {type: 'times', count: 2.5}})],
+    ['chase-reference-bpm-invalid', chaseOf({referenceBpm: 19})],
+    ['chase-reference-bpm-invalid', chaseOf({referenceBpm: 301})],
+    ['chase-reference-bpm-invalid', chaseOf({referenceBpm: 120.5})],
     ['chase-steps-missing', chaseOf({steps: []})],
     ['chase-steps-too-many', chaseOf({steps: Array.from({length: 101}, (_, index) => stepOf({id: `step-${index}`}))})],
     ['chase-step-id-twice', chaseOf({steps: [stepOf(), stepOf()]})],

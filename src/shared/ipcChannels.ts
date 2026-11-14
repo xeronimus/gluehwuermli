@@ -39,6 +39,13 @@ export const IpcChannel = {
   PAUSE_CHASE: 'chase:pause',
   RESUME_CHASE: 'chase:resume',
   STOP_CHASE: 'chase:stop',
+  /** the sync settings of the chases; set-sync and set-speed answer them and are allowed in Show mode too */
+  GET_CHASE_SYNC: 'chase:get-sync',
+  SET_CHASE_SYNC: 'chase:set-sync',
+  SET_CHASE_SPEED: 'chase:set-speed',
+  /** renderer -> main, fire-and-forget, no payload: a tap of the tempo, timestamped by main; allowed in Show mode too */
+  TEMPO_TAP: 'tempo:tap',
+  GET_TEMPO_STATUS: 'tempo:get-status',
   GET_LOCK_STATUS: 'app:get-lock-status',
   UNLOCK: 'app:unlock',
   LOCK: 'app:lock',
@@ -51,6 +58,10 @@ export const IpcChannel = {
   STATUS_CHANGED: 'dmx:status-changed',
   /** main -> renderer, on every step of a chase and on start, pause, resume, stop and finish */
   CHASE_STATUS_CHANGED: 'chase:status-changed',
+  /** main -> renderer, whenever a chase's sync or speed changes */
+  CHASE_SYNC_CHANGED: 'chase:sync-changed',
+  /** main -> renderer, whenever a tap sets a new tempo */
+  TEMPO_STATUS_CHANGED: 'tempo:status-changed',
   /** main -> renderer, the values a chase step set (after the caps), one message per step */
   CHANNELS_CHANGED: 'dmx:channels-changed',
   /** main -> renderer, whenever the mode or the channel lock changes */

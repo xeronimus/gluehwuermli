@@ -1,7 +1,9 @@
 import type {
   BlackoutOnQuit,
   ChannelsChanged,
+  ChaseSpeed,
   ChaseStatus,
+  ChaseSyncStatus,
   ChosenLocale,
   DataFolder,
   DmxOutputStatus,
@@ -17,6 +19,7 @@ import type {
   RememberedPort,
   SerialPortDescription,
   SetChannelRequest,
+  TempoStatus,
   UniverseValues
 } from './ipc';
 
@@ -78,6 +81,18 @@ export interface PreloadBridge {
   stopChase: () => Promise<ChaseStatus>;
   /** returns the function that removes the listener again */
   onChaseStatusChanged: (listener: (status: ChaseStatus) => void) => () => void;
+  /** the chases whose sync or speed differs from the default */
+  getChaseSync: () => Promise<ChaseSyncStatus>;
+  /** turning it on without a tempo changes nothing; allowed in Show mode too */
+  setChaseSync: (chaseId: string, synced: boolean) => Promise<ChaseSyncStatus>;
+  setChaseSpeed: (chaseId: string, speed: ChaseSpeed) => Promise<ChaseSyncStatus>;
+  /** returns the function that removes the listener again */
+  onChaseSyncChanged: (listener: (status: ChaseSyncStatus) => void) => () => void;
+  /** fire-and-forget: a tap of the tempo, timestamped by main */
+  tapTempo: () => void;
+  getTempoStatus: () => Promise<TempoStatus>;
+  /** returns the function that removes the listener again */
+  onTempoStatusChanged: (listener: (status: TempoStatus) => void) => () => void;
   getLockStatus: () => Promise<LockStatus>;
   /** Setup mode; with no password stored yet, stores this one and unlocks */
   unlock: (password: string) => Promise<PasswordResult>;

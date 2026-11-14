@@ -208,6 +208,13 @@ export const CHASE_REPEAT_MAX = 99;
 
 export const CHASE_STEPS_MAX = 100;
 
+/** the slowest and fastest tempo a chase's times can be written at, in beats per minute */
+export const CHASE_REFERENCE_BPM_MIN = 20;
+export const CHASE_REFERENCE_BPM_MAX = 300;
+
+/** the tempo of a chase without one of its own: 120 BPM, a beat of 500 ms */
+export const CHASE_REFERENCE_BPM_DEFAULT = 120;
+
 /** the value a chase step sets on an absolute channel; not checked against a fixture's value rules on that address */
 const ChaseStepValueSchema = Type.Object({
   channel: DmxChannelSchema,
@@ -247,9 +254,24 @@ export const ChaseSchema = Type.Object({
   id: Type.String({minLength: 1}),
   name: Type.String({minLength: 1, maxLength: CHASE_NAME_MAX_LENGTH}),
   repeat: ChaseRepeatSchema,
-  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX})
+  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX}),
+  /**
+   * the tempo the chase's milliseconds were written at, in beats per minute: a synced chase scales its steps by it.
+   * Missing is CHASE_REFERENCE_BPM_DEFAULT
+   */
+  referenceBpm: Type.Optional(Type.Integer({minimum: CHASE_REFERENCE_BPM_MIN, maximum: CHASE_REFERENCE_BPM_MAX}))
 });
 export type Chase = Static<typeof ChaseSchema>;
+
+/** how many times faster than the tapped tempo a synced chase plays: ½×, 1×, 2× or 4× */
+export const ChaseSpeedSchema = Type.Union([Type.Literal(0.5), Type.Literal(1), Type.Literal(2), Type.Literal(4)]);
+export type ChaseSpeed = Static<typeof ChaseSpeedSchema>;
+
+/** every speed, slowest first: the speed buttons of a chase row */
+export const CHASE_SPEEDS: readonly ChaseSpeed[] = [0.5, 1, 2, 4];
+
+/** the speed of a chase nobody changed */
+export const CHASE_SPEED_DEFAULT: ChaseSpeed = 1;
 
 /** starting a chase names it by id: main plays the chase as saved in the open project, not a copy from the renderer */
 export const StartChaseRequestSchema = Type.Object({
@@ -267,10 +289,58 @@ export const ChaseStatusSchema = Type.Union([
     type: Type.Union([Type.Literal('running'), Type.Literal('paused')]),
     chaseId: Type.String({minLength: 1}),
     stepIndex: Type.Integer({minimum: 0}),
-    passIndex: Type.Integer({minimum: 0})
+    passIndex: Type.Integer({minimum: 0}),
+    /** whether it follows the tapped tempo, at `speed` */
+    synced: Type.Boolean(),
+    speed: ChaseSpeedSchema
   })
 ]);
 export type ChaseStatus = Static<typeof ChaseStatusSchema>;
+
+/** whether a chase follows the tapped tempo and how fast; kept by main while the app runs, never saved */
+export const ChaseSyncSettingSchema = Type.Object({
+  chaseId: Type.String({minLength: 1}),
+  synced: Type.Boolean(),
+  speed: ChaseSpeedSchema
+});
+export type ChaseSyncSetting = Static<typeof ChaseSyncSettingSchema>;
+
+/**
+ * the sync settings of the chases that differ from the default (not synced, 1×): what GET_CHASE_SYNC and the set
+ * requests answer, pushed over CHASE_SYNC_CHANGED whenever one changes
+ */
+export const ChaseSyncStatusSchema = Type.Object({
+  chases: Type.Array(ChaseSyncSettingSchema)
+});
+export type ChaseSyncStatus = Static<typeof ChaseSyncStatusSchema>;
+
+/** any chase id, also one not in the open project: it only changes a setting, Start still plays saved chases only */
+export const SetChaseSyncRequestSchema = Type.Object({
+  chaseId: Type.String({minLength: 1}),
+  synced: Type.Boolean()
+});
+export type SetChaseSyncRequest = Static<typeof SetChaseSyncRequestSchema>;
+
+export const SetChaseSpeedRequestSchema = Type.Object({
+  chaseId: Type.String({minLength: 1}),
+  speed: ChaseSpeedSchema
+});
+export type SetChaseSpeedRequest = Static<typeof SetChaseSpeedRequestSchema>;
+
+/**
+ * the tapped tempo: none before the first valid tap sequence, else its beats per minute, the length of a beat and how
+ * long ago the last beat was when main sent it, so the renderer places the beat on its own clock
+ */
+export const TempoStatusSchema = Type.Union([
+  Type.Object({type: Type.Literal('none')}),
+  Type.Object({
+    type: Type.Literal('set'),
+    bpm: Type.Number({exclusiveMinimum: 0}),
+    beatMs: Type.Number({exclusiveMinimum: 0}),
+    sinceBeatMs: Type.Number({minimum: 0})
+  })
+]);
+export type TempoStatus = Static<typeof TempoStatusSchema>;
 
 /**
  * channel values main changed on its own (a chase step), after the caps: pushed over CHANNELS_CHANGED so the faders
@@ -489,6 +559,18 @@ export const parseStartChaseRequest = (payload: unknown): StartChaseRequest | un
 
 export const parseChaseStatus = (payload: unknown): ChaseStatus | undefined =>
   Value.Check(ChaseStatusSchema, payload) ? payload : undefined;
+
+export const parseSetChaseSyncRequest = (payload: unknown): SetChaseSyncRequest | undefined =>
+  Value.Check(SetChaseSyncRequestSchema, payload) ? payload : undefined;
+
+export const parseSetChaseSpeedRequest = (payload: unknown): SetChaseSpeedRequest | undefined =>
+  Value.Check(SetChaseSpeedRequestSchema, payload) ? payload : undefined;
+
+export const parseChaseSyncStatus = (payload: unknown): ChaseSyncStatus | undefined =>
+  Value.Check(ChaseSyncStatusSchema, payload) ? payload : undefined;
+
+export const parseTempoStatus = (payload: unknown): TempoStatus | undefined =>
+  Value.Check(TempoStatusSchema, payload) ? payload : undefined;
 
 export const parseUniverseValues = (payload: unknown): UniverseValues | undefined =>
   Value.Check(UniverseValuesSchema, payload) ? payload : undefined;
