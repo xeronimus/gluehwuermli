@@ -16,6 +16,7 @@
     "start": "electron-vite preview",
     "build": "electron-vite build",
     "dist": "electron-vite build && electron-builder --win",
+    "dist:mac": "electron-vite build && electron-builder --mac",
     "typecheck": "tsc -p tsconfig.json && tsc -p src/renderer/tsconfig.json && tsc -p ghpage/tsconfig.json",
     "test": "pnpm run i18n:extract && pnpm run typecheck && vitest run && pnpm run i18n:compile",
     "test:watch": "vitest",
