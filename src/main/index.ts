@@ -13,6 +13,7 @@ import {registerChaseIpc} from './ipc/registerChaseIpc';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerLockIpc} from './ipc/registerLockIpc';
 import {registerProjectIpc} from './ipc/registerProjectIpc';
+import {registerTempoIpc} from './ipc/registerTempoIpc';
 import log, {configureLog} from './log';
 import {projectPathFromArgv} from './project/commandLine';
 import {windowTitleOf} from './project/windowTitle';
@@ -133,6 +134,7 @@ function startApp(): void {
     );
     registerLockIpc(services.appLock);
     registerChaseIpc(services.chasePlayer, chaseIpcHandlers(services.chasePlayer, projectSession));
+    registerTempoIpc(services.tempoClock);
     void openMainWindow();
     // once per start, in the background: a newer release is installed when the app quits, never during a show
     void services.autoUpdate.check();

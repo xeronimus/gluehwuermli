@@ -3,11 +3,15 @@ import {IpcRendererEvent, contextBridge, ipcRenderer} from 'electron';
 import type {
   ChannelsChanged,
   ChaseStatus,
+  ChaseSyncStatus,
   DmxOutputStatus,
   LockStatus,
   ProjectPathRequest,
   ProjectStatus,
-  StartChaseRequest
+  SetChaseSpeedRequest,
+  SetChaseSyncRequest,
+  StartChaseRequest,
+  TempoStatus
 } from '@shared/ipc';
 import {IpcChannel} from '@shared/ipcChannels';
 import {PRELOAD_BRIDGE_GLOBAL, PreloadBridge} from '@shared/preloadBridge';
@@ -77,6 +81,31 @@ const preloadBridge: PreloadBridge = {
     ipcRenderer.on(IpcChannel.CHASE_STATUS_CHANGED, handler);
     return () => {
       ipcRenderer.removeListener(IpcChannel.CHASE_STATUS_CHANGED, handler);
+    };
+  },
+  getChaseSync: () => ipcRenderer.invoke(IpcChannel.GET_CHASE_SYNC),
+  setChaseSync: (chaseId, synced) => {
+    const request: SetChaseSyncRequest = {chaseId, synced};
+    return ipcRenderer.invoke(IpcChannel.SET_CHASE_SYNC, request);
+  },
+  setChaseSpeed: (chaseId, speed) => {
+    const request: SetChaseSpeedRequest = {chaseId, speed};
+    return ipcRenderer.invoke(IpcChannel.SET_CHASE_SPEED, request);
+  },
+  onChaseSyncChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, status: ChaseSyncStatus) => listener(status);
+    ipcRenderer.on(IpcChannel.CHASE_SYNC_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.CHASE_SYNC_CHANGED, handler);
+    };
+  },
+  tapTempo: () => ipcRenderer.send(IpcChannel.TEMPO_TAP),
+  getTempoStatus: () => ipcRenderer.invoke(IpcChannel.GET_TEMPO_STATUS),
+  onTempoStatusChanged: (listener) => {
+    const handler = (_event: IpcRendererEvent, status: TempoStatus) => listener(status);
+    ipcRenderer.on(IpcChannel.TEMPO_STATUS_CHANGED, handler);
+    return () => {
+      ipcRenderer.removeListener(IpcChannel.TEMPO_STATUS_CHANGED, handler);
     };
   },
   getLockStatus: () => ipcRenderer.invoke(IpcChannel.GET_LOCK_STATUS),
