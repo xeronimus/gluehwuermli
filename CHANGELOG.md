@@ -14,6 +14,8 @@ change bumps the minor version and everything else the patch version.
 
 - Chase steps can fade in: the channels move smoothly to the step's values before its hold. Each step has a Fade in
   time next to its Hold, and the All steps panel sets it for every step at once (#107)
+- The installed app writes a log file (`logs/main.log` in the data folder the Help view opens): lock, mode,
+  project, port and chase events, warnings and errors, and the updater's messages, each with a timestamp (#109)
 
 ## [0.4.0] - 2026-11-13
 

@@ -72,7 +72,7 @@ function createMainWindow(placement: WindowPlacement, title: string): BrowserWin
 }
 
 const config = loadMainConfig(app.isPackaged);
-configureLog(config.debug);
+configureLog({consoleLevel: config.logLevel, logToFile: config.logToFile});
 
 /**
  * One process only: a second one would fight over the COM port. A .glp double-clicked while the app runs starts a

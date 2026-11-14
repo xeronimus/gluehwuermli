@@ -113,7 +113,8 @@ How code is written in Glühwürmli. What the app is, its architecture and its p
 
 - **No silent catch blocks:** action hooks log and surface errors (`outputError`, `fixturesError`).
 - **Expected failures are values**, not exceptions (see `CLAUDE.md`).
-- **Log through loglevel:** `data/service/Logger.ts` in the renderer, `src/main/log.ts` in main; no `console.*`.
+- **Log through the logger:** `data/service/Logger.ts` (loglevel) in the renderer, `src/main/log.ts` (electron-log)
+  in main; no `console.*`.
 
 ## Commits and branches
 

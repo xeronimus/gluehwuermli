@@ -38,7 +38,8 @@ A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, 
 - **State:** Zustand with `combine` + Reselect selectors
 - **Validation:** TypeBox schemas for every IPC payload (`src/shared/ipc.ts`), one contract shared by both sides
 - **Faders:** react-range; **icons:** `@tabler/icons-react`
-- **Logging:** loglevel
+- **Logging:** loglevel in the renderer, electron-log in main (the terminal at `MAIN_VITE_LOG_LEVEL`, default
+  `info`; an installed app also writes `info` and above to `userData/logs/main.log`)
 - **i18n:** Lingui, in the renderer only: `en` is the source language, `de` the catalog to keep
   complete; the macro runs through `lingui-macro-plugin.mts` (Babel), the `.po` catalogs compile in the build
 - **Testing:** Vitest, one project per process (`vitest.config.mts`), `node` environment
