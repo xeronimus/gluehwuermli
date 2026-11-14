@@ -58,7 +58,15 @@ export const rowRepeat = style({
   color: vars.colors.textSecondary
 });
 
-/** Setup mode's buttons at the end of the row, after the repeat */
+/** the sync switch and the speeds, after the repeat */
+export const rowSync = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2px',
+  flexShrink: 0
+});
+
+/** Setup mode's buttons at the end of the row, after the sync */
 export const rowActions = style({
   display: 'flex',
   alignItems: 'center',

@@ -44,6 +44,8 @@ export {
   IconDeviceFloppy as SavePresetIcon,
   IconStack as SceneIcon,
   IconSettings as SettingsIcon,
+  IconMetronome as SyncChaseIcon,
+  IconHandFinger as TapTempoIcon,
   IconBroadcast as StepOnRigIcon,
   IconPlayerStop as StopChaseIcon,
   IconLockOpen as UnlockIcon,

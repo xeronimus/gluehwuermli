@@ -72,6 +72,21 @@ test('a fade survives the round trip; a fade of 0 is left out, so a chase withou
   expect(chaseOfDraft('chorus', chaseDraftOf(chorus)).steps[0]).toEqual(firstStep);
 });
 
+test('a blank tempo is left out, a typed one stored, one that is no number is an error', () => {
+  const withTempo: Chase = {...chorus, referenceBpm: 140};
+
+  expect(chaseDraftOf(chorus).referenceBpm).toBe('');
+  expect(chaseOfDraft('chorus', typedChase({referenceBpm: ' '}))).not.toHaveProperty('referenceBpm');
+  expect(chaseOfDraft('chorus', typedChase({referenceBpm: '140'})).referenceBpm).toBe(140);
+  expect(chaseOfDraft('chorus', chaseDraftOf(withTempo))).toEqual(withTempo);
+  expect(chaseEditErrors(typedChase({referenceBpm: 'abc'})).chase).toContainEqual({
+    type: 'chase-reference-bpm-invalid'
+  });
+  expect(chaseEditErrors(typedChase({referenceBpm: '301'})).chase).toContainEqual({
+    type: 'chase-reference-bpm-invalid'
+  });
+});
+
 test('a blank fade is no fade, unlike a blank hold', () => {
   const blankFade = withStepFade(chaseDraftOf(chorus), 0, ' ');
 
