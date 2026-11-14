@@ -2,7 +2,7 @@
 
 ## What is this project?
 
-A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a virtual COM port) or a **Eurolite USB-DMX512 PRO** (same protocol, needs
+A desktop app that sends DMX to lighting fixtures through an **Enttec DMX USB Pro** (a serial port: COM on Windows, `/dev/cu.*` on macOS) or a **Eurolite USB-DMX512 PRO** (same protocol, needs
 250000 8N2). Today:
 a Help view (short manual, the data folder, links to the website and the repo), projects (a `.glp` file wherever the user keeps it, holding the fixtures and scenes of one rig, saved on every change;
 the last one reopens on start, a double-click on a `.glp` opens it, ADR 4), fixtures (named devices with a start address
@@ -29,8 +29,8 @@ A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, 
 `CODE_STYLE.md`.
 
 - **Desktop:** Electron 45, built with **electron-vite** (Vite 8 for main, preload and renderer), packaged with
-  electron-builder (Windows NSIS, `electron-builder.yml`), released by `.github/workflows/release.yml`, updated by
-  `electron-updater` from the GitHub Releases. ADR 1
+  electron-builder (Windows NSIS and a universal macOS dmg, ad-hoc signed, `electron-builder.yml`), both released by
+  `.github/workflows/release.yml`, the Windows app updated by `electron-updater` from the GitHub Releases. ADR 1
 - **Serial port:** `serialport` in the main process; with `electron-updater` the only runtime `dependencies`,
   everything Vite bundles is a `devDependency`
 - **Framework:** React 19 + TypeScript 7 (strict mode)
@@ -49,15 +49,16 @@ A TypeScript and React frontend stack (Vite, Vanilla Extract, Zustand, TypeBox, 
 
 ## Commands
 
-| Command       | Description                                                                                |
-| ------------- | ------------------------------------------------------------------------------------------ |
-| `pnpm dev`    | Electron + Vite dev server; settings from `.env.development.local` (copy of `.env.sample`) |
-| `pnpm start`  | Build and run the production build                                                         |
-| `pnpm build`  | Build to `out/`                                                                            |
-| `pnpm dist`   | Build and package the Windows installer to `dist/`                                         |
-| `pnpm test`   | `lingui extract`, typecheck, Vitest (fails on a missing German text), `lingui compile`     |
-| `pnpm format` | Import normalizer + Prettier (code and Markdown)                                           |
-| `pnpm ft`     | Format + test                                                                              |
+| Command         | Description                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `pnpm dev`      | Electron + Vite dev server; settings from `.env.development.local` (copy of `.env.sample`) |
+| `pnpm start`    | Build and run the production build                                                         |
+| `pnpm build`    | Build to `out/`                                                                            |
+| `pnpm dist`     | Build and package the Windows installer to `dist/`                                         |
+| `pnpm dist:mac` | Only on a Mac: build and package the universal dmg to `dist/`                              |
+| `pnpm test`     | `lingui extract`, typecheck, Vitest (fails on a missing German text), `lingui compile`     |
+| `pnpm format`   | Import normalizer + Prettier (code and Markdown)                                           |
+| `pnpm ft`       | Format + test                                                                              |
 
 ## Project Structure
 
@@ -72,7 +73,8 @@ ghpage/                      # the landing page (GitHub Pages), a package of its
                              # help/topics/ and .po catalogs, its own texts are extracted into those catalogs too;
                              # deployed by .github/workflows/ghpage.yml
 electron-builder.yml         # packaging; serialport's native binding is unpacked from the asar
-build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer
+build/project.ico            # the .glp file icon (the app icon on a page), registered by the installer;
+                             # project.icns the same for macOS, made from its PNG frames
 doc/
   dmx-latency-and-stack.md   # latency analysis, stack choice, open questions
   dmxInterfaces/             # the two USB DMX interfaces: links to their product pages and the Pro's protocol
@@ -107,7 +109,7 @@ src/
     serialQueue.ts           # runs overlapping async tasks one after the other (saves, project switches)
   main/                      # Electron main process
     index.ts                 # single-instance lock (before any service), window, lifecycle, .glp from argv and
-                             # second-instance, window title
+                             # second-instance (Windows) or open-file (macOS, registered before ready), window title
     config.ts                # the only module reading the environment: `MAIN_VITE_*` from electron-vite's .env files (.env.sample)
     services.ts              # composition root, the only module importing from impl/
     ipc/registerDmxIpc.ts    # IPC handlers: validate, then call the engine; dmx:get-channel-values answers the
@@ -125,7 +127,8 @@ src/
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     project/                 # ADR 4: projectSession (the open project: start, create, open, recent, save; blackout and
                              # channel limits on a switch), ProjectFileStore + impl/file (never touches a file it can't
-                             # open), ProjectDialogs + impl/electron, recentProjects, commandLine (argv), windowTitle
+                             # open), ProjectDialogs + impl/electron, recentProjects, commandLine (argv),
+                             # openFileRequests (macOS open-file paths held until the session starts), windowTitle
     quit/quitGuard.ts        # holds the quit until the DMX port is closed (blackout first if set), at most 2 s
     update/                  # autoUpdate (check on start, download in the background, install on quit, never a
                              # prompt or restart), Updater + impl/electronUpdater; packaged builds only
@@ -149,6 +152,7 @@ src/
       enttecProPacket.ts     # label 6 framing
       DmxPortConnector.ts    # port interface; impl/serialport (real), impl/inMemory (tests, simulated)
       portDetection.ts       # FTDI ids of the Pro
+      portPaths.ts           # macOS: each device listed once, by its /dev/cu.* path
       portMemory.ts          # remembers the last connected port in the settings, connects to it on start (not with
                              # the simulated output)
   preload/index.ts           # contextBridge: the PreloadBridge over ipcRenderer
@@ -242,9 +246,12 @@ version, everything else the patch version.
   app's exe and the installer through SignPath Foundation (once the repo variable `SIGNPATH_ORGANIZATION_ID` and the
   secret `SIGNPATH_API_TOKEN` are set; unsigned until then), fixes `latest.yml` for the signed installer and publishes
   the installer and `latest.yml` as a GitHub Release. Nothing is published by hand or by electron-builder itself
-- Installed apps update from the latest release (`publish` in `electron-builder.yml`): checked once on start,
+- A second job, `release-mac` on `macos-latest`, runs after it: `pnpm test`, `pnpm dist:mac`, and attaches the
+  universal dmg (ad-hoc signed, no Developer ID, no `latest-mac.yml`) to the same release
+- Installed Windows apps update from the latest release (`publish` in `electron-builder.yml`): checked once on start,
   downloaded in the background, installed silently when the app quits, after the quit guard closed the DMX port. Never
-  a prompt or a restart while it runs; no blockmap (`differentialPackage: false`), since signing changes the installer
+  a prompt or a restart while it runs; no blockmap (`differentialPackage: false`), since signing changes the installer.
+  A Mac app never updates itself (`autoUpdate` off on darwin): Squirrel.Mac refuses an app without a Developer ID
 
 ## Code Style and Workflow
 

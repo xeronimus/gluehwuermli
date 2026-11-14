@@ -6,7 +6,7 @@ interface HeroProps {
   rootPath: string;
 }
 
-/** the mascot, what the app is in one line, and the download */
+/** the mascot, what the app is in one line, and the downloads: both lead to the latest release, its assets are named by version */
 const Hero = ({rootPath}: HeroProps) => {
   const {t} = useLingui();
 
@@ -22,11 +22,18 @@ const Hero = ({rootPath}: HeroProps) => {
       <div>
         <h1>Glühwürmli</h1>
         <p className="pitch">
-          <Trans>A DMX lighting controller for Windows, for the living room, the party and the small band.</Trans>
+          <Trans>
+            A DMX lighting controller for Windows and macOS, for the living room, the party and the small band.
+          </Trans>
         </p>
-        <a className="downloadButton" href={DOWNLOAD_URL}>
-          <Trans>Download for Windows</Trans>
-        </a>
+        <div className="downloadButtons">
+          <a className="downloadButton" href={DOWNLOAD_URL}>
+            <Trans>Download for Windows</Trans>
+          </a>
+          <a className="downloadButton" href={DOWNLOAD_URL}>
+            <Trans>Download for macOS</Trans>
+          </a>
+        </div>
         <p className="downloadNote">
           <Trans>Free and open source (GPL-3.0).</Trans>
         </p>

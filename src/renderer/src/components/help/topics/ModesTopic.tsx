@@ -28,8 +28,8 @@ const ModesTopic = () => (
     </p>
     <p>
       <Trans>
-        Forgot the password? Close the app, delete <strong>settings.json</strong> in the data folder (see the Data
-        folder section) and start it again: the next time a password is asked for, it becomes the new one.
+        Forgot the password? Quit the app (on macOS with ⌘Q), delete <strong>settings.json</strong> in the data folder
+        (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one.
       </Trans>
     </p>
   </>

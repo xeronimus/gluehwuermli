@@ -114,6 +114,12 @@ main,
   font-size: 1.25em;
 }
 
+.downloadButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .downloadButton {
   display: inline-block;
   padding: 12px 24px;

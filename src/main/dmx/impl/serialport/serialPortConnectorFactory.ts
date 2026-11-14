@@ -4,6 +4,7 @@ import type {SerialPortDescription} from '@shared/ipc';
 
 import type {DmxConnection, DmxPortConnector} from '@/dmx/DmxPortConnector';
 import {isLikelyEnttecPro} from '@/dmx/portDetection';
+import {calloutPortsOf} from '@/dmx/portPaths';
 
 /**
  * 250000 8N2: the Enttec Pro ignores the port settings (a virtual COM port, USB is as fast as it is); the Eurolite
@@ -11,6 +12,13 @@ import {isLikelyEnttecPro} from '@/dmx/portDetection';
  */
 const BAUD_RATE = 250000;
 const STOP_BITS = 2;
+
+const MACOS: NodeJS.Platform = 'darwin';
+
+export interface SerialPortConnectorOptions {
+  /** macOS lists each serial device twice (tty and cu), only the cu path is listed */
+  platform: NodeJS.Platform;
+}
 
 type PortInfo = Awaited<ReturnType<typeof SerialPort.list>>[number];
 
@@ -57,8 +65,11 @@ function connectionOf(port: SerialPort): DmxConnection {
 }
 
 /** the DmxPortConnector on top of the OS serial ports (node-serialport) */
-export const serialPortConnectorFactory = (): DmxPortConnector => ({
-  listPorts: async () => (await SerialPort.list()).map(toPortDescription),
+export const serialPortConnectorFactory = ({platform}: SerialPortConnectorOptions): DmxPortConnector => ({
+  listPorts: async () => {
+    const ports = (await SerialPort.list()).map(toPortDescription);
+    return platform === MACOS ? calloutPortsOf(ports) : ports;
+  },
 
   open: (path) =>
     new Promise((resolve, reject) => {

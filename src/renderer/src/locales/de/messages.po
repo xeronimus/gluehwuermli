@@ -111,8 +111,8 @@ msgstr "Eine Farbe muss ein Hex-Wert wie #ff00ff sein"
 
 #: ghpage/src/Hero.tsx
 #: ghpage/src/LandingPage.tsx
-msgid "A DMX lighting controller for Windows, for the living room, the party and the small band."
-msgstr "Ein DMX-Lichtpult für Windows, fürs Wohnzimmer, die Party und die kleine Band."
+msgid "A DMX lighting controller for Windows and macOS, for the living room, the party and the small band."
+msgstr "Ein DMX-Lichtpult für Windows und macOS, fürs Wohnzimmer, die Party und die kleine Band."
 
 #: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
@@ -226,8 +226,8 @@ msgid "Adds channel {channel} to {addedCount} of {stepCount, plural, one {# step
 msgstr "Fügt Kanal {channel} zu {addedCount} von {stepCount, plural, one {# Schritt} other {# Schritten}} hinzu"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
-msgstr "Nach <0>Trennen</0> und nach dem Schliessen der App sendet das Interface die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Schliessen zuerst alle Kanäle auf 0."
+msgid "After <0>Disconnect</0>, and after quitting the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), quitting the app sets all channels to 0 first. On macOS, quit with ⌘Q: closing the window leaves the app running and sending, a running chase too."
+msgstr "Nach <0>Trennen</0> und nach dem Beenden der App sendet das Interface die letzten Werte weiter, solange es USB-Strom hat: Die Lichter bleiben, wie sie sind. Drück vor dem Trennen <1>Not-Aus</1>, wenn es dunkel werden soll. Mit <2>Blackout beim Beenden</2> (im Abschnitt Ausgang) setzt die App beim Beenden zuerst alle Kanäle auf 0. Unter macOS beendest du sie mit ⌘Q: Wenn du nur das Fenster schliesst, läuft die App weiter und sendet, auch ein laufender Chase."
 
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 msgid "All"
@@ -272,6 +272,10 @@ msgstr "Frage nach, ob die App gesperrt ist…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Blackout beim Beenden"
+
+#: ghpage/src/TestedHardware.tsx
+msgid "Both are tested on Windows; on macOS they aren't tested yet."
+msgstr "Beide sind unter Windows getestet, unter macOS noch nicht."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Buttons"
@@ -650,6 +654,10 @@ msgid "Disconnect"
 msgstr "Trennen"
 
 #: ghpage/src/Hero.tsx
+msgid "Download for macOS"
+msgstr "Für macOS herunterladen"
+
+#: ghpage/src/Hero.tsx
 msgid "Download for Windows"
 msgstr "Für Windows herunterladen"
 
@@ -790,8 +798,8 @@ msgid "Fixtures, presets and scenes can be played, not changed. Unlock Setup mod
 msgstr "Geräte, Presets und Szenen lassen sich spielen, aber nicht ändern. Entsperr den Setup-Modus, um sie zu ändern."
 
 #: src/renderer/src/components/help/topics/ModesTopic.tsx
-msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
-msgstr "Passwort vergessen? Schliess die App, lösch <0>settings.json</0> im Datenordner (siehe Abschnitt Datenordner) und starte sie neu: Das nächste Passwort, nach dem gefragt wird, wird zum neuen."
+msgid "Forgot the password? Quit the app (on macOS with ⌘Q), delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
+msgstr "Passwort vergessen? Beende die App (unter macOS mit ⌘Q), lösch <0>settings.json</0> im Datenordner (siehe Abschnitt Datenordner) und starte sie neu: Das nächste Passwort, nach dem gefragt wird, wird zum neuen."
 
 #: ghpage/src/Hero.tsx
 msgid "Free and open source (GPL-3.0)."
@@ -806,8 +814,8 @@ msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <
 msgstr "Gib der Szene einen <0>Namen</0> und setze ein Häkchen bei den <1>Geräten</1>, die sie umfasst. Beim <2>Speichern</2> wird der aktuelle Wert jedes Kanals der angehakten Geräte gespeichert."
 
 #: ghpage/src/LandingPage.tsx
-msgid "Glühwürmli – DMX lighting controller for Windows"
-msgstr "Glühwürmli – DMX-Lichtpult für Windows"
+msgid "Glühwürmli – DMX lighting controller for Windows and macOS"
+msgstr "Glühwürmli – DMX-Lichtpult für Windows und macOS"
 
 #: src/renderer/src/components/help/topics/SafetyNotice.tsx
 msgid "Glühwürmli comes without any warranty. It is made for private use, such as a living room, a party or a small band, not for professional shows or anything safety-critical."
@@ -906,6 +914,10 @@ msgstr "Suche den Ordner…"
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Lowest value of channel {row}"
 msgstr "Tiefster Wert von Kanal {row}"
+
+#: ghpage/src/SafetyNote.tsx
+msgid "macOS Gatekeeper"
+msgstr "macOS Gatekeeper"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Manual"
@@ -1156,10 +1168,6 @@ msgstr "Nur die beiden USB-Interfaces oben; kein Art-Net, sACN oder anderes DMX 
 msgid "Only while held"
 msgstr "Nur solange gedrückt"
 
-#: ghpage/src/Limitations.tsx
-msgid "Only Windows, for now."
-msgstr "Vorerst nur Windows."
-
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Open in Explorer"
 msgstr "Im Explorer öffnen"
@@ -1226,8 +1234,8 @@ msgid "Pick a color"
 msgstr "Farbe auswählen"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
-msgstr "Steck das DMX-Interface ein, einen Enttec DMX USB Pro oder ein Eurolite USB-DMX512 PRO, und schliess deine Geräte an seinen DMX-Ausgang an. Windows zeigt es als seriellen Port an (zum Beispiel COM3)."
+msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example), macOS as /dev/cu.usbserial-… ."
+msgstr "Steck das DMX-Interface ein, einen Enttec DMX USB Pro oder ein Eurolite USB-DMX512 PRO, und schliess deine Geräte an seinen DMX-Ausgang an. Windows zeigt es als seriellen Port an (zum Beispiel COM3), macOS als /dev/cu.usbserial-… ."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Position {positionNumber} of channel {row} only while held"
@@ -1255,8 +1263,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
-msgstr "Drück oben in der Leiste (oder in den Einstellungen) auf <0>Verbinden</0>. Sobald die App ans Interface sendet, steht oben in der Leiste <1>Sendet auf COM3</1>."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> (or /dev/cu.usbserial-…) once the app sends to the interface."
+msgstr "Drück oben in der Leiste (oder in den Einstellungen) auf <0>Verbinden</0>. Sobald die App ans Interface sendet, steht oben in der Leiste <1>Sendet auf COM3</1> (oder /dev/cu.usbserial-…)."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -1784,6 +1792,10 @@ msgstr "Die Sperre gilt nur für das, was die App sendet. Ein Laser kann trotzde
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "The lowest value of the fader; empty for {lowestValue}"
 msgstr "Der tiefste Wert des Faders; leer für {lowestValue}"
+
+#: ghpage/src/SafetyNote.tsx
+msgid "The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open <0>System Settings → Privacy & Security</0> and choose <1>Open Anyway</1> next to the message about Glühwürmli, or run <2>xattr -cr \"/Applications/gluehwuermli.app\"</2> in Terminal. It needs macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page."
+msgstr "Die Mac-App ist nicht von Apple signiert, darum öffnet macOS sie beim ersten Mal nicht. Öffne <0>Systemeinstellungen → Datenschutz & Sicherheit</0> und wähle neben der Meldung zu Glühwürmli <1>Dennoch öffnen</1>, oder führ im Terminal <2>xattr -cr \"/Applications/gluehwuermli.app\"</2> aus. Sie braucht macOS 13 Ventura oder neuer und aktualisiert sich nicht selbst: Lade eine neue Version von der Release-Seite herunter."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"

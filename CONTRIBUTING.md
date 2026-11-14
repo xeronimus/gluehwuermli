@@ -28,7 +28,7 @@ set the value to `0`) to see the real ports again. All settings: [.env.sample](.
 
 Device Manager → Ports (COM & LPT) → the interface's COM port → Port Settings → Advanced → **Latency Timer: 1–2 ms**
 (default 16). It's the biggest single factor in how quickly a fader reaches the light; see
-[doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md).
+[doc/dmx-latency-and-stack.md](doc/dmx-latency-and-stack.md). On macOS the latency hasn't been measured yet.
 
 ## Commands
 
@@ -38,6 +38,7 @@ Device Manager → Ports (COM & LPT) → the interface's COM port → Port Setti
 | `pnpm start`      | Build and run the production build (`electron-vite preview`)                    |
 | `pnpm build`      | Build main, preload and renderer to `out/`                                      |
 | `pnpm dist`       | Build and package the Windows installer (NSIS) to `dist/`                       |
+| `pnpm dist:mac`   | Only on a Mac: build and package the universal dmg (ad-hoc signed) to `dist/`   |
 | `pnpm test`       | Extract the texts, typecheck, all Vitest tests (fails on a missing German text) |
 | `pnpm test:watch` | Vitest in watch mode                                                            |
 | `pnpm format`     | Import normalizer + Prettier (code and Markdown)                                |
