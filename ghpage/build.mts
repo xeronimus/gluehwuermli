@@ -19,6 +19,7 @@ const SCREENSHOTS_DIR = resolve(PAGE_DIR, '..', 'doc', 'screenshots');
 const COPIED_FILES = [
   {from: resolve(PAGE_DIR, 'src', 'page.css'), to: 'assets/page.css'},
   {from: resolve(APP_ASSETS_DIR, 'gluehwuermli_mascot_600.png'), to: 'assets/mascot.png'},
+  {from: resolve(APP_ASSETS_DIR, 'switzerland_24.png'), to: 'assets/switzerland.png'},
   {from: resolve(APP_ASSETS_DIR, 'favicon', 'favicon.ico'), to: 'favicon.ico'},
   {from: resolve(APP_ASSETS_DIR, 'favicon', 'favicon-32x32.png'), to: 'assets/favicon-32x32.png'},
   {from: resolve(APP_ASSETS_DIR, 'favicon', 'apple-touch-icon.png'), to: 'assets/apple-touch-icon.png'},

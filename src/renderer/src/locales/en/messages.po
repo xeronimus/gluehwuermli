@@ -2030,6 +2030,10 @@ msgstr "Values can't be changed one by one here. A channel added to a fixture la
 msgid "Values of channel {row}"
 msgstr "Values of channel {row}"
 
+#: ghpage/src/GitHubRibbon.tsx
+msgid "View on GitHub"
+msgstr "View on GitHub"
+
 #: src/renderer/src/components/help/HelpView.tsx
 msgid "Website"
 msgstr "Website"

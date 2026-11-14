@@ -2030,6 +2030,10 @@ msgstr "Einzelne Werte lassen sich hier nicht √§ndern. Ein Kanal, der einem Ger√
 msgid "Values of channel {row}"
 msgstr "Werte von Kanal {row}"
 
+#: ghpage/src/GitHubRibbon.tsx
+msgid "View on GitHub"
+msgstr "Auf GitHub ansehen"
+
 #: src/renderer/src/components/help/HelpView.tsx
 msgid "Website"
 msgstr "Website"

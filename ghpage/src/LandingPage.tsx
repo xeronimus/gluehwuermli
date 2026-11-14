@@ -1,6 +1,7 @@
 import {useLingui} from '@lingui/react/macro';
 
 import FeatureCards from './FeatureCards';
+import GitHubRibbon from './GitHubRibbon';
 import Hero from './Hero';
 import LanguageSwitch from './LanguageSwitch';
 import Limitations from './Limitations';
@@ -44,6 +45,7 @@ const LandingPage = ({page}: LandingPageProps) => {
         <link rel="stylesheet" href={`${rootPath}assets/page.css`} />
       </head>
       <body>
+        <GitHubRibbon />
         <header className="topBar">
           <span className="brand">Glühwürmli</span>
           <LanguageSwitch page={page} />
@@ -57,7 +59,7 @@ const LandingPage = ({page}: LandingPageProps) => {
           <SafetyNote />
           <Manual />
         </main>
-        <PageFooter />
+        <PageFooter rootPath={rootPath} />
       </body>
     </html>
   );
