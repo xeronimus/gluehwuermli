@@ -49,6 +49,10 @@ msgstr "{presetName} sets a locked channel"
 msgid "{stepCount} steps"
 msgstr "{stepCount} steps"
 
+#: src/renderer/src/components/chases/TapTempoPad.tsx
+msgid "{tempoBpm} BPM"
+msgstr "{tempoBpm} BPM"
+
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
 msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels to 0 at once, in Show and in Setup mode, with or without a project. The fixtures, presets and scenes stay as they are; the faders show 0."
@@ -56,6 +60,10 @@ msgstr "<0>Emergency off</0> at the right of the top bar sets all 512 channels t
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
 msgid "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
 msgstr "<0>Preview on rig</0> in the chase editor sends the shown step to the output while it is edited: when it is turned on, when another step is chosen and on every change, capped by the channel lock like a fader. A chase playing is stopped when it is turned on. Start, Resume, Emergency off and closing the editor turn it off; the channels keep the values last sent. A fader moved meanwhile keeps its value until the step changes again."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "<0>Tempo and sync:</0> tap the pad above the chases, or press <1>T</1>, at least four times on the beat of the music. The pad shows the tempo in BPM and blinks on the beat; the last tap is the beat. A pause of 2 seconds starts over, and a tap far off the others is ignored. T does nothing while you type in a field. The tempo isn't saved: tap it again at the next show."
+msgstr "<0>Tempo and sync:</0> tap the pad above the chases, or press <1>T</1>, at least four times on the beat of the music. The pad shows the tempo in BPM and blinks on the beat; the last tap is the beat. A pause of 2 seconds starts over, and a tap far off the others is ignored. T does nothing while you type in a field. The tempo isn't saved: tap it again at the next show."
 
 #: src/renderer/src/components/fixtures/FixtureChannelHelp.tsx
 msgid "<0>Values</0> sets where the fader stops. <1>Continuous</1> goes through every value from min to max, e.g. a dimmer that does nothing below 100. <2>Steps</2> goes from min to max by the step size, e.g. a strobe in steps of 10. <3>Positions</3> stops only at the values listed, each with an optional name, e.g. the slots of a gobo wheel at 5, 6 and 200: the fader shows a tick for each (its name on mouse over), and a preset picks one of them. With <4>Buttons</4> next to Add position, the Show view has a button per position instead of the fader, the highest value on top. A position whose <5/> box is checked is momentary: its button sets its value only while it is held down with the mouse or a finger, e.g. a blinder flash, and then puts back the value from before; the keyboard doesn't press it. Only the fixture's faders follow these, the Channels view sends any value."
@@ -273,6 +281,10 @@ msgstr "Asking whether the app is locked…"
 msgid "Black out on quit"
 msgstr "Black out on quit"
 
+#: src/renderer/src/components/chases/ChaseReferenceBpmField.tsx
+msgid "BPM"
+msgstr "BPM"
+
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Buttons"
 msgstr "Buttons"
@@ -461,6 +473,10 @@ msgstr "Could not ask the app to open the project"
 msgid "Could not ask the app which project is open"
 msgstr "Could not ask the app which project is open"
 
+#: src/renderer/src/state/actionHooks/chaseSync.ts
+msgid "Could not change the chase's sync"
+msgstr "Could not change the chase's sync"
+
 #: src/renderer/src/state/actionHooks/lockActions.ts
 msgid "Could not change the password"
 msgstr "Could not change the password"
@@ -541,6 +557,10 @@ msgstr "Could not read the channel values the output sends"
 msgid "Could not read the output status"
 msgstr "Could not read the output status"
 
+#: src/renderer/src/state/actionHooks/tempoSubscription.ts
+msgid "Could not read the tempo"
+msgstr "Could not read the tempo"
+
 #: src/renderer/src/state/actionHooks/chaseSubscription.ts
 msgid "Could not read whether a chase is playing"
 msgstr "Could not read whether a chase is playing"
@@ -548,6 +568,10 @@ msgstr "Could not read whether a chase is playing"
 #: src/renderer/src/state/actionHooks/lockSubscription.ts
 msgid "Could not read whether the app is locked"
 msgstr "Could not read whether the app is locked"
+
+#: src/renderer/src/state/actionHooks/chaseSubscription.ts
+msgid "Could not read which chases are synced"
+msgstr "Could not read which chases are synced"
 
 #: src/renderer/src/state/actionHooks/project.ts
 msgid "Could not remove the project from the list"
@@ -1225,6 +1249,10 @@ msgstr "Pick a channel"
 msgid "Pick a color"
 msgstr "Pick a color"
 
+#: src/renderer/src/components/chases/ChaseRowSync.tsx
+msgid "Play the chase {chaseName} at {label} the tempo"
+msgstr "Play the chase {chaseName} at {label} the tempo"
+
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
 msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
 msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
@@ -1592,6 +1620,14 @@ msgstr "Steps of channel values played one after the other, each fading in and h
 msgid "Stop the chase {chaseName}"
 msgstr "Stop the chase {chaseName}"
 
+#: src/renderer/src/components/chases/ChaseRowSync.tsx
+msgid "Sync the chase {chaseName} to the tempo"
+msgstr "Sync the chase {chaseName} to the tempo"
+
+#: src/renderer/src/components/chases/ChaseRowSync.tsx
+msgid "Sync the chase {chaseName} to the tempo: tap it first"
+msgstr "Sync the chase {chaseName} to the tempo: tap it first"
+
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 msgid "Take the current values of {fixtureName}"
 msgstr "Take the current values of {fixtureName}"
@@ -1608,6 +1644,18 @@ msgstr "Take the values of the preset {presetName}"
 msgid "Take the values of the scene {sceneName}"
 msgstr "Take the values of the scene {sceneName}"
 
+#: src/renderer/src/components/chases/TapTempoPad.tsx
+msgid "Tap"
+msgstr "Tap"
+
+#: src/renderer/src/components/chases/TapTempoPad.tsx
+msgid "Tap the tempo (T)"
+msgstr "Tap the tempo (T)"
+
+#: src/renderer/src/components/chases/ChaseReferenceBpmField.tsx
+msgid "Tempo"
+msgstr "Tempo"
+
 #: ghpage/src/TestedHardware.tsx
 msgid "Tested hardware"
 msgstr "Tested hardware"
@@ -1619,6 +1667,10 @@ msgstr "The <0>Address</0> column shows where each channel lands. Fixtures shari
 #: src/renderer/src/components/fixtures/FixtureGeneralHelp.tsx
 msgid "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
 msgstr "The <0>hint</0> is shown below the faders, for what you need while playing, e.g. \"warm up 2 min before smoke\". Use the <1>description</1> for anything else worth knowing about the device: the DMX mode, DIP switch settings, where it hangs, who it belongs to. It stays hidden until you open it on the fixture."
+
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "The <0>sync</0> switch on a row lets its chase follow the tapped tempo, at <1>½×</1>, <2>1×</2>, <3>2×</3> or <4>4×</4>. Every step keeps its share of the chase: a chase written at 120 BPM plays at 100 BPM with each fade and hold 1.2 times as long. The tempo a chase is written at is set in the chase editor, 120 BPM unless set. Turned on while the chase plays, the current step ends on a beat and the steps after it play to the tempo; a new tempo or speed does the same. Turned off, the chase goes on from the current step with its own times. A synced chase starts at once, on the nearest beat. Pause, Resume and Stop keep the switch and the speed until the app is closed; the switch needs a tempo."
+msgstr "The <0>sync</0> switch on a row lets its chase follow the tapped tempo, at <1>½×</1>, <2>1×</2>, <3>2×</3> or <4>4×</4>. Every step keeps its share of the chase: a chase written at 120 BPM plays at 100 BPM with each fade and hold 1.2 times as long. The tempo a chase is written at is set in the chase editor, 120 BPM unless set. Turned on while the chase plays, the current step ends on a beat and the steps after it play to the tempo; a new tempo or speed does the same. Turned off, the chase goes on from the current step with its own times. A synced chase starts at once, on the nearest beat. Pause, Resume and Stop keep the switch and the speed until the app is closed; the switch needs a tempo."
 
 #: src/renderer/src/components/help/topics/ModesTopic.tsx
 msgid "The app always starts in <0>Show mode</0>: the fixtures, their presets and the scenes can be played, but not changed, and the Channels view is off. Anything else needs <1>Setup mode</1>: in the <2>Settings</2> view, press <3>Unlock Setup mode</3> and type the password. The first time, there is no password yet: the one you type (twice) becomes it. The app then goes to the Show view; while Setup mode is open, the top bar says so."
@@ -1861,6 +1913,14 @@ msgstr "The start address must be a whole number from {firstAddress} to {lastUni
 msgid "The step sets this channel twice"
 msgstr "The step sets this channel twice"
 
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "The tempo must be a whole number from {minBpm} to {maxBpm} BPM"
+msgstr "The tempo must be a whole number from {minBpm} to {maxBpm} BPM"
+
+#: src/renderer/src/components/chases/ChaseReferenceBpmField.tsx
+msgid "The tempo the chase's times are written at, for syncing it to a tapped tempo"
+msgstr "The tempo the chase's times are written at, for syncing it to a tapped tempo"
+
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The values of a channel must be whole numbers from {minValue} to {maxValue}"
 msgstr "The values of a channel must be whole numbers from {minValue} to {maxValue}"
@@ -1882,8 +1942,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "To change the password, unlock Setup mode and press <0>Change password</0> in the Settings view: type the current password and the new one twice. From then on, only the new one unlocks Setup mode and lifts the channel lock."
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Fade in</1> and <2>Hold</2> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <3>Add channel</3> adds one by hand. The <4>Fill from</4> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
-msgstr "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Fade in</1> and <2>Hold</2> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <3>Add channel</3> adds one by hand. The <4>Fill from</4> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat, the <1>Tempo</1> its times are written at and the steps, a tab each with its <2>Fade in</2> and <3>Hold</3> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <4>Add channel</4> adds one by hand. The <5>Fill from</5> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+msgstr "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat, the <1>Tempo</1> its times are written at and the steps, a tab each with its <2>Fade in</2> and <3>Hold</3> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <4>Add channel</4> adds one by hand. The <5>Fill from</5> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
 
 #: src/renderer/src/components/help/topics/ScenesTopic.tsx
 msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."

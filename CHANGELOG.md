@@ -16,6 +16,9 @@ change bumps the minor version and everything else the patch version.
   time next to its Hold, and the All steps panel sets it for every step at once (#107)
 - The installed app writes a log file (`logs/main.log` in the data folder the Help view opens): lock, mode,
   project, port and chase events, warnings and errors, and the updater's messages, each with a timestamp (#109)
+- Chases can follow the music: tap the tempo on the pad above the chases (or press T), then sync a chase on its row,
+  at ½×, 1×, 2× or 4×. Each chase has a tempo its times are written at (120 BPM unless set in the editor), and plays
+  its steps scaled to the tapped tempo (#113)
 
 ## [0.4.0] - 2026-11-13
 

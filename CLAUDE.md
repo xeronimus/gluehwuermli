@@ -10,13 +10,14 @@ and named channels, each with an optional color its fader fills and glows in and
 or named positions its fader stops at, shown as a fader or as buttons, a button optionally momentary) with a fader per channel and presets (named buttons setting several of a fixture's channels at once), scenes
 (named buttons setting the channels of several fixtures at once, stored with the fixtures; in the Show view above the
 fixture groups), chases (steps of absolute channel values played one after the other by main; a row each below the
-fixture groups, started, paused, resumed and stopped there), a bank
+fixture groups, started, paused, resumed and stopped there, each optionally synced to a tempo tapped on the pad above
+the rows or with the T key, at ½×, 1×, 2× or 4×, its steps scaled by its reference BPM), a bank
 of 16 raw 0–255 faders that moves across channels 1–512, port selection and connect/disconnect (the last connected
 port is remembered and preselected on start, the app always starts disconnected; Connect / Disconnect in the top bar). The app starts in
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
-In Setup mode chases are added, edited (name, repeat, steps with their fade in, hold and
+In Setup mode chases are added, edited (name, repeat, reference BPM, steps with their fade in, hold and
 channel values, filled from the current values of checked fixtures, a scene or a preset, merged into the step),
 deleted and put in order. Planned: fades for faders, presets and scenes.
 
@@ -98,6 +99,8 @@ src/
                              # channel, independent of the fixtures; passCount (main's player and the chase rows),
                              # stepFadeMs (a missing fade is 0)
     time.ts                  # MS_PER_SECOND, MS_PER_MINUTE
+    tapTempo.ts              # pure: taps to a tempo (beat length, downbeat), the tap rules; main's tempo clock and the
+                             # renderer's inMemory tempo service
     channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
                              # scene values checked against them
     validation.ts            # isBlank, duplicatesOf: shared by the fixture and scene validation
@@ -120,8 +123,10 @@ src/
     ipc/registerLockIpc.ts   # app:get-lock-status, app:unlock, app:lock, app:lift-channel-lock, app:lock-channels,
                              # app:change-password, app:user-activity, pushes app:lock-changed
     ipc/registerChaseIpc.ts  # chase:get-status/start/pause/resume/stop (chaseIpcHandlers: start takes an id, plays the
-                             # chase saved in the open project; allowed in Show mode), pushes chase:status-changed and
+                             # chase saved in the open project; allowed in Show mode), chase:get-sync/set-sync/set-speed
+                             # (any chase id), pushes chase:status-changed, chase:sync-changed and
                              # dmx:channels-changed (the values a step set, after the caps)
+    ipc/registerTempoIpc.ts  # tempo:tap (send, no payload), tempo:get-status, pushes tempo:status-changed; Show mode too
     storage/jsonFile.ts      # reading a JSON file, writing one atomically; used by every file store
     project/                 # ADR 4: projectSession (the open project: start, create, open, recent, save; blackout and
                              # channel limits on a switch), ProjectFileStore + impl/file (never touches a file it can't
@@ -138,10 +143,14 @@ src/
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation away from the app page or new window, only http(s) links
                              # open in the browser
-    chase/                   # chasePosition (pure: step, pass and fade progress of a chase at a given time),
-                             # chasePlayer (one chase at a time on the engine's tick: start, pause, resume, stop; fades
-                             # a step's channels from a snapshot taken when it begins, the targets capped then; stopped
-                             # by Emergency off, a project switch, quitting, saving or deleting the running chase)
+    chase/                   # chasePosition (pure: step, pass and fade progress of a chase at a given chase time),
+                             # chaseClock (pure: main's time to chase time, free or synced to the tempo, re-anchored on
+                             # every change so nothing jumps or drifts), chasePlayer (one chase at a time on the
+                             # engine's tick: start, pause, resume, stop; fades a step's channels from a snapshot taken
+                             # when it begins, the targets capped then; sync and speed per chase id, kept while the app
+                             # runs; stopped by Emergency off, a project switch, quitting, saving or deleting the
+                             # running chase)
+    tempo/tempoClock.ts      # the tapped tempo: timestamps taps on the player's clock, keeps the last valid tempo
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3);
                              # onTick runs the chase player right before the universe is sent
@@ -161,8 +170,8 @@ src/
                              # main as translated messages (fixture and scene errors, output status, password form)
       locales/{en,de}/       # messages.po, extracted by `lingui extract`; the German one is translated by hand
       components/            # UI by feature: output/ (top bar: open project, view toggle, lock indicator, output status, Emergency off), fixtures/
-                             # (fixture groups and editor, scene buttons and editor), chases/ (a row per chase below the fixtures: Start, Pause /
-                             # Resume, Stop, the step boxes, the repeat and pass; in Setup mode move, edit, delete,
+                             # (fixture groups and editor, scene buttons and editor), chases/ (TapTempoPad above the rows, the T key; a row per chase below the fixtures: Start, Pause /
+                             # Resume, Stop, the step boxes, the repeat and pass, the sync switch and speed; in Setup mode move, edit, delete,
                              # Add chase, and the chase editor below the rows), project/ (start view without a
                              # project, Create/Open, recent list, the Settings view's project section), faders/ (raw
                              # channels), settings/ (output port, language, mode and channel lock),
@@ -174,11 +183,11 @@ src/
       data/                  # pure logic (channelValues, channelBank, channelLocks, outputStatus, fixtureDraft,
                              # channelValuesDraft, fixtureEditorTabs, fixtureFaders, faderStops, fixtureList,
                              # presets, scenes, chaseRows, chaseDraft, chaseHold, chaseStepFill, chaseList, tabs, passwordForm, activityThrottle,
-                             # recentProjects)
-        service/             # DmxService, ProjectService, AppService, LockService, ChaseService, services.ts
+                             # recentProjects, tempoPad (the beat mark's animation), tapKey (when T taps))
+        service/             # DmxService, ProjectService, AppService, LockService, ChaseService, TempoService, services.ts
                              # (composition root), impl/electron, impl/inMemory
       domain/                # types (Fader)
-      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, chase/, actionHooks/
+      state/                 # Zustand store: channels/, output/, fixtures/, dataFolder/, lock/, chase/, tempo/, actionHooks/
 ```
 
 ## Key Architecture Patterns
