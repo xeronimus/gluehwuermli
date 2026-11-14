@@ -1,8 +1,19 @@
 import {stepFadeMs} from '@shared/chases';
-import type {Chase, ChaseStatus, SetChannelRequest} from '@shared/ipc';
+import {
+  CHASE_SPEED_DEFAULT,
+  type Chase,
+  type ChaseSpeed,
+  type ChaseStatus,
+  type ChaseSyncSetting,
+  type ChaseSyncStatus,
+  type SetChannelRequest
+} from '@shared/ipc';
+import type {Tempo} from '@shared/tapTempo';
 
 import type {DmxEngine} from '@/dmx/dmxEngine';
+import type {TempoClock} from '@/tempo/tempoClock';
 
+import {type ChaseClock, chaseMsAt, freeClock, resyncedClock, startedSyncedClock} from './chaseClock';
 import {type StepPosition, chasePosition, lastPosition, previousOf, stepsBetween} from './chasePosition';
 
 export interface ChasePlayerLog {
@@ -19,6 +30,10 @@ export type ChasePlayerStatus = ChaseStatus;
  * values through `DmxEngine.setChannel`, so they leave in one packet and a locked channel stays at its cap. A step with
  * a fade in moves its channels on every tick in a straight line from what they held when it began to its values,
  * capped as they were then. It only touches the channels a step names, and stopping leaves every value as it is.
+ *
+ * It reads the time of a chase from a chase clock (chaseClock.ts): unsynced the chase's own milliseconds, synced the
+ * tapped tempo, scaled by the chase's reference tempo and its speed. Each chase's sync and speed are kept by id while
+ * the app runs, across Stop, Emergency off and project switches, and never saved.
  */
 export interface ChasePlayer {
   /** step 1, first pass; a chase already running or paused is stopped first, its values stay */
@@ -44,11 +59,27 @@ export interface ChasePlayer {
    * goes with them, at most once per tick. Returns the function that removes the listener
    */
   onValuesApplied: (listener: (values: readonly SetChannelRequest[]) => void) => () => void;
+  /**
+   * whether the chase with this id follows the tapped tempo; turning it on without a tempo changes nothing. The
+   * running chase ends its current step on the beat (sync on) or goes on at its own milliseconds (off), without a jump
+   */
+  setSync: (chaseId: string, synced: boolean) => void;
+  /** the chase's speed; a running synced chase goes on at the new rate, its step ending on the beat */
+  setSpeed: (chaseId: string, speed: ChaseSpeed) => void;
+  /** the chases whose sync or speed differ from the default */
+  syncStatus: () => ChaseSyncStatus;
+  /**
+   * after setSync or setSpeed changed something, before the chase status of the chase it changed (if it plays);
+   * returns the function that removes the listener
+   */
+  onSyncChanged: (listener: (status: ChaseSyncStatus) => void) => () => void;
 }
 
 export interface ChasePlayerDependencies {
   engine: Pick<DmxEngine, 'setChannel' | 'channelValue' | 'cappedValue' | 'onTick'>;
-  /** a monotonic clock in milliseconds */
+  /** the tapped tempo, timestamped with `now` */
+  tempo: Pick<TempoClock, 'tempo' | 'onTempoChanged'>;
+  /** a monotonic clock in milliseconds, the tempo clock's */
   now: () => number;
   log: ChasePlayerLog;
 }
@@ -71,28 +102,66 @@ interface PlayingState {
   readonly fade: ActiveFade;
 }
 
-type RunningState = {readonly type: 'running'; readonly startedAtMs: number} & PlayingState;
+type RunningState = {readonly type: 'running'; readonly clock: ChaseClock} & PlayingState;
 
+/** paused at `chaseMs` of chase time */
 type PlayerState =
-  {readonly type: 'idle'} | RunningState | ({readonly type: 'paused'; readonly elapsedMs: number} & PlayingState);
+  {readonly type: 'idle'} | RunningState | ({readonly type: 'paused'; readonly chaseMs: number} & PlayingState);
 
 const IDLE: PlayerState = {type: 'idle'};
 const FIRST_STEP: StepPosition = {stepIndex: 0, passIndex: 0};
 
-const statusOf = (state: PlayerState): ChasePlayerStatus =>
-  state.type === 'idle'
-    ? IDLE
-    : {
-        type: state.type,
-        chaseId: state.chase.id,
-        stepIndex: state.position.stepIndex,
-        passIndex: state.position.passIndex
-      };
+/** a chase's sync and speed */
+type SyncSetting = Omit<ChaseSyncSetting, 'chaseId'>;
 
-export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies): ChasePlayer {
+const DEFAULT_SYNC: SyncSetting = {synced: false, speed: CHASE_SPEED_DEFAULT};
+
+const isSameSync = (setting: SyncSetting, other: SyncSetting): boolean =>
+  setting.synced === other.synced && setting.speed === other.speed;
+
+export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDependencies): ChasePlayer {
   let state: PlayerState = IDLE;
+  const syncSettings = new Map<string, SyncSetting>();
   const statusListeners = new Set<(status: ChasePlayerStatus) => void>();
   const valuesListeners = new Set<(values: readonly SetChannelRequest[]) => void>();
+  const syncListeners = new Set<(status: ChaseSyncStatus) => void>();
+
+  const syncSettingOf = (chaseId: string): SyncSetting => syncSettings.get(chaseId) ?? DEFAULT_SYNC;
+
+  /** the tempo a chase follows: none while it isn't synced */
+  const followedTempo = (chaseId: string): Tempo | undefined =>
+    syncSettingOf(chaseId).synced ? tempo.tempo() : undefined;
+
+  const statusOf = (current: PlayerState): ChasePlayerStatus =>
+    current.type === 'idle'
+      ? {type: 'idle'}
+      : {
+          type: current.type,
+          chaseId: current.chase.id,
+          stepIndex: current.position.stepIndex,
+          passIndex: current.position.passIndex,
+          ...syncSettingOf(current.chase.id)
+        };
+
+  const syncStatus = (): ChaseSyncStatus => ({
+    chases: Array.from(syncSettings, ([chaseId, setting]) => ({chaseId, ...setting}))
+  });
+
+  /** the clock from now on at the chase time `chaseMs`; synced, the current step ends on the beat */
+  const clockFrom = (chase: Chase, chaseMs: number): ChaseClock => {
+    const followed = followedTempo(chase.id);
+    return followed === undefined
+      ? freeClock(now(), chaseMs)
+      : resyncedClock(chase, followed, syncSettingOf(chase.id).speed, now(), chaseMs);
+  };
+
+  /** synced, the chase's beat 0 on the nearest beat */
+  const startClock = (chase: Chase): ChaseClock => {
+    const followed = followedTempo(chase.id);
+    return followed === undefined
+      ? freeClock(now(), 0)
+      : startedSyncedClock(chase, followed, syncSettingOf(chase.id).speed, now());
+  };
 
   /**
    * a listener that throws (a push to a window going away) only loses its own work: the player still moves on, rather
@@ -185,8 +254,8 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
 
   /** the chase on the tick: the fade moved on, the steps since the last tick played, or the chase finished */
   const advanceRunning = (running: RunningState) => {
-    const {chase, startedAtMs, position, fade} = running;
-    const current = chasePosition(chase, now() - startedAtMs);
+    const {chase, clock, position, fade} = running;
+    const current = chasePosition(chase, chaseMsAt(clock, now()));
     const applied = new Set<number>();
     if (current.type === 'finished') {
       continueFade(fade, 1, applied);
@@ -209,7 +278,7 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     const nextFade = beginStep(chase, current.stepIndex, current.fadeProgress, applied);
     reportApplied(applied);
     const nextPosition = {stepIndex: current.stepIndex, passIndex: current.passIndex};
-    setState({type: 'running', chase, startedAtMs, position: nextPosition, fade: nextFade});
+    setState({type: 'running', chase, clock, position: nextPosition, fade: nextFade});
   };
 
   const advance = () => {
@@ -218,7 +287,47 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     }
   };
 
+  /** the running chase on a new clock at the chase time it is at now */
+  const reclocked = (running: RunningState): RunningState => ({
+    ...running,
+    clock: clockFrom(running.chase, chaseMsAt(running.clock, now()))
+  });
+
+  /**
+   * the setting stored (a default one forgotten) and pushed; the chase it belongs to, if it plays, re-clocked when its
+   * rate changed and its status pushed after
+   */
+  const changeSync = (chaseId: string, change: Partial<SyncSetting>) => {
+    const before = syncSettingOf(chaseId);
+    const after = {...before, ...change};
+    if (isSameSync(before, after)) {
+      return;
+    }
+    // the steps due so far play at the old rate
+    advance();
+    if (isSameSync(after, DEFAULT_SYNC)) {
+      syncSettings.delete(chaseId);
+    } else {
+      syncSettings.set(chaseId, after);
+    }
+    notify(syncListeners, syncStatus());
+    if (state.type === 'idle' || state.chase.id !== chaseId) {
+      return;
+    }
+    // a speed changed while not synced has no effect yet; a paused chase is re-clocked by Resume
+    const rateChanged = before.synced || after.synced;
+    setState(state.type === 'running' && rateChanged ? reclocked(state) : state);
+  };
+
   engine.onTick(advance);
+
+  // a new tempo or downbeat: the synced chase follows it from the step it is in, no status (the rows show nothing new)
+  tempo.onTempoChanged(() => {
+    advance();
+    if (state.type === 'running' && syncSettingOf(state.chase.id).synced) {
+      state = reclocked(state);
+    }
+  });
 
   return {
     start: (chase) => {
@@ -227,7 +336,7 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
       const fade = beginStep(chase, FIRST_STEP.stepIndex, 0, applied);
       reportApplied(applied);
       log.info(`started the chase ${chase.name}`);
-      setState({type: 'running', chase, startedAtMs: now(), position: FIRST_STEP, fade});
+      setState({type: 'running', chase, clock: startClock(chase), position: FIRST_STEP, fade});
     },
     pause: () => {
       // a step whose time came since the last tick plays first: the paused step is the one the clock is at
@@ -235,15 +344,16 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
       if (state.type !== 'running') {
         return;
       }
-      const {chase, position, fade, startedAtMs} = state;
-      setState({type: 'paused', chase, elapsedMs: now() - startedAtMs, position, fade});
+      const {chase, position, fade, clock} = state;
+      setState({type: 'paused', chase, chaseMs: chaseMsAt(clock, now()), position, fade});
     },
     resume: () => {
       if (state.type !== 'paused') {
         return;
       }
-      const {chase, position, fade, elapsedMs} = state;
-      setState({type: 'running', chase, startedAtMs: now() - elapsedMs, position, fade});
+      const {chase, position, fade, chaseMs} = state;
+      // synced, the paused step ends on the beat
+      setState({type: 'running', chase, clock: clockFrom(chase, chaseMs), position, fade});
     },
     stop: () => {
       if (state.type === 'idle') {
@@ -260,6 +370,26 @@ export function chasePlayerFactory({engine, now, log}: ChasePlayerDependencies):
     onValuesApplied: (listener) => {
       valuesListeners.add(listener);
       return () => valuesListeners.delete(listener);
+    },
+    setSync: (chaseId, synced) => {
+      if (synced && tempo.tempo() === undefined) {
+        return;
+      }
+      if (syncSettingOf(chaseId).synced !== synced) {
+        log.info(`sync ${synced ? 'on' : 'off'} for the chase ${chaseId}`);
+      }
+      changeSync(chaseId, {synced});
+    },
+    setSpeed: (chaseId, speed) => {
+      if (syncSettingOf(chaseId).speed !== speed) {
+        log.info(`speed ${speed}× for the chase ${chaseId}`);
+      }
+      changeSync(chaseId, {speed});
+    },
+    syncStatus,
+    onSyncChanged: (listener) => {
+      syncListeners.add(listener);
+      return () => syncListeners.delete(listener);
     }
   };
 }

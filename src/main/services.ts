@@ -15,6 +15,7 @@ import {type ProjectSession, projectSessionFactory} from './project/projectSessi
 import {type AppSettings, appSettingsFactory} from './settings/appSettings';
 import {fileSettingsStoreFactory} from './settings/impl/file/fileSettingsStoreFactory';
 import {fileExists} from './storage/fileExists';
+import {type TempoClock, tempoClockFactory} from './tempo/tempoClock';
 import {type AutoUpdate, autoUpdateFactory, disabledAutoUpdate} from './update/autoUpdate';
 import {electronUpdaterFactory} from './update/impl/electronUpdater/electronUpdaterFactory';
 import type {WindowStateStore} from './window/WindowStateStore';
@@ -35,6 +36,7 @@ const WRONG_PASSWORD_DELAY_MS = 1000;
 export interface MainServices {
   dmxPortConnector: DmxPortConnector;
   dmxEngine: DmxEngine;
+  tempoClock: TempoClock;
   chasePlayer: ChasePlayer;
   windowStateStore: WindowStateStore;
   settings: AppSettings;
@@ -65,8 +67,11 @@ export function createMainServices(
     log,
     logUniverse: config.logLevel === 'debug'
   });
-  // monotonic: a clock change on the PC (summer time, NTP) mustn't make a step wait or skip
-  const chasePlayer = chasePlayerFactory({engine: dmxEngine, now: () => performance.now(), log});
+  // monotonic: a clock change on the PC (summer time, NTP) mustn't make a step wait or skip. One clock for the taps
+  // and the chases, so beat times and chase anchors compare directly
+  const now = () => performance.now();
+  const tempoClock = tempoClockFactory({now, log});
+  const chasePlayer = chasePlayerFactory({engine: dmxEngine, tempo: tempoClock, now, log});
 
   const windowStateStore = fileWindowStateStoreFactory({filePath: windowStateFilePath, log});
 
@@ -101,6 +106,7 @@ export function createMainServices(
   return {
     dmxPortConnector,
     dmxEngine,
+    tempoClock,
     chasePlayer,
     windowStateStore,
     settings,

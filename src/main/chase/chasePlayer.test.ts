@@ -7,6 +7,7 @@ import {
   SIMULATED_PORT_PATH,
   inMemoryConnectorFactory
 } from '@/dmx/impl/inMemory/inMemoryConnectorFactory';
+import {tempoClockFactory} from '@/tempo/tempoClock';
 
 import {type ChasePlayer, type ChasePlayerStatus, chasePlayerFactory} from './chasePlayer';
 
@@ -59,7 +60,12 @@ beforeEach(async () => {
   vi.useFakeTimers();
   connector = inMemoryConnectorFactory();
   engine = dmxEngineFactory({connector, refreshIntervalMs: TICK_MS, log: silentLog, logUniverse: false});
-  player = chasePlayerFactory({engine, now: () => Date.now(), log: silentLog});
+  player = chasePlayerFactory({
+    engine,
+    tempo: tempoClockFactory({now: () => Date.now(), log: silentLog}),
+    now: () => Date.now(),
+    log: silentLog
+  });
   statuses = [];
   player.onStatusChanged((status) => statuses.push(status));
   appliedValues = [];
@@ -88,7 +94,14 @@ describe('start', () => {
     expect(channelValueIn(lastPacket(), LASER)).toBe(255);
     expect(channelValueIn(lastPacket(), STROBE)).toBe(0);
     expect(channelValueIn(lastPacket(), DIMMER)).toBe(200);
-    expect(player.status()).toEqual({type: 'running', chaseId: 'alternation', stepIndex: 0, passIndex: 0});
+    expect(player.status()).toEqual({
+      type: 'running',
+      chaseId: 'alternation',
+      stepIndex: 0,
+      passIndex: 0,
+      synced: false,
+      speed: 1
+    });
   });
 
   test('only changes the channels of the step, the others keep their value', async () => {
@@ -117,7 +130,14 @@ describe('start', () => {
     player.start(other);
     await nextTick();
 
-    expect(player.status()).toEqual({type: 'running', chaseId: 'other', stepIndex: 0, passIndex: 0});
+    expect(player.status()).toEqual({
+      type: 'running',
+      chaseId: 'other',
+      stepIndex: 0,
+      passIndex: 0,
+      synced: false,
+      speed: 1
+    });
     expect(channelValueIn(lastPacket(), DIMMER)).toBe(128);
     expect(channelValueIn(lastPacket(), STROBE)).toBe(255);
   });
@@ -130,7 +150,14 @@ describe('start', () => {
     player.start(alternationOf({type: 'forever'}));
     await nextTick();
 
-    expect(player.status()).toEqual({type: 'running', chaseId: 'alternation', stepIndex: 0, passIndex: 0});
+    expect(player.status()).toEqual({
+      type: 'running',
+      chaseId: 'alternation',
+      stepIndex: 0,
+      passIndex: 0,
+      synced: false,
+      speed: 1
+    });
     expect(channelValueIn(lastPacket(), LASER)).toBe(255);
   });
 });
@@ -156,7 +183,14 @@ describe('repeat', () => {
     await advance(10 * HOLD_MS);
 
     expect(stepStatuses()).toHaveLength(3 * 2);
-    expect(stepStatuses().at(-1)).toEqual({type: 'running', chaseId: 'alternation', stepIndex: 1, passIndex: 2});
+    expect(stepStatuses().at(-1)).toEqual({
+      type: 'running',
+      chaseId: 'alternation',
+      stepIndex: 1,
+      passIndex: 2,
+      synced: false,
+      speed: 1
+    });
     expect(player.status()).toEqual({type: 'idle'});
   });
 
@@ -164,7 +198,14 @@ describe('repeat', () => {
     player.start(alternationOf({type: 'forever'}));
     await advance(100 * 2 * HOLD_MS + TICK_MS);
 
-    expect(player.status()).toEqual({type: 'running', chaseId: 'alternation', stepIndex: 0, passIndex: 100});
+    expect(player.status()).toEqual({
+      type: 'running',
+      chaseId: 'alternation',
+      stepIndex: 0,
+      passIndex: 100,
+      synced: false,
+      speed: 1
+    });
   });
 });
 
@@ -190,7 +231,12 @@ describe('timing', () => {
 
   test('a stalled tick still lands the values of the steps it missed', async () => {
     let clockMs = 0;
-    const stalledPlayer = chasePlayerFactory({engine, now: () => clockMs, log: silentLog});
+    const stalledPlayer = chasePlayerFactory({
+      engine,
+      tempo: tempoClockFactory({now: () => clockMs, log: silentLog}),
+      now: () => clockMs,
+      log: silentLog
+    });
     const chase: Chase = {
       id: 'three',
       name: 'Three',
@@ -217,7 +263,14 @@ describe('pause and resume', () => {
     await advance(299);
 
     player.pause();
-    expect(player.status()).toEqual({type: 'paused', chaseId: 'alternation', stepIndex: 0, passIndex: 0});
+    expect(player.status()).toEqual({
+      type: 'paused',
+      chaseId: 'alternation',
+      stepIndex: 0,
+      passIndex: 0,
+      synced: false,
+      speed: 1
+    });
     await advance(10_000);
     expect(player.status()).toMatchObject({type: 'paused', stepIndex: 0});
 
@@ -498,7 +551,12 @@ describe('fades', () => {
 
   beforeEach(() => {
     clockMs = 0;
-    fadePlayer = chasePlayerFactory({engine, now: () => clockMs, log: silentLog});
+    fadePlayer = chasePlayerFactory({
+      engine,
+      tempo: tempoClockFactory({now: () => clockMs, log: silentLog}),
+      now: () => clockMs,
+      log: silentLog
+    });
     fadeValues = [];
     fadePlayer.onValuesApplied((values) => fadeValues.push(values));
   });
@@ -770,7 +828,9 @@ describe('fades', () => {
         await tickAt(ms);
       }
 
-      expect(fadeStatuses).toEqual([{type: 'running', chaseId: 'fading', stepIndex: 0, passIndex: 0}]);
+      expect(fadeStatuses).toEqual([
+        {type: 'running', chaseId: 'fading', stepIndex: 0, passIndex: 0, synced: false, speed: 1}
+      ]);
     });
   });
 });
