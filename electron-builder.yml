@@ -14,6 +14,29 @@ asarUnpack:
 win:
   target: nsis
   icon: src/assets/favicon/android-chrome-512x512.png
+mac:
+  # one dmg for Apple Silicon and Intel: nobody has to know their chip
+  target:
+    - target: dmg
+      arch: universal
+  icon: src/assets/favicon/android-chrome-512x512.png
+  category: public.app-category.music
+  # ad-hoc signed, no Developer ID (so no notarization and no auto-update, src/main/config.ts): Apple Silicon starts
+  # no unsigned binary at all, and electron-builder changes the bundle after Electron signed it
+  identity: '-'
+  # only needed for notarization; with ad-hoc signing its library validation would refuse the serialport .node
+  hardenedRuntime: false
+  # serialport's macOS prebuild is a universal binary already, the same file in both builds: @electron/universal
+  # refuses to merge an identical Mach-O file unless it is named here
+  x64ArchFiles: '**/node_modules/@serialport/bindings-cpp/prebuilds/darwin-x64+arm64/*.node'
+  # the bundle is named gluehwuermli (`pnpm dist:mac` sets productName, which can't be set per platform here):
+  # electron-builder names the helper apps in NFD, Electron finds them by the NFC name from the Info.plist, and its
+  # check before launching a helper compares the two byte for byte, so an "ü" crashes the app on start. app.name (and
+  # with it the data folder) comes from package.json and is gluehwuermli on both systems anyway; the window title
+  # says Glühwürmli (src/main/project/windowTitle.ts)
+dmg:
+  # ASCII only: GitHub renames release assets with an "ü"
+  artifactName: gluehwuermli-${version}-mac.${ext}
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
@@ -28,11 +51,13 @@ publish:
   provider: github
   owner: xeronimus
   repo: gluehwuermli
-# a double-click on a .glp starts the app with that project, or hands it to the running one (src/main/index.ts)
+# a double-click on a .glp starts the app with that project, or hands it to the running one (src/main/index.ts):
+# Windows passes the file as an argument or to second-instance, macOS sends open-file
 fileAssociations:
   - ext: glp
     name: Glühwürmli project
     description: Glühwürmli project
-    # relative to buildResources (build/): the app icon on a page
+    # relative to buildResources (build/): the app icon on a page. On macOS electron-builder takes project.icns in its
+    # place, made once from the PNG frames of project.ico (each frame stored as it is, an icns entry takes a PNG)
     icon: project.ico
     role: Editor

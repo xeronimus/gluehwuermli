@@ -29,10 +29,10 @@ const LandingPage = ({page}: LandingPageProps) => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{t`Glühwürmli – DMX lighting controller for Windows`}</title>
+        <title>{t`Glühwürmli – DMX lighting controller for Windows and macOS`}</title>
         <meta
           name="description"
-          content={t`A DMX lighting controller for Windows, for the living room, the party and the small band.`}
+          content={t`A DMX lighting controller for Windows and macOS, for the living room, the party and the small band.`}
         />
         <link rel="canonical" href={publishedUrlOf(page)} />
         {PAGE_LOCALES.map((other) => (

@@ -68,6 +68,20 @@ test('a second quit while shutting down is held, without a second shutdown', asy
   expect(quit).toHaveBeenCalledOnce();
 });
 
+test('a shutdown with nothing to do quits on a later task, not while the held quit is still handled', async () => {
+  const onWillQuit = quitGuardFactory({shutdown: async () => {}, quit, timeoutMs: TIMEOUT_MS, log: {warn}});
+  onWillQuit(quitEvent().event);
+
+  // the microtasks that run before Electron finishes handling the will-quit
+  for (let i = 0; i < 10; i++) {
+    await Promise.resolve();
+  }
+  expect(quit).not.toHaveBeenCalled();
+
+  await vi.advanceTimersByTimeAsync(0);
+  expect(quit).toHaveBeenCalledOnce();
+});
+
 test('the quit after the shutdown goes through', async () => {
   const onWillQuit = quitGuardFactory({shutdown: async () => {}, quit, timeoutMs: TIMEOUT_MS, log: {warn}});
   onWillQuit(quitEvent().event);
@@ -88,6 +102,8 @@ test('a shutdown that hangs is given up on after the timeout', async () => {
   expect(quit).not.toHaveBeenCalled();
 
   await vi.advanceTimersByTimeAsync(1);
+  // the quit itself is the task after the timeout
+  await vi.runOnlyPendingTimersAsync();
   expect(quit).toHaveBeenCalledOnce();
   expect(warn).toHaveBeenCalledOnce();
 });

@@ -53,14 +53,16 @@ export interface MainServicesOptions {
   windowStateFilePath: string;
   /** where the settings (the password hash, the last port) are stored, in Electron's userData folder */
   settingsFilePath: string;
+  /** the OS the app runs on (process.platform): macOS lists serial ports differently */
+  platform: NodeJS.Platform;
 }
 
 /** The composition root of the main process: creates every service once; the only module importing from impl/. */
 export function createMainServices(
   config: MainConfig,
-  {projectFolder, windowStateFilePath, settingsFilePath}: MainServicesOptions
+  {projectFolder, windowStateFilePath, settingsFilePath, platform}: MainServicesOptions
 ): MainServices {
-  const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory();
+  const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory({platform});
   const dmxEngine = dmxEngineFactory({
     connector: dmxPortConnector,
     refreshIntervalMs: DMX_REFRESH_INTERVAL_MS,

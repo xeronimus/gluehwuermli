@@ -7,7 +7,7 @@ const ConnectingTopic = () => (
       <li>
         <Trans>
           Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to
-          its DMX output. Windows shows it as a serial port (COM3, for example).
+          its DMX output. Windows shows it as a serial port (COM3, for example), macOS as /dev/cu.usbserial-… .
         </Trans>
       </li>
       <li>
@@ -21,7 +21,7 @@ const ConnectingTopic = () => (
       <li>
         <Trans>
           Press <strong>Connect</strong> in the top bar (or in the Settings). The status in the top bar says{' '}
-          <strong>Sending on COM3</strong> once the app sends to the interface.
+          <strong>Sending on COM3</strong> (or /dev/cu.usbserial-…) once the app sends to the interface.
         </Trans>
       </li>
     </ol>
@@ -47,10 +47,11 @@ const ConnectingTopic = () => (
     </p>
     <p>
       <Trans>
-        After <strong>Disconnect</strong>, and after closing the app, the interface keeps sending the last values for as
-        long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before disconnecting
-        to black out. With <strong>Black out on quit</strong> on (in the Output section), closing the app sets all
-        channels to 0 first.
+        After <strong>Disconnect</strong>, and after quitting the app, the interface keeps sending the last values for
+        as long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before
+        disconnecting to black out. With <strong>Black out on quit</strong> on (in the Output section), quitting the app
+        sets all channels to 0 first. On macOS, quit with ⌘Q: closing the window leaves the app running and sending, a
+        running chase too.
       </Trans>
     </p>
   </>

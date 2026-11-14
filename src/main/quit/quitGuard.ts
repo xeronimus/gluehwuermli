@@ -47,7 +47,9 @@ export function quitGuardFactory({shutdown, quit, timeoutMs, log}: QuitGuardDepe
   const shutDownAndQuit = async () => {
     await shutDownWithin();
     state = 'done';
-    quit();
+    // never while Electron still handles the held will-quit: a shutdown with nothing to close resolves in microtasks,
+    // which run before Electron marks the quit as cancelled, and Electron ignores a quit while one is in progress
+    setTimeout(quit, 0);
   };
 
   return (event) => {

@@ -22,6 +22,9 @@ const TestedHardware = () => (
     <p>
       <Trans>Any DMX device can be connected to them: PARs, moving heads, lasers, smoke machines.</Trans>
     </p>
+    <p>
+      <Trans>Both are tested on Windows; on macOS they aren't tested yet.</Trans>
+    </p>
   </section>
 );
 
