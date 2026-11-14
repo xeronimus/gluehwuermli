@@ -7,7 +7,6 @@ import {useLingui} from '@lingui/react/macro';
 import mascot from '@assets/gluehwuermli_mascot_600.png';
 
 import {leadsToShowView} from '@/data/showViewTriggers';
-import envConfig from '@/envConfig';
 import {useChannelValuesSubscription} from '@/state/actionHooks/channelValuesSubscription';
 import {useChaseSubscription} from '@/state/actionHooks/chaseSubscription';
 import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
@@ -19,8 +18,9 @@ import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
 
-import {app, backdrop, contentVariants, showViewVariants, versionLabel} from './App.css';
+import {app, backdrop, contentVariants, showViewVariants} from './App.css';
 import ShowView from './ShowView';
+import VersionLabel from './VersionLabel';
 import ErrorBoundary from './commons/ErrorBoundary';
 import ModeToggle, {Mode} from './commons/ModeToggle';
 import {ChannelsIcon, FixturesIcon, HelpIcon, SettingsIcon} from './commons/icons';
@@ -100,7 +100,7 @@ const App = () => {
   return (
     <div className={`${defaultTheme} ${app}`}>
       <img className={backdrop} src={mascot} alt="" />
-      <span className={versionLabel}>v{envConfig.version}</span>
+      <VersionLabel />
       <ErrorBoundary>
         <OutputBar
           viewToggle={<ModeToggle modes={viewsFor(setupMode, i18n)} activeId={view} onSelect={setView} />}

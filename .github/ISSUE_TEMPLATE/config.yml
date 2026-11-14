@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or help
+    url: https://github.com/xeronimus/gluehwuermli/discussions
+    about: Ask how something works or share your setup in the Discussions.
+  - name: User manual
+    url: https://xeronimus.github.io/gluehwuermli/
+    about: The manual on the website, the same as the app's Help view.

@@ -22,6 +22,7 @@ change bumps the minor version and everything else the patch version.
 - A macOS version: a universal dmg for Apple Silicon and Intel (macOS 13 or newer) on every release. It isn't signed by
   Apple, so it doesn't update itself and has to be allowed once in Privacy & Security; double-clicking a .glp opens
   it (#11)
+- "Made with Love in" and the Swiss flag next to the version in the bottom left corner (#103)
 
 ## [0.4.0] - 2026-11-13
 

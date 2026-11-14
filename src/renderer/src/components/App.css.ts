@@ -56,16 +56,3 @@ export const backdrop = style({
   opacity: 0.25,
   pointerEvents: 'none'
 });
-
-/** the app version, small in the bottom left corner below the mascot, behind everything like it */
-export const versionLabel = style({
-  position: 'absolute',
-  left: '8px',
-  bottom: '4px',
-  zIndex: -1,
-  fontFamily: vars.fonts.mono,
-  fontSize: '11px',
-  color: vars.colors.textMuted,
-  pointerEvents: 'none',
-  userSelect: 'none'
-});
