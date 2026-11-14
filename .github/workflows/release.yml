@@ -4,6 +4,10 @@ name: Release
 # and publishes it with latest.yml as a GitHub Release. Installed apps update from the latest release (electron-updater,
 # src/main/update/), and the website's download button points at it.
 #
+# A second job builds the macOS dmg (universal, ad-hoc signed, no Developer ID) and attaches it to the same release
+# once the Windows job created it. No latest-mac.yml: a Mac app doesn't update itself (src/main/config.ts). A failing
+# Mac build never holds back the Windows release.
+#
 # Signing (SignPath Foundation) runs once the repo variable SIGNPATH_ORGANIZATION_ID and the secret SIGNPATH_API_TOKEN
 # are set; until then the release carries the unsigned installer. SignPath needs a build on a GitHub-hosted runner from
 # the tagged commit, which is what this is. The SignPath project has two artifact configurations, one per request:
@@ -134,3 +138,38 @@ jobs:
       run: |
         gh release create "$GITHUB_REF_NAME" --verify-tag --title "Glühwürmli $VERSION" --notes-file release-notes.md \
           "dist/$INSTALLER" dist/latest.yml
+
+  release-mac:
+    runs-on: macos-latest
+    needs: release
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '24'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    # the release job checked the tag against it already
+    - name: Version
+      run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+
+    - name: Test
+      run: pnpm test
+
+    # ad-hoc signed (electron-builder.yml): no CSC_IDENTITY_AUTO_DISCOVERY=false, that would skip the ad-hoc signing too
+    - name: Build the dmg
+      run: pnpm dist:mac --publish never
+
+    - name: Attach the dmg to the release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh release upload "$GITHUB_REF_NAME" "dist/gluehwuermli-$VERSION-mac.dmg"
