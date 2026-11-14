@@ -47,10 +47,11 @@ const ConnectingTopic = () => (
     </p>
     <p>
       <Trans>
-        After <strong>Disconnect</strong>, and after closing the app, the interface keeps sending the last values for as
-        long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before disconnecting
-        to black out. With <strong>Black out on quit</strong> on (in the Output section), closing the app sets all
-        channels to 0 first.
+        After <strong>Disconnect</strong>, and after quitting the app, the interface keeps sending the last values for
+        as long as it has USB power: the lights stay as they are. Press <strong>Emergency off</strong> before
+        disconnecting to black out. With <strong>Black out on quit</strong> on (in the Output section), quitting the app
+        sets all channels to 0 first. On macOS, quit with ⌘Q: closing the window leaves the app running and sending, a
+        running chase too.
       </Trans>
     </p>
   </>

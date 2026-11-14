@@ -226,8 +226,8 @@ msgid "Adds channel {channel} to {addedCount} of {stepCount, plural, one {# step
 msgstr "Adds channel {channel} to {addedCount} of {stepCount, plural, one {# step} other {# steps}}"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
-msgstr "After <0>Disconnect</0>, and after closing the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), closing the app sets all channels to 0 first."
+msgid "After <0>Disconnect</0>, and after quitting the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), quitting the app sets all channels to 0 first. On macOS, quit with ⌘Q: closing the window leaves the app running and sending, a running chase too."
+msgstr "After <0>Disconnect</0>, and after quitting the app, the interface keeps sending the last values for as long as it has USB power: the lights stay as they are. Press <1>Emergency off</1> before disconnecting to black out. With <2>Black out on quit</2> on (in the Output section), quitting the app sets all channels to 0 first. On macOS, quit with ⌘Q: closing the window leaves the app running and sending, a running chase too."
 
 #: src/renderer/src/components/chases/ChaseFillPanel.tsx
 msgid "All"
@@ -798,8 +798,8 @@ msgid "Fixtures, presets and scenes can be played, not changed. Unlock Setup mod
 msgstr "Fixtures, presets and scenes can be played, not changed. Unlock Setup mode to change them."
 
 #: src/renderer/src/components/help/topics/ModesTopic.tsx
-msgid "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
-msgstr "Forgot the password? Close the app, delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
+msgid "Forgot the password? Quit the app (on macOS with ⌘Q), delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
+msgstr "Forgot the password? Quit the app (on macOS with ⌘Q), delete <0>settings.json</0> in the data folder (see the Data folder section) and start it again: the next time a password is asked for, it becomes the new one."
 
 #: ghpage/src/Hero.tsx
 msgid "Free and open source (GPL-3.0)."
