@@ -29,7 +29,12 @@ let handlers: ChaseIpcHandlers;
 beforeEach(() => {
   vi.useFakeTimers();
   projectStatus = projectWith([strobe]);
-  engine = dmxEngineFactory({connector: inMemoryConnectorFactory(), refreshIntervalMs: 23, log: silentLog});
+  engine = dmxEngineFactory({
+    connector: inMemoryConnectorFactory(),
+    refreshIntervalMs: 23,
+    log: silentLog,
+    logUniverse: false
+  });
   player = chasePlayerFactory({engine, now: () => Date.now(), log: silentLog});
   handlers = chaseIpcHandlers(player, {status: () => projectStatus});
 });

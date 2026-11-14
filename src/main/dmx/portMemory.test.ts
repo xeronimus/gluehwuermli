@@ -35,7 +35,12 @@ beforeEach(() => {
   stored = {version: 1, password: PASSWORD};
   failingSave = false;
   inMemoryConnector = inMemoryConnectorFactory();
-  engine = dmxEngineFactory({connector: inMemoryConnector, refreshIntervalMs: REFRESH_INTERVAL_MS, log: silentLog});
+  engine = dmxEngineFactory({
+    connector: inMemoryConnector,
+    refreshIntervalMs: REFRESH_INTERVAL_MS,
+    log: silentLog,
+    logUniverse: false
+  });
 });
 
 afterEach(async () => {

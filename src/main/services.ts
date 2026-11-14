@@ -59,7 +59,12 @@ export function createMainServices(
   {projectFolder, windowStateFilePath, settingsFilePath}: MainServicesOptions
 ): MainServices {
   const dmxPortConnector = config.simulatedOutput ? inMemoryConnectorFactory() : serialPortConnectorFactory();
-  const dmxEngine = dmxEngineFactory({connector: dmxPortConnector, refreshIntervalMs: DMX_REFRESH_INTERVAL_MS, log});
+  const dmxEngine = dmxEngineFactory({
+    connector: dmxPortConnector,
+    refreshIntervalMs: DMX_REFRESH_INTERVAL_MS,
+    log,
+    logUniverse: config.logLevel === 'debug'
+  });
   // monotonic: a clock change on the PC (summer time, NTP) mustn't make a step wait or skip
   const chasePlayer = chasePlayerFactory({engine: dmxEngine, now: () => performance.now(), log});
 
