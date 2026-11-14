@@ -20,9 +20,6 @@ const Limitations = () => (
         <Trans>Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network.</Trans>
       </li>
       <li>
-        <Trans>Only Windows, for now.</Trans>
-      </li>
-      <li>
         <Trans>
           No fades yet for faders, presets and scenes: their values change at once; chase steps can fade in.
         </Trans>

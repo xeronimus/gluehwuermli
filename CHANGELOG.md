@@ -16,6 +16,9 @@ change bumps the minor version and everything else the patch version.
   time next to its Hold, and the All steps panel sets it for every step at once (#107)
 - The installed app writes a log file (`logs/main.log` in the data folder the Help view opens): lock, mode,
   project, port and chase events, warnings and errors, and the updater's messages, each with a timestamp (#109)
+- A macOS version: a universal dmg for Apple Silicon and Intel (macOS 13 or newer) on every release. It isn't signed by
+  Apple, so it doesn't update itself and has to be allowed once in Privacy & Security; double-clicking a .glp opens
+  it (#11)
 
 ## [0.4.0] - 2026-11-13
 

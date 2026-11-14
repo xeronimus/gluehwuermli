@@ -111,8 +111,8 @@ msgstr "A color must be a hex value like #ff00ff"
 
 #: ghpage/src/Hero.tsx
 #: ghpage/src/LandingPage.tsx
-msgid "A DMX lighting controller for Windows, for the living room, the party and the small band."
-msgstr "A DMX lighting controller for Windows, for the living room, the party and the small band."
+msgid "A DMX lighting controller for Windows and macOS, for the living room, the party and the small band."
+msgstr "A DMX lighting controller for Windows and macOS, for the living room, the party and the small band."
 
 #: src/renderer/src/components/help/topics/FixturesTopic.tsx
 msgid "A fixture is one device of your rig, e.g. a PAR or a smoke machine. In Setup mode, press <0>Add fixture</0> in the <1>Show</1> view:"
@@ -272,6 +272,10 @@ msgstr "Asking whether the app is locked…"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Black out on quit"
 msgstr "Black out on quit"
+
+#: ghpage/src/TestedHardware.tsx
+msgid "Both are tested on Windows; on macOS they aren't tested yet."
+msgstr "Both are tested on Windows; on macOS they aren't tested yet."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Buttons"
@@ -650,6 +654,10 @@ msgid "Disconnect"
 msgstr "Disconnect"
 
 #: ghpage/src/Hero.tsx
+msgid "Download for macOS"
+msgstr "Download for macOS"
+
+#: ghpage/src/Hero.tsx
 msgid "Download for Windows"
 msgstr "Download for Windows"
 
@@ -806,8 +814,8 @@ msgid "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <
 msgstr "Give the scene a <0>name</0> and tick the <1>fixtures</1> it covers. On <2>Save</2>, the current value of every channel of the ticked fixtures is stored."
 
 #: ghpage/src/LandingPage.tsx
-msgid "Glühwürmli – DMX lighting controller for Windows"
-msgstr "Glühwürmli – DMX lighting controller for Windows"
+msgid "Glühwürmli – DMX lighting controller for Windows and macOS"
+msgstr "Glühwürmli – DMX lighting controller for Windows and macOS"
 
 #: src/renderer/src/components/help/topics/SafetyNotice.tsx
 msgid "Glühwürmli comes without any warranty. It is made for private use, such as a living room, a party or a small band, not for professional shows or anything safety-critical."
@@ -906,6 +914,10 @@ msgstr "Looking up the folder…"
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "Lowest value of channel {row}"
 msgstr "Lowest value of channel {row}"
+
+#: ghpage/src/SafetyNote.tsx
+msgid "macOS Gatekeeper"
+msgstr "macOS Gatekeeper"
 
 #: src/renderer/src/components/help/UserManual.tsx
 msgid "Manual"
@@ -1156,10 +1168,6 @@ msgstr "Only the two USB interfaces above; no Art-Net, sACN or other DMX over th
 msgid "Only while held"
 msgstr "Only while held"
 
-#: ghpage/src/Limitations.tsx
-msgid "Only Windows, for now."
-msgstr "Only Windows, for now."
-
 #: src/renderer/src/components/help/DataFolderSection.tsx
 msgid "Open in Explorer"
 msgstr "Open in Explorer"
@@ -1226,8 +1234,8 @@ msgid "Pick a color"
 msgstr "Pick a color"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
-msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example)."
+msgid "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example), macOS as /dev/cu.usbserial-… ."
+msgstr "Plug in the DMX interface, an Enttec DMX USB Pro or a Eurolite USB-DMX512 PRO, and connect your fixtures to its DMX output. Windows shows it as a serial port (COM3, for example), macOS as /dev/cu.usbserial-… ."
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Position {positionNumber} of channel {row} only while held"
@@ -1255,8 +1263,8 @@ msgid "Presets ({presetCount})"
 msgstr "Presets ({presetCount})"
 
 #: src/renderer/src/components/help/topics/ConnectingTopic.tsx
-msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
-msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> once the app sends to the interface."
+msgid "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> (or /dev/cu.usbserial-…) once the app sends to the interface."
+msgstr "Press <0>Connect</0> in the top bar (or in the Settings). The status in the top bar says <1>Sending on COM3</1> (or /dev/cu.usbserial-…) once the app sends to the interface."
 
 #: src/renderer/src/components/fixtures/SceneHelp.tsx
 msgid "Pressing the scene sets these values again. Unticked fixtures are left out and stay as they are, so scenes can be layered, e.g. a colour scene for the PARs while the smoke machine keeps running."
@@ -1784,6 +1792,10 @@ msgstr "The lock only covers what the app sends. A laser can still come on witho
 #: src/renderer/src/components/fixtures/ChannelValuesField.tsx
 msgid "The lowest value of the fader; empty for {lowestValue}"
 msgstr "The lowest value of the fader; empty for {lowestValue}"
+
+#: ghpage/src/SafetyNote.tsx
+msgid "The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open <0>System Settings → Privacy & Security</0> and choose <1>Open Anyway</1> next to the message about Glühwürmli, or run <2>xattr -cr \"/Applications/Glühwürmli.app\"</2> in Terminal. It needs macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page."
+msgstr "The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open <0>System Settings → Privacy & Security</0> and choose <1>Open Anyway</1> next to the message about Glühwürmli, or run <2>xattr -cr \"/Applications/Glühwürmli.app\"</2> in Terminal. It needs macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"
