@@ -190,11 +190,13 @@ function startApp(): void {
    */
   let quitRequested = false;
   app.on('before-quit', () => {
+    log.info(`quit requested, ${BrowserWindow.getAllWindows().length} window(s) open`);
     quitRequested = true;
   });
 
   // macOS keeps the app running with its window closed, unless the window closed because the app quits
   app.on('window-all-closed', () => {
+    log.info(`all windows closed, quit requested: ${quitRequested}`);
     if (process.platform !== 'darwin' || quitRequested) {
       app.quit();
     }
@@ -207,13 +209,23 @@ function startApp(): void {
   const shutDownOutput = async () => {
     // before anything awaits: no step goes out after the blackout, or while the port closes
     services.chasePlayer.stop();
+    log.info('shutting down the DMX output before quitting');
     const {blackoutOnQuit} = await services.settings.load();
     await services.dmxEngine.dispose({blackout: blackoutOnQuit === true});
+    log.info('the DMX output is shut down');
   };
 
   // will-quit, not before-quit: the windows are closed by then, nobody sees a window that doesn't react
   app.on(
     'will-quit',
-    quitGuardFactory({shutdown: shutDownOutput, quit: () => app.quit(), timeoutMs: QUIT_TIMEOUT_MS, log})
+    quitGuardFactory({
+      shutdown: shutDownOutput,
+      quit: () => {
+        log.info('quitting');
+        app.quit();
+      },
+      timeoutMs: QUIT_TIMEOUT_MS,
+      log
+    })
   );
 }
