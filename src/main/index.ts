@@ -89,7 +89,8 @@ function startApp(): void {
   const services = createMainServices(config, {
     projectFolder: app.getPath('documents'),
     windowStateFilePath: join(dataFolder, WINDOW_STATE_FILE_NAME),
-    settingsFilePath: join(dataFolder, SETTINGS_FILE_NAME)
+    settingsFilePath: join(dataFolder, SETTINGS_FILE_NAME),
+    platform: process.platform
   });
   const {projectSession} = services;
 
