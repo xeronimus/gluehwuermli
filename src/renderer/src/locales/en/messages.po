@@ -1125,8 +1125,8 @@ msgid "No serial port found"
 msgstr "No serial port found"
 
 #: ghpage/src/Limitations.tsx
-msgid "No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel."
-msgstr "No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel."
+msgid "No sound-to-light, beat detection or timecode (tap the tempo instead); a device's own sound mode still works through its channel."
+msgstr "No sound-to-light, beat detection or timecode (tap the tempo instead); a device's own sound mode still works through its channel."
 
 #: src/renderer/src/i18n/messages/outputMessages.ts
 msgid "Not connected"
@@ -1613,8 +1613,8 @@ msgid "Steps"
 msgstr "Steps"
 
 #: ghpage/src/FeatureCards.tsx
-msgid "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click."
-msgstr "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click."
+msgid "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click, and synced to a tempo you tap."
+msgstr "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click, and synced to a tempo you tap."
 
 #: src/renderer/src/components/chases/ChaseRow.tsx
 msgid "Stop the chase {chaseName}"

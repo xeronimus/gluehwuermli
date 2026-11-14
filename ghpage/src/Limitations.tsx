@@ -40,7 +40,8 @@ const Limitations = () => (
       </li>
       <li>
         <Trans>
-          No sound-to-light, beat detection or timecode; a device's own sound mode still works through its channel.
+          No sound-to-light, beat detection or timecode (tap the tempo instead); a device's own sound mode still works
+          through its channel.
         </Trans>
       </li>
       <li>
