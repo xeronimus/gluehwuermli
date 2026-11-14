@@ -17,7 +17,7 @@ let engine: DmxEngine;
 beforeEach(() => {
   vi.useFakeTimers();
   connector = inMemoryConnectorFactory();
-  engine = dmxEngineFactory({connector, refreshIntervalMs: REFRESH_INTERVAL_MS, log: silentLog});
+  engine = dmxEngineFactory({connector, refreshIntervalMs: REFRESH_INTERVAL_MS, log: silentLog, logUniverse: false});
 });
 
 afterEach(async () => {
@@ -49,6 +49,35 @@ test('coalesces all changes between two ticks into one packet', async () => {
   expect(connector.writtenPackets).toHaveLength(2);
   expect(channelValueIn(connector.writtenPackets[1], 1)).toBe(20);
   expect(channelValueIn(connector.writtenPackets[1], 512)).toBe(255);
+});
+
+describe('the universe in the log', () => {
+  const engineLogging = async (logUniverse: boolean) => {
+    const debug = vi.fn();
+    const loggingEngine = dmxEngineFactory({
+      connector,
+      refreshIntervalMs: REFRESH_INTERVAL_MS,
+      log: {...silentLog, debug},
+      logUniverse
+    });
+    loggingEngine.setChannel(1, 255);
+    await loggingEngine.connect(SIMULATED_PORT_PATH);
+    await nextTick();
+    await loggingEngine.dispose();
+    return debug;
+  };
+
+  test('is a debug line per universe sent when asked for', async () => {
+    const debug = await engineLogging(true);
+
+    expect(debug).toHaveBeenCalledWith(`sending universe to ${SIMULATED_PORT_PATH}: 1=255`);
+  });
+
+  test('is left out otherwise', async () => {
+    const debug = await engineLogging(false);
+
+    expect(debug).not.toHaveBeenCalled();
+  });
 });
 
 test('sends nothing while nothing changes', async () => {
@@ -371,7 +400,8 @@ describe('dispose on quit', () => {
     const heldEngine = dmxEngineFactory({
       connector: heldConnector,
       refreshIntervalMs: REFRESH_INTERVAL_MS,
-      log: silentLog
+      log: silentLog,
+      logUniverse: false
     });
     heldEngine.setChannel(1, 255);
     await heldEngine.connect(SIMULATED_PORT_PATH);

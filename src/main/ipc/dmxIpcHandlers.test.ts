@@ -12,7 +12,12 @@ let engine: DmxEngine;
 
 beforeEach(() => {
   vi.useFakeTimers();
-  engine = dmxEngineFactory({connector: inMemoryConnectorFactory(), refreshIntervalMs: 25, log: silentLog});
+  engine = dmxEngineFactory({
+    connector: inMemoryConnectorFactory(),
+    refreshIntervalMs: 25,
+    log: silentLog,
+    logUniverse: false
+  });
 });
 
 afterEach(async () => {

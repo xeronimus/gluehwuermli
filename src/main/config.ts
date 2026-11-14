@@ -13,7 +13,7 @@ export interface MainEnv {
   readonly MAIN_VITE_LOG_LEVEL?: string;
 }
 
-export const LOG_LEVELS = ['error', 'warn', 'info', 'debug'] as const;
+const LOG_LEVELS = ['error', 'warn', 'info', 'debug'] as const;
 export type LogLevel = (typeof LOG_LEVELS)[number];
 
 /** the events (lock, mode, project, port, chase), without a line per universe sent */

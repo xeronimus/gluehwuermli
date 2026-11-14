@@ -76,6 +76,8 @@ export interface DmxEngineDependencies {
   connector: DmxPortConnector;
   refreshIntervalMs: number;
   log: DmxEngineLog;
+  /** a debug line per universe sent; off, the line isn't even built (up to about 43 a second) */
+  logUniverse: boolean;
 }
 
 const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
@@ -88,7 +90,7 @@ export const describeActiveChannels = (universe: Uint8Array): string => {
   return active.length === 0 ? 'all channels 0' : active.map(({channel, value}) => `${channel}=${value}`).join(' ');
 };
 
-export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineDependencies): DmxEngine {
+export function dmxEngineFactory({connector, refreshIntervalMs, log, logUniverse}: DmxEngineDependencies): DmxEngine {
   const universe = new Uint8Array(DMX_UNIVERSE_SIZE);
   const statusListeners = new Set<(status: DmxOutputStatus) => void>();
   const tickListeners = new Set<() => void>();
@@ -150,7 +152,9 @@ export function dmxEngineFactory({connector, refreshIntervalMs, log}: DmxEngineD
 
   const writeUniverse = async (target: DmxConnection) => {
     try {
-      log.debug(`sending universe to ${target.path}: ${describeActiveChannels(universe)}`);
+      if (logUniverse) {
+        log.debug(`sending universe to ${target.path}: ${describeActiveChannels(universe)}`);
+      }
       await target.write(enttecProDmxPacket(universe));
     } catch (error) {
       // a write to a port that was replaced in the meantime doesn't concern the current one

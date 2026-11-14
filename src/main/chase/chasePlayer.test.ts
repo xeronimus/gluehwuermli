@@ -58,7 +58,7 @@ const stepStatuses = () => statuses.filter((status) => status.type === 'running'
 beforeEach(async () => {
   vi.useFakeTimers();
   connector = inMemoryConnectorFactory();
-  engine = dmxEngineFactory({connector, refreshIntervalMs: TICK_MS, log: silentLog});
+  engine = dmxEngineFactory({connector, refreshIntervalMs: TICK_MS, log: silentLog, logUniverse: false});
   player = chasePlayerFactory({engine, now: () => Date.now(), log: silentLog});
   statuses = [];
   player.onStatusChanged((status) => statuses.push(status));
