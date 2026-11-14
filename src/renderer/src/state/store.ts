@@ -16,11 +16,14 @@ import {LockActions, getLockActions} from './lock/LockActions';
 import {LockState, getDefaultLockState} from './lock/LockState';
 import {OutputActions, getOutputActions} from './output/OutputActions';
 import {OutputState, getDefaultOutputState} from './output/OutputState';
+import {TempoActions, getTempoActions} from './tempo/TempoActions';
+import {TempoState, getDefaultTempoState} from './tempo/TempoState';
 
-export interface AppState extends ChannelsState, OutputState, FixturesState, DataFolderState, LockState, ChaseState {}
+export interface AppState
+  extends ChannelsState, OutputState, FixturesState, DataFolderState, LockState, ChaseState, TempoState {}
 
 export interface AppActions
-  extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions, LockActions, ChaseActions {}
+  extends ChannelsActions, OutputActions, FixturesActions, DataFolderActions, LockActions, ChaseActions, TempoActions {}
 
 export interface AppStore extends AppState, AppActions {}
 
@@ -31,7 +34,8 @@ const innerUseAppStore = combine(
     ...getDefaultFixturesState(),
     ...getDefaultDataFolderState(),
     ...getDefaultLockState(),
-    ...getDefaultChaseState()
+    ...getDefaultChaseState(),
+    ...getDefaultTempoState()
   },
 
   (set) => ({
@@ -40,7 +44,8 @@ const innerUseAppStore = combine(
     ...getFixturesActions(set),
     ...getDataFolderActions(set),
     ...getLockActions(set),
-    ...getChaseActions(set)
+    ...getChaseActions(set),
+    ...getTempoActions(set)
   })
 );
 

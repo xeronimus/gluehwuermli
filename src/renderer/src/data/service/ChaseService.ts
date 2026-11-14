@@ -1,4 +1,4 @@
-import type {ChaseStatus} from '@shared/ipc';
+import type {ChaseSpeed, ChaseStatus, ChaseSyncStatus} from '@shared/ipc';
 
 /**
  * The renderer's access to the chase player, in the main process, which plays the chases as saved in the open project.
@@ -14,4 +14,11 @@ export default interface ChaseService {
   stop: () => Promise<ChaseStatus>;
   /** on every step and on start, pause, resume, stop and finish; returns the function that removes the listener again */
   onStatusChanged: (listener: (status: ChaseStatus) => void) => () => void;
+  /** the chases whose sync or speed differ from the default (not synced, 1×) */
+  getSync: () => Promise<ChaseSyncStatus>;
+  /** turning it on without a tempo changes nothing */
+  setSync: (chaseId: string, synced: boolean) => Promise<ChaseSyncStatus>;
+  setSpeed: (chaseId: string, speed: ChaseSpeed) => Promise<ChaseSyncStatus>;
+  /** whenever a chase's sync or speed changes; returns the function that removes the listener again */
+  onSyncChanged: (listener: (status: ChaseSyncStatus) => void) => () => void;
 }

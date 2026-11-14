@@ -1,4 +1,4 @@
-import {parseChaseStatus} from '@shared/ipc';
+import {parseChaseStatus, parseChaseSyncStatus} from '@shared/ipc';
 import type {PreloadBridge} from '@shared/preloadBridge';
 
 import type ChaseService from '@/data/service/ChaseService';
@@ -16,6 +16,18 @@ export const electronChaseServiceFactory = (bridge: PreloadBridge): ChaseService
       const status = parseChaseStatus(payload);
       if (!status) {
         logger.warn('dropped invalid chase status', payload);
+        return;
+      }
+      listener(status);
+    }),
+  getSync: () => bridge.getChaseSync(),
+  setSync: (chaseId, synced) => bridge.setChaseSync(chaseId, synced),
+  setSpeed: (chaseId, speed) => bridge.setChaseSpeed(chaseId, speed),
+  onSyncChanged: (listener) =>
+    bridge.onChaseSyncChanged((payload) => {
+      const status = parseChaseSyncStatus(payload);
+      if (!status) {
+        logger.warn('dropped invalid chase sync status', payload);
         return;
       }
       listener(status);

@@ -8,6 +8,8 @@ import {
   CHASE_HOLD_MAX_MS,
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
+  CHASE_REFERENCE_BPM_MAX,
+  CHASE_REFERENCE_BPM_MIN,
   CHASE_REPEAT_MAX,
   CHASE_REPEAT_MIN,
   CHASE_STEPS_MAX
@@ -30,6 +32,11 @@ export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
       const minRepeat = CHASE_REPEAT_MIN;
       const maxRepeat = CHASE_REPEAT_MAX;
       return msg`A chase can be played from ${minRepeat} to ${maxRepeat} times`;
+    }
+    case 'chase-reference-bpm-invalid': {
+      const minBpm = CHASE_REFERENCE_BPM_MIN;
+      const maxBpm = CHASE_REFERENCE_BPM_MAX;
+      return msg`The tempo must be a whole number from ${minBpm} to ${maxBpm} BPM`;
     }
     case 'chase-steps-missing':
       return msg`The chase needs at least one step`;

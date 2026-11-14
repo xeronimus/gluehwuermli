@@ -1,5 +1,12 @@
 import {passCount} from '@shared/chases';
-import type {Chase, ChaseRepeat, ChaseStatus} from '@shared/ipc';
+import {
+  CHASE_SPEED_DEFAULT,
+  type Chase,
+  type ChaseRepeat,
+  type ChaseSpeed,
+  type ChaseStatus,
+  type ChaseSyncStatus
+} from '@shared/ipc';
 
 /**
  * What a chase's row in the Show view shows, from the chase and the player's status in main. Numbers and codes only,
@@ -32,6 +39,22 @@ export function repeatLabel(repeat: ChaseRepeat): string {
   const passes = passCount(repeat);
   return Number.isFinite(passes) ? `${passes}×` : '∞';
 }
+
+/** a chase row's sync switch and speed: as main keeps them, else not synced at 1× */
+export interface ChaseSyncShown {
+  readonly synced: boolean;
+  readonly speed: ChaseSpeed;
+}
+
+export function syncSettingOf(chaseSync: ChaseSyncStatus, chaseId: string): ChaseSyncShown {
+  const setting = chaseSync.chases.find((chase) => chase.chaseId === chaseId);
+  return setting === undefined
+    ? {synced: false, speed: CHASE_SPEED_DEFAULT}
+    : {synced: setting.synced, speed: setting.speed};
+}
+
+/** a speed as its button shows it: `½×`, `1×`, `2×` or `4×`, the same in every language */
+export const speedLabel = (speed: ChaseSpeed): string => `${speed === 0.5 ? '½' : speed}×`;
 
 /** the row of this chase while the player has that status; a status of a chase the project doesn't list dims no row */
 export function chaseRowState(chase: Chase, status: ChaseStatus, chases: readonly Chase[]): ChaseRowState {
