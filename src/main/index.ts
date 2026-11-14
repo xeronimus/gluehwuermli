@@ -15,6 +15,7 @@ import {registerLockIpc} from './ipc/registerLockIpc';
 import {registerProjectIpc} from './ipc/registerProjectIpc';
 import log, {configureLog} from './log';
 import {projectPathFromArgv} from './project/commandLine';
+import {openFileRequestsFactory} from './project/openFileRequests';
 import {windowTitleOf} from './project/windowTitle';
 import {quitGuardFactory} from './quit/quitGuard';
 import {createMainServices} from './services';
@@ -94,8 +95,21 @@ function startApp(): void {
   });
   const {projectSession} = services;
 
+  /**
+   * macOS hands a double-clicked .glp over as `open-file`, also before `ready` when the double-click starts the app;
+   * registered right away, so none is missed. preventDefault: the app opens the file itself
+   */
+  const openFileRequests = openFileRequestsFactory();
+  app.on('open-file', (event, path) => {
+    event.preventDefault();
+    openFileRequests.received(path);
+  });
+
+  /** the window being opened: an open-file and a dock click at the same time open one window, not two */
+  let windowOpening: Promise<void> | undefined;
+
   /** where it was last time, if that is still on a connected display; screen is only available once the app is ready */
-  async function openMainWindow(): Promise<void> {
+  async function createWindowAtSavedPlace(): Promise<void> {
     const savedState = await services.windowStateStore.load();
     const displayWorkAreas = screen.getAllDisplays().map((display) => display.workArea);
     const window = createMainWindow(
@@ -105,12 +119,33 @@ function startApp(): void {
     persistWindowState(window, services.windowStateStore, log);
   }
 
-  app.on('second-instance', (_event, argv, workingDirectory) => {
+  function openMainWindow(): Promise<void> {
+    windowOpening ??= createWindowAtSavedPlace().finally(() => {
+      windowOpening = undefined;
+    });
+    return windowOpening;
+  }
+
+  function focusMainWindow(): void {
     const [window] = BrowserWindow.getAllWindows();
     if (window?.isMinimized()) {
       window.restore();
     }
     window?.focus();
+  }
+
+  /** on macOS the app keeps running with its window closed: the project is opened in a new one */
+  async function requestOpenInWindow(projectPath: string): Promise<void> {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      await openMainWindow();
+    } else {
+      focusMainWindow();
+    }
+    projectSession.requestOpen(projectPath);
+  }
+
+  app.on('second-instance', (_event, argv, workingDirectory) => {
+    focusMainWindow();
     const projectPath = projectPathFromArgv(argv, workingDirectory);
     if (projectPath !== undefined) {
       projectSession.requestOpen(projectPath);
@@ -123,7 +158,7 @@ function startApp(): void {
 
   void app.whenReady().then(async () => {
     // the project's channel locks apply before anything can be connected, so the output is capped from its first packet
-    await projectSession.start(projectPathFromArgv(process.argv, process.cwd()));
+    await projectSession.start(openFileRequests.takeStartPath() ?? projectPathFromArgv(process.argv, process.cwd()));
     registerDmxIpc(services.dmxEngine, services.dmxPortConnector, services.portMemory, services.chasePlayer);
     registerProjectIpc(projectSession, projectIpcHandlers(projectSession));
     registerAppIpc(
@@ -135,6 +170,8 @@ function startApp(): void {
     registerLockIpc(services.appLock);
     registerChaseIpc(services.chasePlayer, chaseIpcHandlers(services.chasePlayer, projectSession));
     void openMainWindow();
+    // registerProjectIpc listens for open requests by now, so the renderer gets them
+    openFileRequests.forwardTo((projectPath) => void requestOpenInWindow(projectPath));
     // once per start, in the background: a newer release is installed when the app quits, never during a show
     void services.autoUpdate.check();
 
