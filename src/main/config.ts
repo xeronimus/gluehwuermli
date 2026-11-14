@@ -25,7 +25,10 @@ export interface MainConfig {
   logLevel: LogLevel;
   /** only an installed app writes a log file: unpackaged, the terminal shows it all */
   logToFile: boolean;
-  /** only an installed app updates itself: unpackaged, there is no app-update.yml and nothing to replace */
+  /**
+   * only an installed Windows app updates itself: unpackaged, there is no app-update.yml and nothing to replace; on
+   * macOS, Squirrel.Mac refuses an app without a Developer ID signature, so it would fail on every start
+   */
   autoUpdate: boolean;
 }
 
@@ -36,11 +39,14 @@ const isLogLevel = (value: string | undefined): value is LogLevel => LOG_LEVELS.
 /** an unknown level falls back to the default rather than silencing the log */
 const logLevelOf = (value: string | undefined): LogLevel => (isLogLevel(value) ? value : DEFAULT_LOG_LEVEL);
 
-export const mainConfigOf = (env: MainEnv, isPackaged: boolean): MainConfig => ({
+const MACOS: NodeJS.Platform = 'darwin';
+
+export const mainConfigOf = (env: MainEnv, isPackaged: boolean, platform: NodeJS.Platform): MainConfig => ({
   simulatedOutput: env.MAIN_VITE_SIMULATED_OUTPUT === ENABLED,
   logLevel: logLevelOf(env.MAIN_VITE_LOG_LEVEL),
   logToFile: isPackaged,
-  autoUpdate: isPackaged
+  autoUpdate: isPackaged && platform !== MACOS
 });
 
-export const loadMainConfig = (isPackaged: boolean): MainConfig => mainConfigOf(import.meta.env, isPackaged);
+export const loadMainConfig = (isPackaged: boolean, platform: NodeJS.Platform): MainConfig =>
+  mainConfigOf(import.meta.env, isPackaged, platform);

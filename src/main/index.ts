@@ -71,7 +71,7 @@ function createMainWindow(placement: WindowPlacement, title: string): BrowserWin
   return window;
 }
 
-const config = loadMainConfig(app.isPackaged);
+const config = loadMainConfig(app.isPackaged, process.platform);
 configureLog({consoleLevel: config.logLevel, logToFile: config.logToFile});
 
 /**
