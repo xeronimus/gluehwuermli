@@ -137,6 +137,54 @@ test('a late synced start on a chase with a short step 1 lands on step 2 without
   expect(engine.channelValue(STROBE)).toBe(2);
 });
 
+/** when the player first set a value since this was called */
+const firstAppliedAt = () => {
+  const applied: number[] = [];
+  player.onValuesApplied(() => applied.push(Date.now()));
+  return () => applied[0];
+};
+
+test('an early synced start: step 1 waits for the coming beat, nothing is sent before', async () => {
+  await tapTempo(120);
+  const downbeatMs = Date.now();
+  player.setSync('alternation', true);
+  const firstApplied = firstAppliedAt();
+  // 0.3 beat before the beat at +500
+  await advance(350);
+
+  player.start(alternation);
+  await advance(140);
+  expect(firstApplied()).toBeUndefined();
+  expect(engine.channelValue(STROBE)).toBe(0);
+  await advance(700);
+
+  expect((firstApplied() ?? Number.NaN) - (downbeatMs + 500)).toBeLessThanOrEqual(TICK_MS);
+  expect(firstApplied()).toBeGreaterThanOrEqual(downbeatMs + 500);
+  expectStepWithinATickOf(1, 0, downbeatMs + 1000);
+});
+
+test('paused while waiting for its beat 0: Resume starts it again on the nearest beat', async () => {
+  await tapTempo(120);
+  const downbeatMs = Date.now();
+  player.setSync('alternation', true);
+  const firstApplied = firstAppliedAt();
+  await advance(350);
+  player.start(alternation);
+  await advance(50);
+
+  player.pause();
+  await advance(1000);
+  // at +1400: the nearest beat is at +1500
+  player.resume();
+  await advance(80);
+  expect(firstApplied()).toBeUndefined();
+  await advance(600);
+
+  expect(firstApplied()).toBeGreaterThanOrEqual(downbeatMs + 1500);
+  expect((firstApplied() ?? Number.NaN) - (downbeatMs + 1500)).toBeLessThanOrEqual(TICK_MS);
+  expectStepWithinATickOf(1, 0, downbeatMs + 2000);
+});
+
 test('sync on mid-step: the step ends on the next beat, then the steps play scaled', async () => {
   await tapTempo(100);
   const downbeatMs = Date.now();

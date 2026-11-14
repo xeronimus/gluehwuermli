@@ -125,9 +125,10 @@ steps of 4, 1, ½ and 2 beats). A synced chase keeps that rhythm: it scales **ev
   where it would end at the new rate, never at or before now, and only on a point that leaves at least half of its
   rest: the rest plays at most 2× faster, a fade never snaps, and the step may end up to a grid beat later than its
   natural end. From there the steps play at the synced rate. A 4-beat step just begun isn't squeezed into one beat.
-- **Synced start:** at once, with the chase's beat 0 on the nearest grid point, up to half a beat before or after the
-  click. Pressed late, step 1 is that much shorter (a step shorter than that is played and replaced in the same
-  packet, as a stalled tick does); pressed early, step 1 holds at its start that much longer. No waiting for a beat.
+- **Synced start:** the chase's beat 0 on the nearest grid point, up to half a beat before or after the click.
+  Pressed late, step 1 begins at once and is that much shorter (a step shorter than that is played and replaced in
+  the same packet, as a stalled tick does); pressed early, step 1 begins on the beat, nothing is sent before it, so a
+  hit lands on the beat. Paused before its beat 0, Resume starts the chase again on the nearest grid point.
 - **Sync off:** the chase goes on from where it is at its own milliseconds.
 - **Settings:** main keeps the switch and the speed per chase id while the app runs, across Stop, Emergency off and
   project switches; never saved. Turning sync on without a tempo does nothing. Unsynced, the speed is kept but has no

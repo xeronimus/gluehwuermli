@@ -67,8 +67,9 @@ const ChasesTopic = () => (
         chase written at 120 BPM plays at 100 BPM with each fade and hold 1.2 times as long. The tempo a chase is
         written at is set in the chase editor, 120 BPM unless set. Turned on while the chase plays, the current step
         ends on a beat and the steps after it play to the tempo; a new tempo or speed does the same. Turned off, the
-        chase goes on from the current step with its own times. A synced chase starts at once, on the nearest beat.
-        Pause, Resume and Stop keep the switch and the speed until the app is closed; the switch needs a tempo.
+        chase goes on from the current step with its own times. A synced chase starts on the nearest beat, at most half
+        a beat after the click. Pause, Resume and Stop keep the switch and the speed until the app is closed; the switch
+        needs a tempo.
       </Trans>
     </p>
     <p>

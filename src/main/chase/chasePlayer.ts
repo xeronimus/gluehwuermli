@@ -36,7 +36,10 @@ export type ChasePlayerStatus = ChaseStatus;
  * the app runs, across Stop, Emergency off and project switches, and never saved.
  */
 export interface ChasePlayer {
-  /** step 1, first pass; a chase already running or paused is stopped first, its values stay */
+  /**
+   * step 1, first pass; a chase already running or paused is stopped first, its values stay. Synced, step 1 begins on
+   * the nearest beat: at once when that beat has just passed, on the beat when it is still ahead
+   */
   start: (chase: Chase) => void;
   /**
    * keeps the step the clock is at (one due since the last tick is played first) and its values; nothing while no
@@ -100,6 +103,8 @@ interface PlayingState {
   readonly chase: Chase;
   readonly position: StepPosition;
   readonly fade: ActiveFade;
+  /** false while a synced start waits for its beat 0: step 1 has set nothing yet */
+  readonly begun: boolean;
 }
 
 type RunningState = {readonly type: 'running'; readonly clock: ChaseClock} & PlayingState;
@@ -155,7 +160,7 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
       : resyncedClock(chase, followed, syncSettingOf(chase.id).speed, now(), chaseMs);
   };
 
-  /** synced, the chase's beat 0 on the nearest beat */
+  /** synced, the chase's beat 0 on the nearest beat; it may still be ahead */
   const startClock = (chase: Chase): ChaseClock => {
     const followed = followedTempo(chase.id);
     return followed === undefined
@@ -252,11 +257,20 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
     }
   };
 
-  /** the chase on the tick: the fade moved on, the steps since the last tick played, or the chase finished */
+  /**
+   * the chase on the tick: step 1 begun once its beat 0 has come, the fade moved on, the steps since the last tick
+   * played, or the chase finished
+   */
   const advanceRunning = (running: RunningState) => {
-    const {chase, clock, position, fade} = running;
-    const current = chasePosition(chase, chaseMsAt(clock, now()));
+    const {chase, clock, position} = running;
+    const chaseMs = chaseMsAt(clock, now());
+    if (!running.begun && chaseMs < 0) {
+      return;
+    }
     const applied = new Set<number>();
+    // a fading step 1 starts from what the universe holds on beat 0
+    const fade = running.begun ? running.fade : beginStep(chase, FIRST_STEP.stepIndex, 0, applied);
+    const current = chasePosition(chase, chaseMs);
     if (current.type === 'finished') {
       continueFade(fade, 1, applied);
       applyStepsUpTo(chase, position, lastPosition(chase), applied);
@@ -269,7 +283,7 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
       const nextFade = continueFade(fade, current.fadeProgress, applied);
       reportApplied(applied);
       // the same step: no status, a tick that only moves a fade is no news to the chase rows
-      state = {...running, fade: nextFade};
+      state = {...running, fade: nextFade, begun: true};
       return;
     }
     // the step before ends at its values, so the new one fades from there, never from partway
@@ -278,7 +292,7 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
     const nextFade = beginStep(chase, current.stepIndex, current.fadeProgress, applied);
     reportApplied(applied);
     const nextPosition = {stepIndex: current.stepIndex, passIndex: current.passIndex};
-    setState({type: 'running', chase, clock, position: nextPosition, fade: nextFade});
+    setState({type: 'running', chase, clock, position: nextPosition, fade: nextFade, begun: true});
   };
 
   const advance = () => {
@@ -287,10 +301,14 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
     }
   };
 
+  /** the clock of a chase going on from `chaseMs`; one still waiting for its beat 0 starts again on the nearest beat */
+  const clockOf = (playing: PlayingState, chaseMs: number): ChaseClock =>
+    playing.begun ? clockFrom(playing.chase, chaseMs) : startClock(playing.chase);
+
   /** the running chase on a new clock at the chase time it is at now */
   const reclocked = (running: RunningState): RunningState => ({
     ...running,
-    clock: clockFrom(running.chase, chaseMsAt(running.clock, now()))
+    clock: clockOf(running, chaseMsAt(running.clock, now()))
   });
 
   /**
@@ -331,12 +349,14 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
 
   return {
     start: (chase) => {
+      const clock = startClock(chase);
+      const begun = chaseMsAt(clock, now()) >= 0;
       const applied = new Set<number>();
-      // a fading step 1 starts from what the universe holds at Start
-      const fade = beginStep(chase, FIRST_STEP.stepIndex, 0, applied);
+      // a fading step 1 starts from what the universe holds at Start; one waiting for its beat 0 begins on a tick
+      const fade = begun ? beginStep(chase, FIRST_STEP.stepIndex, 0, applied) : NO_FADE;
       reportApplied(applied);
       log.info(`started the chase ${chase.name}`);
-      setState({type: 'running', chase, clock: startClock(chase), position: FIRST_STEP, fade});
+      setState({type: 'running', chase, clock, position: FIRST_STEP, fade, begun});
     },
     pause: () => {
       // a step whose time came since the last tick plays first: the paused step is the one the clock is at
@@ -344,16 +364,16 @@ export function chasePlayerFactory({engine, tempo, now, log}: ChasePlayerDepende
       if (state.type !== 'running') {
         return;
       }
-      const {chase, position, fade, clock} = state;
-      setState({type: 'paused', chase, chaseMs: chaseMsAt(clock, now()), position, fade});
+      const {chase, position, fade, begun, clock} = state;
+      setState({type: 'paused', chase, chaseMs: chaseMsAt(clock, now()), position, fade, begun});
     },
     resume: () => {
       if (state.type !== 'paused') {
         return;
       }
-      const {chase, position, fade, chaseMs} = state;
+      const {chase, position, fade, begun, chaseMs} = state;
       // synced, the paused step ends on the beat
-      setState({type: 'running', chase, clock: clockFrom(chase, chaseMs), position, fade});
+      setState({type: 'running', chase, clock: clockOf(state, chaseMs), position, fade, begun});
     },
     stop: () => {
       if (state.type === 'idle') {
