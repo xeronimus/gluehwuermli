@@ -119,8 +119,8 @@ How code is written in Glühwürmli. What the app is, its architecture and its p
 ## Commits and branches
 
 - **Branches** are named `<issuenr>-description`, e.g. `1-add-fixtures`.
-- **Reference the issue** in the commit message (e.g. `Refs #12`). Small tweaks without their own issue use `Refs #7`,
-  the chore issue that is never closed.
+- **Reference the issue** in the commit message (e.g. `Refs #12`). Every change has an issue: a small chore or UI tweak
+  gets a small issue of its own, with fitting labels.
 
 ## Post-task review
 
