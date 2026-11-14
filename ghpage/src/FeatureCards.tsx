@@ -29,8 +29,8 @@ const FeatureCards = () => {
       title: t`Chases`,
       text: (
         <Trans>
-          Steps of channel values played one after the other, each held as long as you like; started, paused and stopped
-          with a click.
+          Steps of channel values played one after the other, each fading in and held as long as you like; started,
+          paused and stopped with a click.
         </Trans>
       )
     },

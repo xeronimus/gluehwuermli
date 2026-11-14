@@ -16,7 +16,8 @@ interface, set up your devices once, then play them with faders and buttons.
 - **Fixtures and presets:** name your devices and their channels, give a channel a color, and set several channels at
   once with a preset button
 - **Scenes:** one button sets the channels of several fixtures at once
-- **Chases:** steps of channel values played one after the other, started, paused and stopped with a click
+- **Chases:** steps of channel values played one after the other, each fading in and held as long as you like,
+  started, paused and stopped with a click
 - **Show mode and Setup mode:** the app starts in Show mode, where everything can be played and nothing changed; a
   password unlocks Setup mode
 - **Channel caps:** a channel, e.g. a laser's, can be capped while the channel lock is on; only the password lifts it

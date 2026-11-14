@@ -1585,8 +1585,8 @@ msgid "Steps"
 msgstr "Steps"
 
 #: ghpage/src/FeatureCards.tsx
-msgid "Steps of channel values played one after the other, each held as long as you like; started, paused and stopped with a click."
-msgstr "Steps of channel values played one after the other, each held as long as you like; started, paused and stopped with a click."
+msgid "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click."
+msgstr "Steps of channel values played one after the other, each fading in and held as long as you like; started, paused and stopped with a click."
 
 #: src/renderer/src/components/chases/ChaseRow.tsx
 msgid "Stop the chase {chaseName}"

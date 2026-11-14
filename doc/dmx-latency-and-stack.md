@@ -78,7 +78,7 @@ For this app, yes. The options:
 - **Wails (Go), Neutralino**: workable, but they add nothing here.
 
 The split between UI and engine keeps the options open: the `DmxEngine` in the main process owns the universe, the
-port and (later) the fade/chase timing, and the UI talks to it only over the narrow IPC API in `src/shared/`. Adding
+port and the chase timing with its fades, and the UI talks to it only over the narrow IPC API in `src/shared/`. Adding
 Art-Net/sACN output (another `DmxPortConnector`), or moving the engine to Tauri, doesn't touch the UI.
 
 ## Open questions
@@ -88,6 +88,7 @@ Art-Net/sACN output (another `DmxPortConnector`), or moving the engine to Tauri,
   most 2 s, so a hanging port can't keep the app open). The setting **Black out on quit** (off by default) sends an
   all-zero universe first, bypassing the tick, and waits until it has been written. An unplugged widget or a crash of
   the main process still leaves the rig with its last look.
-- **Fades and chases** will run as timers in the main process, like the refresh tick. `setInterval` there has a
-  jitter of a few ms, which is fine for lighting. If it ever isn't, move the engine to a `utilityProcess` or a worker
+- **Fades and chases** run on the engine's refresh tick in the main process (chases and their step fades since #73 and
+  #107; fades for faders, presets and scenes will too). `setInterval` there has a jitter of a few ms, which is fine for
+  lighting; a fade's values come from the clock, so a late tick doesn't stretch it. If it ever isn't, move the engine to a `utilityProcess` or a worker
   thread.
