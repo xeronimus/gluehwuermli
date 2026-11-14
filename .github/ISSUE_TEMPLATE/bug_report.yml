@@ -1,0 +1,70 @@
+name: Bug report
+description: Something in Glühwürmli doesn't work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please check the [open issues](https://github.com/xeronimus/gluehwuermli/issues) first, maybe it's already known.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a project with …
+        2. In Show mode, press …
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Glühwürmli version
+      description: Shown in the bottom left corner of the app window.
+      placeholder: e.g. 0.4.0
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: DMX interface
+      options:
+        - Enttec DMX USB Pro
+        - Eurolite USB-DMX512 PRO
+        - Other
+        - None (not connected)
+    validations:
+      required: true
+  - type: textarea
+    id: fixtures
+    attributes:
+      label: Fixtures involved
+      description: Which fixtures (make and model) and which DMX mode, if the bug is about a fixture or its output.
+  - type: textarea
+    id: log
+    attributes:
+      label: Log
+      description: |
+        The installed app writes `logs/main.log` in its data folder (the Help view shows where it is). Paste the lines from around the time the bug happened.
+      render: text
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, a project file (`.glp`) that shows the problem, …

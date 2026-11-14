@@ -1,0 +1,25 @@
+name: Feature request
+description: An idea for something Glühwürmli should do
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Glühwürmli is made for private use (living room, party, small band), not for professional shows. Please check the [open issues](https://github.com/xeronimus/gluehwuermli/issues) first, maybe the idea is already there.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to do?
+      description: The situation and what's missing or hard today. A concrete example (your rig, your show) helps most.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: How could it work?
+      description: Your idea of how it could look or behave in the app.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: How do you do it today?
+      description: Workarounds or other apps you use for it.
