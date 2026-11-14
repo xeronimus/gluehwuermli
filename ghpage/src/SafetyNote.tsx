@@ -25,7 +25,7 @@ const SafetyNote = () => (
       <Trans>
         The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open{' '}
         <strong>System Settings → Privacy &amp; Security</strong> and choose <strong>Open Anyway</strong> next to the
-        message about Glühwürmli, or run <code>xattr -cr "/Applications/Glühwürmli.app"</code> in Terminal. It needs
+        message about Glühwürmli, or run <code>xattr -cr "/Applications/gluehwuermli.app"</code> in Terminal. It needs
         macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page.
       </Trans>
     </p>

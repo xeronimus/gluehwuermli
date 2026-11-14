@@ -1794,8 +1794,8 @@ msgid "The lowest value of the fader; empty for {lowestValue}"
 msgstr "Der tiefste Wert des Faders; leer für {lowestValue}"
 
 #: ghpage/src/SafetyNote.tsx
-msgid "The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open <0>System Settings → Privacy & Security</0> and choose <1>Open Anyway</1> next to the message about Glühwürmli, or run <2>xattr -cr \"/Applications/Glühwürmli.app\"</2> in Terminal. It needs macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page."
-msgstr "Die Mac-App ist nicht von Apple signiert, darum öffnet macOS sie beim ersten Mal nicht. Öffne <0>Systemeinstellungen → Datenschutz & Sicherheit</0> und wähle neben der Meldung zu Glühwürmli <1>Dennoch öffnen</1>, oder führ im Terminal <2>xattr -cr \"/Applications/Glühwürmli.app\"</2> aus. Sie braucht macOS 13 Ventura oder neuer und aktualisiert sich nicht selbst: Lade eine neue Version von der Release-Seite herunter."
+msgid "The Mac app isn't signed by Apple, so macOS refuses to open it the first time. Open <0>System Settings → Privacy & Security</0> and choose <1>Open Anyway</1> next to the message about Glühwürmli, or run <2>xattr -cr \"/Applications/gluehwuermli.app\"</2> in Terminal. It needs macOS 13 Ventura or newer, and it doesn't update itself: download a new version from the releases page."
+msgstr "Die Mac-App ist nicht von Apple signiert, darum öffnet macOS sie beim ersten Mal nicht. Öffne <0>Systemeinstellungen → Datenschutz & Sicherheit</0> und wähle neben der Meldung zu Glühwürmli <1>Dennoch öffnen</1>, oder führ im Terminal <2>xattr -cr \"/Applications/gluehwuermli.app\"</2> aus. Sie braucht macOS 13 Ventura oder neuer und aktualisiert sich nicht selbst: Lade eine neue Version von der Release-Seite herunter."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The maximum while locked must be a whole number from {minValue} to {maxValue}"

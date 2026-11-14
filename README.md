@@ -66,7 +66,7 @@ interrupted.
 [latest release](https://github.com/xeronimus/gluehwuermli/releases/latest), open it and drag Glühwürmli to
 Applications. The app isn't signed by Apple, so macOS refuses to open it the first time: open **System Settings →
 Privacy & Security** and choose **Open Anyway** next to the message about Glühwürmli, or run
-`xattr -cr "/Applications/Glühwürmli.app"` in Terminal. The Mac app doesn't update itself: download a new version from
+`xattr -cr "/Applications/gluehwuermli.app"` in Terminal. The Mac app doesn't update itself: download a new version from
 the releases page and replace the old one in Applications. Closing its window leaves the app and the DMX output
 running, as macOS apps do; quit it with ⌘Q.
 

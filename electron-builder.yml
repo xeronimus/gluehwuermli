@@ -29,6 +29,13 @@ mac:
   # serialport's macOS prebuild is a universal binary already, the same file in both builds: @electron/universal
   # refuses to merge an identical Mach-O file unless it is named here
   x64ArchFiles: '**/node_modules/@serialport/bindings-cpp/prebuilds/darwin-x64+arm64/*.node'
+  # the bundle is named gluehwuermli (`pnpm dist:mac` sets productName, which can't be set per platform here):
+  # electron-builder names the helper apps in NFD, Electron finds them by the NFC name from the Info.plist, and its
+  # check before launching a helper compares the two byte for byte, so an "ü" crashes the app on start. app.name (and
+  # with it the data folder) comes from package.json and is gluehwuermli on both systems anyway. Electron reads
+  # CFBundleName, never CFBundleDisplayName, so the name shown keeps its umlauts
+  extendInfo:
+    CFBundleDisplayName: Glühwürmli
 dmg:
   # ASCII only: GitHub renames release assets with an "ü"
   artifactName: gluehwuermli-${version}-mac.${ext}
