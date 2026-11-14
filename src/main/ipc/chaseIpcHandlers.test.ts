@@ -4,6 +4,7 @@ import type {Chase, ProjectStatus} from '@shared/ipc';
 import {type ChasePlayer, chasePlayerFactory} from '@/chase/chasePlayer';
 import {type DmxEngine, dmxEngineFactory} from '@/dmx/dmxEngine';
 import {inMemoryConnectorFactory} from '@/dmx/impl/inMemory/inMemoryConnectorFactory';
+import {type TempoClock, tempoClockFactory} from '@/tempo/tempoClock';
 
 import {type ChaseIpcHandlers, chaseIpcHandlers} from './chaseIpcHandlers';
 
@@ -23,6 +24,7 @@ const projectWith = (chases: Chase[]): ProjectStatus => ({
 
 let projectStatus: ProjectStatus;
 let engine: DmxEngine;
+let tempo: TempoClock;
 let player: ChasePlayer;
 let handlers: ChaseIpcHandlers;
 
@@ -35,7 +37,8 @@ beforeEach(() => {
     log: silentLog,
     logUniverse: false
   });
-  player = chasePlayerFactory({engine, now: () => Date.now(), log: silentLog});
+  tempo = tempoClockFactory({now: () => Date.now(), log: silentLog});
+  player = chasePlayerFactory({engine, tempo, now: () => Date.now(), log: silentLog});
   handlers = chaseIpcHandlers(player, {status: () => projectStatus});
 });
 
@@ -53,7 +56,9 @@ test('starts the chase saved in the open project with that id', async () => {
     type: 'running',
     chaseId: 'strobe',
     stepIndex: 0,
-    passIndex: 0
+    passIndex: 0,
+    synced: false,
+    speed: 1
   });
   expect(engine.channelValue(30)).toBe(255);
 });
@@ -72,6 +77,32 @@ test('refuses an unknown id, an invalid request and a start without a project', 
   projectStatus = {type: 'none'};
   await expect(handlers.start({chaseId: 'strobe'})).rejects.toThrow('no chase strobe');
   expect(handlers.status()).toEqual({type: 'idle'});
+});
+
+test('set-sync and set-speed answer the sync status, without asking the project or the mode', async () => {
+  tempo.tap();
+  vi.advanceTimersByTime(500);
+  tempo.tap();
+  vi.advanceTimersByTime(500);
+  tempo.tap();
+  vi.advanceTimersByTime(500);
+  tempo.tap();
+  projectStatus = {type: 'none'};
+
+  expect(await handlers.setSync({chaseId: 'smoke', synced: true})).toEqual({
+    chases: [{chaseId: 'smoke', synced: true, speed: 1}]
+  });
+  expect(await handlers.setSpeed({chaseId: 'smoke', speed: 2})).toEqual({
+    chases: [{chaseId: 'smoke', synced: true, speed: 2}]
+  });
+  expect(handlers.syncStatus()).toEqual({chases: [{chaseId: 'smoke', synced: true, speed: 2}]});
+});
+
+test('refuses an invalid set-sync or set-speed request', async () => {
+  await expect(handlers.setSync({chaseId: '', synced: true})).rejects.toThrow('invalid set-chase-sync request');
+  await expect(handlers.setSync({chaseId: 'strobe'})).rejects.toThrow('invalid set-chase-sync request');
+  await expect(handlers.setSpeed({chaseId: 'strobe', speed: 3})).rejects.toThrow('invalid set-chase-speed request');
+  expect(handlers.syncStatus()).toEqual({chases: []});
 });
 
 test('pause, resume and stop answer the status they leave', async () => {

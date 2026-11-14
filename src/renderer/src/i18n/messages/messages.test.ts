@@ -101,6 +101,9 @@ describe('chase errors in English', () => {
     expect(translate(chaseErrorMessage({type: 'chase-repeat-invalid'}))).toBe(
       'A chase can be played from 2 to 99 times'
     );
+    expect(translate(chaseErrorMessage({type: 'chase-reference-bpm-invalid'}))).toBe(
+      'The tempo must be a whole number from 20 to 300 BPM'
+    );
   });
 });
 

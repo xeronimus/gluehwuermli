@@ -83,7 +83,7 @@ const createSession = () =>
       status: () =>
         runningChaseId === undefined
           ? {type: 'idle'}
-          : {type: 'running', chaseId: runningChaseId, stepIndex: 0, passIndex: 0},
+          : {type: 'running', chaseId: runningChaseId, stepIndex: 0, passIndex: 0, synced: false, speed: 1},
       stop: () => {
         runningChaseId = undefined;
         chaseStops.push(engineCalls.length);

@@ -30,7 +30,7 @@ const FeatureCards = () => {
       text: (
         <Trans>
           Steps of channel values played one after the other, each fading in and held as long as you like; started,
-          paused and stopped with a click.
+          paused and stopped with a click, and synced to a tempo you tap.
         </Trans>
       )
     },

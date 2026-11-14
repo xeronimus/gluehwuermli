@@ -1,6 +1,6 @@
 import type {Chase, ChaseRepeat} from '@shared/ipc';
 
-import {chasePosition, lastPosition, passDurationMs, previousOf, stepsBetween} from './chasePosition';
+import {chasePosition, lastPosition, passDurationMs, previousOf, stepEndMs, stepsBetween} from './chasePosition';
 
 /** three steps of 100, 200 and 300 ms: a pass takes 600 ms */
 const chaseOf = (repeat: ChaseRepeat): Chase => ({
@@ -112,4 +112,16 @@ describe('fades', () => {
 test("the step before a pass's first step is the last step of the pass before", () => {
   expect(previousOf(forever, {stepIndex: 2, passIndex: 1})).toEqual({stepIndex: 1, passIndex: 1});
   expect(previousOf(forever, {stepIndex: 0, passIndex: 1})).toEqual({stepIndex: 2, passIndex: 0});
+});
+
+describe('stepEndMs', () => {
+  test.each([
+    [100, 300],
+    [299, 300],
+    [300, 600],
+    [1300, 1500],
+    [-50, 100]
+  ])('at %i ms the step ends at %i ms', (chaseMs, endMs) => {
+    expect(stepEndMs(forever, chaseMs)).toBe(endMs);
+  });
 });

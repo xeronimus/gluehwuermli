@@ -13,6 +13,7 @@ import {registerChaseIpc} from './ipc/registerChaseIpc';
 import {registerDmxIpc} from './ipc/registerDmxIpc';
 import {registerLockIpc} from './ipc/registerLockIpc';
 import {registerProjectIpc} from './ipc/registerProjectIpc';
+import {registerTempoIpc} from './ipc/registerTempoIpc';
 import log, {configureLog} from './log';
 import {projectPathFromArgv} from './project/commandLine';
 import {openFileRequestsFactory} from './project/openFileRequests';
@@ -169,6 +170,7 @@ function startApp(): void {
     );
     registerLockIpc(services.appLock);
     registerChaseIpc(services.chasePlayer, chaseIpcHandlers(services.chasePlayer, projectSession));
+    registerTempoIpc(services.tempoClock);
     void openMainWindow();
     // registerProjectIpc listens for open requests by now, so the renderer gets them
     openFileRequests.forwardTo((projectPath) => void requestOpenInWindow(projectPath));

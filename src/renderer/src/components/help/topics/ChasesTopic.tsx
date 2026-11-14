@@ -2,7 +2,7 @@ import {Trans} from '@lingui/react/macro';
 
 /**
  * the manual's topic on steps played one after the other: playing, fade in vs. hold vs. pause, what stops a chase,
- * making one
+ * tapping the tempo and syncing, making one
  */
 const ChasesTopic = () => (
   <>
@@ -54,14 +54,34 @@ const ChasesTopic = () => (
     </p>
     <p>
       <Trans>
+        <strong>Tempo and sync:</strong> tap the pad above the chases, or press <strong>T</strong>, at least four times
+        on the beat of the music. The pad shows the tempo in BPM and blinks on the beat; the last tap is the beat. A
+        pause of 2 seconds starts over, and a tap far off the others is ignored. T does nothing while you type in a
+        field. The tempo isn't saved: tap it again at the next show.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
+        The <strong>sync</strong> switch on a row lets its chase follow the tapped tempo, at <strong>½×</strong>,{' '}
+        <strong>1×</strong>, <strong>2×</strong> or <strong>4×</strong>. Every step keeps its share of the chase: a
+        chase written at 120 BPM plays at 100 BPM with each fade and hold 1.2 times as long. The tempo a chase is
+        written at is set in the chase editor, 120 BPM unless set. Turned on while the chase plays, the current step
+        ends on a beat and the steps after it play to the tempo; a new tempo or speed does the same. Turned off, the
+        chase goes on from the current step with its own times. A synced chase starts on the nearest beat, at most half
+        a beat after the click. Pause, Resume and Stop keep the switch and the speed until the app is closed; the switch
+        needs a tempo.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
         To make one, unlock Setup mode and press <strong>Add chase</strong> below the rows. The chase editor sets the
-        name, the repeat and the steps, a tab each with its <strong>Fade in</strong> and <strong>Hold</strong> in
-        seconds and the channels it sets, in a table grouped by the fixtures on those addresses.{' '}
-        <strong>Add channel</strong> adds one by hand. The <strong>Fill from</strong> panel beside it takes the current
-        values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the
-        step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A
-        step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The
-        buttons next to a chase edit, delete and move it.
+        name, the repeat, the <strong>Tempo</strong> its times are written at and the steps, a tab each with its{' '}
+        <strong>Fade in</strong> and <strong>Hold</strong> in seconds and the channels it sets, in a table grouped by
+        the fixtures on those addresses. <strong>Add channel</strong> adds one by hand. The <strong>Fill from</strong>{' '}
+        panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges
+        them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button
+        marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset
+        later doesn't change the chase. The buttons next to a chase edit, delete and move it.
       </Trans>
     </p>
     <p>

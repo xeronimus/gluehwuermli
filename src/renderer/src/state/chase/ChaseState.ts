@@ -1,10 +1,12 @@
 import type {MessageDescriptor} from '@lingui/core';
 
-import type {ChaseStatus} from '@shared/ipc';
+import type {ChaseStatus, ChaseSyncStatus} from '@shared/ipc';
 
 export interface ChaseState {
   /** mirrors the chase player in main (useChaseSubscription); idle until main answered, as the app starts with none */
   chaseStatus: ChaseStatus;
+  /** mirrors the sync and speed main keeps per chase; none differ from the default until main answered */
+  chaseSync: ChaseSyncStatus;
   /** a failure talking to main about the chases */
   chaseError: MessageDescriptor | undefined;
   /**
@@ -16,6 +18,7 @@ export interface ChaseState {
 
 export const getDefaultChaseState = (): ChaseState => ({
   chaseStatus: {type: 'idle'},
+  chaseSync: {chases: []},
   chaseError: undefined,
   stepOnRig: false
 });

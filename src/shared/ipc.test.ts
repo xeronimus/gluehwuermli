@@ -3,6 +3,7 @@ import {
   PROJECT_VERSION,
   parseChannelsChanged,
   parseChaseStatus,
+  parseChaseSyncStatus,
   parseConnectRequest,
   parseDmxOutputStatus,
   parseLiftChannelLockRequest,
@@ -11,7 +12,10 @@ import {
   parseProjectStatus,
   parseSetChannelRequest,
   parseSetChannelValuesRequest,
+  parseSetChaseSpeedRequest,
+  parseSetChaseSyncRequest,
   parseStartChaseRequest,
+  parseTempoStatus,
   parseUniverseValues,
   parseUnlockRequest
 } from './ipc';
@@ -108,20 +112,77 @@ describe('parseStartChaseRequest', () => {
 describe('parseChaseStatus', () => {
   test.each([
     {type: 'idle'},
-    {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 0},
-    {type: 'paused', chaseId: 'chorus', stepIndex: 3, passIndex: 7}
+    {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 0, synced: false, speed: 1},
+    {type: 'paused', chaseId: 'chorus', stepIndex: 3, passIndex: 7, synced: true, speed: 0.5}
   ])('accepts %j', (payload) => {
     expect(parseChaseStatus(payload)).toEqual(payload);
   });
 
   test.each([
-    {type: 'running', chaseId: 'chorus', stepIndex: -1, passIndex: 0},
-    {type: 'paused', chaseId: '', stepIndex: 0, passIndex: 0},
+    {type: 'running', chaseId: 'chorus', stepIndex: -1, passIndex: 0, synced: false, speed: 1},
+    {type: 'paused', chaseId: '', stepIndex: 0, passIndex: 0, synced: false, speed: 1},
+    {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 0},
+    {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 0, synced: true, speed: 3},
     {type: 'running', chaseId: 'chorus'},
     {type: 'finished'},
     null
   ])('rejects %j', (payload) => {
     expect(parseChaseStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseSetChaseSyncRequest', () => {
+  test('accepts an id and a switch', () => {
+    expect(parseSetChaseSyncRequest({chaseId: 'chorus', synced: true})).toEqual({chaseId: 'chorus', synced: true});
+  });
+
+  test.each([{chaseId: '', synced: true}, {chaseId: 'chorus'}, {chaseId: 'chorus', synced: 'yes'}, null])(
+    'rejects %j',
+    (payload) => {
+      expect(parseSetChaseSyncRequest(payload)).toBeUndefined();
+    }
+  );
+});
+
+describe('parseSetChaseSpeedRequest', () => {
+  test.each([0.5, 1, 2, 4])('accepts speed %d', (speed) => {
+    expect(parseSetChaseSpeedRequest({chaseId: 'chorus', speed})).toEqual({chaseId: 'chorus', speed});
+  });
+
+  test.each([
+    {chaseId: 'chorus', speed: 3},
+    {chaseId: 'chorus', speed: 0},
+    {chaseId: '', speed: 1},
+    {chaseId: 'chorus'}
+  ])('rejects %j', (payload) => {
+    expect(parseSetChaseSpeedRequest(payload)).toBeUndefined();
+  });
+});
+
+describe('parseChaseSyncStatus', () => {
+  test('accepts a list of settings', () => {
+    const status = {chases: [{chaseId: 'chorus', synced: true, speed: 2}]};
+    expect(parseChaseSyncStatus(status)).toEqual(status);
+    expect(parseChaseSyncStatus({chases: []})).toEqual({chases: []});
+  });
+
+  test.each([{chases: [{chaseId: 'chorus', synced: true}]}, {}, null])('rejects %j', (payload) => {
+    expect(parseChaseSyncStatus(payload)).toBeUndefined();
+  });
+});
+
+describe('parseTempoStatus', () => {
+  test.each([{type: 'none'}, {type: 'set', bpm: 120, beatMs: 500, sinceBeatMs: 0}])('accepts %j', (payload) => {
+    expect(parseTempoStatus(payload)).toEqual(payload);
+  });
+
+  test.each([
+    {type: 'set', bpm: 0, beatMs: 500, sinceBeatMs: 0},
+    {type: 'set', bpm: 120, beatMs: 500, sinceBeatMs: -1},
+    {type: 'set', bpm: 120},
+    null
+  ])('rejects %j', (payload) => {
+    expect(parseTempoStatus(payload)).toBeUndefined();
   });
 });
 

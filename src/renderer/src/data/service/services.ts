@@ -4,16 +4,19 @@ import type DmxService from './DmxService';
 import type LockService from './LockService';
 import logger from './Logger';
 import type ProjectService from './ProjectService';
+import type TempoService from './TempoService';
 import {electronAppServiceFactory} from './impl/electron/electronAppServiceFactory';
 import {electronChaseServiceFactory} from './impl/electron/electronChaseServiceFactory';
 import {electronDmxServiceFactory} from './impl/electron/electronDmxServiceFactory';
 import {electronLockServiceFactory} from './impl/electron/electronLockServiceFactory';
 import {electronProjectServiceFactory} from './impl/electron/electronProjectServiceFactory';
+import {electronTempoServiceFactory} from './impl/electron/electronTempoServiceFactory';
 import {inMemoryAppServiceFactory} from './impl/inMemory/inMemoryAppServiceFactory';
 import {inMemoryChaseServiceFactory} from './impl/inMemory/inMemoryChaseServiceFactory';
 import {inMemoryDmxServiceFactory} from './impl/inMemory/inMemoryDmxServiceFactory';
 import {inMemoryLockServiceFactory} from './impl/inMemory/inMemoryLockServiceFactory';
 import {inMemoryProjectServiceFactory} from './impl/inMemory/inMemoryProjectServiceFactory';
+import {inMemoryTempoServiceFactory} from './impl/inMemory/inMemoryTempoServiceFactory';
 
 /**
  * The composition root of the renderer: creates every service instance once; the only module importing from impl/
@@ -44,3 +47,7 @@ export const lockService: LockService = preloadBridge
 export const chaseService: ChaseService = preloadBridge
   ? electronChaseServiceFactory(preloadBridge)
   : inMemoryChaseServiceFactory();
+
+export const tempoService: TempoService = preloadBridge
+  ? electronTempoServiceFactory(preloadBridge)
+  : inMemoryTempoServiceFactory(() => performance.now());

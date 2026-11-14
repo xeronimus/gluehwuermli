@@ -1,6 +1,6 @@
 # Chases
 
-Status: **built** (#69: #70 to #76; fade in #107). The Help view's manual explains chases to the operator.
+Status: **built** (#69: #70 to #76; fade in #107; tap tempo and sync #113). The Help view's manual explains chases to the operator.
 
 ## What a chase is
 
@@ -19,15 +19,19 @@ The UI calls it **Chase** in English and German, the term console users know (QL
 
 ## Terms
 
-| Term   | Meaning                                                                                                   |
-| ------ | --------------------------------------------------------------------------------------------------------- |
-| Step   | A set of `(channel, value)` pairs, absolute DMX addresses 1–512, plus a fade in and a hold time           |
-| Fade   | How long a step's channels move from what they held to the step's values, before its hold. 0: at once     |
-| Hold   | How long a step stays before the chase moves to the next step. Part of the chase, set while editing       |
-| Pause  | An operator action while the chase plays: the clock stops, the current step stays. Not the same as a hold |
-| Stop   | An operator action (or Emergency off, a project switch): the chase is no longer running, the values stay  |
-| Repeat | What happens after the last step: end (play once), play N times, or loop until stopped                    |
-| Pass   | One run through all steps                                                                                 |
+| Term          | Meaning                                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| Step          | A set of `(channel, value)` pairs, absolute DMX addresses 1–512, plus a fade in and a hold time           |
+| Fade          | How long a step's channels move from what they held to the step's values, before its hold. 0: at once     |
+| Hold          | How long a step stays before the chase moves to the next step. Part of the chase, set while editing       |
+| Pause         | An operator action while the chase plays: the clock stops, the current step stays. Not the same as a hold |
+| Stop          | An operator action (or Emergency off, a project switch): the chase is no longer running, the values stay  |
+| Repeat        | What happens after the last step: end (play once), play N times, or loop until stopped                    |
+| Pass          | One run through all steps                                                                                 |
+| Tempo         | The tapped tempo: BPM and the time of a beat, from the tap pad or the T key; not saved                    |
+| Reference BPM | The tempo a chase's milliseconds were written at; optional, 120 when missing                              |
+| Sync          | Per chase: its steps follow the tapped tempo, scaled by reference BPM / (tapped BPM × speed)              |
+| Speed         | Per chase: ½×, 1×, 2× or 4× the tapped tempo while synced                                                 |
 
 **Hold vs. pause:** the hold is designed into the chase ("step 2 lasts 0.5 s"), the pause is pressed live ("wait, the
 singer is talking"). A paused chase doesn't count down its fade or hold. A step lasts its fade plus its hold; a pass
@@ -96,6 +100,43 @@ the sum of them over all steps.
   is back).
 - The app always starts with no chase running.
 
+### Tempo and sync
+
+A chase is written in milliseconds, most of them to a beat without saying so ("Disco Fever v2" is built at 120 BPM from
+steps of 4, 1, ½ and 2 beats). A synced chase keeps that rhythm: it scales **every** step, fades and holds alike, by
+`referenceBpm / (tappedBpm × speed)`, rather than playing one step per beat.
+
+- **Tapping** (`shared/tapTempo.ts`, `main/tempo/tempoClock.ts`): main timestamps each tap with its own monotonic
+  clock, the chase player's. A tap more than 2 s after the last accepted one starts a new sequence (also the slowest
+  tempo, 30 BPM); an interval under 200 ms (a bounced key) is ignored; from the second interval on, one more than 25 %
+  off the sequence's average is ignored, and two ignored taps in a row start a new sequence at the second of them, so a
+  stray first interval can't lock out the real taps. The tempo is the average of the last up to 8 intervals, set from
+  the 4th tap; the last accepted tap is the downbeat. Once there is a tempo it never goes away: taps 1 to 3 of a new
+  sequence keep the old one. Not saved, a tempo belongs to the evening.
+- **The chase clock** (`main/chase/chaseClock.ts`): the player no longer measures a chase in wall time since Start. It
+  reads chase time, the chase's own milliseconds, from a piecewise linear map of main's time: unsynced at rate 1,
+  synced at `tappedBpm × speed / referenceBpm`. `chasePosition` reads chase time as before, so fades scale too.
+  Every change (sync on or off, a new tempo or speed, Resume) starts a new clock at the current chase time: the
+  position never jumps, and it is always one multiplication from its anchor, so a synced chase doesn't drift.
+- **The grid:** a chase beat lasts `60000 / referenceBpm` chase ms. Synced, chase beats fall where
+  `tappedBeats × speed` is a whole number: on every tapped beat at 1×, on beats and half beats at 2×, on every second
+  beat at ½×. A step ending on a half chase beat ends on a half grid point, so the whole chase stays on the grid.
+- **Resync** (sync on, a new tempo or speed, Resume while synced): the current step ends on the grid point nearest to
+  where it would end at the new rate, never at or before now, and only on a point that leaves at least half of its
+  rest: the rest plays at most 2× faster, a fade never snaps, and the step may end up to a grid beat later than its
+  natural end. From there the steps play at the synced rate. A 4-beat step just begun isn't squeezed into one beat.
+- **Synced start:** the chase's beat 0 on the nearest grid point, up to half a beat before or after the click.
+  Pressed late, step 1 begins at once and is that much shorter (a step shorter than that is played and replaced in
+  the same packet, as a stalled tick does); pressed early, step 1 begins on the beat, nothing is sent before it, so a
+  hit lands on the beat. Paused before its beat 0, Resume starts the chase again on the nearest grid point.
+- **Sync off:** the chase goes on from where it is at its own milliseconds.
+- **Settings:** main keeps the switch and the speed per chase id while the app runs, across Stop, Emergency off and
+  project switches; never saved. Turning sync on without a tempo does nothing. Unsynced, the speed is kept but has no
+  effect.
+
+With "Disco Fever v2" (35 beats, 17 500 ms at 120): a pass lasts 21 000 ms at 100 BPM and 15 000 ms at 140 BPM, every
+step in the same proportion, each beat-long step starting on a beat.
+
 ### Where it runs
 
 The player runs in **main**, next to the `DmxEngine` (ADR 2): a hidden window, a render error or a busy renderer never
@@ -114,13 +155,13 @@ order.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ▶  Chorus flash            ● ○ ○ ○        step 1 / 4 · pass 3 / 8   ⏸   ■    │   running: highlighted
+│ ▶  Chorus flash      ● ○ ○ ○   step 1 / 4 · pass 3 / 8   8×  ◉ ½× 1× 2× 4×   │   running, synced at 1×
 └──────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ▶  Laser intro             ○ ○ ○ ○ ○ ○                          ∞            │   dimmed while another runs
+│ ▶  Laser intro       ○ ○ ○ ○ ○ ○                         ∞   ○ ½× 1× 2× 4×   │   dimmed while another runs
 └──────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ▶  Slow colors             ○ ○ ○                                1×           │
+│ ▶  Slow colors       ○ ○ ○                               1×  ○ ½× 1× 2× 4×   │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -133,15 +174,21 @@ Each row shows:
   plays, `100 steps` otherwise
 - the repeat: `1×`, `8×` or `∞`, and while running or paused the current pass (`pass 3 / 8`, `pass 3` for `∞`; none for
   a chase played once)
+- the **sync** switch (disabled without a tempo) and the speeds **½× 1× 2× 4×** (disabled while the switch is off),
+  for a stopped, running or paused chase
+
+Above the rows, the **tap pad**: a click or **T** taps the tempo; it shows `Tap`, or the tempo rounded to a whole BPM
+with a mark blinking on the beat (a CSS animation one beat long, phased from main's `sinceBeatMs`, no timer).
 
 The running or paused row is highlighted (paused distinguishable from running); the others look dimmed, their Start
 still replaces the running chase.
 
-Show mode can start, pause, resume and stop chases. It can't change them.
+Show mode can start, pause, resume and stop chases, tap the tempo and sync them. It can't change them.
 
 Only the chase rows show that a chase runs: nothing in the top bar or the window title, even when the rows are scrolled
-out of view below the fixtures. Chases are started, paused and stopped with the mouse only, there are no keyboard
-shortcuts.
+out of view below the fixtures. Chases are started, paused and stopped with the mouse only. The one keyboard shortcut is
+**T**, which taps the tempo while the project has chases (the pad is shown only then, also in Setup mode); it does nothing while a text field, a select or a
+contenteditable has the focus, with Ctrl, Alt or Meta, or while the key is held.
 
 ## Setup mode
 
@@ -154,6 +201,8 @@ project has no chases yet; the editor opens below it.
 - **Name** (required, at most 40 characters like a scene's). No color: a chase row is told apart by its name and its
   steps
 - **Repeat**: Once · N times (N ≥ 2, N passes in total: "3 times" plays the steps three times) · Until stopped
+- **Tempo [ ] BPM**: the reference BPM, a whole number from 20 to 300; blank (placeholder 120) leaves it out of the
+  file, a typed 120 is stored
 - **Steps**, in order, one tab each, numbered and marked when something is wrong with the step (its problems on
   hover), with **Add step** after the last tab. Each step's panel has:
   - its own **fade in**, in seconds with two decimals: 0 (the values at once, also for an empty field) up to 3600 s
@@ -211,26 +260,35 @@ const ChaseSchema = Type.Object({
     Type.Object({type: Type.Literal('times'), count: Type.Integer({minimum: 2, maximum: CHASE_REPEAT_MAX})}),
     Type.Object({type: Type.Literal('forever')})
   ]),
-  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX})
+  steps: Type.Array(ChaseStepSchema, {minItems: 1, maxItems: CHASE_STEPS_MAX}),
+  /** the tempo the chase's milliseconds were written at; missing is 120 */
+  referenceBpm: Type.Optional(Type.Integer({minimum: CHASE_REFERENCE_BPM_MIN, maximum: CHASE_REFERENCE_BPM_MAX}))
 });
 ```
 
 Limits: `CHASE_NAME_MAX_LENGTH` 40, `CHASE_HOLD_MIN_MS` 50, `CHASE_HOLD_MAX_MS` 3 600 000, `CHASE_FADE_MAX_MS`
-3 600 000, `CHASE_REPEAT_MAX` 99, `CHASE_STEPS_MAX` 100. `fadeMs` is optional, so files from before fades load
+3 600 000, `CHASE_REPEAT_MAX` 99, `CHASE_STEPS_MAX` 100, `CHASE_REFERENCE_BPM_MIN` 20, `CHASE_REFERENCE_BPM_MAX` 300 (missing:
+`CHASE_REFERENCE_BPM_DEFAULT` 120, optional like `fadeMs`). `fadeMs` is optional, so files from before fades load
 unchanged; the editor leaves it out for a fade of 0, so saving such a chase unchanged leaves the file as it was. 0.4.0
 reads a file with fades too, but loses them if it saves it. The number of chases in a project isn't limited.
 
 Validation (`shared/chases.ts`, codes like `SceneError`): name missing or too long, no steps, a step without values, a
 channel twice in one step, a channel or value out of range, a hold or a fade out of range (`chase-step-fade-invalid`), too many steps, a repeat count out
-of range, ids twice. Unlike scenes, nothing
+of range, a reference BPM out of range (`chase-reference-bpm-invalid`), ids twice. Unlike scenes, nothing
 refers to a fixture, so a fixture change never makes a chase invalid.
 
 ## IPC and status
 
 - `chase:get-status`: the renderer asks once on load, then follows the pushes
 - `chase:start` (id), `chase:pause`, `chase:resume`, `chase:stop`: `invoke`, allowed in Show and Setup mode
-- `chase:status-changed` pushed by main: `idle`, or `running` / `paused` with the chase id, step index and pass. Sent
-  on every step change, not on every tick
+- `chase:status-changed` pushed by main: `idle`, or `running` / `paused` with the chase id, step index and pass, and
+  whether it is `synced` at what `speed`. Sent on every step change, not on every tick, and on a sync change of the
+  playing chase
+- `chase:get-sync`, `chase:set-sync` (id, on/off), `chase:set-speed` (id, speed): `invoke`, any chase id, allowed in
+  Show mode; they answer the `ChaseSyncStatus` (the chases differing from not synced at 1×), which
+  `chase:sync-changed` pushes, before the chase status
+- `tempo:tap`: `send`, no payload, main timestamps it; allowed in Show mode. `tempo:get-status` and the push
+  `tempo:status-changed`: `none`, or `set` with `bpm`, `beatMs` and `sinceBeatMs`, taken when main sends it
 - `dmx:channels-changed` pushed by main: the values a step set (after the caps), so the faders, fixture and raw, show
   what goes out. Today the renderer is the only one changing values and updates its store itself; a chase is the
   first change coming from main. One message per step, and during a fade one per tick that changed a value
@@ -257,5 +315,7 @@ refers to a fixture, so a fixture change never makes a chase invalid.
 
 ## Not in this feature
 
-Curves other than linear, fade out or per-channel fade times, BPM / tap tempo, several chases at once, a manual "go" step that waits for a button press,
-keyboard shortcuts, a running chase shown in the top bar or the window title, starting a chase on app start.
+Curves other than linear, fade out or per-channel fade times, several chases at once, a manual "go" step that waits for
+a button press, keyboard shortcuts other than T, a running chase shown in the top bar or the window title, starting a
+chase on app start. Follow-ups: a tempo from audio input or MIDI clock (further sources for the same tempo clock), step
+lengths in beats in the editor, saving the tempo.

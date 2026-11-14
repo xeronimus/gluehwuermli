@@ -97,6 +97,17 @@ export const countInput = style({
   width: '52px'
 });
 
+export const tempoField = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '6px'
+});
+
+/** room for three digits and the spinner */
+export const bpmInput = style({
+  width: '60px'
+});
+
 /** the step tabs, as wide as the editor */
 export const steps = style({
   alignSelf: 'stretch',

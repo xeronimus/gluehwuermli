@@ -4,6 +4,9 @@ import {
   CHASE_HOLD_MAX_MS,
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
+  CHASE_REFERENCE_BPM_DEFAULT,
+  CHASE_REFERENCE_BPM_MAX,
+  CHASE_REFERENCE_BPM_MIN,
   CHASE_REPEAT_MAX,
   CHASE_REPEAT_MIN,
   CHASE_STEPS_MAX,
@@ -44,6 +47,7 @@ export type ChaseError =
   | {readonly type: 'chase-name-missing'}
   | {readonly type: 'chase-name-too-long'}
   | {readonly type: 'chase-repeat-invalid'}
+  | {readonly type: 'chase-reference-bpm-invalid'}
   | {readonly type: 'chase-steps-missing'}
   | {readonly type: 'chase-steps-too-many'}
   | {readonly type: 'chase-step-id-twice'}
@@ -68,6 +72,13 @@ const valueError = (type: ChaseValueError['type'], values: readonly boolean[]): 
 const isValidRepeat = (repeat: ChaseRepeat): boolean =>
   repeat.type !== 'times' ||
   (Number.isInteger(repeat.count) && repeat.count >= CHASE_REPEAT_MIN && repeat.count <= CHASE_REPEAT_MAX);
+
+/** the tempo the chase's times were written at, in beats per minute; the default for a chase without one */
+export const referenceBpmOf = (chase: Chase): number => chase.referenceBpm ?? CHASE_REFERENCE_BPM_DEFAULT;
+
+/** a chase's reference tempo: whole beats per minute, from the slowest to the fastest */
+export const isValidReferenceBpm = (bpm: number): boolean =>
+  Number.isInteger(bpm) && bpm >= CHASE_REFERENCE_BPM_MIN && bpm <= CHASE_REFERENCE_BPM_MAX;
 
 /** a step's hold, in milliseconds: whole, from the shortest to the longest hold */
 export const isValidHold = (holdMs: number): boolean =>
@@ -125,6 +136,9 @@ export function chaseOwnErrors(chase: Chase): ChaseError[] {
   }
   if (!isValidRepeat(chase.repeat)) {
     errors.push({type: 'chase-repeat-invalid'});
+  }
+  if (chase.referenceBpm !== undefined && !isValidReferenceBpm(chase.referenceBpm)) {
+    errors.push({type: 'chase-reference-bpm-invalid'});
   }
   if (chase.steps.length === 0) {
     errors.push({type: 'chase-steps-missing'});

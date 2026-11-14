@@ -1,6 +1,14 @@
-import type {Chase, ChaseRepeat, ChaseStatus} from '@shared/ipc';
+import {CHASE_SPEEDS, type Chase, type ChaseRepeat, type ChaseStatus} from '@shared/ipc';
 
-import {chaseRowControls, chaseRowState, repeatLabel, showsPass, stepBoxesFit} from './chaseRows';
+import {
+  chaseRowControls,
+  chaseRowState,
+  repeatLabel,
+  showsPass,
+  speedLabel,
+  stepBoxesFit,
+  syncSettingOf
+} from './chaseRows';
 
 const chaseOf = (id: string, repeat: ChaseRepeat, stepCount = 4): Chase => ({
   id,
@@ -19,7 +27,18 @@ const colors = chaseOf('colors', {type: 'once'}, 3);
 const chases = [chorus, laser, colors];
 
 const IDLE: ChaseStatus = {type: 'idle'};
-const RUNNING: ChaseStatus = {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 2};
+const RUNNING: ChaseStatus = {type: 'running', chaseId: 'chorus', stepIndex: 0, passIndex: 2, synced: false, speed: 1};
+
+test('a chase main lists has its sync and speed, any other none at 1×', () => {
+  const chaseSync = {chases: [{chaseId: 'laser', synced: true, speed: 2 as const}]};
+
+  expect(syncSettingOf(chaseSync, 'laser')).toEqual({synced: true, speed: 2});
+  expect(syncSettingOf(chaseSync, 'chorus')).toEqual({synced: false, speed: 1});
+});
+
+test('the speeds read ½×, 1×, 2× and 4×', () => {
+  expect(CHASE_SPEEDS.map(speedLabel)).toEqual(['½×', '1×', '2×', '4×']);
+});
 
 test('the repeat reads 1×, N× or ∞', () => {
   expect(repeatLabel({type: 'once'})).toBe('1×');
@@ -63,7 +82,7 @@ test('a chase the project no longer lists dims no row', () => {
 });
 
 test('a forever chase counts its passes without a total', () => {
-  const status: ChaseStatus = {type: 'running', chaseId: 'laser', stepIndex: 5, passIndex: 41};
+  const status: ChaseStatus = {type: 'running', chaseId: 'laser', stepIndex: 5, passIndex: 41, synced: false, speed: 1};
   expect(chaseRowState(laser, status, chases)).toMatchObject({
     position: {stepNumber: 6, stepCount: 6, passNumber: 42, passCount: Number.POSITIVE_INFINITY}
   });

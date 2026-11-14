@@ -14,6 +14,7 @@ import {useActionLoadPorts} from '@/state/actionHooks/loadPorts';
 import {useLockSubscription} from '@/state/actionHooks/lockSubscription';
 import {useOutputStatusSubscription} from '@/state/actionHooks/outputStatusSubscription';
 import {useProjectSubscription} from '@/state/actionHooks/project';
+import {useTempoSubscription} from '@/state/actionHooks/tempoSubscription';
 import {useUserActivityReporting} from '@/state/actionHooks/userActivity';
 import {selectIsSetupMode} from '@/state/lock/lockSelectors';
 import {useAppStore} from '@/state/store';
@@ -69,6 +70,7 @@ const App = () => {
   useProjectSubscription();
   // a chase plays whichever view is open
   useChaseSubscription();
+  useTempoSubscription();
   // the faders of every view show what main sends: on load, and after every chase step
   useChannelValuesSubscription();
   // every fader of every view: a drag whose mouseup got lost must not keep sending values

@@ -72,3 +72,24 @@ export const lastPosition = (chase: Chase): StepPosition => ({
   stepIndex: chase.steps.length - 1,
   passIndex: passCount(chase.repeat) - 1
 });
+
+/**
+ * the chase time, in milliseconds since the start, at which the step playing at `chaseMs` ends (its pass included);
+ * before the start, when step 1 ends
+ */
+export function stepEndMs(chase: Chase, chaseMs: number): number {
+  const passMs = passDurationMs(chase);
+  if (passMs <= 0) {
+    return chaseMs;
+  }
+  const elapsed = Math.max(0, chaseMs);
+  const passStartMs = Math.floor(elapsed / passMs) * passMs;
+  let endMs = passStartMs;
+  for (const step of chase.steps) {
+    endMs += stepDurationMs(step);
+    if (elapsed < endMs) {
+      return endMs;
+    }
+  }
+  return passStartMs + passMs;
+}

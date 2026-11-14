@@ -9,6 +9,7 @@ import Button from '../commons/Button';
 import MoveButtons from '../commons/MoveButtons';
 import {DeleteIcon, EditIcon, PauseChaseIcon, ResumeChaseIcon, StartChaseIcon, StopChaseIcon} from '../commons/icons';
 import {chaseRow, rowActions, rowControls, rowName, rowPass, rowRepeat} from './ChaseRow.css';
+import ChaseRowSync, {type ChaseRowSyncProps} from './ChaseRowSync';
 import ChaseSteps from './ChaseSteps';
 
 /** changing the chase, only in Setup mode */
@@ -27,6 +28,8 @@ interface ChaseRowProps {
   chase: Chase;
   rowState: ChaseRowState;
   onControl: (control: ChaseControl) => void;
+  /** the sync switch and speed, the chase name aside */
+  sync: Omit<ChaseRowSyncProps, 'chaseName'>;
   /** undefined in Show mode: the chase can be played, not changed */
   actions: ChaseRowActions | undefined;
 }
@@ -42,10 +45,10 @@ const rowVariant = (rowState: ChaseRowState) =>
   rowState.type === 'playing' ? (rowState.paused ? 'paused' : 'running') : rowState.type;
 
 /**
- * One chase: its controls, name, steps and repeat, and while it plays its pass. Highlighted while it runs or is paused,
+ * One chase: its controls, name, steps, repeat, sync switch and speed, and while it plays its pass. Highlighted while it runs or is paused,
  * dimmed while another one does (its Start still replaces that one).
  */
-const ChaseRow = ({chase, rowState, onControl, actions}: ChaseRowProps) => {
+const ChaseRow = ({chase, rowState, onControl, sync, actions}: ChaseRowProps) => {
   const {t} = useLingui();
   const chaseName = chase.name;
   const titles: Record<ChaseControl, string> = {
@@ -85,6 +88,7 @@ const ChaseRow = ({chase, rowState, onControl, actions}: ChaseRowProps) => {
       <ChaseSteps steps={chase.steps} currentIndex={position && position.stepNumber - 1} />
       <span className={rowPass}>{passText()}</span>
       <span className={rowRepeat}>{repeatLabel(chase.repeat)}</span>
+      <ChaseRowSync chaseName={chaseName} {...sync} />
       {actions && (
         <span className={rowActions}>
           <MoveButtons

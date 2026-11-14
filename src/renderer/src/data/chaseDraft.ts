@@ -14,6 +14,8 @@ export interface ChaseDraft {
   readonly repeatType: ChaseRepeat['type'];
   /** the number of passes of a `times` repeat; kept while another repeat is chosen, so switching back loses nothing */
   readonly repeatCount: string;
+  /** the tempo the chase's times are written at, in BPM; blank for none, which is 120 */
+  readonly referenceBpm: string;
   readonly steps: readonly ChaseStepDraft[];
 }
 
@@ -44,6 +46,7 @@ export const newChaseDraft = (): ChaseDraft => ({
   name: '',
   repeatType: 'once',
   repeatCount: String(CHASE_REPEAT_MIN),
+  referenceBpm: '',
   steps: []
 });
 
@@ -62,6 +65,7 @@ export const chaseDraftOf = (chase: Chase): ChaseDraft => ({
   name: chase.name,
   repeatType: chase.repeat.type,
   repeatCount: chase.repeat.type === 'times' ? String(chase.repeat.count) : String(CHASE_REPEAT_MIN),
+  referenceBpm: chase.referenceBpm === undefined ? '' : String(chase.referenceBpm),
   steps: chase.steps.map(stepDraftOf)
 });
 
@@ -90,12 +94,16 @@ const stepOf = (step: ChaseStepDraft): ChaseStep => {
   };
 };
 
-/** the chase as it is saved, with a trimmed name; it may be invalid, chaseEditErrors says why */
+/**
+ * the chase as it is saved, with a trimmed name; it may be invalid, chaseEditErrors says why. A blank reference tempo
+ * isn't stored, like a fade of 0: a chase without one saved unchanged leaves the file as it was
+ */
 export const chaseOfDraft = (id: string, draft: ChaseDraft): Chase => ({
   id,
   name: draft.name.trim(),
   repeat: repeatOf(draft),
-  steps: draft.steps.map(stepOf)
+  steps: draft.steps.map(stepOf),
+  ...(!isBlank(draft.referenceBpm) && {referenceBpm: numberOf(draft.referenceBpm)})
 });
 
 /** what the editor shows: the chase's own problems below the steps, each step's at the step */

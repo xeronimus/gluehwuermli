@@ -31,6 +31,7 @@ import {
   steps
 } from './ChaseEditor.css';
 import ChaseOnRigToggle from './ChaseOnRigToggle';
+import ChaseReferenceBpmField from './ChaseReferenceBpmField';
 import ChaseRepeatField from './ChaseRepeatField';
 import ChaseStepTabs from './ChaseStepTabs';
 import {useStepRowMarks} from './useStepRowMarks';
@@ -100,6 +101,7 @@ const ChaseEditor = ({chase, onClose}: ChaseEditorProps) => {
             />
           </label>
           <ChaseRepeatField draft={draft} onChange={setDraft} />
+          <ChaseReferenceBpmField draft={draft} onChange={setDraft} />
           <ChaseOnRigToggle />
         </div>
         <ChaseAllSteps
