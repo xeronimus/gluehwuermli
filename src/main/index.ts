@@ -183,8 +183,19 @@ function startApp(): void {
     });
   });
 
+  /**
+   * Set by every quit (⌘Q, the menu, app.quit). The window's close waits for its state to be saved
+   * (persistWindowState), and Electron takes a held close as a cancelled quit: without this, macOS would keep the app
+   * running after the first quit closed the window
+   */
+  let quitRequested = false;
+  app.on('before-quit', () => {
+    quitRequested = true;
+  });
+
+  // macOS keeps the app running with its window closed, unless the window closed because the app quits
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin' || quitRequested) {
       app.quit();
     }
   });
