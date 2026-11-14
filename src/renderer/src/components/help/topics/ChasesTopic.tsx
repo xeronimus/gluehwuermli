@@ -1,6 +1,9 @@
 import {Trans} from '@lingui/react/macro';
 
-/** the manual's topic on steps played one after the other: playing, hold vs. pause, what stops a chase, making one */
+/**
+ * the manual's topic on steps played one after the other: playing, fade in vs. hold vs. pause, what stops a chase,
+ * making one
+ */
 const ChasesTopic = () => (
   <>
     <p>
@@ -13,11 +16,23 @@ const ChasesTopic = () => (
     </p>
     <p>
       <Trans>
+        A step can <strong>fade in</strong> first: for its fade time, its channels move smoothly in a straight line to
+        the step's values, then its hold begins. A step's time is its fade plus its hold; a fade of 0 sets the values at
+        once. A fade starts from what each channel holds when the step begins: the step before, a fader moved by hand or
+        a scene; for the first step what was there at Start, and when the chase loops the last step's values. The row
+        shows a step as the current one during its fade too. While a channel fades, it is set on every tick: a fader
+        moved by hand on it jumps back onto the fade until the fade ends, then it keeps its value again.
+      </Trans>
+    </p>
+    <p>
+      <Trans>
         The play button of a row starts its chase at the first step, in Show and in Setup mode. One chase plays at a
         time: starting another one stops the one playing. Its row is highlighted, the current step filled, and the pass
         is counted. <strong>Pause</strong> keeps the current step. The hold is part of the chase, the pause is pressed
-        live: a paused chase doesn't count down its hold, and <strong>Resume</strong> continues the step with the time
-        that was left. <strong>Stop</strong> ends the chase. The app always starts with no chase playing.
+        live: a paused chase doesn't count down its fade or hold, and <strong>Resume</strong> continues the step with
+        the time that was left: the rest of the fade, then the hold. A channel still fading goes back onto its fade,
+        also when its fader was moved during the pause. <strong>Stop</strong> ends the chase. The app always starts with
+        no chase playing.
       </Trans>
     </p>
     <p>
@@ -25,7 +40,8 @@ const ChasesTopic = () => (
         A step only sets the channels it names; all others stay as they are. The faders stay live while a chase plays: a
         channel moved by hand keeps its value until a step sets it again. After Stop, and when a chase ends, the
         channels keep the values the last step left; press <strong>Emergency off</strong> to black out. The channel lock
-        caps a chase's values like a fader's.
+        caps a chase's values like a fader's; a channel capped when its fade began stays at its cap until the next step,
+        even if the lock is lifted during the fade.
       </Trans>
     </p>
     <p>
@@ -39,12 +55,13 @@ const ChasesTopic = () => (
     <p>
       <Trans>
         To make one, unlock Setup mode and press <strong>Add chase</strong> below the rows. The chase editor sets the
-        name, the repeat and the steps, a tab each with its <strong>Hold</strong> in seconds and the channels it sets,
-        in a table grouped by the fixtures on those addresses. <strong>Add channel</strong> adds one by hand. The{' '}
-        <strong>Fill from</strong> panel beside it takes the current values of a fixture or of all, a scene or a preset
-        in one click and merges them into the step: a channel the step already sets takes the new value, the others are
-        added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a
-        fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it.
+        name, the repeat and the steps, a tab each with its <strong>Fade in</strong> and <strong>Hold</strong> in
+        seconds and the channels it sets, in a table grouped by the fixtures on those addresses.{' '}
+        <strong>Add channel</strong> adds one by hand. The <strong>Fill from</strong> panel beside it takes the current
+        values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the
+        step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A
+        step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The
+        buttons next to a chase edit, delete and move it.
       </Trans>
     </p>
     <p>

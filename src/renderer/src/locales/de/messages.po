@@ -146,13 +146,21 @@ msgstr "Eine Szene ist ein Knopf über den Geräten, der die Kanäle mehrerer Ge
 msgid "A scene name can have at most {maxLength} characters"
 msgstr "Ein Szenen-Name darf höchstens {maxLength} Zeichen haben"
 
+#: src/renderer/src/components/help/topics/ChasesTopic.tsx
+msgid "A step can <0>fade in</0> first: for its fade time, its channels move smoothly in a straight line to the step's values, then its hold begins. A step's time is its fade plus its hold; a fade of 0 sets the values at once. A fade starts from what each channel holds when the step begins: the step before, a fader moved by hand or a scene; for the first step what was there at Start, and when the chase loops the last step's values. The row shows a step as the current one during its fade too. While a channel fades, it is set on every tick: a fader moved by hand on it jumps back onto the fade until the fade ends, then it keeps its value again."
+msgstr "Ein Schritt kann zuerst <0>einblenden</0>: Während seiner Einblendzeit bewegen sich seine Kanäle gleichmässig in einer geraden Linie zu den Werten des Schritts, danach beginnt seine Haltezeit. Ein Schritt dauert seine Einblendzeit plus seine Haltezeit; mit einer Einblendzeit von 0 werden die Werte sofort gesetzt. Eine Einblendung beginnt bei dem, was jeder Kanal hat, wenn der Schritt beginnt: beim Schritt davor, bei einem von Hand bewegten Fader oder bei einer Szene; beim ersten Schritt bei dem, was beim Start da war, und wenn der Chase wiederholt, bei den Werten des letzten Schritts. Die Zeile zeigt einen Schritt auch während seiner Einblendung als aktuellen Schritt. Solange ein Kanal einblendet, wird er bei jedem Takt gesetzt: Ein Fader, den du darauf von Hand bewegst, springt zurück auf die Einblendung, bis sie zu Ende ist; danach behält er seinen Wert wieder."
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "A step fades in from 0 seconds to {maxMinutes} minutes"
+msgstr "Ein Schritt blendet 0 Sekunden bis {maxMinutes} Minuten ein"
+
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "A step holds from {minSeconds} seconds to {maxMinutes} minutes"
 msgstr "Ein Schritt hält {minSeconds, number} Sekunden bis {maxMinutes} Minuten"
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "A step only sets the channels it names; all others stay as they are. The faders stay live while a chase plays: a channel moved by hand keeps its value until a step sets it again. After Stop, and when a chase ends, the channels keep the values the last step left; press <0>Emergency off</0> to black out. The channel lock caps a chase's values like a fader's."
-msgstr "Ein Schritt setzt nur die Kanäle, die er nennt; alle anderen bleiben, wie sie sind. Die Fader bleiben bedienbar, während ein Chase läuft: Ein von Hand bewegter Kanal behält seinen Wert, bis ein Schritt ihn wieder setzt. Nach dem Stoppen und wenn ein Chase zu Ende ist, behalten die Kanäle die Werte, die der letzte Schritt hinterlassen hat; drück <0>Not-Aus</0>, um alles dunkel zu machen. Die Kanalsperre begrenzt die Werte eines Chases wie die eines Faders."
+msgid "A step only sets the channels it names; all others stay as they are. The faders stay live while a chase plays: a channel moved by hand keeps its value until a step sets it again. After Stop, and when a chase ends, the channels keep the values the last step left; press <0>Emergency off</0> to black out. The channel lock caps a chase's values like a fader's; a channel capped when its fade began stays at its cap until the next step, even if the lock is lifted during the fade."
+msgstr "Ein Schritt setzt nur die Kanäle, die er nennt; alle anderen bleiben, wie sie sind. Die Fader bleiben bedienbar, während ein Chase läuft: Ein von Hand bewegter Kanal behält seinen Wert, bis ein Schritt ihn wieder setzt. Nach dem Stoppen und wenn ein Chase zu Ende ist, behalten die Kanäle die Werte, die der letzte Schritt hinterlassen hat; drück <0>Not-Aus</0>, um alles dunkel zu machen. Die Kanalsperre begrenzt die Werte eines Chases wie die eines Faders; ein Kanal, der zu Beginn seiner Einblendung begrenzt war, bleibt bis zum nächsten Schritt bei seiner Grenze, auch wenn die Sperre während der Einblendung aufgehoben wird."
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "A step sets a channel twice"
@@ -709,6 +717,10 @@ msgid "Every preset needs a name"
 msgstr "Jedes Preset braucht einen Namen"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Every step already fades in for {fade} s"
+msgstr "Jeder Schritt blendet schon {fade} s ein"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Every step already holds {hold} s"
 msgstr "Jeder Schritt hält schon {hold} s"
 
@@ -727,6 +739,11 @@ msgstr "Beispiel: ein RGB-PAR im 3-Kanal-Modus auf Adresse 10: Rot Offset 0 (10)
 #: src/renderer/src/components/help/manualTopics.ts
 msgid "Exploring"
 msgstr "Erkunden"
+
+#: src/renderer/src/components/chases/ChaseFadeOfAllSteps.tsx
+#: src/renderer/src/components/chases/ChaseStepHeader.tsx
+msgid "Fade in"
+msgstr "Einblendzeit"
 
 #: src/renderer/src/components/fixtures/ChannelPositionsList.tsx
 msgid "Fader"
@@ -1038,8 +1055,8 @@ msgid "No cue lists, no moving-head effects (pan/tilt shapes), no RDM."
 msgstr "Keine Cue-Listen, keine Moving-Head-Effekte (Pan/Tilt-Figuren), kein RDM."
 
 #: ghpage/src/Limitations.tsx
-msgid "No fades yet: values and chase steps change at once (fades are planned)."
-msgstr "Noch keine Überblendungen: Werte und Chase-Schritte wechseln sofort (Überblendungen sind geplant)."
+msgid "No fades yet for faders, presets and scenes: their values change at once; chase steps can fade in."
+msgstr "Noch keine Überblendungen für Fader, Presets und Szenen: Ihre Werte wechseln sofort; Chase-Schritte können einblenden."
 
 #: ghpage/src/Limitations.tsx
 msgid "No fixture library: you enter each device's channels yourself, from its manual."
@@ -1352,8 +1369,8 @@ msgstr "Neues Passwort nochmals eingeben"
 msgid "Resume the chase {chaseName}"
 msgstr "Chase {chaseName} fortsetzen"
 
-#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
 #: src/renderer/src/components/chases/ChaseStepHeader.tsx
+#: src/renderer/src/components/chases/ChaseTimeOfAllSteps.tsx
 msgid "s"
 msgstr "s"
 
@@ -1408,7 +1425,7 @@ msgstr "Sendet den angezeigten Schritt an den Ausgang, während du ihn bearbeite
 msgid "Sending on {path}"
 msgstr "Sendet auf {path}"
 
-#: src/renderer/src/components/chases/ChaseHoldOfAllSteps.tsx
+#: src/renderer/src/components/chases/ChaseTimeOfAllSteps.tsx
 msgid "Set"
 msgstr "Setzen"
 
@@ -1437,6 +1454,14 @@ msgid "Set the <0>start address</0> to the DMX address set on the device (its di
 msgstr "Setz die <0>Startadresse</0> auf die DMX-Adresse, die am Gerät eingestellt ist (auf seinem Display oder mit den DIP-Schaltern). Das Gerät hört dort und auf den Adressen danach."
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Set the fade in of {changedCount, plural, one {# step} other {# steps}}"
+msgstr "Einblendzeit von {changedCount, plural, one {# Schritt} other {# Schritten}} gesetzt"
+
+#: src/renderer/src/components/chases/ChaseFadeOfAllSteps.tsx
+msgid "Set the fade in of all steps"
+msgstr "Die Einblendzeit aller Schritte setzen"
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Set the hold of {changedCount, plural, one {# step} other {# steps}}"
 msgstr "Haltezeit von {changedCount, plural, one {# Schritt} other {# Schritten}} gesetzt"
 
@@ -1447,6 +1472,10 @@ msgstr "Die Haltezeit aller Schritte setzen"
 #: src/renderer/src/components/settings/BlackoutOnQuitToggle.tsx
 msgid "Sets all channels to 0 before the app closes the port. Otherwise the widget keeps sending the last look after the app is gone."
 msgstr "Setzt alle Kanäle auf 0, bevor die App den Port schliesst. Sonst sendet das Widget die letzten Werte weiter, auch wenn die App zu ist."
+
+#: src/renderer/src/i18n/messages/chaseMessages.ts
+msgid "Sets the fade in of {changedCount, plural, one {# step} other {# steps}}"
+msgstr "Setzt die Einblendzeit von {changedCount, plural, one {# Schritt} other {# Schritten}}"
 
 #: src/renderer/src/i18n/messages/chaseMessages.ts
 msgid "Sets the hold of {changedCount, plural, one {# step} other {# steps}}"
@@ -1529,6 +1558,10 @@ msgstr "Chase {chaseName} starten"
 #: src/renderer/src/components/chases/ChaseSteps.tsx
 msgid "step {stepNumber} / {stepCount}"
 msgstr "Schritt {stepNumber} / {stepCount}"
+
+#: src/renderer/src/components/chases/ChaseSteps.tsx
+msgid "Step {stepNumber}: fades in {fadeSeconds} s, holds {seconds} s"
+msgstr "Schritt {stepNumber}: blendet {fadeSeconds} s ein, hält {seconds} s"
 
 #: src/renderer/src/components/chases/ChaseSteps.tsx
 msgid "Step {stepNumber}: holds {seconds} s"
@@ -1781,8 +1814,8 @@ msgid "The passwords don't match"
 msgstr "Die Passwörter stimmen nicht überein"
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "The play button of a row starts its chase at the first step, in Show and in Setup mode. One chase plays at a time: starting another one stops the one playing. Its row is highlighted, the current step filled, and the pass is counted. <0>Pause</0> keeps the current step. The hold is part of the chase, the pause is pressed live: a paused chase doesn't count down its hold, and <1>Resume</1> continues the step with the time that was left. <2>Stop</2> ends the chase. The app always starts with no chase playing."
-msgstr "Der Play-Knopf einer Zeile startet ihren Chase beim ersten Schritt, im Show-Modus und im Setup-Modus. Es läuft immer nur ein Chase: Startest du einen anderen, stoppt der laufende. Seine Zeile ist hervorgehoben, der aktuelle Schritt ausgefüllt, und der Durchgang wird gezählt. <0>Pausieren</0> behält den aktuellen Schritt. Die Haltezeit gehört zum Chase, die Pause wird live gedrückt: Ein pausierter Chase zählt seine Haltezeit nicht herunter, und <1>Fortsetzen</1> macht beim Schritt mit der verbleibenden Zeit weiter. <2>Stoppen</2> beendet den Chase. Die App startet immer ohne laufenden Chase."
+msgid "The play button of a row starts its chase at the first step, in Show and in Setup mode. One chase plays at a time: starting another one stops the one playing. Its row is highlighted, the current step filled, and the pass is counted. <0>Pause</0> keeps the current step. The hold is part of the chase, the pause is pressed live: a paused chase doesn't count down its fade or hold, and <1>Resume</1> continues the step with the time that was left: the rest of the fade, then the hold. A channel still fading goes back onto its fade, also when its fader was moved during the pause. <2>Stop</2> ends the chase. The app always starts with no chase playing."
+msgstr "Der Play-Knopf einer Zeile startet ihren Chase beim ersten Schritt, im Show-Modus und im Setup-Modus. Es läuft immer nur ein Chase: Startest du einen anderen, stoppt der laufende. Seine Zeile ist hervorgehoben, der aktuelle Schritt ausgefüllt, und der Durchgang wird gezählt. <0>Pausieren</0> behält den aktuellen Schritt. Die Haltezeit gehört zum Chase, die Pause wird live gedrückt: Ein pausierter Chase zählt seine Einblend- und Haltezeit nicht herunter, und <1>Fortsetzen</1> macht beim Schritt mit der verbleibenden Zeit weiter: zuerst mit dem Rest der Einblendung, dann mit der Haltezeit. Ein Kanal, der noch einblendet, kehrt auf seine Einblendung zurück, auch wenn sein Fader während der Pause bewegt wurde. <2>Stoppen</2> beendet den Chase. Die App startet immer ohne laufenden Chase."
 
 #: src/renderer/src/i18n/messages/fixtureMessages.ts
 msgid "The preset {preset} needs at least one channel"
@@ -1849,8 +1882,8 @@ msgid "To change the password, unlock Setup mode and press <0>Change password</0
 msgstr "Um das Passwort zu ändern, entsperr den Setup-Modus und drück in der Ansicht Einstellungen auf <0>Passwort ändern</0>: Gib das aktuelle Passwort ein und das neue zweimal. Ab dann entsperrt nur noch das neue den Setup-Modus und hebt die Kanalsperre auf."
 
 #: src/renderer/src/components/help/topics/ChasesTopic.tsx
-msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Hold</1> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <2>Add channel</2> adds one by hand. The <3>Fill from</3> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
-msgstr "Um einen zu erstellen, entsperr den Setup-Modus und drück <0>Chase hinzufügen</0> unter den Zeilen. Im Chase-Editor legst du den Namen, die Wiederholung und die Schritte fest, jeder in einem eigenen Tab mit seiner <1>Haltezeit</1> in Sekunden und den Kanälen, die er setzt, in einer Tabelle nach den Geräten auf diesen Adressen gruppiert. <2>Kanal hinzufügen</2> fügt einen von Hand hinzu. Das Panel <3>Füllen aus</3> daneben übernimmt mit einem Klick die aktuellen Werte eines Geräts oder aller, eine Szene oder ein Preset und führt sie im Schritt zusammen: Ein Kanal, den der Schritt schon setzt, bekommt den neuen Wert, die anderen kommen dazu. Fährst du über einen Knopf, sind die Zeilen markiert, die er ändern würde. Ein Schritt speichert nur Kanäle und Werte; ändert sich später ein Gerät, eine Szene oder ein Preset, bleibt der Chase, wie er ist. Mit den Knöpfen neben einem Chase bearbeitest, löschst und verschiebst du ihn."
+msgid "To make one, unlock Setup mode and press <0>Add chase</0> below the rows. The chase editor sets the name, the repeat and the steps, a tab each with its <1>Fade in</1> and <2>Hold</2> in seconds and the channels it sets, in a table grouped by the fixtures on those addresses. <3>Add channel</3> adds one by hand. The <4>Fill from</4> panel beside it takes the current values of a fixture or of all, a scene or a preset in one click and merges them into the step: a channel the step already sets takes the new value, the others are added. Hovering a button marks the rows it would change. A step stores only channels and values, so changing a fixture, scene or preset later doesn't change the chase. The buttons next to a chase edit, delete and move it."
+msgstr "Um einen zu erstellen, entsperr den Setup-Modus und drück <0>Chase hinzufügen</0> unter den Zeilen. Im Chase-Editor legst du den Namen, die Wiederholung und die Schritte fest, jeder in einem eigenen Tab mit seiner <1>Einblendzeit</1> und <2>Haltezeit</2> in Sekunden und den Kanälen, die er setzt, in einer Tabelle nach den Geräten auf diesen Adressen gruppiert. <3>Kanal hinzufügen</3> fügt einen von Hand hinzu. Das Panel <4>Füllen aus</4> daneben übernimmt mit einem Klick die aktuellen Werte eines Geräts oder aller, eine Szene oder ein Preset und führt sie im Schritt zusammen: Ein Kanal, den der Schritt schon setzt, bekommt den neuen Wert, die anderen kommen dazu. Fährst du über einen Knopf, sind die Zeilen markiert, die er ändern würde. Ein Schritt speichert nur Kanäle und Werte; ändert sich später ein Gerät, eine Szene oder ein Preset, bleibt der Chase, wie er ist. Mit den Knöpfen neben einem Chase bearbeitest, löschst und verschiebst du ihn."
 
 #: src/renderer/src/components/help/topics/ScenesTopic.tsx
 msgid "To make one, unlock Setup mode, set the faders to the look you want, press the <0>Add scene</0> button after the scenes, name it and choose its fixtures: their current values are stored. The edit button next to a scene renames it, gives it a color (a dot on its button) or changes its fixtures; check <1>Save current values</1> to store what the faders show now. Deleting a fixture takes it out of every scene."

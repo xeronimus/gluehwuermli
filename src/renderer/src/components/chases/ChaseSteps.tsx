@@ -2,9 +2,10 @@ import {useRef} from 'react';
 
 import {useLingui} from '@lingui/react/macro';
 
+import {stepFadeMs} from '@shared/chases';
 import type {ChaseStep} from '@shared/ipc';
 
-import {holdSeconds} from '@/data/chaseHold';
+import {holdSeconds, secondsText} from '@/data/chaseHold';
 import {stepBoxesFit} from '@/data/chaseRows';
 
 import {useElementWidth} from '../commons/useElementWidth';
@@ -17,8 +18,8 @@ interface ChaseStepsProps {
 }
 
 /**
- * A small box per step, the current one filled, each with its hold on hover. The boxes get narrower to fit; when they
- * would get too narrow, the step number instead.
+ * A small box per step, the current one filled, each with its fade in and hold on hover. The boxes get narrower to
+ * fit; when they would get too narrow, the step number instead.
  */
 const ChaseSteps = ({steps, currentIndex}: ChaseStepsProps) => {
   const {t} = useLingui();
@@ -31,11 +32,17 @@ const ChaseSteps = ({steps, currentIndex}: ChaseStepsProps) => {
       return steps.map((step, index) => {
         const stepNumber = index + 1;
         const seconds = holdSeconds(step.holdMs);
+        const fadeMs = stepFadeMs(step);
+        const fadeSeconds = secondsText(fadeMs);
         return (
           <span
             key={step.id}
             className={stepBox[index === currentIndex ? 'current' : 'other']}
-            title={t`Step ${stepNumber}: holds ${seconds} s`}
+            title={
+              fadeMs > 0
+                ? t`Step ${stepNumber}: fades in ${fadeSeconds} s, holds ${seconds} s`
+                : t`Step ${stepNumber}: holds ${seconds} s`
+            }
           />
         );
       });

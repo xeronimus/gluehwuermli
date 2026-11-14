@@ -16,9 +16,9 @@ port is remembered and preselected on start, the app always starts disconnected;
 **Show mode** (fixtures and scenes can be played, not changed); a password unlocks **Setup mode**. Fixture channels can declare a
 cap (`"lock": {"max": 0}`, e.g. a laser) that applies while the channel lock is on; it is independent of the mode and
 lifted with the password, too (ADR 3). The UI is in English and German (Swiss High German), switched in the Settings view.
-In Setup mode chases are added, edited (name, repeat, steps with their hold and
+In Setup mode chases are added, edited (name, repeat, steps with their fade in, hold and
 channel values, filled from the current values of checked fixtures, a scene or a preset, merged into the step),
-deleted and put in order. Planned: fades.
+deleted and put in order. Planned: fades for faders, presets and scenes.
 
 The widget sends the DMX signal on its own clock and repeats the last universe it got; the app only sends a full
 universe when something changed. Why a web stack is fast enough, and why Electron: `doc/dmx-latency-and-stack.md`.
@@ -94,7 +94,8 @@ src/
     projects.ts              # project files: parseProjectFile (too-new before invalid), the .glp extension, projectNameOf
     scenes.ts                # scene validation (SceneError codes), checked by parseFixtureSetup
     chases.ts                # chase validation (ChaseError codes), checked by parseFixtureSetup; per absolute
-                             # channel, independent of the fixtures; passCount (main's player and the chase rows)
+                             # channel, independent of the fixtures; passCount (main's player and the chase rows),
+                             # stepFadeMs (a missing fade is 0)
     time.ts                  # MS_PER_SECOND, MS_PER_MINUTE
     channelValueRules.ts     # a channel's value rules: its stops, nearest/next/previous stop, rule errors, preset and
                              # scene values checked against them
@@ -136,9 +137,10 @@ src/
                              # WindowStateStore + impl/file, persistWindowState (debounced save, save on close);
                              # externalLinks: no navigation away from the app page or new window, only http(s) links
                              # open in the browser
-    chase/                   # chasePosition (pure: step and pass of a chase at a given time), chasePlayer (one chase at
-                             # a time on the engine's tick: start, pause, resume, stop; stopped by Emergency off, a
-                             # project switch, quitting, saving or deleting the running chase)
+    chase/                   # chasePosition (pure: step, pass and fade progress of a chase at a given time),
+                             # chasePlayer (one chase at a time on the engine's tick: start, pause, resume, stop; fades
+                             # a step's channels from a snapshot taken when it begins, the targets capped then; stopped
+                             # by Emergency off, a project switch, quitting, saving or deleting the running chase)
     dmx/
       dmxEngine.ts           # owns universe, port and refresh tick (ADR 2), caps channels while the lock is on (ADR 3);
                              # onTick runs the chase player right before the universe is sent

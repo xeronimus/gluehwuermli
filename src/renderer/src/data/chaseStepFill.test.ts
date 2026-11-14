@@ -41,8 +41,8 @@ const draftWithStep = (values: {channel: string; value: string}[]): ChaseDraft =
   repeatType: 'once',
   repeatCount: '2',
   steps: [
-    {id: 'first', hold: '1.00', values: values.map((value, index) => ({id: `row-${index}`, ...value}))},
-    {id: 'second', hold: '1.00', values: [{id: 'other', channel: '10', value: '1'}]}
+    {id: 'first', fade: '0.00', hold: '1.00', values: values.map((value, index) => ({id: `row-${index}`, ...value}))},
+    {id: 'second', fade: '0.00', hold: '1.00', values: [{id: 'other', channel: '10', value: '1'}]}
   ]
 });
 

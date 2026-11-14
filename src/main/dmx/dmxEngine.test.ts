@@ -232,6 +232,19 @@ describe('channel limits', () => {
     expect(channelValueIn(lastPacket(), MACRO)).toBe(30);
   });
 
+  test('the capped value is what setChannel would put on the channel now', () => {
+    engine.setChannelLimits(limits);
+
+    expect(engine.cappedValue(LASER, 255)).toBe(0);
+    expect(engine.cappedValue(MACRO, 30)).toBe(30);
+    expect(engine.cappedValue(MACRO, 200)).toBe(50);
+    expect(engine.cappedValue(1, 255)).toBe(255);
+
+    engine.setLimitsEnforced(false);
+
+    expect(engine.cappedValue(LASER, 255)).toBe(255);
+  });
+
   test('new limits while enforced cap the channels already above them', async () => {
     engine.setChannel(MACRO, 200);
     await nextTick();

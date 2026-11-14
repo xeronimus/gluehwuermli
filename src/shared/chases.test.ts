@@ -56,7 +56,12 @@ describe('chaseErrors', () => {
       name: 'x'.repeat(40),
       repeat: {type: 'times', count: 99},
       steps: Array.from({length: 100}, (_, index) =>
-        stepOf({id: `step-${index}`, holdMs: index % 2 === 0 ? 50 : 3_600_000, values: [{channel: 512, value: 255}]})
+        stepOf({
+          id: `step-${index}`,
+          fadeMs: index % 2 === 0 ? 0 : 3_600_000,
+          holdMs: index % 2 === 0 ? 50 : 3_600_000,
+          values: [{channel: 512, value: 255}]
+        })
       )
     });
 
@@ -75,6 +80,10 @@ describe('chaseErrors', () => {
     ['chase-step-hold-invalid', chaseOf({steps: [stepOf({holdMs: 49})]})],
     ['chase-step-hold-invalid', chaseOf({steps: [stepOf({holdMs: 3_600_001})]})],
     ['chase-step-hold-invalid', chaseOf({steps: [stepOf({holdMs: 100.5})]})],
+    ['chase-step-fade-invalid', chaseOf({steps: [stepOf({fadeMs: -1})]})],
+    ['chase-step-fade-invalid', chaseOf({steps: [stepOf({fadeMs: 3_600_001})]})],
+    ['chase-step-fade-invalid', chaseOf({steps: [stepOf({fadeMs: 100.5})]})],
+    ['chase-step-fade-invalid', chaseOf({steps: [stepOf({fadeMs: Number.NaN})]})],
     ['chase-step-values-missing', chaseOf({steps: [stepOf({values: []})]})],
     ['chase-step-channel-invalid', chaseOf({steps: [stepOf({values: [{channel: 0, value: 1}]})]})],
     ['chase-step-channel-invalid', chaseOf({steps: [stepOf({values: [{channel: 513, value: 1}]})]})],

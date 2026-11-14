@@ -42,7 +42,7 @@ lighting software:
 - Only one DMX universe: 512 channels
 - Only the two USB interfaces above; no Art-Net, sACN or other DMX over the network
 - Only Windows, for now ([#11](https://github.com/xeronimus/gluehwuermli/issues/11))
-- No fades yet: values and chase steps change at once (fades are planned)
+- No fades yet for faders, presets and scenes: their values change at once; chase steps can fade in
 - No fixture library: you enter each device's channels yourself, from its manual
 - No 16-bit channels: every channel is 0–255, a device's coarse and fine channel are two separate faders
 - No MIDI or other hardware controllers; mouse and keyboard only

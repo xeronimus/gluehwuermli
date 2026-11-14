@@ -35,7 +35,7 @@ export const stepEditor = style({
   }
 });
 
-/** Hold on the left, the step's actions on the right */
+/** Fade in and Hold on the left, the step's actions on the right */
 export const stepHeader = style({
   gridArea: 'header',
   display: 'flex',
@@ -59,7 +59,8 @@ export const deleteAction = style({
   borderLeft: `1px solid ${vars.colors.border}`
 });
 
-export const holdField = style({
+/** Fade in and Hold, each a label, its field and the unit */
+export const timeField = style({
   display: 'inline-flex',
   alignItems: 'center',
   gap: '6px',
@@ -68,7 +69,7 @@ export const holdField = style({
 });
 
 /** room for `3600.00` */
-export const holdInput = style({
+export const timeInput = style({
   width: '84px'
 });
 

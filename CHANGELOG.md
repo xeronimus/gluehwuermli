@@ -10,6 +10,11 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+### Added
+
+- Chase steps can fade in: the channels move smoothly to the step's values before its hold. Each step has a Fade in
+  time next to its Hold, and the All steps panel sets it for every step at once (#107)
+
 ## [0.4.0] - 2026-11-13
 
 ### Added

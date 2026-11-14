@@ -1,14 +1,48 @@
+import type {ReactNode} from 'react';
+
 import {Trans, useLingui} from '@lingui/react/macro';
 
-import {type ChaseDraft, withStepHold, withStepMoved} from '@/data/chaseDraft';
-import {HOLD_INPUT_STEP_SECONDS, HOLD_MAX_SECONDS, HOLD_MIN_SECONDS} from '@/data/chaseHold';
+import {type ChaseDraft, withStepFade, withStepHold, withStepMoved} from '@/data/chaseDraft';
+import {
+  FADE_MAX_SECONDS,
+  FADE_MIN_SECONDS,
+  HOLD_MAX_SECONDS,
+  HOLD_MIN_SECONDS,
+  TIME_INPUT_STEP_SECONDS
+} from '@/data/chaseHold';
 
 import Button from '../commons/Button';
 import MoveButtons from '../commons/MoveButtons';
 import {DeleteIcon, DuplicateIcon} from '../commons/icons';
-import {deleteAction, holdField, holdInput, stepActions, stepHeader} from './ChaseStepEditor.css';
+import {deleteAction, stepActions, stepHeader, timeField, timeInput} from './ChaseStepEditor.css';
+
+interface StepTimeFieldProps {
+  label: ReactNode;
+  value: string;
+  minSeconds: number;
+  maxSeconds: number;
+  onChange: (typed: string) => void;
+}
+
+/** Label [ X ] s: the step's fade in or hold in seconds */
+const StepTimeField = ({label, value, minSeconds, maxSeconds, onChange}: StepTimeFieldProps) => (
+  <label className={timeField}>
+    {label}
+    <input
+      className={timeInput}
+      type="number"
+      min={minSeconds}
+      max={maxSeconds}
+      step={TIME_INPUT_STEP_SECONDS}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
+    <Trans>s</Trans>
+  </label>
+);
 
 interface ChaseStepHeaderProps {
+  fade: string;
   hold: string;
   /** where the step is in the chase, of `count` steps */
   index: number;
@@ -18,29 +52,27 @@ interface ChaseStepHeaderProps {
   onDelete: () => void;
 }
 
-/** the step's hold on the left; moving and duplicating it on the right, deleting it set apart from them */
-const ChaseStepHeader = ({hold, index, count, onChange, onDuplicate, onDelete}: ChaseStepHeaderProps) => {
+/** the step's fade in and hold on the left; moving and duplicating it on the right, deleting it set apart from them */
+const ChaseStepHeader = ({fade, hold, index, count, onChange, onDuplicate, onDelete}: ChaseStepHeaderProps) => {
   const {t} = useLingui();
   const stepNumberShown = index + 1;
 
   return (
     <div className={stepHeader}>
-      <label className={holdField}>
-        <Trans>Hold</Trans>
-        <input
-          className={holdInput}
-          type="number"
-          min={HOLD_MIN_SECONDS}
-          max={HOLD_MAX_SECONDS}
-          step={HOLD_INPUT_STEP_SECONDS}
-          value={hold}
-          onChange={(event) => {
-            const typed = event.target.value;
-            onChange((draft) => withStepHold(draft, index, typed));
-          }}
-        />
-        <Trans>s</Trans>
-      </label>
+      <StepTimeField
+        label={<Trans>Fade in</Trans>}
+        value={fade}
+        minSeconds={FADE_MIN_SECONDS}
+        maxSeconds={FADE_MAX_SECONDS}
+        onChange={(typed) => onChange((draft) => withStepFade(draft, index, typed))}
+      />
+      <StepTimeField
+        label={<Trans>Hold</Trans>}
+        value={hold}
+        minSeconds={HOLD_MIN_SECONDS}
+        maxSeconds={HOLD_MAX_SECONDS}
+        onChange={(typed) => onChange((draft) => withStepHold(draft, index, typed))}
+      />
       <div className={stepActions}>
         <MoveButtons
           index={index}

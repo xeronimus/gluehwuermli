@@ -23,7 +23,9 @@ const Limitations = () => (
         <Trans>Only Windows, for now.</Trans>
       </li>
       <li>
-        <Trans>No fades yet: values and chase steps change at once (fades are planned).</Trans>
+        <Trans>
+          No fades yet for faders, presets and scenes: their values change at once; chase steps can fade in.
+        </Trans>
       </li>
       <li>
         <Trans>No fixture library: you enter each device's channels yourself, from its manual.</Trans>

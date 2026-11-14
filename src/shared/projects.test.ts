@@ -15,6 +15,19 @@ describe('parseProjectFile', () => {
     expect(parseProjectFile(content)).toEqual({type: 'invalid', error: {reason: 'invalid'}});
   });
 
+  test('a chase step without a fade loads unchanged, one with a fade keeps it', () => {
+    const chaseWith = (step: object) => ({
+      version: 1,
+      fixtures: [],
+      chases: [{id: 'chorus', name: 'Chorus', repeat: {type: 'once'}, steps: [step]}]
+    });
+    const withoutFade = chaseWith({id: 'one', holdMs: 500, values: [{channel: 12, value: 255}]});
+    const withFade = chaseWith({id: 'one', fadeMs: 2000, holdMs: 500, values: [{channel: 12, value: 255}]});
+
+    expect(parseProjectFile(withoutFade)).toEqual({type: 'valid', setup: withoutFade});
+    expect(parseProjectFile(withFade)).toEqual({type: 'valid', setup: withFade});
+  });
+
   test('a file without chases loads unchanged, one with chases keeps them', () => {
     const withoutChases = {version: 1, fixtures: [], scenes: []};
     const withChases = {
@@ -43,6 +56,15 @@ describe('parseProjectFile', () => {
         name: 'Chorus',
         repeat: {type: 'once'},
         steps: [{id: 'one', holdMs: 10, values: [{channel: 1, value: 255}]}]
+      }
+    ],
+    [
+      'a chase step fading for less than nothing',
+      {
+        id: 'chorus',
+        name: 'Chorus',
+        repeat: {type: 'once'},
+        steps: [{id: 'one', fadeMs: -1, holdMs: 500, values: [{channel: 1, value: 255}]}]
       }
     ],
     [

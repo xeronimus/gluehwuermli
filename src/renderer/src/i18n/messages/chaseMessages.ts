@@ -4,6 +4,7 @@ import {msg, plural} from '@lingui/core/macro';
 import type {ChaseError, ChaseValueError} from '@shared/chases';
 import {DMX_MAX_VALUE, DMX_MIN_VALUE, FIRST_DMX_CHANNEL, LAST_DMX_CHANNEL} from '@shared/dmx';
 import {
+  CHASE_FADE_MAX_MS,
   CHASE_HOLD_MAX_MS,
   CHASE_HOLD_MIN_MS,
   CHASE_NAME_MAX_LENGTH,
@@ -14,7 +15,7 @@ import {
 import {MS_PER_MINUTE, MS_PER_SECOND} from '@shared/time';
 
 import type {AllStepsLine, ChannelInAllStepsEffect, WithoutChannelInAllStepsEffect} from '@/data/chaseAllSteps';
-import {holdSeconds} from '@/data/chaseHold';
+import {holdSeconds, secondsText} from '@/data/chaseHold';
 
 /** what chaseErrors found, in the UI language; the shortest hold in seconds, as the editor shows it */
 export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
@@ -42,6 +43,10 @@ export function chaseErrorMessage(error: ChaseError): MessageDescriptor {
       const minSeconds = CHASE_HOLD_MIN_MS / MS_PER_SECOND;
       const maxMinutes = CHASE_HOLD_MAX_MS / MS_PER_MINUTE;
       return msg`A step holds from ${minSeconds} seconds to ${maxMinutes} minutes`;
+    }
+    case 'chase-step-fade-invalid': {
+      const maxMinutes = CHASE_FADE_MAX_MS / MS_PER_MINUTE;
+      return msg`A step fades in from 0 seconds to ${maxMinutes} minutes`;
     }
     case 'chase-step-values-missing':
       return msg`Every step needs at least one channel`;
@@ -104,6 +109,16 @@ function removeLineMessage(channel: number, done: boolean, effect: WithoutChanne
 /** what the All steps panel says: what the hovered action would do, or what the clicked one did */
 export function allStepsLineMessage(line: AllStepsLine): MessageDescriptor {
   switch (line.action) {
+    case 'fade': {
+      const {changedCount, fadeMs} = line.effect;
+      if (changedCount === 0) {
+        const fade = secondsText(fadeMs);
+        return msg`Every step already fades in for ${fade} s`;
+      }
+      return line.done
+        ? msg`Set the fade in of ${plural(changedCount, {one: '# step', other: '# steps'})}`
+        : msg`Sets the fade in of ${plural(changedCount, {one: '# step', other: '# steps'})}`;
+    }
     case 'hold': {
       const {changedCount, holdMs} = line.effect;
       if (changedCount === 0) {

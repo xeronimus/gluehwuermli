@@ -92,6 +92,7 @@ const ChaseStepEditor = ({
   return (
     <div className={stepEditor} ref={editorRef}>
       <ChaseStepHeader
+        fade={step.fade}
         hold={step.hold}
         index={index}
         count={count}

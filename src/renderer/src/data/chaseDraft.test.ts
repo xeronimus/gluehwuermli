@@ -16,10 +16,12 @@ import {
   stepIdAfterRemoval,
   stepIdBeside,
   withChannelInAllSteps,
+  withFadeOfAllSteps,
   withHoldOfAllSteps,
   withNewStep,
   withNewStepValue,
   withStepDuplicated,
+  withStepFade,
   withStepHold,
   withStepMoved,
   withStepValueChange,
@@ -58,6 +60,28 @@ test('a chase survives the round trip through a draft', () => {
   expect(chaseOfDraft('chorus', chaseDraftOf(forever))).toEqual(forever);
 });
 
+test('a fade survives the round trip; a fade of 0 is left out, so a chase without fades saves unchanged', () => {
+  const firstStep = chorus.steps[0];
+  const withFade: Chase = {...chorus, steps: chorus.steps.map((step) => ({...step, fadeMs: 1500}))};
+  const withZeroFade: Chase = {...chorus, steps: chorus.steps.map((step) => ({...step, fadeMs: 0}))};
+
+  expect(chaseOfDraft('chorus', chaseDraftOf(withFade))).toEqual(withFade);
+  expect(chaseOfDraft('chorus', chaseDraftOf(withZeroFade))).toEqual(chorus);
+  expect(chaseDraftOf(withFade).steps[0]?.fade).toBe('1.50');
+  expect(chaseDraftOf(chorus).steps[0]?.fade).toBe('0.00');
+  expect(chaseOfDraft('chorus', chaseDraftOf(chorus)).steps[0]).toEqual(firstStep);
+});
+
+test('a blank fade is no fade, unlike a blank hold', () => {
+  const blankFade = withStepFade(chaseDraftOf(chorus), 0, ' ');
+
+  expect(chaseEditErrors(blankFade).steps[0]).toEqual([]);
+  expect(chaseOfDraft(chorus.id, blankFade).steps[0]).not.toHaveProperty('fadeMs');
+  expect(chaseEditErrors(withStepHold(chaseDraftOf(chorus), 0, '')).steps[0]).toEqual([
+    {type: 'chase-step-hold-invalid'}
+  ]);
+});
+
 test('shows a hold in seconds with two decimals', () => {
   expect(chaseDraftOf(chorus).steps.map(({hold}) => hold)).toEqual(['0.50', '1.25']);
 });
@@ -71,19 +95,21 @@ test('trims the name, and keeps the typed count while another repeat is chosen',
   expect({...draft, repeatType: 'forever'}.repeatCount).toBe('5');
 });
 
-test('the first step added holds 1 s, a later one as long as the step before it', () => {
+test('the first step added fades not and holds 1 s, a later one as long as the step before it', () => {
   const first = withNewStep(newChaseDraft(), 'a');
-  const second = withNewStep(withStepHold(first, 0, '0.25'), 'b');
+  const second = withNewStep(withStepFade(withStepHold(first, 0, '0.25'), 0, '2.00'), 'b');
 
-  expect(first.steps).toEqual([{id: 'a', hold: '1.00', values: []}]);
-  expect(second.steps[1]).toEqual({id: 'b', hold: '0.25', values: []});
+  expect(first.steps).toEqual([{id: 'a', fade: '0.00', hold: '1.00', values: []}]);
+  expect(second.steps[1]).toEqual({id: 'b', fade: '2.00', hold: '0.25', values: []});
 });
 
-test('duplicates a step with its hold and values right after it, under a new id', () => {
-  const draft = withStepDuplicated(chaseDraftOf(chorus), 0, 'copy');
+test('duplicates a step with its fade, hold and values right after it, under a new id', () => {
+  const fading = withStepFade(chaseDraftOf(chorus), 0, '1.50');
+  const draft = withStepDuplicated(fading, 0, 'copy');
 
   expect(stepIds(draft)).toEqual(['laser', 'copy', 'strobe']);
-  expect(draft.steps[1]).toEqual({...chaseDraftOf(chorus).steps[0], id: 'copy'});
+  expect(draft.steps[1]).toEqual({...fading.steps[0], id: 'copy'});
+  expect(draft.steps[1]?.fade).toBe('1.50');
   expect(withStepDuplicated(chaseDraftOf(chorus), 5, 'copy')).toEqual(chaseDraftOf(chorus));
 });
 
@@ -180,8 +206,12 @@ describe('all steps at once', () => {
   test('a typed channel with a leading zero counts as the channel', () => {
     const typed = withStepValueChange(draft, 0, 0, {channel: '020'});
 
-    expect(setsChannel({id: 'a', hold: '1.00', values: [{id: '0', channel: '020', value: '0'}]}, 20)).toBe(true);
-    expect(setsChannel({id: 'a', hold: '1.00', values: [{id: '0', channel: '', value: '0'}]}, 0)).toBe(false);
+    expect(
+      setsChannel({id: 'a', fade: '0.00', hold: '1.00', values: [{id: '0', channel: '020', value: '0'}]}, 20)
+    ).toBe(true);
+    expect(setsChannel({id: 'a', fade: '0.00', hold: '1.00', values: [{id: '0', channel: '', value: '0'}]}, 0)).toBe(
+      false
+    );
     expect(withChannelInAllSteps(typed, 20, () => 'new').steps[0]).toBe(typed.steps[0]);
   });
 
@@ -196,6 +226,11 @@ describe('all steps at once', () => {
   test('sets the hold of every step, with two decimals', () => {
     expect(withHoldOfAllSteps(draft, 2000).steps.map(({hold}) => hold)).toEqual(['2.00', '2.00']);
     expect(withHoldOfAllSteps(newChaseDraft(), 2000).steps).toEqual([]);
+  });
+
+  test('sets the fade in of every step, with two decimals', () => {
+    expect(withFadeOfAllSteps(draft, 1500).steps.map(({fade}) => fade)).toEqual(['1.50', '1.50']);
+    expect(withFadeOfAllSteps(draft, 0).steps.map(({fade}) => fade)).toEqual(['0.00', '0.00']);
   });
 });
 
@@ -268,7 +303,7 @@ describe('the step tab shown', () => {
   });
 
   test('stepping through: the step before or after the shown one, round from either end to the other', () => {
-    const three = [...steps, {id: 'blackout', hold: '1.00', values: []}];
+    const three = [...steps, {id: 'blackout', fade: '0.00', hold: '1.00', values: []}];
     expect(stepIdBeside(three, 'laser', 'later')).toBe('strobe');
     expect(stepIdBeside(three, 'strobe', 'earlier')).toBe('laser');
     expect(stepIdBeside(three, 'blackout', 'later')).toBe('laser');
