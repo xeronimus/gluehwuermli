@@ -10,6 +10,8 @@ change bumps the minor version and everything else the patch version.
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-27
+
 ### Fixed
 
 - macOS: the green button puts the window into full screen again; it was disabled after the first start. The window
@@ -297,7 +299,8 @@ First release.
 - The main window keeps its position and size between sessions
 - Windows installer (NSIS)
 
-[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/xeronimus/gluehwuermli/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/xeronimus/gluehwuermli/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/xeronimus/gluehwuermli/compare/v0.3.1...v0.3.2
