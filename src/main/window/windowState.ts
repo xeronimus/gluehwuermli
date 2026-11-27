@@ -34,6 +34,13 @@ export interface Size {
 export type WindowPlacement =
   {type: 'centred'; size: Size} | {type: 'restored'; bounds: Rectangle; maximized: boolean; fullScreen: boolean};
 
+/**
+ * The bounds the window is created with. Never `fullscreen`: on macOS an explicit `fullscreen: false` disables the
+ * green full-screen button, so full screen is entered after the window is shown.
+ */
+export const initialBoundsOf = (placement: WindowPlacement): Rectangle | Size =>
+  placement.type === 'restored' ? placement.bounds : placement.size;
+
 /** enough of the window on a display to grab it and drag it back; a corner of a few pixels doesn't count */
 const MIN_VISIBLE_PIXELS = 50;
 
