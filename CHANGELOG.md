@@ -13,7 +13,7 @@ change bumps the minor version and everything else the patch version.
 ### Fixed
 
 - macOS: the green button puts the window into full screen again; it was disabled after the first start. The window
-  reopens in full screen if it was closed in full screen, otherwise where and as large as it was
+  reopens in full screen if it was closed in full screen, otherwise where and as large as it was (#119)
 
 ## [0.4.1] - 2026-11-14
 
