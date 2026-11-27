@@ -22,7 +22,7 @@ import {quitGuardFactory} from './quit/quitGuard';
 import {createMainServices} from './services';
 import {guardExternalLinks} from './window/externalLinks';
 import {persistWindowState} from './window/persistWindowState';
-import {type WindowPlacement, restorableBounds} from './window/windowState';
+import {type WindowPlacement, initialBoundsOf, restorableBounds} from './window/windowState';
 
 const MAIN_WINDOW_SIZE = {width: 1280, height: 800};
 const WINDOW_STATE_FILE_NAME = 'window-state.json';
@@ -30,12 +30,9 @@ const SETTINGS_FILE_NAME = 'settings.json';
 /** closing the port takes a few ms; a port that hangs must not keep the app from quitting */
 const QUIT_TIMEOUT_MS = 2000;
 
-const boundsOf = (placement: WindowPlacement) =>
-  placement.type === 'restored' ? {...placement.bounds, fullscreen: placement.fullScreen} : placement.size;
-
 function createMainWindow(placement: WindowPlacement, title: string): BrowserWindow {
   const window = new BrowserWindow({
-    ...boundsOf(placement),
+    ...initialBoundsOf(placement),
     show: false,
     autoHideMenuBar: true,
     title,
@@ -66,6 +63,10 @@ function createMainWindow(placement: WindowPlacement, title: string): BrowserWin
       window.maximize();
     }
     window.show();
+    // full screen only once shown: macOS can't put a hidden window into its own space
+    if (placement.type === 'restored' && placement.fullScreen) {
+      window.setFullScreen(true);
+    }
   });
 
   void window.loadURL(appPageUrl);

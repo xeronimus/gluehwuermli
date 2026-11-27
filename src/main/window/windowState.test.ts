@@ -1,4 +1,4 @@
-import {type Rectangle, type WindowState, parseWindowState, restorableBounds} from './windowState';
+import {type Rectangle, type WindowState, initialBoundsOf, parseWindowState, restorableBounds} from './windowState';
 
 const DEFAULT_SIZE = {width: 1280, height: 800};
 const PRIMARY: Rectangle = {x: 0, y: 0, width: 1920, height: 1040};
@@ -53,4 +53,15 @@ test.each([
 
 test('a valid window state parses', () => {
   expect(parseWindowState(onSecondary)).toEqual(onSecondary);
+});
+
+test('a window is created with the saved bounds, never with a full-screen flag (macOS would disable its button)', () => {
+  const bounds = {x: 100, y: 50, width: 1600, height: 900};
+
+  expect(initialBoundsOf({type: 'restored', bounds, maximized: false, fullScreen: false})).toEqual(bounds);
+  expect(initialBoundsOf({type: 'restored', bounds, maximized: false, fullScreen: true})).toEqual(bounds);
+});
+
+test('a window without a saved state is created with the default size', () => {
+  expect(initialBoundsOf({type: 'centred', size: DEFAULT_SIZE})).toEqual(DEFAULT_SIZE);
 });
